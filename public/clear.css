@@ -1,0 +1,37 @@
+
+*,::before,::after {
+    margin: 0;
+    padding: 0;
+    border: 0;
+    box-sizing: border-box;
+}
+html{
+    font-size: 24px;
+}
+body{
+    line-height: 1;
+    max-height: 100%;
+}
+li{
+    list-style: none;
+}
+a,a-visited{
+    text-decoration: none;
+}
+a-hover{
+    text-decoration: none;
+}
+h1,h2,h3,h4,h5,h6{
+    font-weight: inherit;
+    font-size: inherit;
+}
+img{
+    vertical-align: top;
+}
+html, body, #root {
+    height: 100%;
+}
+.wrapper {
+    min-height: 100%;
+    overflow: hidden;
+}

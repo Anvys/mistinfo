@@ -1,0 +1,7 @@
+.box {
+    display: flex;
+    border: 1px solid black;
+    padding: 5px;
+    justify-content: flex-start;
+    column-gap: 50px;
+}
