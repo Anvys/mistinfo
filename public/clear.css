@@ -15,10 +15,10 @@ body{
 li{
     list-style: none;
 }
-a,a-visited{
+a,a:visited{
     text-decoration: none;
 }
-a-hover{
+a:hover{
     text-decoration: none;
 }
 h1,h2,h3,h4,h5,h6{
@@ -28,8 +28,9 @@ h1,h2,h3,h4,h5,h6{
 img{
     vertical-align: top;
 }
-html, body, #root {
+html, body{
     height: 100%;
+    margin: 0;
 }
 .wrapper {
     min-height: 100%;

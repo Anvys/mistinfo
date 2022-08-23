@@ -1,0 +1,13 @@
+.map {
+    height: 100%;
+}
+
+.coords {
+    position: absolute;
+    background-color: white;
+    font-size: 12px;
+    top: 0px;
+    right: 0px;
+    z-index: 1000 !important;
+    /*top: -40px;*/
+}

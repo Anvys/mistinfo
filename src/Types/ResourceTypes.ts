@@ -19,7 +19,7 @@ export type TTranslateLangObj = {
 }
 export type TTranslateData = TTranslateLangObj
 export type TMaterialType = 'Bone' | 'Fiber' | 'Leather' | 'Metal' | 'Stone' | 'Wood'
-type TMaterialAttributes = {
+export type TMaterialAttributes = {
     Absorbity: number
     Density: number
     Flexibility: number
@@ -30,8 +30,8 @@ type TMaterialAttributes = {
     Rigidity: number
 }
 export type TMaterials = IResources<TMaterialType, TMaterialAttributes>
-type TComponentType = | 'Plant' | 'Gem' | 'Substance' | 'Powder' | 'Sap' | 'Pollen' | 'Artefact'
-type TComponentAttributes = {
+export type TComponentType =  'Plant' | 'Gem' | 'Substance' | 'Powder' | 'Sap' | 'Pollen' | 'Artefact'
+export type TComponentAttributes = {
     Activator: number
     Binder: number
     Deteriorator: number
@@ -54,14 +54,20 @@ type TComponentAttributes = {
 }
 export type TComponents = IResources<TComponentType, TComponentAttributes>
 
-export type TRequestBody = {
-    type: 'Component' | 'Material'
-    resource: TMaterials | TComponents
+export type TRequestType = 'Material' | 'Component' | 'Npc'
+export type TRequestBody<T extends TRequestType, D> = {
+    type: T
+    data: D
 }
-export type TResponseBody<T> = {
+export type TResponse<T> = {
     status: number
     msg: Array<string>
     data: T
 }
-export type TResponseSingleBody = TResponseBody<Array<TComponents | TMaterials>>
-export type TResponseAllBody = TResponseBody<{materials: Array<TMaterials>, components: Array<TComponents>}>
+export type TResponseBody<T> = {
+    status: number
+    msg: Array<string>
+    data: Array<T>
+}
+export type TResResponse<T = TComponents | TMaterials> = TResponse<Array<T>>
+export type TResponseAllBody = TResponse<{materials: Array<TMaterials>, components: Array<TComponents>}>

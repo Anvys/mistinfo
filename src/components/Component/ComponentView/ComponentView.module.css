@@ -1,0 +1,14 @@
+.vid {
+    overflow: auto;
+}
+.table td{
+    border: 1px solid black;
+    max-width: 50px;
+    overflow: hidden;
+}
+.table{
+
+}
+.table , th{
+    border: 1px solid black;
+}

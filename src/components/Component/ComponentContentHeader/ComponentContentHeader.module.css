@@ -1,16 +1,15 @@
-.sideBox {
+.header{
     display: flex;
     border: 1px solid black;
-    padding: 10px;
-    flex-direction: column;
-    gap: 7px;
-}
-.navButton {
     padding: 5px;
+    justify-content: space-between;
+}
+.navButton{
+    padding: 2px;
     border: 1px solid black;
     box-shadow: 1px 1px 2px 2px darkgrey;
     background-color: #5fcade;
-    font-size: 18px;
+    font-size: 14px;
     user-select: none;
     transition-duration: 0.05s;
     text-align: center;

@@ -3,4 +3,16 @@
     border: 1px solid black;
     padding: 5px;
     flex-grow: 1;
+    flex-direction: column;
+    gap: 5px;
+    overflow: hidden;
+}
+.nav {
+    border: 1px solid black;
+    padding: 5px;
+}
+.dbField{
+    border: 1px solid black;
+    padding: 5px;
+    flex-grow: 1;
 }

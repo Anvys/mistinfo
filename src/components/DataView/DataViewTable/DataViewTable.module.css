@@ -1,0 +1,20 @@
+.vid {
+    overflow: auto;
+}
+.table{
+    /*overflow: auto;*/
+}
+.table td:not(.nameTd){
+    border: 1px solid black;
+    max-width: 50px;
+    overflow: hidden;
+}
+.nameTd{
+    border: 1px solid black;
+    max-width: 100px;
+    overflow: hidden;
+
+}
+.table , th{
+    border: 1px solid black;
+}
