@@ -1,12 +1,8 @@
 import React from "react";
-import {Route, Routes } from "react-router-dom";
+import {Route, Routes} from "react-router-dom";
 import styles from './ContentSpace.module.css'
-import {MaterialContentHeader} from "../Material/MaterialContentHeader/MaterialContentHeader";
-import {MaterialView} from "../Material/MaterialView/MaterialView";
 import {MaterialContent} from "../Material/MaterialContent/MaterialContent";
 import {ComponentContent} from "../Component/ComponentContent/ComponentContent";
-import {AddComponent} from "../Component/AddComponent/AddComponent";
-import {AddMaterial} from "../Material/AddMaterial/AddMaterial";
 import {Map} from "../Map/Map";
 
 
@@ -24,10 +20,10 @@ export const ContentSpace: React.FC = () =>{
             <Routes>
                 <Route path={'/map'} element={<Map/>}/>
                 <Route path={'/material/'} element={<MaterialContent/>}>
-                    <Route path={'/material/add'} element={<AddMaterial selectFields={materialSelectFields}/>}/>
+                    {/*<Route path={'/material/add'} element={<AddMaterial selectFields={materialSelectFields}/>}/>*/}
                 </Route>
                 <Route path={'/component/'} element={<ComponentContent/>}>
-                    <Route path={'/component/add'} element={<AddComponent selectFields={componentSelectFields}/>}/>
+                    {/*<Route path={'/component/add'} element={<AddComponent selectFields={componentSelectFields}/>}/>*/}
                 </Route>
             </Routes>
 

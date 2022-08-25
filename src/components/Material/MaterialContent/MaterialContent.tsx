@@ -1,19 +1,20 @@
 import React from 'react';
 import styles from './MaterialContent.module.css';
 import {useDispatch, useSelector} from "react-redux";
-import {getIsMaterialsInitSelector} from "../../../redux/resourcesSelectors";
-import {ResourcesThunks} from "../../../redux/reducers/resourceReducer";
+import {getIsMaterialsInitSelector, getMaterialsSelector} from "../../../redux/dataSelectors";
 import {TAppDispatch} from "../../../redux/store";
 import {MaterialContentHeader} from "../MaterialContentHeader/MaterialContentHeader";
-import {Outlet, Route, Routes} from "react-router-dom";
-import {MaterialView} from "../MaterialView/MaterialView";
-import {AddMaterial} from "../AddMaterial/AddMaterial";
+import {Outlet} from "react-router-dom";
+import {DataView} from "../../DataView/DataView";
+import {MaterialThunks} from "../../../redux/reducers/materialReducer";
 
 type TProps = {};
 export const MaterialContent:React.FC<TProps> = (props) => {
     const isInit = useSelector(getIsMaterialsInitSelector)
     const dispatch = useDispatch<TAppDispatch>()
-    if(!isInit)dispatch(ResourcesThunks.getMaterials())
+    if(!isInit)dispatch(MaterialThunks.getAll())
+    const materials = useSelector(getMaterialsSelector);
+    if (!materials.length) return <>empty</>
     return (
         <div className={styles.contentBox}>
             <div className={styles.nav}>
@@ -30,7 +31,8 @@ export const MaterialContent:React.FC<TProps> = (props) => {
                 {/*    /!*<Route path={'/material/view'} element={<ComponentView/>}/>*!/*/}
                 {/*    */}
                 {/*</Routes>*/}
-                <MaterialView/>
+                {/*<MaterialView/>*/}
+                <DataView data={materials}/>
             </div>
         </div>
     );

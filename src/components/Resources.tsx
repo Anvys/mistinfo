@@ -3,7 +3,7 @@ import {TComponents, TMaterials} from "../Types/ResourceTypes";
 import {useDispatch, useSelector} from "react-redux";
 import {ResourcesThunks} from "../redux/reducers/resourceReducer";
 import {TAppDispatch} from "../redux/store";
-import {getComponentsSelector, getMaterialsSelector} from "../redux/resourcesSelectors";
+import {getComponentsSelector, getMaterialsSelector} from "../redux/dataSelectors";
 import {AddMaterial} from "./Material/AddMaterial/AddMaterial";
 
 

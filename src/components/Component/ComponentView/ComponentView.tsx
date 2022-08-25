@@ -1,12 +1,12 @@
 import React from 'react';
 import styles from './ComponentView.module.css';
 import {useDispatch, useSelector} from "react-redux";
-import {getComponentsSelector, getMaterialsSelector} from "../../../redux/resourcesSelectors";
+import {getComponentsSelector, getMaterialsSelector} from "../../../redux/dataSelectors";
 import {TMaterialAttributes, TMaterials, TTranslateData} from "../../../Types/ResourceTypes";
 import {TAppDispatch} from "../../../redux/store";
 import {ResourcesThunks} from "../../../redux/reducers/resourceReducer";
-import {getDeepKeys} from "../../Material/MaterialView/MaterialView";
 import {DataView} from "../../DataView/DataView";
+import {getDeepKeys} from "../../../Unils/utilsFunctions";
 
 enum tableSort {
     type = 9,

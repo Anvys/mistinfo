@@ -1,6 +1,7 @@
 import React, {useEffect, useState} from 'react';
 import style from './MaterialContentHeader.module.css'
 import {Link, useLocation, useNavigate} from "react-router-dom";
+import {DataAdd} from "../../DataAdd/DataAdd";
 
 type TProps = {};
 export const MaterialContentHeader:React.FC<TProps> = (props) => {
@@ -14,9 +15,13 @@ export const MaterialContentHeader:React.FC<TProps> = (props) => {
     console.log(curLoc)
     return (
         <div className={style.header}>
-            <div>Materials header</div>
-            {curLoc === 'material' &&<button className={style.navButton}><Link to={'/material/add'}>Add</Link></button>}
-            {curLoc === 'add' &&<button className={style.navButton}><Link to={'/material'}>View</Link></button>}
+            <div className={style.row}>
+                <div>Materials header</div>
+                {curLoc === 'material' &&<button className={style.navButton}><Link to={'/material/add'}>Add</Link></button>}
+                {curLoc === 'add' &&<button className={style.navButton}><Link to={'/material'}>View</Link></button>}
+            </div>
+
+
         </div>
     );
 }

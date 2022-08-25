@@ -1,7 +1,7 @@
 import axios, {AxiosResponse} from "axios";
 import {
     TComponents,
-    TMaterials,
+    TMaterials, TNpc,
     TRequestBody, TRequestType,
     TResponseAllBody,
     TResponseBody,
@@ -36,6 +36,7 @@ const getDataAPI = <D, T extends TRequestType>(uri: string, type: T) => {
 }
 export const MaterialAPI = getDataAPI<TMaterials, 'Material'>(`/materials`, 'Material')
 export const ComponentAPI = getDataAPI<TComponents, 'Component'>(`/components`, 'Component')
+export const NpcAPI = getDataAPI<TNpc, 'Npc'>(`/npc`, 'Npc')
 //     {
 //     getAll: () => instance.get<TMatResponse>(`${materialURI}/all`).then(data => data.data),
 //     getOne: (id: string) => instance.get<TMatResponse>(`${materialURI}/one/:${id}`).then(data => data.data),

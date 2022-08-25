@@ -1,8 +1,12 @@
 .header{
     display: flex;
+    flex-direction: column;
     border: 1px solid black;
     padding: 5px;
     justify-content: space-between;
+}
+.row{
+    display: flex;
 }
 .navButton{
     padding: 2px;

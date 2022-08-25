@@ -6,7 +6,7 @@ import {useDispatch, useSelector} from "react-redux";
 import {ResourcesThunks} from "../../../redux/reducers/resourceReducer";
 import {TAppDispatch} from "../../../redux/store";
 // import {AddResourceForm} from "./AddResourceForm";
-import {getIsMaterialsInitSelector, getMaterialsSelector} from "../../../redux/resourcesSelectors";
+import {getIsMaterialsInitSelector, getMaterialsSelector} from "../../../redux/dataSelectors";
 
 // const getWeight = (str: string): number => {
 //     switch (str) {

@@ -1,6 +1,13 @@
 import type {PayloadAction} from '@reduxjs/toolkit'
 import {createAsyncThunk, createSlice} from '@reduxjs/toolkit'
-import {TComponents, TMaterials, TMaterialType, TResResponse, TTranslateLangObj} from "../../Types/ResourceTypes";
+import {
+    TComponents,
+    TMaterials,
+    TMaterialType,
+    TResResponse,
+    TTranslateLangObj,
+    TTranslateLangObjFull
+} from "../../Types/ResourceTypes";
 import {StatusCodes} from "../../Types/Utils";
 import {useDispatch} from "react-redux";
 import {ComponentAPI, MaterialAPI} from "../../API/ResourceAPI";
@@ -14,6 +21,7 @@ export interface CounterState {
 
 const initialState: CounterState = {
     materials: [{
+        _id: '123456789012345678901234',
         name: '',
         type: 'Bone' as TMaterialType,
         durability: 0,
@@ -31,7 +39,7 @@ const initialState: CounterState = {
         },
         goldCost: 0,
         encumbrance: 0,
-        translate: {En: ''} as TTranslateLangObj,
+        translate: {En: '',Fr:'', Ru:''} as TTranslateLangObjFull,
     }],
     isMaterialsInit: false,
     components: [],

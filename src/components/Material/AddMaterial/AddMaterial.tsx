@@ -1,12 +1,20 @@
 import React, {useState} from "react";
 import styles from "./AddMaterial.module.css";
-import {TComponents, TMaterials, TMaterialType, TTranslateLang, TTranslateLangObj} from "../../../Types/ResourceTypes";
+import {
+    TComponents,
+    TMaterials,
+    TMaterialType,
+    TTranslateLang,
+    TTranslateLangObj,
+    TTranslateLangObjFull
+} from "../../../Types/ResourceTypes";
 import {useFormik} from "formik";
 import {useDispatch} from "react-redux";
 import {ResourcesThunks} from "../../../redux/reducers/resourceReducer";
 import {TAppDispatch} from "../../../redux/store";
 
 type TSelectsParams = 'type' | 'tier';
+type TCompWithoutId = Omit<TMaterials, '_id'>
 type TProps = {
     selectFields: Array<{[key: string]: Array<string>}>
 }
@@ -33,11 +41,11 @@ export const AddMaterial: React.FC<TProps> = (props) => {
             },
             goldCost: 0,
             encumbrance: 0,
-            translate: {En: ''} as TTranslateLangObj,
+            translate: {En: '',Fr:'', Ru:''} as TTranslateLangObjFull,
         },
         onSubmit: async (values, actions) => {
             // alert(JSON.stringify(values, null, 2));
-            const resToSend: TMaterials = {
+            const resToSend: TCompWithoutId = {
                 name: values.translate.En,
                 type: values.type,
                 difficulty: +values.difficulty,
@@ -49,7 +57,7 @@ export const AddMaterial: React.FC<TProps> = (props) => {
                 translate: values.translate,
             }
             console.log(resToSend)
-            await dispatch(ResourcesThunks.addMaterial(resToSend))
+            // await dispatch(ResourcesThunks.addMaterial(resToSend))
             actions.setSubmitting(false);
         },
     });

@@ -4,7 +4,7 @@ import {
     TComponents,
     TComponentType,
     TMaterials,
-    TMaterialType,
+    TMaterialType, TTranslateData,
     TTranslateLang,
     TTranslateLangObj
 } from "../../../Types/ResourceTypes";
@@ -13,6 +13,7 @@ import {useDispatch} from "react-redux";
 import {ResourcesThunks} from "../../../redux/reducers/resourceReducer";
 import {TAppDispatch} from "../../../redux/store";
 
+type TCompWithoutId = Omit<TComponents, '_id'>
 type TProps = {
     selectFields: Array<{[key: string]: Array<string>}>
 }
@@ -50,11 +51,11 @@ export const AddComponent: React.FC<TProps> = (props) => {
             },
             goldCost: 0,
             encumbrance: 0,
-            translate: {En: ''} as TTranslateLangObj,
+            translate: {En: ''} as TTranslateData,
         },
         onSubmit: async (values, actions) => {
             // alert(JSON.stringify(values, null, 2));
-            const resToSend: TComponents = {
+            const resToSend: TCompWithoutId = {
                 name: values.translate.En,
                 type: values.type,
                 difficulty: +values.difficulty,
@@ -66,7 +67,7 @@ export const AddComponent: React.FC<TProps> = (props) => {
                 translate: values.translate,
             }
             console.log(resToSend)
-            await dispatch(ResourcesThunks.addComponent(resToSend))
+            // await dispatch(ResourcesThunks.addComponent(resToSend))
             actions.setSubmitting(false);
         },
     });
