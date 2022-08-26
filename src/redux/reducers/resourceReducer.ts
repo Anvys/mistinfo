@@ -1,8 +1,8 @@
 import type {PayloadAction} from '@reduxjs/toolkit'
 import {createAsyncThunk, createSlice} from '@reduxjs/toolkit'
 import {
-    TComponents,
-    TMaterials,
+    TComponent,
+    TMaterial,
     TMaterialType,
     TResResponse,
     TTranslateLangObj,
@@ -13,9 +13,9 @@ import {useDispatch} from "react-redux";
 import {ComponentAPI, MaterialAPI} from "../../API/ResourceAPI";
 
 export interface CounterState {
-    materials: Array<TMaterials>
+    materials: Array<TMaterial>
     isMaterialsInit: boolean
-    components: Array<TComponents>
+    components: Array<TComponent>
     isComponentsInit: boolean
 }
 
@@ -52,7 +52,7 @@ const checkError = (data: TResResponse): boolean => {
     return data.status === StatusCodes.Ok
 }
 
-export const ResourcesThunks = {
+const ResourcesThunks = {
     getAllResources: createAsyncThunk('resources/getAll', async (_, thunkAPI) => {
             thunkAPI.dispatch(ResourcesThunks.getMaterials())
             thunkAPI.dispatch(ResourcesThunks.getComponents())
@@ -78,17 +78,17 @@ export const ResourcesThunks = {
             if (checkError(res)) return res.data
         }
     ),
-    addMaterial: createAsyncThunk('resources/addMaterial', async (material: TMaterials, thunkAPI) => {
+    addMaterial: createAsyncThunk('resources/addMaterial', async (material: TMaterial, thunkAPI) => {
             const res = await MaterialAPI.addOne(material)
             if (checkError(res)) thunkAPI.dispatch(resourcesSlice.actions.addMaterial(res.data))
         }
     ),
-    addComponent: createAsyncThunk('resources/addComponent', async (component: TComponents, thunkAPI) => {
+    addComponent: createAsyncThunk('resources/addComponent', async (component: TComponent, thunkAPI) => {
             const res = await ComponentAPI.addOne(component)
             if (checkError(res)) thunkAPI.dispatch(resourcesSlice.actions.addComponent(res.data))
         }
     ),
-    updateMaterial: createAsyncThunk('resources/updateMaterial', async (resInfo: { id: string, res: TMaterials }, thunkAPI) => {
+    updateMaterial: createAsyncThunk('resources/updateMaterial', async (resInfo: { id: string, res: TMaterial }, thunkAPI) => {
             const res = await MaterialAPI.updateOne(resInfo.id, resInfo.res)
             if (checkError(res)) thunkAPI.dispatch(resourcesSlice.actions.updateMaterial({
                 id: resInfo.id,
@@ -96,7 +96,7 @@ export const ResourcesThunks = {
             }))
         }
     ),
-    updateComponent: createAsyncThunk('resources/updateComponent', async (resInfo: { id: string, res: TComponents }, thunkAPI) => {
+    updateComponent: createAsyncThunk('resources/updateComponent', async (resInfo: { id: string, res: TComponent }, thunkAPI) => {
             const res = await ComponentAPI.updateOne(resInfo.id, resInfo.res)
             if (checkError(res)) thunkAPI.dispatch(resourcesSlice.actions.updateComponent({
                 id: resInfo.id,
@@ -116,31 +116,31 @@ export const ResourcesThunks = {
     ),
 }
 
-export const resourcesSlice = createSlice({
+const resourcesSlice = createSlice({
     name: 'resources',
     initialState,
     reducers: {
-        initMaterials: (state, action: PayloadAction<Array<TMaterials>>) => {
+        initMaterials: (state, action: PayloadAction<Array<TMaterial>>) => {
             console.log('in mat')
             state.materials = [...action.payload];
             state.isMaterialsInit = true;
         },
-        initComponents: (state, action: PayloadAction<Array<TComponents>>) => {
+        initComponents: (state, action: PayloadAction<Array<TComponent>>) => {
             console.log('in comp')
             state.components = [...action.payload];
             state.isComponentsInit = true;
         },
-        addMaterial: (state, action: PayloadAction<Array<TMaterials>>) => {
+        addMaterial: (state, action: PayloadAction<Array<TMaterial>>) => {
             state.materials.push(action.payload[0])
         },
-        addComponent: (state, action: PayloadAction<Array<TComponents>>) => {
+        addComponent: (state, action: PayloadAction<Array<TComponent>>) => {
             state.components.push(action.payload[0])
         },
-        updateMaterial: (state, action: PayloadAction<{ id: string, res: TMaterials }>) => {
-            state.materials[state.materials.indexOf(state.materials.find((v) => v.name === action.payload.id) as TMaterials)] = action.payload.res
+        updateMaterial: (state, action: PayloadAction<{ id: string, res: TMaterial }>) => {
+            state.materials[state.materials.indexOf(state.materials.find((v) => v.name === action.payload.id) as TMaterial)] = action.payload.res
         },
-        updateComponent: (state, action: PayloadAction<{ id: string, res: TComponents }>) => {
-            state.components[state.components.indexOf(state.components.find((v) => v.name === action.payload.id) as TComponents)] = action.payload.res
+        updateComponent: (state, action: PayloadAction<{ id: string, res: TComponent }>) => {
+            state.components[state.components.indexOf(state.components.find((v) => v.name === action.payload.id) as TComponent)] = action.payload.res
         },
         deleteMaterial: (state, action: PayloadAction<{ id: string }>) => {
             state.materials = state.materials.filter(v => v.name !== action.payload.id)

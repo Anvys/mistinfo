@@ -1,4 +1,4 @@
-import {TMaterials} from "./ResourceTypes";
+import {TMaterial} from "./ResourceTypes";
 
 type Prev = [never, 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10,
     11, 12, 13, 14, 15, 16, 17, 18, 19, 20,]
@@ -11,8 +11,8 @@ type Paths<T, D extends number = 10> = [D] extends [never] ? never : T extends o
         `${K}` | Join<K, Paths<T[K], Prev[D]>>
         : never
     }[keyof T] : ""
-type NestedObjectPaths = Paths<TMaterials>;
-type NestedObjectLeaves = Leaves<TMaterials>
+type NestedObjectPaths = Paths<TMaterial>;
+type NestedObjectLeaves = Leaves<TMaterial>
 type Leaves<T, D extends number = 10> = [D] extends [never] ? never : T extends object ?
     { [K in keyof T]-?: Join<K, Leaves<T[K], Prev[D]>> }[keyof T] : "";
 type NestedKeys<T> =
@@ -38,3 +38,10 @@ type qwe<T extends Record<string, Record<string, unknown>>> = {
 // type res = TVal<qwe<TMaterials>>
 //     type keys = NestedKeys<T>
 // type keys = Spec<T>
+
+// type DistributiveValues<T extends Record<string, any>> = T extends T ? T[keyof T] : never;
+// type InnerValues<
+//     T extends Record<keyof T, object>,
+//     K extends keyof T
+//     > = DistributiveValues<T[K]>;
+// export type TInnerValues<T> = InnerValues<T, keyof T>;

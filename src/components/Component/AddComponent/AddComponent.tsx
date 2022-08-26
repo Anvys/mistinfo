@@ -1,19 +1,11 @@
 import React, {useState} from "react";
 import styles from "./AddComponent.module.css";
-import {
-    TComponents,
-    TComponentType,
-    TMaterials,
-    TMaterialType, TTranslateData,
-    TTranslateLang,
-    TTranslateLangObj
-} from "../../../Types/ResourceTypes";
+import {TComponent, TComponentType, TTranslateData} from "../../../Types/ResourceTypes";
 import {useFormik} from "formik";
 import {useDispatch} from "react-redux";
-import {ResourcesThunks} from "../../../redux/reducers/resourceReducer";
 import {TAppDispatch} from "../../../redux/store";
 
-type TCompWithoutId = Omit<TComponents, '_id'>
+type TCompWithoutId = Omit<TComponent, '_id'>
 type TProps = {
     selectFields: Array<{[key: string]: Array<string>}>
 }
@@ -132,11 +124,6 @@ export const AddComponent: React.FC<TProps> = (props) => {
                                         <label className={styles.label} htmlFor={vKey}>{vKey}</label>
                                         <select name={vKey} onChange={formik.handleChange} value={formik.values[vKey] as string}>
                                             {v[vKey].map(v=>(<option value={v}>{v}</option>))}
-                                            {/*<option value="Fiber">Fiber</option>*/}
-                                            {/*<option value="Leather">Leather</option>*/}
-                                            {/*<option value="Metal">Metal</option>*/}
-                                            {/*<option value="Stone">Stone</option>*/}
-                                            {/*<option value="Wood">Wood</option>*/}
                                         </select>
                                     </div>
                                 )

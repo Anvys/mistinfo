@@ -1,11 +1,11 @@
 import axios, {AxiosResponse} from "axios";
 import {
-    TComponents,
-    TMaterials, TNpc,
+    TComponent, TLocation,
+    TMaterial, TNpc, TRegion,
     TRequestBody, TRequestType,
     TResponseAllBody,
     TResponseBody,
-    TResResponse
+    TResResponse, TWOid
 } from "../Types/ResourceTypes";
 
 
@@ -16,8 +16,8 @@ const instance = axios.create({
 });
 
 
-type TMatResponse = TResResponse<TMaterials>
-type TComResponse = TResResponse<TComponents>
+type TMatResponse = TResResponse<TMaterial>
+type TComResponse = TResResponse<TComponent>
 const materialURI = `/materials`
 const componentURI = `/components`
 
@@ -25,18 +25,20 @@ const getDataAPI = <D, T extends TRequestType>(uri: string, type: T) => {
     type axRes = TResponseBody<D>
     return {
         getAll: () => instance.get<axRes>(`${uri}/all`).then(data => data.data),
-        getOne: (id: string) => instance.get<axRes>(`${uri}/one/:${id}`).then(data => data.data),
-        addOne: (data: D) => instance.post<axRes, AxiosResponse<axRes>, TRequestBody<T, D>>(
+        getOne: (id: string) => instance.get<axRes>(`${uri}/one/${id}`).then(data => data.data),
+        addOne: (data: TWOid<D>) => instance.post<axRes, AxiosResponse<axRes>, TRequestBody<T, TWOid<D>>>(
             `${uri}/one`, {type: type, data: data}).then(data => data.data),
         updateOne: (id: string, data: D) => instance.put<axRes, AxiosResponse<axRes>, TRequestBody<T, D>>(
-            `${uri}/one/:${id}`, {type: type, data: data}).then(data => data.data),
+            `${uri}/one/${id}`, {type: type, data: data}).then(data => data.data),
         deleteOne: (id: string) => instance.delete<axRes>(
-            `${uri}/one/:${id}`).then(data => data.data),
+            `${uri}/one/${id}`).then(data => data.data),
     }
 }
-export const MaterialAPI = getDataAPI<TMaterials, 'Material'>(`/materials`, 'Material')
-export const ComponentAPI = getDataAPI<TComponents, 'Component'>(`/components`, 'Component')
+export const MaterialAPI = getDataAPI<TMaterial, 'Material'>(`/materials`, 'Material')
+export const ComponentAPI = getDataAPI<TComponent, 'Component'>(`/components`, 'Component')
 export const NpcAPI = getDataAPI<TNpc, 'Npc'>(`/npc`, 'Npc')
+export const LocationAPI = getDataAPI<TLocation, 'Location'>(`/location`, 'Location')
+export const RegionAPI = getDataAPI<TRegion, 'Region'>(`/region`, 'Region')
 //     {
 //     getAll: () => instance.get<TMatResponse>(`${materialURI}/all`).then(data => data.data),
 //     getOne: (id: string) => instance.get<TMatResponse>(`${materialURI}/one/:${id}`).then(data => data.data),

@@ -3,22 +3,22 @@ import styles from './DataView.module.css';
 import {DataViewTable} from "./DataViewTable/DataViewTable";
 import {getMapKeys, sortDataMapKeys, sortStrKeys} from "../../Unils/utilsFunctions";
 import {DataAdd} from "../DataAdd/DataAdd";
-import {TCombineData, TComponents, TMaterials} from "../../Types/ResourceTypes";
+import {TCombineData, TComponent, TMaterial, TPrimKeys, TSubKeys} from "../../Types/ResourceTypes";
 
 // function DataViewTest<T>(props: React.PropsWithChildren<TProps<T>>) {
 //
 //     return <span>Some component logic</span>;
 // }
 
-type KeysOfUnion<T> = T extends T ? keyof T : never;
-type TPrimKeys<T> = keyof T
-type TSubKeys<T> =  KeysOfUnion<T[keyof T]>
 
-
-
-type TProps<T> = { data: Array<T> };
+type TProps<T> = {
+    data: Array<T>
+    dataAddHandler: (id: string) => void
+};
 export const DataView = <T extends TCombineData>(props: React.PropsWithChildren<TProps<T>>) => {
-    const {data} = props;
+    const {data, dataAddHandler} = props;
+    const [dataOnEdit, setDataOnEdit] = useState<null | { [key: string]: any }>(null)
+    if (!data || !data.length) return <>empty bd</>
     type k1 = TPrimKeys<T>
     type k2 = TSubKeys<T>
 
@@ -33,17 +33,22 @@ export const DataView = <T extends TCombineData>(props: React.PropsWithChildren<
         return sortedRow
     })
     console.log(dataValues)
-    const [dataOnEdit, setDataOnEdit] = useState<null | {[key: string]: any }>(null)
-    const edithandler = (id: string) =>{
+
+    const editHandler = (id: string) => {
         console.log(`handle ${id}`)
-        const result = data.find(v=>v._id === id);
+        const result = data.find(v => v._id === id);
         console.log(result)
-        if(result) setDataOnEdit(result)
+        if (result) setDataOnEdit(result)
     }
     return (
         <>
-            <DataAdd dataKeys={dataKeys} sortedDataKeys={sortedDataKeys} data={dataOnEdit}/>
-            <DataViewTable dataKeys={dataKeys} sortedDataKeys={sortedDataKeys} dataValues={dataValues} edithandler={edithandler}/>
+            {/*<DataAdd dataKeys={dataKeys} sortedDataKeys={sortedDataKeys} data={dataOnEdit}/>*/}
+            <DataViewTable
+                dataKeys={dataKeys}
+                sortedDataKeys={sortedDataKeys}
+                dataValues={dataValues}
+                dataAddHandler={dataAddHandler}
+            />
         </>
 
     )

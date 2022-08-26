@@ -1,13 +1,14 @@
 import type {PayloadAction} from '@reduxjs/toolkit'
 import {createAsyncThunk, createSlice} from '@reduxjs/toolkit'
-import {TMaterials} from "../../Types/ResourceTypes";
+import {TMaterial, TWOid} from "../../Types/ResourceTypes";
 import {MaterialAPI} from "../../API/ResourceAPI";
 import {checkError} from "../../Unils/utilsFunctions";
+import {selectFieldsOptions} from "../../components/DataAdd/AddFields";
 
 const reducerPath = 'mif/material'
 
 export type TInitialState = {
-    data: Array<TMaterials>
+    data: Array<TMaterial>
     isInit: boolean
 }
 const initialState: TInitialState = {
@@ -19,15 +20,15 @@ export const MaterialSlice = createSlice({
     name: 'material',
     initialState,
     reducers: {
-        init: (state, action: PayloadAction<Array<TMaterials>>) => {
+        init: (state, action: PayloadAction<Array<TMaterial>>) => {
             state.data = [...action.payload];
             state.isInit = true;
         },
-        addOne: (state, action: PayloadAction<Array<TMaterials>>) => {
+        addOne: (state, action: PayloadAction<Array<TMaterial>>) => {
             state.data.push(action.payload[0])
         },
-        updateOne: (state, action: PayloadAction<{ id: string, data: TMaterials }>) => {
-            state.data[state.data.indexOf(state.data.find((v) => v._id === action.payload.id) as TMaterials)] = action.payload.data
+        updateOne: (state, action: PayloadAction<{ id: string, data: TMaterial }>) => {
+            state.data[state.data.indexOf(state.data.find((v) => v._id === action.payload.id) as TMaterial)] = action.payload.data
         },
         deleteOne: (state, action: PayloadAction<{ id: string }>) => {
             state.data = state.data.filter(v => v._id !== action.payload.id)
@@ -48,9 +49,11 @@ export const MaterialSlice = createSlice({
 
 const CurAPI = MaterialAPI;
 const CurSlice = MaterialSlice;
+export type TMaterialThunks = typeof MaterialThunks;
 export const MaterialThunks = {
     getAll: createAsyncThunk(`${reducerPath}/getAll`, async (_, thunkAPI) => {
             const res = await CurAPI.getAll()
+            if (res.data.length) selectFieldsOptions.material = res.data.map(v => v.name);
             if (checkError(res)) thunkAPI.dispatch(CurSlice.actions.init(res.data))
         }
     ),
@@ -59,12 +62,12 @@ export const MaterialThunks = {
             if (checkError(res)) return res.data
         }
     ),
-    addOne: createAsyncThunk(`${reducerPath}/addOne`, async (data: TMaterials, thunkAPI) => {
+    addOne: createAsyncThunk(`${reducerPath}/addOne`, async (data: TWOid<TMaterial>, thunkAPI) => {
             const res = await CurAPI.addOne(data)
             if (checkError(res)) thunkAPI.dispatch(CurSlice.actions.addOne(res.data))
         }
     ),
-    updateOne: createAsyncThunk(`${reducerPath}/updateOne`, async (resInfo: { id: string, data: TMaterials }, thunkAPI) => {
+    updateOne: createAsyncThunk(`${reducerPath}/updateOne`, async (resInfo: { id: string, data: TMaterial }, thunkAPI) => {
             const res = await CurAPI.updateOne(resInfo.id, resInfo.data)
             if (checkError(res)) thunkAPI.dispatch(CurSlice.actions.updateOne({
                 id: resInfo.id,

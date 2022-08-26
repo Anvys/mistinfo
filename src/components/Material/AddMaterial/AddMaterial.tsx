@@ -1,8 +1,8 @@
 import React, {useState} from "react";
 import styles from "./AddMaterial.module.css";
 import {
-    TComponents,
-    TMaterials,
+    TComponent,
+    TMaterial,
     TMaterialType,
     TTranslateLang,
     TTranslateLangObj,
@@ -10,11 +10,10 @@ import {
 } from "../../../Types/ResourceTypes";
 import {useFormik} from "formik";
 import {useDispatch} from "react-redux";
-import {ResourcesThunks} from "../../../redux/reducers/resourceReducer";
 import {TAppDispatch} from "../../../redux/store";
 
 type TSelectsParams = 'type' | 'tier';
-type TCompWithoutId = Omit<TMaterials, '_id'>
+type TCompWithoutId = Omit<TMaterial, '_id'>
 type TProps = {
     selectFields: Array<{[key: string]: Array<string>}>
 }

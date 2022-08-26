@@ -2,13 +2,15 @@ import React from 'react';
 import {useFormik} from "formik";
 import styles from './DataAdd.module.css';
 import {getDefaultFormikValues} from "../../Types/Utils";
+import {TCombineData, TPrimKeys, TSubKeys} from "../../Types/ResourceTypes";
 
 type TProps = {
     dataKeys: Map<string, Array<string>>
     sortedDataKeys: Array<string>
     data?: any
 };
-type objtype = { [key: string]: string | number | undefined | objtype }
+type objtype = { [key: string]: string | number  | { [key: string]: string | number }}
+// type objtype = TCombineData
 const getInitObj = (dataKeys: Map<string, Array<string>>, data: objtype | null = null) => {
     let obj: objtype = {};
     if (data === null) {
@@ -32,12 +34,13 @@ const getInitObj = (dataKeys: Map<string, Array<string>>, data: objtype | null =
 }
 export const DataAdd: React.FC<TProps> = (props) => {
     const {dataKeys, sortedDataKeys} = props;
+
     // console.log('initobj')
     // console.log(dataKeys)
-    console.log('Initialvalue:')
+    // console.log('Initialvalue:')
 
     const data = props.data ? getInitObj(dataKeys, props.data) : getInitObj(dataKeys)
-    console.log(data)
+    // console.log(data)
 
     const formik = useFormik({
         initialValues: data,
@@ -46,8 +49,10 @@ export const DataAdd: React.FC<TProps> = (props) => {
             actions.setSubmitting(false);
         }
     })
-    console.log(`formik values:`)
-    console.log(formik.values)
+    // type k1 = TPrimKeys<fv>
+    // type k2 = TSubKeys<fv>
+    // console.log(`formik values:`)
+    // console.log(formik.values)
 
     // const data = {asd: 1, qwe: {q: 2, w: 3}, zxc: 4}
     // type tdata = Extract<keyof typeof data, string>
@@ -60,7 +65,7 @@ export const DataAdd: React.FC<TProps> = (props) => {
                         {dataKeys.get(v)?.map((str, i) => {
                             const htmlId = `${v}.${str}`
                             // @ts-ignore
-                            const value = formik.values[v][str]
+                            const value = formik.values[v as k1][str as k2]
                             const strType = typeof value === 'number' ? 'number' : 'text';
                             // console.log(`${htmlId} / ${value}`)
                             return (

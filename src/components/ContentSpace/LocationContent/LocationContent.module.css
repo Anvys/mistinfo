@@ -1,0 +1,7 @@
+.contentBox {
+    display: flex;
+    border: 1px solid black;
+    padding: 5px;
+    flex-direction: column;
+    gap: 10px;
+}

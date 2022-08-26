@@ -1,8 +1,10 @@
 import type {PayloadAction} from '@reduxjs/toolkit'
 import {createAsyncThunk, createSlice} from '@reduxjs/toolkit'
-import {TNpc} from "../../Types/ResourceTypes";
+import {TNpc, TWOid} from "../../Types/ResourceTypes";
 import {NpcAPI} from "../../API/ResourceAPI";
 import {checkError} from "../../Unils/utilsFunctions";
+import {selectFieldsOptions} from "../../components/DataAdd/AddFields";
+import {ComponentThunks} from "./componentReducer";
 
 const reducerPath = 'mif/npc'
 
@@ -48,9 +50,11 @@ export const NpcSlice = createSlice({
 
 const CurAPI = NpcAPI;
 const CurSlice = NpcSlice;
+export type TNpcThunks = typeof NpcThunks;
 export const NpcThunks = {
     getAll: createAsyncThunk(`${reducerPath}/getAll`, async (_, thunkAPI) => {
             const res = await CurAPI.getAll()
+            if (res.data.length) selectFieldsOptions.npc = res.data.map(v => v.name);
             if (checkError(res)) thunkAPI.dispatch(CurSlice.actions.init(res.data))
         }
     ),
@@ -59,7 +63,7 @@ export const NpcThunks = {
             if (checkError(res)) return res.data
         }
     ),
-    addOne: createAsyncThunk(`${reducerPath}/addOne`, async (data: TNpc, thunkAPI) => {
+    addOne: createAsyncThunk(`${reducerPath}/addOne`, async (data: TWOid<TNpc>, thunkAPI) => {
             const res = await CurAPI.addOne(data)
             if (checkError(res)) thunkAPI.dispatch(CurSlice.actions.addOne(res.data))
         }

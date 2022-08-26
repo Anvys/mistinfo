@@ -1,15 +1,15 @@
 import type {PayloadAction} from '@reduxjs/toolkit'
 import {createAsyncThunk, createSlice} from '@reduxjs/toolkit'
-import {TComponent, TWOid} from "../../Types/ResourceTypes";
-import {ComponentAPI, NpcAPI} from "../../API/ResourceAPI";
+import {TLocation, TWOid} from "../../Types/ResourceTypes";
+import {LocationAPI, NpcAPI} from "../../API/ResourceAPI";
 import {checkError} from "../../Unils/utilsFunctions";
 import {selectFieldsOptions} from "../../components/DataAdd/AddFields";
-import {MaterialThunks} from "./materialReducer";
+import {RegionThunks} from "./regionReducer";
 
-const reducerPath = 'mif/component'
+const reducerPath = 'mif/location'
 
 export type TInitialState = {
-    data: Array<TComponent>
+    data: Array<TLocation>
     isInit: boolean
 }
 const initialState: TInitialState = {
@@ -17,19 +17,19 @@ const initialState: TInitialState = {
     isInit: false,
 }
 
-export const ComponentSlice = createSlice({
-    name: 'component',
+export const LocationSlice = createSlice({
+    name: 'location',
     initialState,
     reducers: {
-        init: (state, action: PayloadAction<Array<TComponent>>) => {
+        init: (state, action: PayloadAction<Array<TLocation>>) => {
             state.data = [...action.payload];
             state.isInit = true;
         },
-        addOne: (state, action: PayloadAction<Array<TComponent>>) => {
+        addOne: (state, action: PayloadAction<Array<TLocation>>) => {
             state.data.push(action.payload[0])
         },
-        updateOne: (state, action: PayloadAction<{ id: string, data: TComponent }>) => {
-            state.data[state.data.indexOf(state.data.find((v) => v._id === action.payload.id) as TComponent)] = action.payload.data
+        updateOne: (state, action: PayloadAction<{ id: string, data: TLocation }>) => {
+            state.data[state.data.indexOf(state.data.find((v) => v._id === action.payload.id) as TLocation)] = action.payload.data
         },
         deleteOne: (state, action: PayloadAction<{ id: string }>) => {
             state.data = state.data.filter(v => v._id !== action.payload.id)
@@ -37,24 +37,24 @@ export const ComponentSlice = createSlice({
     },
     extraReducers: (builder) => {
         // Add reducers for additional action types here, and handle loading state as needed
-        builder.addCase(ComponentThunks.getAll.fulfilled, (state, action) => {
+        builder.addCase(LocationThunks.getAll.fulfilled, (state, action) => {
         })
-        builder.addCase(ComponentThunks.getOne.fulfilled, (state, action) => {
+        builder.addCase(LocationThunks.getOne.fulfilled, (state, action) => {
         })
-        builder.addCase(ComponentThunks.updateOne.fulfilled, (state, action) => {
+        builder.addCase(LocationThunks.updateOne.fulfilled, (state, action) => {
         })
-        builder.addCase(ComponentThunks.deleteOne.fulfilled, (state, action) => {
+        builder.addCase(LocationThunks.deleteOne.fulfilled, (state, action) => {
         })
     }
 })
 
-const CurAPI = ComponentAPI;
-const CurSlice = ComponentSlice;
-export type TComponentThunks = typeof ComponentThunks;
-export const ComponentThunks = {
+const CurAPI = LocationAPI;
+const CurSlice = LocationSlice;
+export type TLocationThunks = typeof LocationThunks;
+export const LocationThunks = {
     getAll: createAsyncThunk(`${reducerPath}/getAll`, async (_, thunkAPI) => {
             const res = await CurAPI.getAll()
-            if (res.data.length) selectFieldsOptions.component = res.data.map(v => v.name);
+            if (res.data.length) selectFieldsOptions.location = res.data.map(v=>v.name);
             if (checkError(res)) thunkAPI.dispatch(CurSlice.actions.init(res.data))
         }
     ),
@@ -63,12 +63,12 @@ export const ComponentThunks = {
             if (checkError(res)) return res.data
         }
     ),
-    addOne: createAsyncThunk(`${reducerPath}/addOne`, async (data: TWOid<TComponent>, thunkAPI) => {
+    addOne: createAsyncThunk(`${reducerPath}/addOne`, async (data: TWOid<TLocation>, thunkAPI) => {
             const res = await CurAPI.addOne(data)
             if (checkError(res)) thunkAPI.dispatch(CurSlice.actions.addOne(res.data))
         }
     ),
-    updateOne: createAsyncThunk(`${reducerPath}/updateOne`, async (resInfo: { id: string, data: TComponent }, thunkAPI) => {
+    updateOne: createAsyncThunk(`${reducerPath}/updateOne`, async (resInfo: { id: string, data: TLocation }, thunkAPI) => {
             const res = await CurAPI.updateOne(resInfo.id, resInfo.data)
             if (checkError(res)) thunkAPI.dispatch(CurSlice.actions.updateOne({
                 id: resInfo.id,
@@ -85,4 +85,4 @@ export const ComponentThunks = {
 
 
 // Action creators are generated for each case reducer function
-export const {} = ComponentSlice.actions
+// export const {} = NpcSlice.actions

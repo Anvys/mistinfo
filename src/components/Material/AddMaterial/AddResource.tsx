@@ -1,9 +1,8 @@
 import React, {useState} from "react";
 import styles from "./AddMaterial.module.css";
-import {TComponents, TMaterials, TMaterialType, TTranslateLang, TTranslateLangObj} from "../../../Types/ResourceTypes";
+import {TComponent, TMaterial, TMaterialType, TTranslateLang, TTranslateLangObj} from "../../../Types/ResourceTypes";
 import {useFormik} from "formik";
 import {useDispatch, useSelector} from "react-redux";
-import {ResourcesThunks} from "../../../redux/reducers/resourceReducer";
 import {TAppDispatch} from "../../../redux/store";
 // import {AddResourceForm} from "./AddResourceForm";
 import {getIsMaterialsInitSelector, getMaterialsSelector} from "../../../redux/dataSelectors";

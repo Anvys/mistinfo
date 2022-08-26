@@ -1,4 +1,4 @@
-export type TCombineData = TNpc | TRegion | TLocation | TGatherPoint | TMaterials | TComponents
+export type TCombineData = TNpc | TRegion | TLocation | TMaterial | TComponent // | TGatherPoint
 
 export type TResources<T, U> = {
     _id: string
@@ -43,6 +43,7 @@ export type TGatherPoint = {
     cooldown: number
     pos: TMapPosition
     region: string
+    translate: TTranslateData
 }
 
 export type TWOid<T> = Omit<T, '_id'>
@@ -85,7 +86,7 @@ export type TMaterialAttributes = {
     Radiance: number
     Rigidity: number
 }
-export type TMaterials = TResources<TMaterialType, TMaterialAttributes>
+export type TMaterial = TResources<TMaterialType, TMaterialAttributes>
 export type TComponentType = 'Plant' | 'Gem' | 'Substance' | 'Powder' | 'Sap' | 'Pollen' | 'Artefact'
 export type TComponentAttributes = {
     Activator: number
@@ -108,9 +109,9 @@ export type TComponentAttributes = {
     Pyram: number
     Stratam: number
 }
-export type TComponents = TResources<TComponentType, TComponentAttributes>
+export type TComponent = TResources<TComponentType, TComponentAttributes>
 
-export type TRequestType = 'Material' | 'Component' | 'Npc'
+export type TRequestType = 'Material' | 'Component' | 'Npc' | 'Location' | 'Region' | 'GatherPoint'
 export type TRequestBody<T extends TRequestType, D> = {
     type: T
     data: D
@@ -125,5 +126,12 @@ export type TResponseBody<T> = {
     msg: Array<string>
     data: Array<T>
 }
-export type TResResponse<T = TComponents | TMaterials> = TResponse<Array<T>>
-export type TResponseAllBody = TResponse<{ materials: Array<TMaterials>, components: Array<TComponents> }>
+export type TResResponse<T = TComponent | TMaterial> = TResponse<Array<T>>
+export type TResponseAllBody = TResponse<{ materials: Array<TMaterial>, components: Array<TComponent> }>
+
+
+
+
+export type KeysOfUnion<T> = T extends T ? keyof T : never;
+export type TPrimKeys<T> = keyof T
+export type TSubKeys<T> =  KeysOfUnion<T[keyof T]>

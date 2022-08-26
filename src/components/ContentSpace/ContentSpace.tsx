@@ -4,6 +4,10 @@ import styles from './ContentSpace.module.css'
 import {MaterialContent} from "../Material/MaterialContent/MaterialContent";
 import {ComponentContent} from "../Component/ComponentContent/ComponentContent";
 import {Map} from "../Map/Map";
+import {NpcDataAdd} from "../DataAdd/NpcDataAdd";
+import {NpcContent} from "./NpcContent/NpcContent";
+import {LocationContent} from "./LocationContent/LocationContent";
+import {RegionContent} from "./RegionContent/RegionContent";
 
 
 export const ContentSpace: React.FC = () =>{
@@ -23,8 +27,12 @@ export const ContentSpace: React.FC = () =>{
                     {/*<Route path={'/material/add'} element={<AddMaterial selectFields={materialSelectFields}/>}/>*/}
                 </Route>
                 <Route path={'/component/'} element={<ComponentContent/>}>
+
                     {/*<Route path={'/component/add'} element={<AddComponent selectFields={componentSelectFields}/>}/>*/}
                 </Route>
+                <Route path={'/npc/'} element={<NpcContent/>}/>
+                <Route path={'/location/'} element={<LocationContent/>}/>
+                <Route path={'/region/'} element={<RegionContent/>}/>
             </Routes>
 
         </div>

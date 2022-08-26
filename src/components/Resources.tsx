@@ -1,7 +1,6 @@
 import React, {useEffect, useState} from "react";
-import {TComponents, TMaterials} from "../Types/ResourceTypes";
+import {TComponent, TMaterial} from "../Types/ResourceTypes";
 import {useDispatch, useSelector} from "react-redux";
-import {ResourcesThunks} from "../redux/reducers/resourceReducer";
 import {TAppDispatch} from "../redux/store";
 import {getComponentsSelector, getMaterialsSelector} from "../redux/dataSelectors";
 import {AddMaterial} from "./Material/AddMaterial/AddMaterial";

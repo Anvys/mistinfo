@@ -5,10 +5,10 @@ type TProps = {
     dataKeys: Map<string, Array<string>>
     sortedDataKeys: Array<string>
     dataValues: Array<Array<any>>
-    edithandler: (id: string) => void
+    dataAddHandler: (id: string) => void
 };
 export const DataViewTable: React.FC<TProps> = (props) => {
-    const data = props.dataValues.map(v => [...v, <button onClick={() => props.edithandler(v[0])}>Edit</button>])
+    const data = props.dataValues.map(v => [...v, <button onClick={() => props.dataAddHandler(v[0])}>Edit</button>])
     // const onEdithandler:MouseEventHandler<HTMLButtonElement> = (e)=>{
     //
     // }
