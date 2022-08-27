@@ -1,9 +1,8 @@
-import L, {Icon, LatLng, LatLngBounds} from 'leaflet';
-import React, {MouseEventHandler, useEffect, useState} from 'react';
+import {Icon} from 'leaflet';
+import React, {useEffect, useState} from 'react';
 import styles from './Map.module.css';
-import {ImageOverlay, MapContainer, Marker, Popup, TileLayer, useMap, useMapEvents} from "react-leaflet";
-import mapimg from '../../assets/img/map/001.jpg'
-import icon1 from '../../assets/icons/testicon.png'
+import {MapContainer, Marker, Popup, TileLayer, useMap} from "react-leaflet";
+
 // import * as icons from '../../assets/icons'
 function MyComponent() {
     const [coords, setCoords] = useState({lat:0, lng:0});
