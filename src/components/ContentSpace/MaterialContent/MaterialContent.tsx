@@ -3,14 +3,11 @@ import styles from './MaterialContent.module.css';
 import {useDispatch, useSelector} from "react-redux";
 import {getIsMaterialsInitSelector, getMaterialsSelector} from "../../../redux/dataSelectors";
 import {TAppDispatch} from "../../../redux/store";
-import {MaterialContentHeader} from "../MaterialContentHeader/MaterialContentHeader";
 import {Outlet} from "react-router-dom";
 import {DataView} from "../../DataView/DataView";
 import {MaterialThunks} from "../../../redux/reducers/materialReducer";
-import {MaterialDataAdd} from "../../DataAdd/MaterialDataAdd";
-import {TComponent, TComponentType, TMaterial, TMaterialType, TWOid} from "../../../Types/ResourceTypes";
+import {TMaterial, TMaterialType, TWOid} from "../../../Types/ResourceTypes";
 import {GenDataAdd} from "../../DataAdd/GenDataAdd";
-import {ComponentThunks} from "../../../redux/reducers/componentReducer";
 
 type TProps = {};
 export const MaterialContent:React.FC<TProps> = (props) => {
@@ -22,12 +19,16 @@ export const MaterialContent:React.FC<TProps> = (props) => {
     const dataAddHandler = (id: string) =>{
         setDataToAdd(id.length ? data.find(v=>v._id===id) || null : null)
     }
+    const dataDelHandler = (id: string) => {
+        dispatch(MaterialThunks.deleteOne(id))
+    }
     const resetAddFormData = () => setDataToAdd(null)
     const initObj: TWOid<TMaterial> = {
         name: '',
         type: 'Bone' as TMaterialType,
         durability: 0,
-        difficulty: 0,
+        craftDifficulty: 0,
+        gatherDifficulty: 0,
         tier: 0,
         attributes: {
             Absorbity: 0,
@@ -57,7 +58,7 @@ export const MaterialContent:React.FC<TProps> = (props) => {
             </div>
             <div className={styles.dbField}>
                 <Outlet/>
-                <DataView data={data} dataAddHandler={dataAddHandler}/>
+                <DataView data={data} dataAddHandler={dataAddHandler} dataDelHandler={dataDelHandler} />
             </div>
         </div>
     );

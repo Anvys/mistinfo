@@ -53,7 +53,16 @@ export type TMaterialThunks = typeof MaterialThunks;
 export const MaterialThunks = {
     getAll: createAsyncThunk(`${reducerPath}/getAll`, async (_, thunkAPI) => {
             const res = await CurAPI.getAll()
-            if (res.data.length) selectFieldsOptions.material = res.data.map(v => v.name);
+            if (res.data.length) {
+                selectFieldsOptions.material = res.data.map(v => v.name);
+                selectFieldsOptions["gatherpoint.Botany"] = res.data.filter(v => v.type === 'Fiber').map(v => v.name)
+                selectFieldsOptions["gatherpoint.Hunting"] = res.data.filter(v => (v.type === 'Bone' || v.type === 'Leather')).map(v => v.name)
+                selectFieldsOptions["gatherpoint.Mining"] = res.data.filter(v => v.type === 'Metal' || v.type === 'Stone').map(v => v.name)
+                selectFieldsOptions["gatherpoint.Lumberjacking"] = res.data.filter(v => v.type === 'Wood').map(v => v.name)
+                console.log(selectFieldsOptions)
+
+            }
+
             if (checkError(res)) thunkAPI.dispatch(CurSlice.actions.init(res.data))
         }
     ),

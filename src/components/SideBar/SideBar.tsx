@@ -6,6 +6,7 @@ export const SideBar: React.FC = () =>{
     return(
         <div className={styles.sideBox}>
         Database menu
+            <Link to={'/map'} className={styles.navButton}>Map</Link>
             <Link to={'/material'} className={styles.navButton}>Material</Link>
             <Link to={'/component'} className={styles.navButton}>Component</Link>
             <Link to={'/npc'} className={styles.navButton}>Npc</Link>

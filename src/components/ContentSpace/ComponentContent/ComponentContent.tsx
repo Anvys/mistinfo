@@ -2,15 +2,11 @@ import React, {useState} from 'react';
 import styles from './ComponentContent.module.css';
 import {useDispatch, useSelector} from "react-redux";
 import {getComponentsSelector, getIsComponentsInitSelector} from "../../../redux/dataSelectors";
-import {TAppDispatch, TCombineThunks} from "../../../redux/store";
-import {ComponentContentHeader} from "../ComponentContentHeader/ComponentContentHeader";
-import {Outlet} from "react-router-dom";
+import {TAppDispatch} from "../../../redux/store";
 import {ComponentThunks} from "../../../redux/reducers/componentReducer";
 import {DataView} from "../../DataView/DataView";
-import {MaterialDataAdd} from "../../DataAdd/MaterialDataAdd";
-import {ComponentDataAdd} from "../../DataAdd/ComponentDataAdd";
 import {TComponent, TComponentType, TWOid} from "../../../Types/ResourceTypes";
-import {GenDataAdd, TDataAddProps} from "../../DataAdd/GenDataAdd";
+import {GenDataAdd} from "../../DataAdd/GenDataAdd";
 
 type TProps = {};
 export const ComponentContent: React.FC<TProps> = (props) => {
@@ -23,12 +19,16 @@ export const ComponentContent: React.FC<TProps> = (props) => {
     const dataAddHandler = (id: string) => {
         setDataToAdd(id.length ? data.find(v => v._id === id) || null : null)
     }
+    const dataDelHandler = (id: string) => {
+        dispatch(ComponentThunks.deleteOne(id))
+    }
     const resetAddFormData = () => setDataToAdd(null)
     const initObj: TWOid<TComponent> = {
         name: '',
         type: 'Plant' as TComponentType,
         durability: 0,
-        difficulty: 0,
+        craftDifficulty: 0,
+        gatherDifficulty: 0,
         tier: 0,
         attributes: {
             Activator: 0,
@@ -69,7 +69,7 @@ export const ComponentContent: React.FC<TProps> = (props) => {
                 })}
             </div>
             <div className={styles.dbField}>
-                <DataView data={data} dataAddHandler={dataAddHandler}/>
+                <DataView data={data} dataAddHandler={dataAddHandler} dataDelHandler={dataDelHandler}/>
             </div>
         </div>
     );

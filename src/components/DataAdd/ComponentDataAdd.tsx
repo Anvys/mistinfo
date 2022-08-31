@@ -1,18 +1,16 @@
 import React from 'react';
 import {useFormik} from "formik";
-import {TMaterialType, TComponent, TWOid, TComponentType} from "../../Types/ResourceTypes";
+import {TComponent, TComponentType, TWOid} from "../../Types/ResourceTypes";
 import {useDispatch} from "react-redux";
 import {TAppDispatch} from "../../redux/store";
-import {RegionThunks} from "../../redux/reducers/regionReducer";
 import {AddDataForm} from "./AddDataForm";
-import {MaterialThunks} from "../../redux/reducers/materialReducer";
 import {ComponentThunks} from "../../redux/reducers/componentReducer";
 // import styles from './NpcDataAdd.module.css';
 
 const DATA_NAME = 'component';
 type TProps = {
     data: TComponent | null
-    resetAddFormData: ()=>void
+    resetAddFormData: () => void
 };
 export const ComponentDataAdd: React.FC<TProps> = (props) => {
     const {data} = props
@@ -21,7 +19,8 @@ export const ComponentDataAdd: React.FC<TProps> = (props) => {
         name: '',
         type: 'Plant' as TComponentType,
         durability: 0,
-        difficulty: 0,
+        craftDifficulty: 0,
+        gatherDifficulty: 0,
         tier: 0,
         attributes: {
             Activator: 0,
@@ -46,7 +45,7 @@ export const ComponentDataAdd: React.FC<TProps> = (props) => {
         },
         goldCost: 0,
         encumbrance: 0,
-        translate: {En: '',Fr:'', Ru:''},
+        translate: {En: '', Fr: '', Ru: ''},
     } as TWOid<TComponent>
     const formik = useFormik({
         initialValues: initVal,
@@ -54,7 +53,7 @@ export const ComponentDataAdd: React.FC<TProps> = (props) => {
         onSubmit: async (values, actions) => {
             values.name = values.translate.En;
             console.log(values)
-            if(data===null)dispatch(ComponentThunks.addOne(values))
+            if (data === null) dispatch(ComponentThunks.addOne(values))
             else dispatch(ComponentThunks.updateOne({id: data._id, data: {...values, _id: data._id}}))
             props.resetAddFormData();
             actions.setSubmitting(false);
@@ -63,7 +62,7 @@ export const ComponentDataAdd: React.FC<TProps> = (props) => {
     return (
         <div>
             {data === null ? 'New Component' : `Update ${data.name}/${data._id}`}
-            <AddDataForm formik={formik} dataName={DATA_NAME} resetAddFormData={props.resetAddFormData} />
+            <AddDataForm formik={formik} dataName={DATA_NAME} resetAddFormData={props.resetAddFormData}/>
         </div>
     );
 }

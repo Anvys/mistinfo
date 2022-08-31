@@ -4,7 +4,6 @@ import {TRegion, TWOid} from "../../Types/ResourceTypes";
 import {RegionAPI} from "../../API/ResourceAPI";
 import {checkError} from "../../Unils/utilsFunctions";
 import {selectFieldsOptions} from "../../components/DataAdd/AddFields";
-import {NpcThunks} from "./npcReducer";
 
 const reducerPath = 'mif/region'
 

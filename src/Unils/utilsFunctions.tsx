@@ -1,8 +1,10 @@
-import {TCombineData, TResponseBody} from "../Types/ResourceTypes";
+import {TCombineData, TMapPosition, TResponseBody} from "../Types/ResourceTypes";
 import {StatusCodes} from "../Types/Utils";
 import {FormikProps} from "formik";
 import {AddFields, selectFieldsOptions, TSelectFieldOptionsKeys} from "../components/DataAdd/AddFields";
 import styles from "../components/DataAdd/DataAdd.module.css";
+import {useSelector} from "react-redux";
+import {getMarkerForAddPosSelector, getMaterialsSelector} from "../redux/dataSelectors";
 
 export const getDeepKeys = (obj: object, keys: Array<string> = []): Array<string> => {
     //todo только для объектов, не для массивов
@@ -32,7 +34,7 @@ export const getDeepKeys = (obj: object, keys: Array<string> = []): Array<string
 export const getMapKeys = (data: any) => {
     const dataKeys = new Map<string, Array<string>>([['primary', []]])
     Object.entries(data).forEach(([key, value]) => {
-        if (key !== '_id' && key !== '__v' && key !== 'name') {
+        if (key !== '_id' && key !== '__v' && key !== 'name'&& key !== 'notes'&& key !== 'drop') {
             const tValue = typeof value
             if (tValue !== 'object') dataKeys.get('primary')?.push(key)
             else dataKeys.set(key, Object.keys(value as any))
@@ -104,12 +106,27 @@ export const getElement = (value: string | number, fullKey: string, formik: Form
     const elType = typeof value === 'number' ? 'number' : 'text'
     const htmlId = `${fullKey}`
     const key = fullKey.split('.').pop()
+    if(dataName==='gatherpoint' && key==='En' ){
+        return AddFields.gathertypename(formik.values.type,formik, formik.handleChange,
+            htmlId, key, index, styles.fieldBox, styles.label, styles.inputText)
+    }
+    // if(dataName==='gatherpoint' && key==='type' )return null
     const selectPathToFind = key === 'type' ? `${dataName}.${fullKey}` : `${fullKey}`
     // console.log(`${selectPathToFind}`)
     const selArr = selectFieldsOptions[`${selectPathToFind}` as TSelectFieldOptionsKeys];
     if (selArr === undefined) {
+        // if(dataName==='gatherpoint'){
+        //     const translate = useSelector(getMaterialsSelector).filter(v=>v.type===formik.values.type && v.name===formik.values.name)[0].translate
+        //     if(key==='En') return AddFields.input(elType, translate.En as string | number, formik.handleChange,
+        //         htmlId, key, true, index, styles.fieldBox, styles.label, styles.inputText, true)
+        //     if(key==='Ru') return AddFields.input(elType, translate.Ru as string | number, formik.handleChange,
+        //         htmlId, key, true, index, styles.fieldBox, styles.label, styles.inputText, true)
+        //     if(key==='Fr') return AddFields.input(elType, translate.Fr as string | number, formik.handleChange,
+        //         htmlId, key, true, index, styles.fieldBox, styles.label, styles.inputText, true)
+        // }
+
         return AddFields.input(elType, value as string | number, formik.handleChange,
-            htmlId, key, true, index, styles.fieldBox, styles.label, styles.inputText)
+            htmlId, key, key!=='Ru' && key!=='Fr', index, styles.fieldBox, styles.label, styles.inputText)
     } else {
         return AddFields.select(value as string | number, formik.handleChange,
             htmlId, key, index, selArr, styles.fieldBox, styles.label, styles.inputText)
@@ -119,14 +136,23 @@ export const getDeepElements = (mapVal: object, prevKey: string, formik: FormikP
     return (
         <>
             {/*{prevKey}*/}
-            {Object.entries(mapVal).sort((a, b) => getWeight(a[0]) - getWeight(b[0])).map(([key, value], i) => {
-                if ((key === 'name' && !prevKey.length)|| key==='_id') { // @ts-ignore
+            {Object.entries(mapVal)
+                .sort((a, b) => getWeight(a[0]) - getWeight(b[0]))
+                .map(([key, value], i) => {// && dataName !=='gatherpoint'
+                if (((key === 'name') && !prevKey.length)|| key==='_id' || (dataName ==='gatherpoint' && (key==='Ru' || key==='Fr'))) { // @ts-ignore
                     return null
                 }
                 const curKey = prevKey.length ? `${prevKey}.${key}` : key;
-                if (typeof value === 'object') return getDeepElements(value, curKey, formik, dataName)
+                if (typeof value === 'object' && key!=='pos')
+                    return getDeepElements(value, curKey, formik, dataName)
                 else {
-                    return [getElement(value, curKey, formik, dataName, i)]
+                    if(key ==='pos'){
+                        // const marPos = useSelector(getMarkerForAddPosSelector)
+                        return AddFields.posField(value['x'],value['y'],formik.handleChange,curKey, i, formik)
+                    }else{
+                        return [getElement(value, curKey, formik, dataName, i)]
+
+                    }
                 }
             })}
         </>

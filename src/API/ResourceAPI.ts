@@ -1,11 +1,16 @@
 import axios, {AxiosResponse} from "axios";
 import {
-    TComponent, TLocation,
-    TMaterial, TNpc, TRegion,
-    TRequestBody, TRequestType,
-    TResponseAllBody,
+    TComponent,
+    TGatherPoint,
+    TLocation,
+    TMaterial,
+    TNpc,
+    TRegion,
+    TRequestBody,
+    TRequestType,
     TResponseBody,
-    TResResponse, TWOid
+    TResResponse,
+    TWOid
 } from "../Types/ResourceTypes";
 
 
@@ -39,6 +44,7 @@ export const ComponentAPI = getDataAPI<TComponent, 'Component'>(`/components`, '
 export const NpcAPI = getDataAPI<TNpc, 'Npc'>(`/npc`, 'Npc')
 export const LocationAPI = getDataAPI<TLocation, 'Location'>(`/location`, 'Location')
 export const RegionAPI = getDataAPI<TRegion, 'Region'>(`/region`, 'Region')
+export const GatherPointAPI = getDataAPI<TGatherPoint, 'GatherPoint'>(`/gatherpoint`, 'GatherPoint')
 //     {
 //     getAll: () => instance.get<TMatResponse>(`${materialURI}/all`).then(data => data.data),
 //     getOne: (id: string) => instance.get<TMatResponse>(`${materialURI}/one/:${id}`).then(data => data.data),

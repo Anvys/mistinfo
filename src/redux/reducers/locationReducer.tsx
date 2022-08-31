@@ -1,10 +1,9 @@
 import type {PayloadAction} from '@reduxjs/toolkit'
 import {createAsyncThunk, createSlice} from '@reduxjs/toolkit'
 import {TLocation, TWOid} from "../../Types/ResourceTypes";
-import {LocationAPI, NpcAPI} from "../../API/ResourceAPI";
+import {LocationAPI} from "../../API/ResourceAPI";
 import {checkError} from "../../Unils/utilsFunctions";
 import {selectFieldsOptions} from "../../components/DataAdd/AddFields";
-import {RegionThunks} from "./regionReducer";
 
 const reducerPath = 'mif/location'
 
@@ -54,7 +53,15 @@ export type TLocationThunks = typeof LocationThunks;
 export const LocationThunks = {
     getAll: createAsyncThunk(`${reducerPath}/getAll`, async (_, thunkAPI) => {
             const res = await CurAPI.getAll()
-            if (res.data.length) selectFieldsOptions.location = res.data.map(v=>v.name);
+            if (res.data.length) {
+                selectFieldsOptions.location = res.data.map(v => v.name);
+                // console.log(`1`)
+                // const dataMarkerArr = [...res.data.map(v=>MC.location(v))]
+                // console.log(dataMarkerArr)
+                // if(dataMarkerArr.length) thunkAPI.dispatch(MapSlice.actions.setMarkers(
+                //     {type:'location', markers:dataMarkerArr}))
+                // console.log(`3`)
+            }
             if (checkError(res)) thunkAPI.dispatch(CurSlice.actions.init(res.data))
         }
     ),

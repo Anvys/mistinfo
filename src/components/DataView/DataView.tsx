@@ -1,9 +1,7 @@
 import React, {useState} from 'react';
-import styles from './DataView.module.css';
 import {DataViewTable} from "./DataViewTable/DataViewTable";
 import {getMapKeys, sortDataMapKeys, sortStrKeys} from "../../Unils/utilsFunctions";
-import {DataAdd} from "../DataAdd/DataAdd";
-import {TCombineData, TComponent, TMaterial, TPrimKeys, TSubKeys} from "../../Types/ResourceTypes";
+import {TCombineData, TPrimKeys, TSubKeys} from "../../Types/ResourceTypes";
 
 // function DataViewTest<T>(props: React.PropsWithChildren<TProps<T>>) {
 //
@@ -14,9 +12,10 @@ import {TCombineData, TComponent, TMaterial, TPrimKeys, TSubKeys} from "../../Ty
 type TProps<T> = {
     data: Array<T>
     dataAddHandler: (id: string) => void
+    dataDelHandler: (id: string) => void
 };
 export const DataView = <T extends TCombineData>(props: React.PropsWithChildren<TProps<T>>) => {
-    const {data, dataAddHandler} = props;
+    const {data, dataAddHandler, dataDelHandler} = props;
     const [dataOnEdit, setDataOnEdit] = useState<null | { [key: string]: any }>(null)
     if (!data || !data.length) return <>empty bd</>
     type k1 = TPrimKeys<T>
@@ -32,7 +31,7 @@ export const DataView = <T extends TCombineData>(props: React.PropsWithChildren<
         }))
         return sortedRow
     })
-    console.log(dataValues)
+    // console.log(dataValues)
 
     const editHandler = (id: string) => {
         console.log(`handle ${id}`)
@@ -48,6 +47,7 @@ export const DataView = <T extends TCombineData>(props: React.PropsWithChildren<
                 sortedDataKeys={sortedDataKeys}
                 dataValues={dataValues}
                 dataAddHandler={dataAddHandler}
+                dataDelHandler={dataDelHandler}
             />
         </>
 

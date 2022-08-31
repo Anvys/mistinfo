@@ -1,11 +1,12 @@
-export type TCombineData = TNpc | TRegion | TLocation | TMaterial | TComponent // | TGatherPoint
+export type TCombineData = TNpc | TRegion | TLocation | TMaterial | TComponent  | TGatherPoint
 
 export type TResources<T, U> = {
     _id: string
     name: string
     type: T
     durability: number
-    difficulty: number
+    craftDifficulty: number
+    gatherDifficulty: number
     tier: number
     attributes: U
     goldCost: number
@@ -39,11 +40,14 @@ export type TGatherPoint = {
     _id: string
     name: string
     type: TGathering
+    resource: string
+    drop: Array<TDrop<TDropTypes>>
     count: number
     cooldown: number
     pos: TMapPosition
     region: string
     translate: TTranslateData
+    notes: Array<string>
 }
 
 export type TWOid<T> = Omit<T, '_id'>
@@ -110,6 +114,15 @@ export type TComponentAttributes = {
     Stratam: number
 }
 export type TComponent = TResources<TComponentType, TComponentAttributes>
+
+export type TDropTypes = TComponentType | TMaterialType
+export type TDrop<T extends TDropTypes> = {
+    type: T
+    name: string
+    count: number
+    chance: number
+}
+
 
 export type TRequestType = 'Material' | 'Component' | 'Npc' | 'Location' | 'Region' | 'GatherPoint'
 export type TRequestBody<T extends TRequestType, D> = {

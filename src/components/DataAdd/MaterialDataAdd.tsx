@@ -1,9 +1,8 @@
 import React from 'react';
 import {useFormik} from "formik";
-import {TMaterialType, TMaterial, TWOid} from "../../Types/ResourceTypes";
+import {TMaterial, TMaterialType, TWOid} from "../../Types/ResourceTypes";
 import {useDispatch} from "react-redux";
 import {TAppDispatch} from "../../redux/store";
-import {RegionThunks} from "../../redux/reducers/regionReducer";
 import {AddDataForm} from "./AddDataForm";
 import {MaterialThunks} from "../../redux/reducers/materialReducer";
 // import styles from './NpcDataAdd.module.css';
@@ -11,7 +10,7 @@ import {MaterialThunks} from "../../redux/reducers/materialReducer";
 const DATA_NAME = 'material';
 type TProps = {
     data: TMaterial | null
-    resetAddFormData: ()=>void
+    resetAddFormData: () => void
 };
 export const MaterialDataAdd: React.FC<TProps> = (props) => {
     const {data} = props
@@ -23,7 +22,8 @@ export const MaterialDataAdd: React.FC<TProps> = (props) => {
             name: '',
             type: 'Bone' as TMaterialType,
             durability: 0,
-            difficulty: 0,
+            craftDifficulty: 0,
+            gatherDifficulty: 0,
             tier: 0,
             attributes: {
                 Absorbity: 0,

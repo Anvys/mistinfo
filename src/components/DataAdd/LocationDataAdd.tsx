@@ -1,12 +1,9 @@
 import React from 'react';
-import {FormikProps, useFormik} from "formik";
+import {useFormik} from "formik";
 import {TLocation, TWOid} from "../../Types/ResourceTypes";
-import styles from "./DataAdd.module.css";
 import {useDispatch} from "react-redux";
 import {TAppDispatch} from "../../redux/store";
-import {AddFields, selectFieldsOptions, TSelectFieldOptionsKeys} from "./AddFields";
 import {LocationThunks} from "../../redux/reducers/locationReducer";
-import {getDeepElements, getElements} from "../../Unils/utilsFunctions";
 import {AddDataForm} from "./AddDataForm";
 // import styles from './NpcDataAdd.module.css';
 
@@ -16,7 +13,7 @@ const isSkipField = (key: string): boolean => {
 }
 type TProps = {
     data: TLocation | null
-    resetAddFormData: ()=>void
+    resetAddFormData: () => void
 };
 export const LocationDataAdd: React.FC<TProps> = (props) => {
     const {data} = props

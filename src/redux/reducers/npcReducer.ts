@@ -4,7 +4,6 @@ import {TNpc, TWOid} from "../../Types/ResourceTypes";
 import {NpcAPI} from "../../API/ResourceAPI";
 import {checkError} from "../../Unils/utilsFunctions";
 import {selectFieldsOptions} from "../../components/DataAdd/AddFields";
-import {ComponentThunks} from "./componentReducer";
 
 const reducerPath = 'mif/npc'
 

@@ -1,40 +1,81 @@
 .vid {
     overflow: auto;
+    --vidWidth: 111px;
+--vid-width: 100vw;
 }
 .table{
+    /*width: 100%;*/
     /*overflow: auto;*/
+    /*display: flex;*/
+    /*flex-direction: column;*/
 }
-.table td:not(.nameTd){
+
+.table td:not(.nameTd):not(:nth-last-child(1)){
+    padding: 2px;
     border: 1px solid black;
-    max-width: 50px;
+    /*max-width: 50px;*/
     overflow: hidden;
+    text-align: center;
+    vertical-align: center;
+    /*background-color: #ccbf64;*/
 }
 .nameTd{
+    padding: 2px;
     border: 1px solid black;
-    max-width: 100px;
+    max-width: 150px;
+    min-width: 100px;
     overflow: hidden;
+    text-align: center;
+    vertical-align: center;
+    background-color: #ccbf64;
 
+}
+.notEmptyTd{
+    background-color: #ccbf64;
+}
+.emptyTd{
+    background-color: #333333;
+    /*font-weight: bold;*/
 }
 /*.table , th{*/
 /*    */
 /*}*/
-.th1, .th2{
+.th1, .th2, .th{
+    padding: 2px;
     border: 1px solid black;
 }
-.th2:not(:nth-child(3)){
-    max-width: 50px;
-    overflow: hidden;
-}
-.th{
-    border: 1px solid black;
-    /*background-color: white;*/
-}
-.headRow{
+.headRow th:nth-child(1){
+    background-color: #848cf6;
     /*max-width: 50px;*/
     /*background-color: white;*/
 }
+.th2{
+    max-width: 100px;
+    background-color: #848cf6;
+}
+
+.headRow th:not(:nth-child(1)){
+    background-color: #4ace60;
+    /*max-width: 50px;*/
+    /*background-color: white;*/
+}
+.th2:not(:nth-child(-n+3)){
+    /*max-width: var(--vid-width,23px);*/
+    /*max-width: calc(100%/30);*/
+    max-width: 70px;
+    /*width: 1px;*/
+    /*display: flex;*/
+    background-color: #4ace60;
+    overflow: hidden;
+}
+.th{
+    /*border: 1px solid black;*/
+    /*background-color: white;*/
+}
+
+
 .dataRow {
-    position: relative;
+    /*position: relative;*/
 }
 .dataRow:hover::before{
     /*content: none;*/
@@ -42,4 +83,42 @@
     /*width: 50px;*/
     /*height: 50px;*/
     /*background-color: red;*/
+}
+.dataRow td:nth-last-child(1){
+    padding: 0 0px 0 2px;
+
+}
+.editButton, .deleteButton {
+    width: 20px;
+    height: 20px;
+    background: #8da2a2 url("./../../../assets/icons/edit.svg")  center / cover no-repeat;
+    box-shadow: 1px 1px 1px 1px #718181;
+    user-select: none;
+    transition-duration: 0.05s;
+}
+.editButton:hover, .deleteButton:hover{
+    cursor: pointer;
+}
+.editButton:active, .deleteButton:active{
+    background-color: #99b7b7;
+    transform: translate(1px, 1px);
+    box-shadow: 0px 0px 1px 1px #718181;
+    /*cursor: pointer;*/
+}
+.deleteButton {
+    width: 20px;
+    height: 20px;
+    background: #e18979 url("./../../../assets/icons/edit.svg")  center / cover no-repeat;
+    box-shadow: 1px 1px 1px 1px #718181;
+    user-select: none;
+    transition-duration: 0.05s;
+}
+.deleteButton:hover{
+    cursor: pointer;
+}
+.deleteButton:active{
+    background-color: #ee5b44;
+    transform: translate(1px, 1px);
+    box-shadow: 0px 0px 1px 1px #718181;
+    /*cursor: pointer;*/
 }

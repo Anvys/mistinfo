@@ -9,13 +9,14 @@ type TProps = {
     resetAddFormData: () => void
 
 };
-export const AddDataForm:React.FC<TProps> = ({formik, dataName, resetAddFormData}) => {
+export const AddDataForm: React.FC<TProps> = React.memo(({formik, dataName, resetAddFormData}) => {
+    // console.log(`AddDataForm`)
     return (
         <form onSubmit={formik.handleSubmit}>
             <div className={styles.col}>
                 <div className={styles.fieldsBox}>
                     <div className={styles.fieldsMainParamBox}>
-                        {getDeepElements(formik.values,'',formik,dataName)}
+                        {getDeepElements(formik.values, '', formik, dataName)}
                     </div>
                 </div>
             </div>
@@ -26,4 +27,4 @@ export const AddDataForm:React.FC<TProps> = ({formik, dataName, resetAddFormData
 
         </form>
     )
-}
+})

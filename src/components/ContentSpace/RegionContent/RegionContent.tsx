@@ -6,20 +6,21 @@ import {getIsLocationInitSelector, getRegionSelector} from "../../../redux/dataS
 import {TAppDispatch} from "../../../redux/store";
 import {DataView} from "../../DataView/DataView";
 import {RegionThunks} from "../../../redux/reducers/regionReducer";
-import {RegionDataAdd} from "../../DataAdd/RegionDataAdd";
-import {TLocation, TRegion, TWOid} from "../../../Types/ResourceTypes";
+import {TRegion, TWOid} from "../../../Types/ResourceTypes";
 import {GenDataAdd} from "../../DataAdd/GenDataAdd";
-import {LocationThunks} from "../../../redux/reducers/locationReducer";
 
 type TProps = {};
-export const RegionContent:React.FC<TProps> = (props) => {
+export const RegionContent: React.FC<TProps> = (props) => {
     const isInit = useSelector(getIsLocationInitSelector)
     const dispatch = useDispatch<TAppDispatch>()
-    if(!isInit)dispatch(RegionThunks.getAll())
+    if (!isInit) dispatch(RegionThunks.getAll())
     const data = useSelector(getRegionSelector);
     const [dataToAdd, setDataToAdd] = useState(null as null | TRegion)
-    const dataAddHandler = (id: string) =>{
-        setDataToAdd(id.length ? data.find(v=>v._id===id) || null : null)
+    const dataAddHandler = (id: string) => {
+        setDataToAdd(id.length ? data.find(v => v._id === id) || null : null)
+    }
+    const dataDelHandler = (id: string) => {
+        dispatch(RegionThunks.deleteOne(id))
     }
     const resetAddFormData = () => setDataToAdd(null)
     const initObj: TWOid<TRegion> = {
@@ -42,7 +43,7 @@ export const RegionContent:React.FC<TProps> = (props) => {
             </div>
             <div className={styles.dbField}>
                 <Outlet/>
-                <DataView data={data} dataAddHandler={dataAddHandler}/>
+                <DataView data={data} dataAddHandler={dataAddHandler} dataDelHandler={dataDelHandler}/>
             </div>
         </div>
     );
