@@ -32,6 +32,8 @@ export const GatherPointContent: React.FC<TProps> = (props) => {
     const resetAddFormData = () => setDataToAdd(null)
     const initObj: TWOid<TGatherPoint> = {
         name: '',
+        icon: '',
+
         type: 'Mining',
         loot:'',
         // drop: [],

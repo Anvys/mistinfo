@@ -5,10 +5,19 @@ import {TGatherPoint, TLocation} from "../../../Types/ResourceTypes";
 // import styles from './MarkerCreator.module.css';
 
 const iconPicker = (type: string) =>{
-    switch (type){
-        case 'Lumberjacking': return require('./../../../assets/icons/material/Wood/t1.png')
-        default : return require('./../../../assets/icons/temp.png')
+    if(!type)return require('./../../../assets/icons/temp.png')
+    const iPath = type.split('/')
+    if(iPath.length===3){
+        return require(`./../../../assets/icons/material/${iPath[1]}/${iPath[2]}.png`)
+        // switch (type){
+        //     case 'Lumberjacking': return require('./../../../assets/icons/material/Wood/t1.png')
+        //     // case 'Lumberjacking': return require('./../../../assets/icons/material/Wood/t1.png')
+        //     default : return require('./../../../assets/icons/temp.png')
+        // }
+    }else{
+        return require('./../../../assets/icons/temp.png')
     }
+
 }
 const locationIconPicker = (type: string) =>{
     switch (type) {
@@ -17,17 +26,18 @@ const locationIconPicker = (type: string) =>{
     }
 }
 export const MC = {
-    location: (loc: TLocation) => {
+    location: (loc: TLocation, zoom: number) => {
+        console.log(zoom)
         return (
             <Marker
                 draggable={false}
                 // eventHandlers={eventHandlers}
                 // ref={markerRef}
                 icon={new Icon({
-                    iconAnchor: [25,60],
+                    iconAnchor: [25*(zoom-4)*0.5,60*(zoom-4)*0.5],
                     // iconUrl: require(`./../../../assets/icons/${loc.icon}.png`),
                     iconUrl: locationIconPicker(loc.icon),
-                    iconSize: [50, 60],
+                    iconSize: [40*(zoom-4)*0.5, 50*(zoom-4)*0.5],
                     popupAnchor: [0, -25],
                 })}
                 position={{lat: loc.pos.x, lng: loc.pos.y}}>
@@ -39,7 +49,7 @@ export const MC = {
             </Marker>
         )
     },
-    gatherPoint: (loc: TGatherPoint) => {
+    gatherPoint: (loc: TGatherPoint, zoom: number) => {
         // const icon = `./../../../assets/icons/${iconPicker(loc.type)}.png`
         // console.log(icon)
         return (
@@ -49,14 +59,15 @@ export const MC = {
                 // ref={markerRef}
                 icon={new Icon({
                     // iconUrl: require(`./../../../assets/icons/${loc.icon}.png`),
-                    iconUrl: iconPicker(loc.type),
-                    iconSize: [50, 50],
+                    iconUrl: iconPicker(loc.icon),
+                    iconSize: [50*(zoom-4)*0.3, 50*(zoom-4)*0.3],
                     popupAnchor: [0, -25],
                 })}
                 position={{lat: loc.pos.x, lng: loc.pos.y}}>
                 <Popup>
                     <p>{loc.name}</p>
                     <p>{loc.type}</p>
+                    <p>icon: {loc.icon}</p>
                     {/*<p>dif:{loc.difficult}</p>*/}
                     <p>count:{loc.count}</p>
                     {/*{loc.exploreReq>0 && <p>explore: {loc.exploreReq}</p>}*/}

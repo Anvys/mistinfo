@@ -1,16 +1,25 @@
 import Leaf, {Icon} from 'leaflet';
 import React, {useEffect, useRef, useState} from 'react';
 import styles from './Map.module.css';
-import {MapContainer, Marker, Popup, TileLayer, useMap} from "react-leaflet";
+import {MapContainer, Marker, Popup, TileLayer, useMap, useMapEvents} from "react-leaflet";
 import {MarkerForDataAdd} from "./Markers/MarkerForDataAdd";
 import {useSelector} from "react-redux";
 import {getGatherPointSelector, getLocationSelector} from "../../redux/dataSelectors";
 import {MC} from "./Markers/MarkerCreator";
 
 // import * as icons from '../../assets/icons'
-function MyComponent() {
+const MyComponent: React.FC<{onZoomChange: (z:number)=>void}> = (props) => {
     const [coords, setCoords] = useState({lat: 0, lng: 0});
     const map = useMap()
+
+    const mapEvents = useMapEvents({
+        zoom: () => {
+            setZoomLevel(mapEvents.getZoom());
+            props.onZoomChange(mapEvents.getZoom())
+        },
+    });
+    const [zoomLevel, setZoomLevel] = useState(mapEvents.getZoom()); // initial zoom level provided for MapContainer
+
     // console.log('map center:', map.getCenter())
     useEffect(() => {
         if (!map) return;
@@ -19,6 +28,7 @@ function MyComponent() {
             setCoords({lat: e.latlng.lat, lng: e.latlng.lng});
         });
     }, [map]);
+    useEffect(()=>props.onZoomChange(mapEvents.getZoom()),[])
     return (<div className={styles.coords}>
             {coords.lat && (
                 <div>
@@ -40,11 +50,13 @@ export const MyMap: React.FC<TProps> = (props) => {
     const [customMarkerPos, setCustomMarkerPos] = useState({lat: 0, lng: -40})
     const [isCusMarkerActive, setIsCusMarkerActive] = useState(false)
     const [map, setMap] = useState<Leaf.Map | null>(null);
-
+    const [zoom, setZoom] = useState(0)
+    const onZoomChange = (z: number)=>setZoom(z)
+    console.log(`curZoom: ${zoom}`)
     // const markers = useSelector(getMarkersSelector).
-    const locationMarkers = useSelector(getLocationSelector).map(v => MC.location(v))
+    const locationMarkers = useSelector(getLocationSelector).map(v => MC.location(v, zoom))
     const gatjers = useSelector(getGatherPointSelector);
-    const gatherMarkers = useSelector(getGatherPointSelector).map(v => MC.gatherPoint(v))
+    const gatherMarkers = useSelector(getGatherPointSelector).map(v => MC.gatherPoint(v, zoom))
     console.log(locationMarkers)
     // console.log(markers)
     // var map = L.map('map').setView([51.505, -0.09], 13);
@@ -88,7 +100,7 @@ export const MyMap: React.FC<TProps> = (props) => {
             }} className={styles.map}>
                 <MapContainer className={styles.map} center={[0, -45]} zoom={6} scrollWheelZoom={false} ref={setMap}>
                     a
-                    <MyComponent/>
+                    <MyComponent onZoomChange={onZoomChange}/>
                     b
                     <TileLayer
                         // tms={true}

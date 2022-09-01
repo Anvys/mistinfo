@@ -25,6 +25,7 @@ export const ComponentContent: React.FC<TProps> = (props) => {
     const resetAddFormData = () => setDataToAdd(null)
     const initObj: TWOid<TComponent> = {
         name: '',
+        icon: '',
         type: 'Plant' as TComponentType,
         durability: 0,
         craftDifficulty: 0,

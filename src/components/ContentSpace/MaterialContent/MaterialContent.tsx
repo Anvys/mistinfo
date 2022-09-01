@@ -25,6 +25,8 @@ export const MaterialContent:React.FC<TProps> = (props) => {
     const resetAddFormData = () => setDataToAdd(null)
     const initObj: TWOid<TMaterial> = {
         name: '',
+        icon: '',
+
         type: 'Bone' as TMaterialType,
         durability: 0,
         craftDifficulty: 0,

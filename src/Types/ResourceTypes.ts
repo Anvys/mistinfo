@@ -3,6 +3,8 @@ export type TCombineData = TNpc | TRegion | TLocation | TMaterial | TComponent |
 export type TResources<T, U> = {
     _id: string
     name: string
+    icon: string
+
     type: T
     durability: number
     craftDifficulty: number
@@ -39,6 +41,7 @@ export type TLocation = {
 export type TGatherPoint = {
     _id: string
     name: string
+    icon: string
     type: TGathering
     loot: string
     // drop: Array<TDrop<TDropTypes>>
