@@ -1,4 +1,4 @@
-export type TCombineData = TNpc | TRegion | TLocation | TMaterial | TComponent  | TGatherPoint
+export type TCombineData = TNpc | TRegion | TLocation | TMaterial | TComponent | TGatherPoint | TLoot
 
 export type TResources<T, U> = {
     _id: string
@@ -49,6 +49,13 @@ export type TGatherPoint = {
     translate: TTranslateData
     notes: Array<string>
 }
+export type TLoot = {
+    _id: string
+    name: string
+    loot: Array<TDrop<TDropTypes>>
+    translate: TTranslateData
+    notes: Array<string>
+}
 
 export type TWOid<T> = Omit<T, '_id'>
 
@@ -70,7 +77,6 @@ export type TGuild =
     | 'Order of the Hippogriff'
     | 'Protector of the Rose'
 export type TReputation = 'Gantras' | 'Kortombe' | 'Larcen' | 'Thorval' | 'Wellnear'
-
 
 
 export type TTranslateLang = 'En' | 'Fr' | 'Ru'
@@ -115,6 +121,7 @@ export type TComponentAttributes = {
 }
 export type TComponent = TResources<TComponentType, TComponentAttributes>
 
+
 export type TDropTypes = TComponentType | TMaterialType
 export type TDrop<T extends TDropTypes> = {
     type: T
@@ -124,7 +131,7 @@ export type TDrop<T extends TDropTypes> = {
 }
 
 
-export type TRequestType = 'Material' | 'Component' | 'Npc' | 'Location' | 'Region' | 'GatherPoint'
+export type TRequestType = 'Material' | 'Component' | 'Npc' | 'Location' | 'Region' | 'GatherPoint' | 'Loot'
 export type TRequestBody<T extends TRequestType, D> = {
     type: T
     data: D
@@ -143,8 +150,6 @@ export type TResResponse<T = TComponent | TMaterial> = TResponse<Array<T>>
 export type TResponseAllBody = TResponse<{ materials: Array<TMaterial>, components: Array<TComponent> }>
 
 
-
-
 export type KeysOfUnion<T> = T extends T ? keyof T : never;
 export type TPrimKeys<T> = keyof T
-export type TSubKeys<T> =  KeysOfUnion<T[keyof T]>
+export type TSubKeys<T> = KeysOfUnion<T[keyof T]>

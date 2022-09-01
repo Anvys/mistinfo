@@ -1,14 +1,14 @@
 import type {PayloadAction} from '@reduxjs/toolkit'
 import {createAsyncThunk, createSlice} from '@reduxjs/toolkit'
-import {TMaterial, TWOid} from "../../Types/ResourceTypes";
-import {MaterialAPI} from "../../API/ResourceAPI";
+import {TLoot, TWOid} from "../../Types/ResourceTypes";
+import {LootAPI, RegionAPI} from "../../API/ResourceAPI";
 import {checkError} from "../../Unils/utilsFunctions";
 import {selectFieldsOptions} from "../../components/DataAdd/AddFields";
 
-const reducerPath = 'mif/material'
+const reducerPath = 'mif/loot'
 
 export type TInitialState = {
-    data: Array<TMaterial>
+    data: Array<TLoot>
     isInit: boolean
 }
 const initialState: TInitialState = {
@@ -16,19 +16,19 @@ const initialState: TInitialState = {
     isInit: false,
 }
 
-export const MaterialSlice = createSlice({
-    name: 'material',
+export const LootSlice = createSlice({
+    name: 'loot',
     initialState,
     reducers: {
-        init: (state, action: PayloadAction<Array<TMaterial>>) => {
+        init: (state, action: PayloadAction<Array<TLoot>>) => {
             state.data = [...action.payload];
             state.isInit = true;
         },
-        addOne: (state, action: PayloadAction<Array<TMaterial>>) => {
+        addOne: (state, action: PayloadAction<Array<TLoot>>) => {
             state.data.push(action.payload[0])
         },
-        updateOne: (state, action: PayloadAction<{ id: string, data: TMaterial }>) => {
-            state.data[state.data.indexOf(state.data.find((v) => v._id === action.payload.id) as TMaterial)] = action.payload.data
+        updateOne: (state, action: PayloadAction<{ id: string, data: TLoot }>) => {
+            state.data[state.data.indexOf(state.data.find((v) => v._id === action.payload.id) as TLoot)] = action.payload.data
         },
         deleteOne: (state, action: PayloadAction<{ id: string }>) => {
             state.data = state.data.filter(v => v._id !== action.payload.id)
@@ -36,33 +36,24 @@ export const MaterialSlice = createSlice({
     },
     extraReducers: (builder) => {
         // Add reducers for additional action types here, and handle loading state as needed
-        builder.addCase(MaterialThunks.getAll.fulfilled, (state, action) => {
+        builder.addCase(LootThunks.getAll.fulfilled, (state, action) => {
         })
-        builder.addCase(MaterialThunks.getOne.fulfilled, (state, action) => {
+        builder.addCase(LootThunks.getOne.fulfilled, (state, action) => {
         })
-        builder.addCase(MaterialThunks.updateOne.fulfilled, (state, action) => {
+        builder.addCase(LootThunks.updateOne.fulfilled, (state, action) => {
         })
-        builder.addCase(MaterialThunks.deleteOne.fulfilled, (state, action) => {
+        builder.addCase(LootThunks.deleteOne.fulfilled, (state, action) => {
         })
     }
 })
 
-const CurAPI = MaterialAPI;
-const CurSlice = MaterialSlice;
-export type TMaterialThunks = typeof MaterialThunks;
-export const MaterialThunks = {
+const CurAPI = LootAPI;
+const CurSlice = LootSlice;
+export type TLootThunks = typeof LootThunks;
+export const LootThunks = {
     getAll: createAsyncThunk(`${reducerPath}/getAll`, async (_, thunkAPI) => {
             const res = await CurAPI.getAll()
-            if (res.data.length) {
-                selectFieldsOptions.material = res.data.map(v => v.name);
-                selectFieldsOptions["gatherpoint.Botany"] = res.data.filter(v => v.type === 'Fiber').map(v => v.name)
-                selectFieldsOptions["gatherpoint.Hunting"] = res.data.filter(v => (v.type === 'Bone' || v.type === 'Leather')).map(v => v.name)
-                selectFieldsOptions["gatherpoint.Mining"] = res.data.filter(v => v.type === 'Metal' || v.type === 'Stone').map(v => v.name)
-                selectFieldsOptions["gatherpoint.Lumberjacking"] = res.data.filter(v => v.type === 'Wood').map(v => v.name)
-                // console.log(selectFieldsOptions)
-
-            }
-
+            if (res.data.length) selectFieldsOptions.region = res.data.map(v=>v.name);
             if (checkError(res)) thunkAPI.dispatch(CurSlice.actions.init(res.data))
         }
     ),
@@ -71,12 +62,12 @@ export const MaterialThunks = {
             if (checkError(res)) return res.data
         }
     ),
-    addOne: createAsyncThunk(`${reducerPath}/addOne`, async (data: TWOid<TMaterial>, thunkAPI) => {
+    addOne: createAsyncThunk(`${reducerPath}/addOne`, async (data: TWOid<TLoot>, thunkAPI) => {
             const res = await CurAPI.addOne(data)
             if (checkError(res)) thunkAPI.dispatch(CurSlice.actions.addOne(res.data))
         }
     ),
-    updateOne: createAsyncThunk(`${reducerPath}/updateOne`, async (resInfo: { id: string, data: TMaterial }, thunkAPI) => {
+    updateOne: createAsyncThunk(`${reducerPath}/updateOne`, async (resInfo: { id: string, data: TLoot }, thunkAPI) => {
             const res = await CurAPI.updateOne(resInfo.id, resInfo.data)
             if (checkError(res)) thunkAPI.dispatch(CurSlice.actions.updateOne({
                 id: resInfo.id,
@@ -93,4 +84,4 @@ export const MaterialThunks = {
 
 
 // Action creators are generated for each case reducer function
-export const {} = MaterialSlice.actions
+// export const {} = NpcSlice.actions

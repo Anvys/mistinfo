@@ -60,7 +60,7 @@ export const GatherPointContent: React.FC<TProps> = (props) => {
                 </div>
                 {isMapActive && <MyMap wid={-1} hei={400}/>}
             </div>
-            <FieldDrop index={0}/>
+
             <div className={styles.dbField}>
                 <Outlet/>
                 <DataView data={data} dataAddHandler={dataAddHandler} dataDelHandler={dataDelHandler}/>

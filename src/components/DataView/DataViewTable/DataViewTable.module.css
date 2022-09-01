@@ -9,6 +9,9 @@
     /*display: flex;*/
     /*flex-direction: column;*/
 }
+.table td {
+    white-space: pre;
+}
 
 .table td:not(.nameTd):not(:nth-last-child(1)){
     padding: 2px;
@@ -52,6 +55,7 @@
 .th2{
     max-width: 100px;
     background-color: #848cf6;
+
 }
 
 .headRow th:not(:nth-child(1)){

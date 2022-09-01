@@ -1,3 +1,9 @@
+.mainDropDiv {
+    border: 1px solid black;
+    display: flex;
+    gap: 20px;
+    flex-direction: column;
+}
 .dropForm {
     display: flex;
     flex-direction: column;
@@ -16,12 +22,14 @@
     width: 50px;
 }
 .inputStr {
-    width: 30px;
+    height: 1rem;
+    font-size: 0.8rem;
+    width: 140px;
 }
-.mainDropDiv {
-    display: flex;
-    gap: 20px;
+.inputStr::placeholder{
+    font-size: 0.6rem;
 }
+
 
 .table, .tableRow, .tableCell {
     border: 1px solid black;
@@ -34,4 +42,13 @@
     border-radius: 10px;
     border: 2px solid #1ee0a8;
     background: #f3d592;
+}
+
+.mainLootDiv {
+    display: flex;
+    gap: 20px;
+}
+.lootDropBlock{
+    display: flex;
+    flex-direction: column;
 }

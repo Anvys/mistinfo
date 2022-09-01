@@ -2,7 +2,7 @@ import axios, {AxiosResponse} from "axios";
 import {
     TComponent,
     TGatherPoint,
-    TLocation,
+    TLocation, TLoot,
     TMaterial,
     TNpc,
     TRegion,
@@ -45,6 +45,7 @@ export const NpcAPI = getDataAPI<TNpc, 'Npc'>(`/npc`, 'Npc')
 export const LocationAPI = getDataAPI<TLocation, 'Location'>(`/location`, 'Location')
 export const RegionAPI = getDataAPI<TRegion, 'Region'>(`/region`, 'Region')
 export const GatherPointAPI = getDataAPI<TGatherPoint, 'GatherPoint'>(`/gatherpoint`, 'GatherPoint')
+export const LootAPI = getDataAPI<TLoot, 'Loot'>(`/loot`, 'Loot')
 //     {
 //     getAll: () => instance.get<TMatResponse>(`${materialURI}/all`).then(data => data.data),
 //     getOne: (id: string) => instance.get<TMatResponse>(`${materialURI}/one/:${id}`).then(data => data.data),

@@ -33,11 +33,19 @@ export const getDeepKeys = (obj: object, keys: Array<string> = []): Array<string
 }
 export const getMapKeys = (data: any) => {
     const dataKeys = new Map<string, Array<string>>([['primary', []]])
-    Object.entries(data).forEach(([key, value]) => {
+    Object.entries(data).forEach((dataObj: any) => {
+        const [key, value] = dataObj;
         if (key !== '_id' && key !== '__v' && key !== 'name'&& key !== 'notes'&& key !== 'drop') {
             const tValue = typeof value
             if (tValue !== 'object') dataKeys.get('primary')?.push(key)
-            else dataKeys.set(key, Object.keys(value as any))
+            else {
+                if(key==='loot'){
+                    dataKeys.set(key,['Drops'])//...value.map((v:object,i:number)=>`${i}`)
+                }else{
+                    dataKeys.set(key, Object.keys(value as any))
+                }
+
+            }
         }
     })
     return dataKeys

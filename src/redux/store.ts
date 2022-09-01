@@ -7,6 +7,7 @@ import {LocationSlice, TLocationThunks} from "./reducers/locationReducer";
 import {RegionSlice, TRegionThunks} from "./reducers/regionReducer";
 import {MapSlice} from "./reducers/mapReducer";
 import {GatherPointSlice, TGatherPointThunks} from "./reducers/gatherPointReducer";
+import {LootSlice} from "./reducers/lootReducer";
 
 
 export const store = configureStore({
@@ -18,6 +19,7 @@ export const store = configureStore({
         region: RegionSlice.reducer,
         map: MapSlice.reducer,
         gatherpoint: GatherPointSlice.reducer,
+        loot: LootSlice.reducer,
 
     },
 })

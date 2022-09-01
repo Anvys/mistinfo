@@ -30,10 +30,15 @@ export const DataViewTable: React.FC<TProps> = (props) => {
             <table className={styles.table}>
                 <thead>
                     <tr className={styles.headRow}>
-                        {props.sortedDataKeys.map((v, i) =>
-                            <th className={styles.th1} key={i}
-                                colSpan={props.dataKeys.get(v)?.length}>{v}
-                            </th>)}
+                        {props.sortedDataKeys.map((v, i) => {
+                            return props.dataKeys.get(v)?.length
+                                ? <th className={styles.th1} key={i}
+                                      colSpan={props.dataKeys.get(v)?.length}>{v}
+                                </th>
+                                : null
+
+                        })}
+
                         <th>Edit</th>
                         <th>Del?</th>
                     </tr>

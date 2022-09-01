@@ -8,6 +8,7 @@ import {NpcContent} from "./NpcContent/NpcContent";
 import {LocationContent} from "./LocationContent/LocationContent";
 import {RegionContent} from "./RegionContent/RegionContent";
 import {GatherPointContent} from "./GatherPointContent/GatherPointContent";
+import {LootContent} from "./LootContent/LootContent";
 
 
 export const ContentSpace: React.FC = () => {
@@ -34,6 +35,7 @@ export const ContentSpace: React.FC = () => {
                 <Route path={'/location/'} element={<LocationContent/>}/>
                 <Route path={'/region/'} element={<RegionContent/>}/>
                 <Route path={'/gatherpoint/'} element={<GatherPointContent/>}/>
+                <Route path={'/loot/'} element={<LootContent/>}/>
             </Routes>
 
         </div>

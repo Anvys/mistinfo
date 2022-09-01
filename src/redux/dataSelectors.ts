@@ -18,6 +18,9 @@ export const getIsRegionInitSelector = (state: TAppState) => state.region.isInit
 export const getGatherPointSelector = (state: TAppState) => state.gatherpoint.data
 export const getIsInitGatherPointSelector = (state: TAppState) => state.gatherpoint.isInit
 
+export const getLootSelector = (state: TAppState) => state.loot.data
+export const getIsLootInitSelector = (state: TAppState) => state.loot.isInit
+
 export const getMarkerForAddPosSelector = (state: TAppState) => state.map.markerForAddPos
 export const getIsAddPosFieldActiveSelector = (state: TAppState) => state.map.isAddPosFieldActive
 export const getMarkersSelector = (state: TAppState) => state.map.markers

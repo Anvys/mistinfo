@@ -1,7 +1,7 @@
 import React, {useState} from 'react';
 import {DataViewTable} from "./DataViewTable/DataViewTable";
 import {getMapKeys, sortDataMapKeys, sortStrKeys} from "../../Unils/utilsFunctions";
-import {TCombineData, TPrimKeys, TSubKeys} from "../../Types/ResourceTypes";
+import {TCombineData, TDrop, TDropTypes, TPrimKeys, TSubKeys} from "../../Types/ResourceTypes";
 
 // function DataViewTest<T>(props: React.PropsWithChildren<TProps<T>>) {
 //
@@ -27,11 +27,42 @@ export const DataView = <T extends TCombineData>(props: React.PropsWithChildren<
     const dataValues = data.map(dataVal => {
         let sortedRow: Array<any> = [dataVal['_id']];
         sortedDataKeys.forEach((sKey) => dataKeys.get(sKey)?.forEach((dKey) => {
-            sortedRow.push(sKey === 'primary' ? dataVal[dKey as k1] : (sKey === 'translate' && dKey === 'En') ? dataVal['name'] : dataVal[sKey as k1][dKey as k2])
+            switch (sKey) {
+                case 'loot': {
+                    const loot = dataVal[sKey as k1]// as Array<TDrop<TDropTypes>>
+                    if (Array.isArray(loot)) {
+                        sortedRow.push(loot.map((drop, i) => `${drop.type}:${drop.name}   x${drop.count}(${drop.chance}%)${i < loot.length-1 ? '\n':''}`))
+                    }
+                    // sortedRow.push(`${drop.type}:${drop.name} x${drop.count} ~${drop.chance}%`)
+                    break
+                }
+                case 'primary':
+                    sortedRow.push(dataVal[sKey as k1])
+                    break
+                case 'translate': {
+                    if (dKey === 'En') sortedRow.push(dataVal['name'])
+                    else sortedRow.push(dataVal[sKey as k1][dKey as k2])
+                    break
+                }
+                default:
+                    sortedRow.push(dataVal[sKey as k1][dKey as k2])
+
+            }
+            // sortedRow.push(
+            //     sKey === 'loot'
+            //         ? dataVal[sKey as k1][dKey as k2]
+            //         : sKey === 'primary'
+            //             ? dataVal[dKey as k1]
+            //             : (sKey === 'translate' && dKey === 'En')
+            //                 ? dataVal['name']
+            //                 : dataVal[sKey as k1][dKey as k2])
         }))
         return sortedRow
     })
-    // console.log(dataValues)
+    console.log(data)
+    console.log(dataKeys)
+    console.log(sortedDataKeys)
+    console.log(dataValues)
 
     const editHandler = (id: string) => {
         console.log(`handle ${id}`)
