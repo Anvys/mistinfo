@@ -6,7 +6,7 @@ import {TGatherPoint, TLocation} from "../../../Types/ResourceTypes";
 
 const iconPicker = (type: string) =>{
     switch (type){
-        case 'Lumberjacking': return require('./../../../assets/icons/Material/Wood/t1.png')
+        case 'Lumberjacking': return require('./../../../assets/icons/material/Wood/t1.png')
         default : return require('./../../../assets/icons/temp.png')
     }
 }

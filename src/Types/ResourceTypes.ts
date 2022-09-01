@@ -40,8 +40,8 @@ export type TGatherPoint = {
     _id: string
     name: string
     type: TGathering
-    resource: string
-    drop: Array<TDrop<TDropTypes>>
+    loot: string
+    // drop: Array<TDrop<TDropTypes>>
     count: number
     cooldown: number
     pos: TMapPosition

@@ -1,0 +1,37 @@
+.main {
+    border: 1px solid black;
+    min-width: 200px;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    position: absolute;
+    background-color: #333333;
+}
+.topMenu{
+    display: flex;
+    gap: 10px;
+    justify-content: right;
+}
+.navMenu{
+    display: flex;
+    gap: 5px;
+    justify-content: center;
+}
+.iconMenu{
+    display: flex;
+    gap: 5px;
+}
+
+.topMenuButton{
+
+}
+.navMenuButton{
+
+}
+
+
+.iconDiv{
+    width: 30px;
+    height: 30px;
+    /*background: rgb(225, 137, 121) url("./../../assets/icons/location/Unknown.png")center / cover no-repeat ;*/
+}

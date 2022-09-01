@@ -53,7 +53,7 @@ export type TLootThunks = typeof LootThunks;
 export const LootThunks = {
     getAll: createAsyncThunk(`${reducerPath}/getAll`, async (_, thunkAPI) => {
             const res = await CurAPI.getAll()
-            if (res.data.length) selectFieldsOptions.region = res.data.map(v=>v.name);
+            if (res.data.length) selectFieldsOptions.loot = res.data.map(v=>v.name);
             if (checkError(res)) thunkAPI.dispatch(CurSlice.actions.init(res.data))
         }
     ),

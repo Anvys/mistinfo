@@ -13,6 +13,7 @@ import {LocationThunks} from "../../../redux/reducers/locationReducer";
 import {TLocation, TWOid} from "../../../Types/ResourceTypes";
 import {GenDataAdd} from "../../DataAdd/GenDataAdd";
 import {MyMap} from "../../Map/MyMap";
+import {IconPicker} from "../../IconPicker/IconPicker";
 
 type TProps = {};
 export const LocationContent: React.FC<TProps> = (props) => {
@@ -52,6 +53,7 @@ export const LocationContent: React.FC<TProps> = (props) => {
                         dataName: 'location'
                     })}
                 </div>
+                {/*<IconPicker onIconPickHandler={onIconPickHandler}/>*/}
                 {isMapActive && <MyMap wid={-1} hei={400}/>}
             </div>
             <div className={styles.dbField}>

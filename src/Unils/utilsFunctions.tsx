@@ -118,6 +118,9 @@ export const getElement = (value: string | number, fullKey: string, formik: Form
         return AddFields.gathertypename(formik.values.type,formik, formik.handleChange,
             htmlId, key, index, styles.fieldBox, styles.label, styles.inputText)
     }
+    if(key==='icon' ){
+        return AddFields.icon(formik, index)
+    }
     // if(dataName==='gatherpoint' && key==='type' )return null
     const selectPathToFind = key === 'type' ? `${dataName}.${fullKey}` : `${fullKey}`
     // console.log(`${selectPathToFind}`)

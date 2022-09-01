@@ -33,6 +33,7 @@ export const LootDataAdd: React.FC<TProps> = (props) => {
     } as TWOid<TLoot>
     const addLootFormik = useFormik({
         initialValues: initVal,
+        enableReinitialize: true,
         onSubmit: async (values, actions) => {
             actions.setSubmitting(true);
             const newLoot = {...addLootFormik.values, loot: dropArr, translate:{...addLootFormik.values.translate, En: addLootFormik.values.name}}
@@ -45,8 +46,19 @@ export const LootDataAdd: React.FC<TProps> = (props) => {
             actions.setSubmitting(false);
         },
     })
+    const onClearHandler = (e:any) =>{
+        setDropArr([]);
+        addLootFormik.handleReset(0);
+    }
     const onDropAddHandler = (drop: TDrop<TDropTypes>) => {
         setDropArr([...dropArr, drop])
+    }
+    const onDropDelHandler = (index: number) => {
+        setDropArr(dropArr.filter((v,i)=>i!==index))
+    }
+    const onDropEditHandler = (index: number) => {
+
+        // setDropArr(dropArr.filter((v,i)=>i!==index))
     }
     return (
         <div className={styles.mainLootDiv}>
@@ -79,6 +91,7 @@ export const LootDataAdd: React.FC<TProps> = (props) => {
                                     <tr className={styles.tableRow} key={index}>
                                         {Object.values(dropValue).map((v, i) =>
                                             <td className={styles.tableCell}>{v}</td>)}
+                                        <td><button className={styles.deleteButton} onClick={()=>onDropDelHandler(index)}/></td>
                                     </tr>)
                                 || <tr>
                                     <td colSpan={4}>...add first drop</td>
@@ -86,6 +99,7 @@ export const LootDataAdd: React.FC<TProps> = (props) => {
                         </tbody>
                     </table>
                     <button className={styles.addButton} type={'submit'}>SAVE</button>
+                    <button className={styles.addButton} type={'reset'} onClick={onClearHandler}>CLEAR</button>
                 </form>
 
             </div>

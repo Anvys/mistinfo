@@ -33,8 +33,8 @@ export const GatherPointContent: React.FC<TProps> = (props) => {
     const initObj: TWOid<TGatherPoint> = {
         name: '',
         type: 'Mining',
-        resource:'',
-        drop: [],
+        loot:'',
+        // drop: [],
         count: 0,
         cooldown: 0,
         pos: {x: 0, y: 0},

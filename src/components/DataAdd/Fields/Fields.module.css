@@ -52,3 +52,39 @@
     display: flex;
     flex-direction: column;
 }
+
+
+.editButton, .deleteButton {
+    width: 20px;
+    height: 20px;
+    background: #8da2a2 url("./../../../assets/icons/edit.svg")  center / cover no-repeat;
+    box-shadow: 1px 1px 1px 1px #718181;
+    user-select: none;
+    transition-duration: 0.05s;
+}
+.editButton:hover, .deleteButton:hover{
+    cursor: pointer;
+}
+.editButton:active, .deleteButton:active{
+    background-color: #99b7b7;
+    transform: translate(1px, 1px);
+    box-shadow: 0px 0px 1px 1px #718181;
+    /*cursor: pointer;*/
+}
+.deleteButton {
+    width: 20px;
+    height: 20px;
+    background: #e18979 url("./../../../assets/icons/edit.svg")  center / cover no-repeat;
+    box-shadow: 1px 1px 1px 1px #718181;
+    user-select: none;
+    transition-duration: 0.05s;
+}
+.deleteButton:hover{
+    cursor: pointer;
+}
+.deleteButton:active{
+    background-color: #ee5b44;
+    transform: translate(1px, 1px);
+    box-shadow: 0px 0px 1px 1px #718181;
+    /*cursor: pointer;*/
+}

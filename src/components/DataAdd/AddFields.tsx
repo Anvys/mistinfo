@@ -5,7 +5,7 @@ import {MapSlice} from "../../redux/reducers/mapReducer";
 import {useSelector} from "react-redux";
 import {getMarkerForAddPosSelector} from "../../redux/dataSelectors";
 import {FormikProps} from "formik";
-// import styles from './AddFields.module.css';
+import {IconPicker} from "../IconPicker/IconPicker";
 
 export type TSelectFieldOptions = typeof selectFieldsOptions;
 export type TSelectFieldOptionsKeys = keyof typeof selectFieldsOptions;
@@ -21,6 +21,7 @@ export const selectFieldsOptions = {
     'location': undefined as Array<string> | undefined,
     'region': undefined as Array<string> | undefined,
     'npc': undefined as Array<string> | undefined,
+    'loot': undefined as Array<string> | undefined,
 
     'terrain': ['Forest', 'Mountain', 'Swamp', 'Underground', 'Desert', 'Mists', 'Urban'],
     'gatherpoint.type': ['Botany', 'Hunting', 'Lumberjacking', 'Mining'],
@@ -117,7 +118,7 @@ export const AddFields = {
                             name={htmlId}
                             onChange={onChange}
                             value={formik.values.translate.En}
-                    required={true}>
+                            required={true}>
                         {!formik.values.name.length &&
                             <option value="" disabled selected hidden>{`Select ${labelText}`}</option>}
                         {mapSelNameValues?.map((v, i) => (<option value={v}>{v}</option>))}
@@ -136,8 +137,54 @@ export const AddFields = {
 
         )
     },
+    icon: (
+           formik: FormikProps<any>,
+           index: number = 0,) => {
+        return (<IconField  index={index} formik={formik}/>
+
+
+        )
+    }
 }
 
+type IconFieldProps = {
+    // pos: { x: number, y: number },
+    // onChange: React.ChangeEventHandler<HTMLInputElement>,
+    index: number,
+    formik: FormikProps<any>
+}
+const IconField: React.FC<IconFieldProps> = ({index, formik}) => {
+    const [isPickIcon, setIsPickIcon] = useState(false)
+    const [iconURL, setIconURL] = useState('')
+    const onAddIcon = () =>{
+        setIsPickIcon(true)
+    }
+    const onIconPickHandler = (path: string, url: string) =>{
+        formik.setFieldValue('icon', path)
+        setIsPickIcon(false)
+        setIconURL(url)
+    }
+    const onClose = () =>{
+        setIsPickIcon(false)
+    }
+
+    return (
+        <div className={styles.iconMainDiv}>
+            <div className={styles.iconFieldBox}>
+                <label className={styles.iconLabel} htmlFor={'icon'}>icon:</label>
+                <input className={styles.iconInput} type={'text'} id={'icon'} name={'icon'}
+                    // disabled={true}
+                    //    onChange={onYChange}
+                       value={formik.values.icon}/>
+                {iconURL && <img className={styles.imgIcon} src={iconURL}/>}
+                {!iconURL && <img className={styles.imgIcon} src={require('./../../assets/icons/location/Unknown.png')}/>}
+            </div>
+            {isPickIcon && <IconPicker onClose={onClose} onIconPickHandler={onIconPickHandler} />}
+            <button onClick={onAddIcon}>Choose Icon</button>
+        </div>
+
+    )
+}
 
 type PosFieldProps = {
     // pos: { x: number, y: number },

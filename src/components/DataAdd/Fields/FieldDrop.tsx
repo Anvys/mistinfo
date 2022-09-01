@@ -68,8 +68,15 @@ export const FieldDrop: React.FC<TProps> = (props) => {
                         <select name={'name'} value={addDropFormik.values.name} onChange={addDropFormik.handleChange}
                                 required autoComplete={'off'} placeholder={'name'}>
                             <option value="" disabled selected hidden>{`Select name`}</option>
+                            {selectFieldsOptions.tier.map(v => <option value={`tier ${v}`}>{`All tier ${v} ${addDropFormik.values.type}s`}</option>)}
                             {nameArr.map(v => <option value={v}>{`${v}`}</option>)}
                         </select>
+                        {/*<label htmlFor={'name'}>or T:</label>*/}
+                        {/*<select name={'name'} value={addDropFormik.values.name} onChange={addDropFormik.handleChange}*/}
+                        {/*        required autoComplete={'off'} placeholder={'name'}>*/}
+                        {/*    <option value="" disabled selected hidden>{`Tier`}</option>*/}
+                        {/*    {selectFieldsOptions.tier.map(v => <option value={v}>{`${v}`}</option>)}*/}
+                        {/*</select>*/}
                     </div>
                     <div className={styles.dropFormRows}>
                         <label htmlFor={'count'}>count:</label>
