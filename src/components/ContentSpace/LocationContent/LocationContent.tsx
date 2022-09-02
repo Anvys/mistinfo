@@ -10,7 +10,7 @@ import {
 import {TAppDispatch} from "../../../redux/store";
 import {DataView} from "../../DataView/DataView";
 import {LocationThunks} from "../../../redux/reducers/locationReducer";
-import {TLocation, TWOid} from "../../../Types/ResourceTypes";
+import {TLocation, TWOid} from "../../../Types/CommonTypes";
 import {GenDataAdd} from "../../DataAdd/GenDataAdd";
 import {MyMap} from "../../Map/MyMap";
 import {IconPicker} from "../../IconPicker/IconPicker";

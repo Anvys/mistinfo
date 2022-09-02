@@ -1,6 +1,6 @@
 import type {PayloadAction} from '@reduxjs/toolkit'
 import {createSlice} from '@reduxjs/toolkit'
-import {TMapPosition} from "../../Types/ResourceTypes";
+import {TMapPosition} from "../../Types/CommonTypes";
 
 const reducerPath = 'mif/map'
 

@@ -1,6 +1,6 @@
 import axios, {AxiosResponse} from "axios";
 import {
-    TComponent,
+    TComponent, TEvent,
     TGatherPoint,
     TLocation, TLoot,
     TMaterial,
@@ -11,7 +11,7 @@ import {
     TResponseBody,
     TResResponse, TStaminaElixir,
     TWOid
-} from "../Types/ResourceTypes";
+} from "../Types/CommonTypes";
 
 
 const baseURL = 'http://127.0.0.1'
@@ -41,6 +41,7 @@ export const RegionAPI = getDataAPI<TRegion, 'Region'>(`/region`, 'Region')
 export const GatherPointAPI = getDataAPI<TGatherPoint, 'GatherPoint'>(`/gatherpoint`, 'GatherPoint')
 export const LootAPI = getDataAPI<TLoot, 'Loot'>(`/loot`, 'Loot')
 export const StaminaElixirAPI = getDataAPI<TStaminaElixir, 'StaminaElixir'>(`/staminaelixir`, 'StaminaElixir')
+export const EventAPI = getDataAPI<TEvent, 'Event'>(`/event`, 'Event')
 //     {
 //     getAll: () => instance.get<TMatResponse>(`${materialURI}/all`).then(data => data.data),
 //     getOne: (id: string) => instance.get<TMatResponse>(`${materialURI}/one/:${id}`).then(data => data.data),

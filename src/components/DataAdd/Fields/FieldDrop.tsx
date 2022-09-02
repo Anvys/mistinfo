@@ -1,5 +1,5 @@
 import React, {useState} from 'react';
-import {TDrop, TDropTypes, TLoot, TWOid} from "../../../Types/ResourceTypes";
+import {TDrop, TDropTypes, TLoot, TWOid} from "../../../Types/CommonTypes";
 import {FormikErrors, useFormik} from "formik";
 import styles from './Fields.module.css';
 import {selectFieldsOptions} from "../AddFields";

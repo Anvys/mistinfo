@@ -6,7 +6,7 @@ import {getIsLocationInitSelector, getRegionSelector} from "../../../redux/dataS
 import {TAppDispatch} from "../../../redux/store";
 import {DataView} from "../../DataView/DataView";
 import {RegionThunks} from "../../../redux/reducers/regionReducer";
-import {TRegion, TWOid} from "../../../Types/ResourceTypes";
+import {TRegion, TWOid} from "../../../Types/CommonTypes";
 import {GenDataAdd} from "../../DataAdd/GenDataAdd";
 
 type TProps = {};

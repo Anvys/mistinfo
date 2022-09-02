@@ -9,6 +9,7 @@ import {MapSlice} from "./reducers/mapReducer";
 import {GatherPointSlice, TGatherPointThunks} from "./reducers/gatherPointReducer";
 import {LootSlice, TLootThunks} from "./reducers/lootReducer";
 import {StaminaElixirSlice, TStaminaElixirThunks} from "./reducers/staminaElixirReducer";
+import {EventSlice, TEventThunks} from "./reducers/eventReducer";
 
 
 export const store = configureStore({
@@ -22,6 +23,7 @@ export const store = configureStore({
         gatherpoint: GatherPointSlice.reducer,
         loot: LootSlice.reducer,
         staminaElixir: StaminaElixirSlice.reducer,
+        event: EventSlice.reducer,
 
     },
 })
@@ -30,4 +32,6 @@ export type TAppState = ReturnType<typeof store.getState>
 export type TAppDispatch = typeof store.dispatch
 export const useAppDispatch = () => useDispatch<TAppDispatch>()
 
-export type TCombineThunks = TMaterialThunks | TComponentThunks | TNpcThunks | TLocationThunks | TRegionThunks | TGatherPointThunks | TLootThunks | TStaminaElixirThunks
+export type TCombineThunks = TMaterialThunks | TComponentThunks
+    | TNpcThunks | TLocationThunks | TRegionThunks | TGatherPointThunks
+    | TLootThunks | TStaminaElixirThunks | TEventThunks

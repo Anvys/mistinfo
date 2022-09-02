@@ -1,6 +1,6 @@
 import type {PayloadAction} from '@reduxjs/toolkit'
 import {createAsyncThunk, createSlice} from '@reduxjs/toolkit'
-import {TGatherPoint, TWOid} from "../../Types/ResourceTypes";
+import {TGatherPoint, TWOid} from "../../Types/CommonTypes";
 import {GatherPointAPI} from "../../API/ResourceAPI";
 import {checkError} from "../../Unils/utilsFunctions";
 

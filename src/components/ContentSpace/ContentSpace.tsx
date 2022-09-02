@@ -10,6 +10,7 @@ import {RegionContent} from "./RegionContent/RegionContent";
 import {GatherPointContent} from "./GatherPointContent/GatherPointContent";
 import {LootContent} from "./LootContent/LootContent";
 import {StaminaElixirContent} from "./StaminaElixirContent/StaminaElixirContent";
+import {EventContent} from "./EventContent/EventContent";
 
 
 export const ContentSpace: React.FC = () => {
@@ -38,6 +39,7 @@ export const ContentSpace: React.FC = () => {
                 <Route path={'/gatherpoint/'} element={<GatherPointContent/>}/>
                 <Route path={'/loot/'} element={<LootContent/>}/>
                 <Route path={'/staminaelixir/'} element={<StaminaElixirContent/>}/>
+                <Route path={'/event/'} element={<EventContent/>}/>
             </Routes>
 
         </div>

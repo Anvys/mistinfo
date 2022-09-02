@@ -1,6 +1,6 @@
 export type TCombineData = TNpc | TRegion | TLocation
     | TMaterial | TComponent | TGatherPoint | TLoot
-    | TStaminaElixir
+    | TStaminaElixir | TEvent
 
 export type TResources<T, U> = {
     _id: string
@@ -67,6 +67,21 @@ export type TStaminaElixir = {
     _id: string
     name: string
     icon: string
+    pos: TMapPosition
+    translate: TTranslateData
+    notes: Array<string>
+}
+export type TStage = {
+    name: string
+    type: string
+    require: string
+    loot: TLoot | null
+}
+export type TEvent = {
+    _id: string
+    name: string
+    type: string
+    stages: Array<TStage>
     pos: TMapPosition
     translate: TTranslateData
     notes: Array<string>
@@ -147,7 +162,9 @@ export type TDrop<T extends TDropTypes> = {
 }
 
 
-export type TRequestType = 'Material' | 'Component' | 'Npc' | 'Location' | 'Region' | 'GatherPoint' | 'Loot' | 'StaminaElixir'
+export type TRequestType = 'Material' | 'Component' | 'Npc'
+    | 'Location' | 'Region' | 'GatherPoint' | 'Loot'
+    | 'StaminaElixir' | 'Event'
 export type TRequestBody<T extends TRequestType, D> = {
     type: T
     data: D

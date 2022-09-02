@@ -11,7 +11,7 @@ import {
 import {NpcThunks} from "../../../redux/reducers/npcReducer";
 import {TAppDispatch} from "../../../redux/store";
 import {DataView} from "../../DataView/DataView";
-import {TNpc, TWOid} from "../../../Types/ResourceTypes";
+import {TNpc, TWOid} from "../../../Types/CommonTypes";
 import {GenDataAdd} from "../../DataAdd/GenDataAdd";
 import {FieldDrop} from "../../DataAdd/Fields/FieldDrop";
 import {LootThunks} from "../../../redux/reducers/lootReducer";

@@ -1,7 +1,7 @@
 import React, {useState} from 'react';
 import {DataViewTable} from "./DataViewTable/DataViewTable";
 import {getMapKeys, sortDataMapKeys, sortStrKeys} from "../../Unils/utilsFunctions";
-import {TCombineData, TDrop, TDropTypes, TPrimKeys, TSubKeys} from "../../Types/ResourceTypes";
+import {TCombineData, TDrop, TDropTypes, TPrimKeys, TSubKeys} from "../../Types/CommonTypes";
 
 // function DataViewTest<T>(props: React.PropsWithChildren<TProps<T>>) {
 //

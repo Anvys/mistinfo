@@ -1,5 +1,5 @@
 import React from 'react';
-import {TCombineData, TWOid} from "../../Types/ResourceTypes";
+import {TCombineData, TWOid} from "../../Types/CommonTypes";
 import {useSelector} from "react-redux";
 import {TCombineThunks, useAppDispatch} from "../../redux/store";
 import {useFormik} from "formik";
@@ -8,7 +8,7 @@ import {getMarkerForAddPosSelector} from "../../redux/dataSelectors";
 // import styles from './GenDataAdd.module.css';
 
 
-const dataWithPos = ['gatherpoint', 'location', 'staminaelixir', 'region']
+const dataWithPos = ['gatherpoint', 'location', 'staminaelixir', 'region', 'event']
 export type TDataAddProps<T extends TCombineData> = {
     data: T | null
     resetAddFormData: () => void

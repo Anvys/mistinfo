@@ -22,6 +22,7 @@ export const selectFieldsOptions = {
     'region': undefined as Array<string> | undefined,
     'npc': undefined as Array<string> | undefined,
     'loot': undefined as Array<string> | undefined,
+    'event': undefined as Array<string> | undefined,
 
     'terrain': ['Forest', 'Mountain', 'Swamp', 'Underground', 'Desert', 'Mists', 'Urban'],
     'gatherpoint.type': ['Botany', 'Hunting', 'Lumberjacking', 'Mining'],

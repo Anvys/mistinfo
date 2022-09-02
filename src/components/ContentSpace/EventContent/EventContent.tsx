@@ -1,46 +1,46 @@
 import React, {useState} from 'react';
-import styles from './NpcContent.module.css';
+import styles from './EventContent.module.css';
 import {useDispatch, useSelector} from "react-redux";
 import {Outlet} from "react-router-dom";
-import {getIsNpcInitSelector, getNpcSelector} from "../../../redux/dataSelectors";
-import {NpcThunks} from "../../../redux/reducers/npcReducer";
+import {getEventSelector, getIsEventInitSelector} from "../../../redux/dataSelectors";
 import {TAppDispatch} from "../../../redux/store";
 import {DataView} from "../../DataView/DataView";
-import {TNpc, TWOid} from "../../../Types/CommonTypes";
+import {TEvent, TWOid} from "../../../Types/CommonTypes";
 import {GenDataAdd} from "../../DataAdd/GenDataAdd";
+import {EventThunks} from "../../../redux/reducers/eventReducer";
 
 type TProps = {};
-export const NpcContent: React.FC<TProps> = (props) => {
-    const isInit = useSelector(getIsNpcInitSelector)
+export const EventContent: React.FC<TProps> = (props) => {
+    const isInit = useSelector(getIsEventInitSelector)
     const dispatch = useDispatch<TAppDispatch>()
-    if (!isInit) dispatch(NpcThunks.getAll())
-    const data = useSelector(getNpcSelector);
-    const [dataToAdd, setDataToAdd] = useState(null as null | TNpc)
+    if (!isInit) dispatch(EventThunks.getAll())
+    const data = useSelector(getEventSelector);
+    const [dataToAdd, setDataToAdd] = useState(null as null | TEvent)
     const dataAddHandler = (id: string) => {
         setDataToAdd(id.length ? data.find(v => v._id === id) || null : null)
     }
     const dataDelHandler = (id: string) => {
-        dispatch(NpcThunks.deleteOne(id))
+        dispatch(EventThunks.deleteOne(id))
     }
     const resetAddFormData = () => setDataToAdd(null)
-    const initObj: TWOid<TNpc> = {
+    const initObj: TWOid<TEvent> = {
         name: '',
-        location: '',
-        time: '',
+        type: '',
+        stages:[],
+        pos: {x:0,y:0},
         translate: {En: '', Ru: '', Fr: ''},
+        notes: [],
     }
-
     return (
         <div className={styles.contentBox}>
             <div className={styles.nav}>
-                {/*<LocationDataAdd data={null}/>*/}
-                {/*<NpcDataAdd data={dataToAdd} resetAddFormData={resetAddFormData}/>*/}
+                {/*<RegionDataAdd data={dataToAdd} resetAddFormData={resetAddFormData}/>*/}
                 {GenDataAdd({
                     data: dataToAdd,
                     resetAddFormData,
                     initObj,
-                    curThunks: NpcThunks,
-                    dataName: 'npc'
+                    curThunks: EventThunks,
+                    dataName: 'event'
                 })}
             </div>
             <div className={styles.dbField}>

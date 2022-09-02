@@ -10,7 +10,7 @@ import {
 import {TAppDispatch} from "../../../redux/store";
 import {DataView} from "../../DataView/DataView";
 import {LocationThunks} from "../../../redux/reducers/locationReducer";
-import {TGatherPoint, TWOid} from "../../../Types/ResourceTypes";
+import {TGatherPoint, TWOid} from "../../../Types/CommonTypes";
 import {GenDataAdd} from "../../DataAdd/GenDataAdd";
 import {MyMap} from "../../Map/MyMap";
 import {GatherPointThunks} from "../../../redux/reducers/gatherPointReducer";

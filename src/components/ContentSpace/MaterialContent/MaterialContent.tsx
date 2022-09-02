@@ -6,7 +6,7 @@ import {TAppDispatch} from "../../../redux/store";
 import {Outlet} from "react-router-dom";
 import {DataView} from "../../DataView/DataView";
 import {MaterialThunks} from "../../../redux/reducers/materialReducer";
-import {TMaterial, TMaterialType, TWOid} from "../../../Types/ResourceTypes";
+import {TMaterial, TMaterialType, TWOid} from "../../../Types/CommonTypes";
 import {GenDataAdd} from "../../DataAdd/GenDataAdd";
 
 type TProps = {};

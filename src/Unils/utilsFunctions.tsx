@@ -1,4 +1,4 @@
-import {TCombineData, TMapPosition, TResponseBody} from "../Types/ResourceTypes";
+import {TCombineData, TMapPosition, TResponseBody} from "../Types/CommonTypes";
 import {StatusCodes} from "../Types/Utils";
 import {FormikProps} from "formik";
 import {AddFields, selectFieldsOptions, TSelectFieldOptionsKeys} from "../components/DataAdd/AddFields";

@@ -9,7 +9,7 @@ import {
 } from "../../../redux/dataSelectors";
 import {TAppDispatch} from "../../../redux/store";
 import {DataView} from "../../DataView/DataView";
-import {TStaminaElixir, TWOid} from "../../../Types/ResourceTypes";
+import {TStaminaElixir, TWOid} from "../../../Types/CommonTypes";
 import {GenDataAdd} from "../../DataAdd/GenDataAdd";
 import {MyMap} from "../../Map/MyMap";
 import {StaminaElixirThunks} from "../../../redux/reducers/staminaElixirReducer";

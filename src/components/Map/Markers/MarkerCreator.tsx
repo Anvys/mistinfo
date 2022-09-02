@@ -1,7 +1,7 @@
 import React from 'react';
 import {Icon} from "leaflet";
 import {Marker, Popup, Tooltip} from "react-leaflet";
-import {TGatherPoint, TLocation, TStaminaElixir} from "../../../Types/ResourceTypes";
+import {TGatherPoint, TLocation, TStaminaElixir} from "../../../Types/CommonTypes";
 // import styles from './MarkerCreator.module.css';
 
 const iconPicker = (type: string) =>{

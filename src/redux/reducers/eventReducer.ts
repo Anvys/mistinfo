@@ -1,14 +1,14 @@
 import type {PayloadAction} from '@reduxjs/toolkit'
 import {createAsyncThunk, createSlice} from '@reduxjs/toolkit'
-import {TNpc, TWOid} from "../../Types/CommonTypes";
-import {NpcAPI} from "../../API/ResourceAPI";
+import {TEvent, TWOid} from "../../Types/CommonTypes";
+import {EventAPI, RegionAPI} from "../../API/ResourceAPI";
 import {checkError} from "../../Unils/utilsFunctions";
 import {selectFieldsOptions} from "../../components/DataAdd/AddFields";
 
-const reducerPath = 'mif/npc'
+const reducerPath = 'mif/event'
 
 export type TInitialState = {
-    data: Array<TNpc>
+    data: Array<TEvent>
     isInit: boolean
 }
 const initialState: TInitialState = {
@@ -16,19 +16,19 @@ const initialState: TInitialState = {
     isInit: false,
 }
 
-export const NpcSlice = createSlice({
-    name: 'npc',
+export const EventSlice = createSlice({
+    name: 'event',
     initialState,
     reducers: {
-        init: (state, action: PayloadAction<Array<TNpc>>) => {
+        init: (state, action: PayloadAction<Array<TEvent>>) => {
             state.data = [...action.payload];
             state.isInit = true;
         },
-        addOne: (state, action: PayloadAction<Array<TNpc>>) => {
+        addOne: (state, action: PayloadAction<Array<TEvent>>) => {
             state.data.push(action.payload[0])
         },
-        updateOne: (state, action: PayloadAction<{ id: string, data: TNpc }>) => {
-            state.data[state.data.indexOf(state.data.find((v) => v._id === action.payload.id) as TNpc)] = action.payload.data
+        updateOne: (state, action: PayloadAction<{ id: string, data: TEvent }>) => {
+            state.data[state.data.indexOf(state.data.find((v) => v._id === action.payload.id) as TEvent)] = action.payload.data
         },
         deleteOne: (state, action: PayloadAction<{ id: string }>) => {
             state.data = state.data.filter(v => v._id !== action.payload.id)
@@ -36,24 +36,24 @@ export const NpcSlice = createSlice({
     },
     extraReducers: (builder) => {
         // Add reducers for additional action types here, and handle loading state as needed
-        builder.addCase(NpcThunks.getAll.fulfilled, (state, action) => {
+        builder.addCase(EventThunks.getAll.fulfilled, (state, action) => {
         })
-        builder.addCase(NpcThunks.getOne.fulfilled, (state, action) => {
+        builder.addCase(EventThunks.getOne.fulfilled, (state, action) => {
         })
-        builder.addCase(NpcThunks.updateOne.fulfilled, (state, action) => {
+        builder.addCase(EventThunks.updateOne.fulfilled, (state, action) => {
         })
-        builder.addCase(NpcThunks.deleteOne.fulfilled, (state, action) => {
+        builder.addCase(EventThunks.deleteOne.fulfilled, (state, action) => {
         })
     }
 })
 
-const CurAPI = NpcAPI;
-const CurSlice = NpcSlice;
-export type TNpcThunks = typeof NpcThunks;
-export const NpcThunks = {
+const CurAPI = EventAPI;
+const CurSlice = EventSlice;
+export type TEventThunks = typeof EventThunks;
+export const EventThunks = {
     getAll: createAsyncThunk(`${reducerPath}/getAll`, async (_, thunkAPI) => {
             const res = await CurAPI.getAll()
-            if (res.data.length) selectFieldsOptions.npc = res.data.map(v => v.name);
+            if (res.data.length) selectFieldsOptions.event = res.data.map(v=>v.name);
             if (checkError(res)) thunkAPI.dispatch(CurSlice.actions.init(res.data))
         }
     ),
@@ -62,12 +62,12 @@ export const NpcThunks = {
             if (checkError(res)) return res.data
         }
     ),
-    addOne: createAsyncThunk(`${reducerPath}/addOne`, async (data: TWOid<TNpc>, thunkAPI) => {
+    addOne: createAsyncThunk(`${reducerPath}/addOne`, async (data: TWOid<TEvent>, thunkAPI) => {
             const res = await CurAPI.addOne(data)
             if (checkError(res)) thunkAPI.dispatch(CurSlice.actions.addOne(res.data))
         }
     ),
-    updateOne: createAsyncThunk(`${reducerPath}/updateOne`, async (resInfo: { id: string, data: TNpc }, thunkAPI) => {
+    updateOne: createAsyncThunk(`${reducerPath}/updateOne`, async (resInfo: { id: string, data: TEvent }, thunkAPI) => {
             const res = await CurAPI.updateOne(resInfo.id, resInfo.data)
             if (checkError(res)) thunkAPI.dispatch(CurSlice.actions.updateOne({
                 id: resInfo.id,
@@ -81,7 +81,3 @@ export const NpcThunks = {
         }
     ),
 }
-
-
-// Action creators are generated for each case reducer function
-export const {} = NpcSlice.actions

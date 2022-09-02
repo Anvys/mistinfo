@@ -5,7 +5,7 @@ import {getComponentsSelector, getIsComponentsInitSelector} from "../../../redux
 import {TAppDispatch} from "../../../redux/store";
 import {ComponentThunks} from "../../../redux/reducers/componentReducer";
 import {DataView} from "../../DataView/DataView";
-import {TComponent, TComponentType, TWOid} from "../../../Types/ResourceTypes";
+import {TComponent, TComponentType, TWOid} from "../../../Types/CommonTypes";
 import {GenDataAdd} from "../../DataAdd/GenDataAdd";
 
 type TProps = {};

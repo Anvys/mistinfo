@@ -1,6 +1,6 @@
 import React from 'react';
 import {useFormik} from "formik";
-import {TMaterial, TMaterialType, TWOid} from "../../Types/ResourceTypes";
+import {TMaterial, TMaterialType, TWOid} from "../../Types/CommonTypes";
 import {useDispatch} from "react-redux";
 import {TAppDispatch} from "../../redux/store";
 import {AddDataForm} from "./AddDataForm";

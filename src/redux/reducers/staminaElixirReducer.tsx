@@ -1,6 +1,6 @@
 import type {PayloadAction} from '@reduxjs/toolkit'
 import {createAsyncThunk, createSlice} from '@reduxjs/toolkit'
-import {TStaminaElixir, TWOid} from "../../Types/ResourceTypes";
+import {TStaminaElixir, TWOid} from "../../Types/CommonTypes";
 import {LocationAPI, StaminaElixirAPI} from "../../API/ResourceAPI";
 import {checkError} from "../../Unils/utilsFunctions";
 import {selectFieldsOptions} from "../../components/DataAdd/AddFields";

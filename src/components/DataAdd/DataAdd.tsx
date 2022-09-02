@@ -2,7 +2,7 @@ import React from 'react';
 import {useFormik} from "formik";
 import styles from './DataAdd.module.css';
 import {getDefaultFormikValues} from "../../Types/Utils";
-import {TCombineData, TPrimKeys, TSubKeys} from "../../Types/ResourceTypes";
+import {TCombineData, TPrimKeys, TSubKeys} from "../../Types/CommonTypes";
 
 type TProps = {
     dataKeys: Map<string, Array<string>>
