@@ -1,4 +1,4 @@
-import Leaf, {Icon} from 'leaflet';
+import Leaf, {Icon, LatLng, LatLngBounds} from 'leaflet';
 import React, {useEffect, useRef, useState} from 'react';
 import styles from './Map.module.css';
 import {MapContainer, Marker, Popup, TileLayer, useMap, useMapEvents} from "react-leaflet";
@@ -121,8 +121,7 @@ export const MyMap: React.FC<TProps> = (props) => {
                         // url='https://miro.medium.com/max/1400/0*FPRXzSDmPMQ158jJ'
                         // url={'World/World_0{x}_0{y}.png'}
                         url={'http://127.0.0.1:3333/api/map/{x}/{y}/{z}'}
-                        // bounds={new LatLngBounds(new LatLng(100, 0),
-                        //     new LatLng(0, 100))}
+                        // bounds={new LatLngBounds(new LatLng(10, -60),                            new LatLng(-10, -30))}
 
                     />
                     {/*<ImageOverlay*/}
@@ -134,21 +133,21 @@ export const MyMap: React.FC<TProps> = (props) => {
                     {/*    url={'./World/World_{x}_{y}.png'} */}
                     {/*    bounds={new LatLngBounds(new LatLng(100, 0),*/}
                     {/*        new LatLng(0, 100))}/>*/}
-                    <Marker icon={new Icon({
-                        iconUrl: require('./../../assets/icons/testicon.png'),
-                        iconSize: [50, 50],
-                        popupAnchor: [0, -25],
-                    })} position={[0, -45]}>
-                        <Popup>
-                            A pretty CSS3 popup. <br/> Easily customizable.
-                        </Popup>
-                    </Marker>
+                    {/*<Marker icon={new Icon({*/}
+                    {/*    iconUrl: require('./../../assets/icons/testicon.png'),*/}
+                    {/*    iconSize: [50, 50],*/}
+                    {/*    popupAnchor: [0, -25],*/}
+                    {/*})} position={[0, -45]}>*/}
+                    {/*    <Popup>*/}
+                    {/*        A pretty CSS3 popup. <br/> Easily customizable.*/}
+                    {/*    </Popup>*/}
+                    {/*</Marker>*/}
                     {locationMarkers.length && locationMarkers}
                     {gatherMarkers.length && gatherMarkers}
                     {staminaElixirMarkers.length && staminaElixirMarkers}
                     {isCusMarkerActive &&
                         <MarkerForDataAdd markerRef={markerRef} eventHandlers={eventHandlers} pos={customMarkerPos}/>}
-                    <ExampleBound/>
+                    {/*<ExampleBound/>*/}
                 </MapContainer>
             </div>
         </div>

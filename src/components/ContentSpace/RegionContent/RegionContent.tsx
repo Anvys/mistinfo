@@ -27,6 +27,8 @@ export const RegionContent: React.FC<TProps> = (props) => {
         name: '',
         terrain: 'Forest',
         terrainReq: 0,
+        bound:[],
+        pos: {x:0,y:0},
         translate: {En: '', Ru: '', Fr: ''},
     }
     return (

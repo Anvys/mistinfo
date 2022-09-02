@@ -29,6 +29,8 @@ export type TRegion = {
     name: string
     terrain: TTerrain
     terrainReq: number
+    bound: Array<Array<number>>
+    pos: TMapPosition
     translate: TTranslateData
 }
 export type TLocation = {
