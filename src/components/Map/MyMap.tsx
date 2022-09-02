@@ -4,8 +4,9 @@ import styles from './Map.module.css';
 import {MapContainer, Marker, Popup, TileLayer, useMap, useMapEvents} from "react-leaflet";
 import {MarkerForDataAdd} from "./Markers/MarkerForDataAdd";
 import {useSelector} from "react-redux";
-import {getGatherPointSelector, getLocationSelector} from "../../redux/dataSelectors";
+import {getGatherPointSelector, getLocationSelector, getStaminaElixirSelector} from "../../redux/dataSelectors";
 import {MC} from "./Markers/MarkerCreator";
+import {ExampleBound} from "./Bounds/ExampleBound";
 
 // import * as icons from '../../assets/icons'
 const MyComponent: React.FC<{onZoomChange: (z:number)=>void}> = (props) => {
@@ -52,12 +53,13 @@ export const MyMap: React.FC<TProps> = (props) => {
     const [map, setMap] = useState<Leaf.Map | null>(null);
     const [zoom, setZoom] = useState(0)
     const onZoomChange = (z: number)=>setZoom(z)
-    console.log(`curZoom: ${zoom}`)
+    // console.log(`curZoom: ${zoom}`)
     // const markers = useSelector(getMarkersSelector).
     const locationMarkers = useSelector(getLocationSelector).map(v => MC.location(v, zoom))
     const gatjers = useSelector(getGatherPointSelector);
     const gatherMarkers = useSelector(getGatherPointSelector).map(v => MC.gatherPoint(v, zoom))
-    console.log(locationMarkers)
+    const staminaElixirMarkers = useSelector(getStaminaElixirSelector).map((v,i) => MC.staminaElixir({...v, name: `${v.name} №${i+1}`}, zoom))
+    // console.log(locationMarkers)
     // console.log(markers)
     // var map = L.map('map').setView([51.505, -0.09], 13);
 
@@ -143,8 +145,10 @@ export const MyMap: React.FC<TProps> = (props) => {
                     </Marker>
                     {locationMarkers.length && locationMarkers}
                     {gatherMarkers.length && gatherMarkers}
+                    {staminaElixirMarkers.length && staminaElixirMarkers}
                     {isCusMarkerActive &&
                         <MarkerForDataAdd markerRef={markerRef} eventHandlers={eventHandlers} pos={customMarkerPos}/>}
+                    <ExampleBound/>
                 </MapContainer>
             </div>
         </div>

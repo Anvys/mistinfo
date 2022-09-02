@@ -139,8 +139,9 @@ export const AddFields = {
     },
     icon: (
            formik: FormikProps<any>,
-           index: number = 0,) => {
-        return (<IconField  index={index} formik={formik}/>
+           index: number = 0,
+           disabled: boolean = false) => {
+        return (<IconField  index={index} formik={formik} disabled={disabled}/>
 
 
         )
@@ -152,10 +153,11 @@ type IconFieldProps = {
     // onChange: React.ChangeEventHandler<HTMLInputElement>,
     index: number,
     formik: FormikProps<any>
+    disabled: boolean
 }
-const IconField: React.FC<IconFieldProps> = ({index, formik}) => {
+const IconField: React.FC<IconFieldProps> = ({index, formik, disabled}) => {
     const [isPickIcon, setIsPickIcon] = useState(false)
-    const [iconURL, setIconURL] = useState('')
+    const [iconURL, setIconURL] = useState(formik.values.icon)
     const onAddIcon = () =>{
         setIsPickIcon(true)
     }
@@ -172,7 +174,7 @@ const IconField: React.FC<IconFieldProps> = ({index, formik}) => {
         <div className={styles.iconMainDiv}>
             <div className={styles.iconFieldBox}>
                 <label className={styles.iconLabel} htmlFor={'icon'}>icon:</label>
-                <input className={styles.iconInput} type={'text'} id={'icon'} name={'icon'}
+                <input disabled={disabled} className={styles.iconInput} type={'text'} id={'icon'} name={'icon'}
                     // disabled={true}
                     //    onChange={onYChange}
                        value={formik.values.icon}/>
@@ -180,7 +182,7 @@ const IconField: React.FC<IconFieldProps> = ({index, formik}) => {
                 {!iconURL && <img className={styles.imgIcon} src={require('./../../assets/icons/location/Unknown.png')}/>}
             </div>
             {isPickIcon && <IconPicker onClose={onClose} onIconPickHandler={onIconPickHandler} />}
-            <button onClick={onAddIcon}>Choose Icon</button>
+            <button disabled={disabled} onClick={onAddIcon}>Choose Icon</button>
         </div>
 
     )

@@ -59,10 +59,10 @@ export const DataView = <T extends TCombineData>(props: React.PropsWithChildren<
         }))
         return sortedRow
     })
-    console.log(data)
-    console.log(dataKeys)
-    console.log(sortedDataKeys)
-    console.log(dataValues)
+    // console.log(data)
+    // console.log(dataKeys)
+    // console.log(sortedDataKeys)
+    // console.log(dataValues)
 
     const editHandler = (id: string) => {
         console.log(`handle ${id}`)

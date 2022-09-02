@@ -21,6 +21,9 @@ export const getIsInitGatherPointSelector = (state: TAppState) => state.gatherpo
 export const getLootSelector = (state: TAppState) => state.loot.data
 export const getIsLootInitSelector = (state: TAppState) => state.loot.isInit
 
+export const getStaminaElixirSelector = (state: TAppState) => state.staminaElixir.data
+export const getIsStaminaElixirInitSelector = (state: TAppState) => state.staminaElixir.isInit
+
 export const getMarkerForAddPosSelector = (state: TAppState) => state.map.markerForAddPos
 export const getIsAddPosFieldActiveSelector = (state: TAppState) => state.map.isAddPosFieldActive
 export const getMarkersSelector = (state: TAppState) => state.map.markers

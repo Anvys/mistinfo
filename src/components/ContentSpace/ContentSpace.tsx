@@ -9,6 +9,7 @@ import {LocationContent} from "./LocationContent/LocationContent";
 import {RegionContent} from "./RegionContent/RegionContent";
 import {GatherPointContent} from "./GatherPointContent/GatherPointContent";
 import {LootContent} from "./LootContent/LootContent";
+import {StaminaElixirContent} from "./StaminaElixirContent/StaminaElixirContent";
 
 
 export const ContentSpace: React.FC = () => {
@@ -36,6 +37,7 @@ export const ContentSpace: React.FC = () => {
                 <Route path={'/region/'} element={<RegionContent/>}/>
                 <Route path={'/gatherpoint/'} element={<GatherPointContent/>}/>
                 <Route path={'/loot/'} element={<LootContent/>}/>
+                <Route path={'/staminaelixir/'} element={<StaminaElixirContent/>}/>
             </Routes>
 
         </div>

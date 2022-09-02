@@ -119,6 +119,7 @@ export const getElement = (value: string | number, fullKey: string, formik: Form
             htmlId, key, index, styles.fieldBox, styles.label, styles.inputText)
     }
     if(key==='icon' ){
+        if(dataName==='staminaelixir')return AddFields.icon(formik, index, true)
         return AddFields.icon(formik, index)
     }
     // if(dataName==='gatherpoint' && key==='type' )return null

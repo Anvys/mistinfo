@@ -9,7 +9,7 @@ import {
     TRequestBody,
     TRequestType,
     TResponseBody,
-    TResResponse,
+    TResResponse, TStaminaElixir,
     TWOid
 } from "../Types/ResourceTypes";
 
@@ -19,12 +19,6 @@ const port = 3333;
 const instance = axios.create({
     baseURL: `${baseURL}:${port}/api`,
 });
-
-
-type TMatResponse = TResResponse<TMaterial>
-type TComResponse = TResResponse<TComponent>
-const materialURI = `/materials`
-const componentURI = `/components`
 
 const getDataAPI = <D, T extends TRequestType>(uri: string, type: T) => {
     type axRes = TResponseBody<D>
@@ -46,6 +40,7 @@ export const LocationAPI = getDataAPI<TLocation, 'Location'>(`/location`, 'Locat
 export const RegionAPI = getDataAPI<TRegion, 'Region'>(`/region`, 'Region')
 export const GatherPointAPI = getDataAPI<TGatherPoint, 'GatherPoint'>(`/gatherpoint`, 'GatherPoint')
 export const LootAPI = getDataAPI<TLoot, 'Loot'>(`/loot`, 'Loot')
+export const StaminaElixirAPI = getDataAPI<TStaminaElixir, 'StaminaElixir'>(`/staminaelixir`, 'StaminaElixir')
 //     {
 //     getAll: () => instance.get<TMatResponse>(`${materialURI}/all`).then(data => data.data),
 //     getOne: (id: string) => instance.get<TMatResponse>(`${materialURI}/one/:${id}`).then(data => data.data),

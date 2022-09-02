@@ -10,6 +10,7 @@ import {RegionThunks} from "./redux/reducers/regionReducer";
 import {NpcThunks} from "./redux/reducers/npcReducer";
 import {GatherPointThunks} from "./redux/reducers/gatherPointReducer";
 import {LootThunks} from "./redux/reducers/lootReducer";
+import {StaminaElixirThunks} from "./redux/reducers/staminaElixirReducer";
 
 function App() {
     const dispatch = useDispatch<TAppDispatch>();
@@ -21,6 +22,7 @@ function App() {
         dispatch(NpcThunks.getAll())
         dispatch(GatherPointThunks.getAll())
         dispatch(LootThunks.getAll())
+        dispatch(StaminaElixirThunks.getAll())
     }, [])
     // if(!useSelector(getIsMaterialsInitSelector))dispatch(MaterialThunks.getAll())
     // if(!useSelector(getIsComponentsInitSelector))dispatch(ComponentThunks.getAll())
