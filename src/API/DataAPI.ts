@@ -66,7 +66,7 @@ export const MapObjectAPI = getDataAPI<TMapObject, 'MapObject'>(`/mapobject`, 'M
 // }
 
 // export const ResourceAPI = {
-//     // getAll: () => instance.get<TResponseAllBody>('/resources').then(data => data.data),
+//     // getAll: () => instance.get<TResponseAllBody>('/resource').then(data => data.data),
 //
 //
 //
