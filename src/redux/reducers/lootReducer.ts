@@ -1,7 +1,7 @@
 import type {PayloadAction} from '@reduxjs/toolkit'
 import {createAsyncThunk, createSlice} from '@reduxjs/toolkit'
 import {TLoot, TWOid} from "../../Types/CommonTypes";
-import {LootAPI, RegionAPI} from "../../API/ResourceAPI";
+import {LootAPI, RegionAPI} from "../../API/DataAPI";
 import {checkError} from "../../Unils/utilsFunctions";
 import {selectFieldsOptions} from "../../components/DataAdd/AddFields";
 

@@ -145,9 +145,13 @@ export const MyMap: React.FC<TProps> = (props) => {
                     {locationMarkers.length && locationMarkers}
                     {gatherMarkers.length && gatherMarkers}
                     {staminaElixirMarkers.length && staminaElixirMarkers}
-                    {isCusMarkerActive &&
-                        <MarkerForDataAdd markerRef={markerRef} eventHandlers={eventHandlers} pos={customMarkerPos}/>}
+                    {/*{isCusMarkerActive &&*/}
+                    {/*    // <MarkerForDataAdd markerRef={markerRef} eventHandlers={eventHandlers} pos={customMarkerPos}/>}*/}
+                    {MC.addDataMarker(customMarkerPos, markerRef, eventHandlers)}
+                    {MC.getTowns(zoom)}
                     {/*<ExampleBound/>*/}
+
+
                 </MapContainer>
             </div>
         </div>

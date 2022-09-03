@@ -2,7 +2,7 @@ import axios, {AxiosResponse} from "axios";
 import {
     TComponent, TEvent,
     TGatherPoint,
-    TLocation, TLoot,
+    TLocation, TLoot, TMapObject,
     TMaterial,
     TNpc,
     TRegion,
@@ -42,6 +42,7 @@ export const GatherPointAPI = getDataAPI<TGatherPoint, 'GatherPoint'>(`/gatherpo
 export const LootAPI = getDataAPI<TLoot, 'Loot'>(`/loot`, 'Loot')
 export const StaminaElixirAPI = getDataAPI<TStaminaElixir, 'StaminaElixir'>(`/staminaelixir`, 'StaminaElixir')
 export const EventAPI = getDataAPI<TEvent, 'Event'>(`/event`, 'Event')
+export const MapObjectAPI = getDataAPI<TMapObject, 'MapObject'>(`/mapobject`, 'MapObject')
 //     {
 //     getAll: () => instance.get<TMatResponse>(`${materialURI}/all`).then(data => data.data),
 //     getOne: (id: string) => instance.get<TMatResponse>(`${materialURI}/one/:${id}`).then(data => data.data),

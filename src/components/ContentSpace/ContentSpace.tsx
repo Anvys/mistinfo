@@ -11,6 +11,7 @@ import {GatherPointContent} from "./GatherPointContent/GatherPointContent";
 import {LootContent} from "./LootContent/LootContent";
 import {StaminaElixirContent} from "./StaminaElixirContent/StaminaElixirContent";
 import {EventContent} from "./EventContent/EventContent";
+import {MapObjectContent} from "./MapObjectContent/MapObjectContent";
 
 
 export const ContentSpace: React.FC = () => {
@@ -25,7 +26,7 @@ export const ContentSpace: React.FC = () => {
     return (
         <div className={styles.contentBox}>
             <Routes>
-                <Route path={'/map'} element={<MyMap wid={600} hei={600}/>}/>
+                <Route path={'/map'} element={<MyMap wid={800} hei={600}/>}/>
                 <Route path={'/material/'} element={<MaterialContent/>}>
                     {/*<Route path={'/material/add'} element={<AddMaterial selectFields={materialSelectFields}/>}/>*/}
                 </Route>
@@ -40,6 +41,7 @@ export const ContentSpace: React.FC = () => {
                 <Route path={'/loot/'} element={<LootContent/>}/>
                 <Route path={'/staminaelixir/'} element={<StaminaElixirContent/>}/>
                 <Route path={'/event/'} element={<EventContent/>}/>
+                <Route path={'/mapobject/'} element={<MapObjectContent/>}/>
             </Routes>
 
         </div>

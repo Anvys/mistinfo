@@ -1,7 +1,7 @@
 import type {PayloadAction} from '@reduxjs/toolkit'
 import {createAsyncThunk, createSlice} from '@reduxjs/toolkit'
 import {TEvent, TWOid} from "../../Types/CommonTypes";
-import {EventAPI, RegionAPI} from "../../API/ResourceAPI";
+import {EventAPI, RegionAPI} from "../../API/DataAPI";
 import {checkError} from "../../Unils/utilsFunctions";
 import {selectFieldsOptions} from "../../components/DataAdd/AddFields";
 

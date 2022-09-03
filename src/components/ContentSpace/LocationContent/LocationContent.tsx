@@ -13,7 +13,6 @@ import {LocationThunks} from "../../../redux/reducers/locationReducer";
 import {TLocation, TWOid} from "../../../Types/CommonTypes";
 import {GenDataAdd} from "../../DataAdd/GenDataAdd";
 import {MyMap} from "../../Map/MyMap";
-import {IconPicker} from "../../IconPicker/IconPicker";
 
 type TProps = {};
 export const LocationContent: React.FC<TProps> = (props) => {

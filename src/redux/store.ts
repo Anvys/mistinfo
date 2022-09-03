@@ -10,6 +10,7 @@ import {GatherPointSlice, TGatherPointThunks} from "./reducers/gatherPointReduce
 import {LootSlice, TLootThunks} from "./reducers/lootReducer";
 import {StaminaElixirSlice, TStaminaElixirThunks} from "./reducers/staminaElixirReducer";
 import {EventSlice, TEventThunks} from "./reducers/eventReducer";
+import {MapObjectSlice} from "./reducers/mapObjectReducer";
 
 
 export const store = configureStore({
@@ -24,6 +25,7 @@ export const store = configureStore({
         loot: LootSlice.reducer,
         staminaElixir: StaminaElixirSlice.reducer,
         event: EventSlice.reducer,
+        mapObject: MapObjectSlice.reducer,
 
     },
 })

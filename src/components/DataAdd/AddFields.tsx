@@ -23,6 +23,7 @@ export const selectFieldsOptions = {
     'npc': undefined as Array<string> | undefined,
     'loot': undefined as Array<string> | undefined,
     'event': undefined as Array<string> | undefined,
+    'mapobject': undefined as Array<string> | undefined,
 
     'terrain': ['Forest', 'Mountain', 'Swamp', 'Underground', 'Desert', 'Mists', 'Urban'],
     'gatherpoint.type': ['Botany', 'Hunting', 'Lumberjacking', 'Mining'],
@@ -182,7 +183,7 @@ const IconField: React.FC<IconFieldProps> = ({index, formik, disabled}) => {
                 {iconURL && <img className={styles.imgIcon} src={iconURL}/>}
                 {!iconURL && <img className={styles.imgIcon} src={require('./../../assets/icons/location/Unknown.png')}/>}
             </div>
-            {isPickIcon && <IconPicker onClose={onClose} onIconPickHandler={onIconPickHandler} />}
+            {isPickIcon && <IconPicker onClose={onClose} onIconPickHandler={onIconPickHandler} iconPossibleFolders={[]}/>}
             <button disabled={disabled} onClick={onAddIcon}>Choose Icon</button>
         </div>
 

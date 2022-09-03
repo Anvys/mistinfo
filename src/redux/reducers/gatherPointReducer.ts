@@ -1,7 +1,7 @@
 import type {PayloadAction} from '@reduxjs/toolkit'
 import {createAsyncThunk, createSlice} from '@reduxjs/toolkit'
 import {TGatherPoint, TWOid} from "../../Types/CommonTypes";
-import {GatherPointAPI} from "../../API/ResourceAPI";
+import {GatherPointAPI} from "../../API/DataAPI";
 import {checkError} from "../../Unils/utilsFunctions";
 
 const reducerPath = 'mif/gatherpoint'

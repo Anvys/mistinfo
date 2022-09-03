@@ -8,7 +8,7 @@ import {getMarkerForAddPosSelector} from "../../redux/dataSelectors";
 // import styles from './GenDataAdd.module.css';
 
 
-const dataWithPos = ['gatherpoint', 'location', 'staminaelixir', 'region', 'event']
+const dataWithPos = ['gatherpoint', 'location', 'staminaelixir', 'region', 'event', 'mapobject']
 export type TDataAddProps<T extends TCombineData> = {
     data: T | null
     resetAddFormData: () => void

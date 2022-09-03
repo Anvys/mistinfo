@@ -7,6 +7,8 @@ const reducerPath = 'mif/map'
 export type TInitialState = {
     markerForAddPos: TMapPosition
     isAddPosFieldActive: boolean
+    addMarkerIcon: string
+    addMarkerSize: Array<number>
     markers: {
         location: Array<JSX.Element>
     }
@@ -14,6 +16,8 @@ export type TInitialState = {
 const initialState: TInitialState = {
     markerForAddPos: {x:0,y:0},
     isAddPosFieldActive: false,
+    addMarkerIcon: require('./../../assets/icons/targetYellow.png'),
+    addMarkerSize:[50, 50],
     markers: {
         location: []
     }
@@ -31,6 +35,15 @@ export const MapSlice = createSlice({
         },
         setMarkers: (state, action: PayloadAction<{ type: keyof typeof state.markers, markers: Array<JSX.Element> }>) => {
             state.markers[action.payload.type] = action.payload.markers
+        },
+        setAddMarkerIcon: (state, action: PayloadAction<{ icon: string}>) => {
+            state.addMarkerIcon = action.payload.icon
+        },
+        setAddMarkerSize: (state, action: PayloadAction<{ size: Array<number>}>) => {
+            state.addMarkerSize = action.payload.size
+        },
+        resetAddMarkerIcon: (state, action: PayloadAction<{ }>) => {
+            state.addMarkerIcon = require('./../../assets/icons/targetYellow.png')
         },
 
     },
