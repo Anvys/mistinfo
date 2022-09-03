@@ -4,7 +4,7 @@ import {useAppDispatch} from "../../redux/store";
 import {MapSlice} from "../../redux/reducers/mapReducer";
 
 
-const iconUrlPicker = (folder: string, icon: string) => {
+export const iconUrlPicker = (folder: string, icon: string) => {
 
     if (icon === 'Unknown') return require(`./../../assets/icons/location/Unknown.png`)
     const str = `./../../assets/icons/${folder}/${icon}.png`
@@ -214,7 +214,7 @@ export const IconPicker: React.FC<TProps> = (props) => {
         console.log(`${path}`)
         props.onIconPickHandler(path, url)
         dispatch(MapSlice.actions.setAddMarkerIcon({icon: url}))
-        dispatch(MapSlice.actions.setAddMarkerSize({size: folder === 'mapobject' ? [200, 200] : [50, 50]}))
+        dispatch(MapSlice.actions.setAddMarkerSize({size: folder === 'mapobject' ? [200, 200] : [30, 30]}))
     }
     const onClose = () => {
         props.onClose()
