@@ -6,13 +6,15 @@ import {useAppDispatch} from "../../../redux/store";
 import {MapSlice} from "../../../redux/reducers/mapReducer";
 import {useSelector} from "react-redux";
 import {getAddMarkerIconSelector, getAddMarkerSizeSelector} from "../../../redux/dataSelectors";
+import {iconUrlPicker} from "../../IconPicker/IconPicker";
 // import styles from './MarkerCreator.module.css';
 
 const iconPicker = (type: string) => {
     if (!type) return require('./../../../assets/icons/temp.png')
     const iPath = type.split('/')
-    if (iPath.length === 3) {
-        return require(`./../../../assets/icons/material/${iPath[1]}/${iPath[2]}.png`)
+    if (iPath.length === 2) {
+        // return require(`./../../../assets/icons/material/${iPath[1]}/${iPath[2]}.png`)
+        return iconUrlPicker(iPath[0],iPath[1])
         // switch (type){
         //     case 'Lumberjacking': return require('./../../../assets/icons/material/Wood/t1.png')
         //     // case 'Lumberjacking': return require('./../../../assets/icons/material/Wood/t1.png')
@@ -64,13 +66,18 @@ export const MC = {
                 iconUrl: require('./../../../assets/icons/mapobject/CityKortombourgNew.png'),
                 iconSize: [1875/coef, 1602/coef],
                 iconAnchor: [1875/coef / 2, 1602/coef / 2],
-            })} position={[-0.18, -45.68]}        />,
+            })} position={[-0.18, -45.68]}       />,
             <Marker
                 icon={new Icon({
                     iconUrl: require('./../../../assets/icons/mapobject/CityQuara.png'),
                     iconSize: [1360/coef, 773/coef],
                     iconAnchor: [1360/coef / 2, 773/coef / 2],
-                })} position={[3.56, -64.64]}            />
+                })}
+                position={[3.56, -64.64]}
+
+                pane={'shadowPane'}
+
+            />
         ]
         return towns
     },
@@ -181,7 +188,10 @@ const AddDataMarker: React.FC<TAddDataMarkerProps> = (props) => {
                 iconSize: [iconSize[0], iconSize[1]],
                 popupAnchor: [0, -25],
             })}
-            position={pos}>
+            position={pos}
+            // zIndex={9999}
+            pane={'popupPane'}
+        >
             <Popup>
 
                 <div>

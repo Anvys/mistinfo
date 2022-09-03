@@ -142,13 +142,14 @@ export const MyMap: React.FC<TProps> = (props) => {
                     {/*        A pretty CSS3 popup. <br/> Easily customizable.*/}
                     {/*    </Popup>*/}
                     {/*</Marker>*/}
+                    {MC.getTowns(zoom)}
                     {locationMarkers.length && locationMarkers}
                     {gatherMarkers.length && gatherMarkers}
                     {staminaElixirMarkers.length && staminaElixirMarkers}
                     {/*{isCusMarkerActive &&*/}
                     {/*    // <MarkerForDataAdd markerRef={markerRef} eventHandlers={eventHandlers} pos={customMarkerPos}/>}*/}
                     {MC.addDataMarker(customMarkerPos, markerRef, eventHandlers)}
-                    {MC.getTowns(zoom)}
+
                     {/*<ExampleBound/>*/}
 
 

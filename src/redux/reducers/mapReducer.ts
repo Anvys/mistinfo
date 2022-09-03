@@ -17,7 +17,7 @@ const initialState: TInitialState = {
     markerForAddPos: {x:0,y:0},
     isAddPosFieldActive: false,
     addMarkerIcon: require('./../../assets/icons/targetYellow.png'),
-    addMarkerSize:[50, 50],
+    addMarkerSize:[30, 30],
     markers: {
         location: []
     }
