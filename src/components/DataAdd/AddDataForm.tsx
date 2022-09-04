@@ -1,6 +1,5 @@
 import React from 'react';
 import styles from './DataAdd.module.css';
-import {getDeepElements} from "../../Unils/utilsFunctions";
 import {FormikProps} from "formik";
 import {commonFields} from "./Fields/CommonFields";
 

@@ -2,6 +2,7 @@ import React from 'react';
 import {getWeight} from "../../../Unils/utilsFunctions";
 import {AddFields, selectFieldsOptions, TSelectFieldOptionsKeys} from "../AddFields";
 import {FormikProps} from "formik";
+import {AttributeField} from "./AttributeField";
 // import styles from './CommonFields.module.css';
 
 
@@ -27,15 +28,17 @@ export const commonFields = (
                     case eKey==='pos':
                         return AddFields.posField(value['x'], value['y'], curKey, i, formik)
                     case eKey==='icon':
-                        return AddFields.icon(formik, i, dataName === 'staminaelixir')
+                        return AddFields.icon(formik, i+100, dataName === 'staminaelixir')
+                    case eKey==='attributes':
+                        return <AttributeField formik={formik} index={i} dataName={dataName}/>
                     case isSelectAvailable:
-                        return AddFields.select(value, formik.handleChange,curKey,eKey,i,selArr as string[] | number[])
+                        return AddFields.select(selArr as string[] | number[],value, formik,curKey,eKey,i+50,true )
 
                     case typeof value ==='number':
-                        return AddFields.input('number',value, formik,curKey,eKey,!fieldsNotRequiredList.includes(eKey),i,fieldsDisabled.includes(`${dataName}.${curKey}`))
+                        return AddFields.input('number',value, formik,curKey,eKey,i,!fieldsNotRequiredList.includes(eKey),fieldsDisabled.includes(`${dataName}.${curKey}`))
 
                     case typeof value ==='string':
-                        return AddFields.input('text',value, formik,curKey,eKey,!fieldsNotRequiredList.includes(eKey),i,fieldsDisabled.includes(`${dataName}.${curKey}`))
+                        return AddFields.input('text',value, formik,curKey,eKey,i,!fieldsNotRequiredList.includes(eKey),fieldsDisabled.includes(`${dataName}.${curKey}`))
                     case typeof value==='object' :
                         return commonFields(formik,curKey, value,dataName)
 

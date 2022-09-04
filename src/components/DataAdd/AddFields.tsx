@@ -4,11 +4,17 @@ import {FormikProps} from "formik";
 import {IconField} from "./Fields/IconField";
 import {PosField} from "./Fields/PosField";
 import {InputField} from "./Fields/InputField";
+import {SelectField} from "./Fields/SelectField";
 
 export type TSelectFieldOptions = typeof selectFieldsOptions;
 export type TSelectFieldOptionsKeys = keyof typeof selectFieldsOptions;
 export const selectFieldsOptions = {
     'material.type': ['Bone', 'Fiber', 'Leather', 'Metal', 'Stone', 'Wood'],
+    'material.attributes': ['Absorbity', 'Density', 'Flexibility', 'Hardness', 'Lightness', 'Purity', 'Radiance', 'Rigidity',],
+    'component.attributes': [
+        'Activator', 'Binder', 'Deteriorator', 'Energizer', 'Focuser', 'Fortifier', 'Putrefier', 'Stimulator', 'Toner',
+        'Tranquilizer', 'Elioam', 'Frimam', 'Hydram', 'Lectram', 'Lithram', 'Magnam', 'Psycham', 'Pyram', 'Stratam',
+    ],
     // 'material.tier': [0, 1, 2, 3, 4, 5],
     'adventure': ['Academic', 'Athletics', 'Exploration', 'Perception', 'Persuasion', 'Strategy', 'Subterfuge'],
     'weapon.type': ['Axe', 'Dagger', 'Mace', 'Polearm', 'Staff', 'Sword'],
@@ -19,6 +25,7 @@ export const selectFieldsOptions = {
     'tier': [0, 1, 2, 3, 4, 5],
     'terrain': ['Forest', 'Mountain', 'Swamp', 'Underground', 'Desert', 'Mists', 'Urban'],
     'gatherpoint.type': ['Botany', 'Hunting', 'Lumberjacking', 'Mining'],
+
 
     'stage.type': ['Adventure'],
 
@@ -43,45 +50,33 @@ export const AddFields = {
             formik: FormikProps<any>,
             htmlId: string,
             labelText: string = '',
-            required: boolean = false,
             index: number = 0,
+            required: boolean = false,
             disabled: boolean = false
-    ) => <InputField index={index} formik={formik} value={value} htmlId={htmlId} labelText={labelText}
-                     disabled={disabled} required={required}/>,
+    ) =>
+        <InputField index={index} formik={formik} value={value} htmlId={htmlId} labelText={labelText}
+                    disabled={disabled} required={required}/>,
     select: (
+        mapSelectValues: Array<string> | Array<number>,
         value: string | number | readonly string[] | undefined,
-        onChange: React.ChangeEventHandler<HTMLSelectElement>,
+        formik: FormikProps<any>,
         htmlId: string,
         labelText: string = '',
         index: number = 0,
-        mapSelectValues: Array<string> | Array<number>,
-    ) => {
-        // if(labelText==='region') console.log(value)
-
-        return (<div className={styles.fieldBox}>
-                <label className={styles.label} htmlFor={htmlId}>{labelText}</label>
-                <select defaultValue={mapSelectValues[0]}
-                        className={styles.inputText}
-                        name={htmlId}
-                        onChange={onChange}
-                        value={value}
-                        required={true}>
-                    {labelText !== 'type' && <option value="" disabled selected>{`Select ${labelText}`}</option>}
-                    {mapSelectValues.map((v, i) => (<option selected={i === 0} value={v}>{v}</option>))}
-                </select>
-            </div>
-        )
-    },
+        required: boolean = false,
+        disabled: boolean = false,
+    ) =>
+        <SelectField mapSelectValues={mapSelectValues} index={index} formik={formik} value={value} htmlId={htmlId}
+                     labelText={labelText}
+                     disabled={disabled} required={required}/>,
     posField: (
-        // pos: { x: number, y: number },
         posX: number,
         posY: number,
         htmlId: string,
         index: number = 0,
         formik: FormikProps<any>
-    ) => (<PosField formik={formik} posX={posX} posY={posY} htmlId={htmlId} index={index}/>
-
-    ),
+    ) =>
+        <PosField formik={formik} posX={posX} posY={posY} htmlId={htmlId} index={index}/>,
     gathertypename: (
         type: string | number | readonly string[] | undefined,
         formik: FormikProps<any>,

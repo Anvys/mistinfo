@@ -25,6 +25,7 @@ export const InputField:React.FC<TProps> = (props) => {
                    required={required}
                    disabled={disabled}
                    autoComplete={'off'}
+
                    value={value}/>
         </div>
     );

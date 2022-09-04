@@ -39,11 +39,11 @@ export const GenDataAdd = <T extends TCombineData, >(props: React.PropsWithChild
 
             console.log(newData)
             if (data === null) { // @ts-ignore
-                dispatch(curThunks.addOne(newData))
+                // dispatch(curThunks.addOne(newData))
             } else {
                 console.log(data._id)
                 // @ts-ignore
-                dispatch(curThunks.updateOne({id: data._id, data: {...newData, _id: data._id}}))
+                // dispatch(curThunks.updateOne({id: data._id, data: {...newData, _id: data._id}}))
             }
             props.resetAddFormData();
             actions.setSubmitting(false);

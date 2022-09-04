@@ -26,7 +26,7 @@ export const IconField: React.FC<IconFieldProps> = ({index, formik, disabled}) =
     }
 
     return (
-        <div className={styles.iconMainDiv}>
+        <div className={styles.iconMainDiv} key={index}>
             <div className={styles.iconFieldBox}>
                 <label className={styles.iconLabel} htmlFor={'icon'}>icon:</label>
                 <input disabled={disabled} className={styles.iconInput} type={'text'} id={'icon'} name={'icon'}
