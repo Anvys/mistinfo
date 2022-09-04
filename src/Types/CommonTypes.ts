@@ -74,8 +74,14 @@ export type TStaminaElixir = {
 export type TStage = {
     name: string
     type: string
-    require: string
+    require: TStageRequire
+    time: number
     loot: TLoot | null
+}
+export type TStageRequire = TRequireAdventure
+export type TRequireAdventure = {
+    adventure: TAdventure
+    count: number
 }
 export type TEvent = {
     _id: string
@@ -92,6 +98,21 @@ export type TMapObject = {
     name: string
     icon: string
     pos: TMapPosition
+    translate: TTranslateData
+    notes: Array<string>
+}
+export type TRecipePart = {
+    name: string
+    component: string
+    count: number
+}
+export type TRecipe = {
+    _id: string
+    name: string
+    icon: string
+    type: TCrafting
+    baseReq: number
+    parts : Array<TRecipePart>
     translate: TTranslateData
     notes: Array<string>
 }

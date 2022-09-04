@@ -8,6 +8,7 @@ import {DataView} from "../../DataView/DataView";
 import {TEvent, TWOid} from "../../../Types/CommonTypes";
 import {GenDataAdd} from "../../DataAdd/GenDataAdd";
 import {EventThunks} from "../../../redux/reducers/eventReducer";
+import {StageField} from "../../DataAdd/Fields/StageField";
 
 type TProps = {};
 export const EventContent: React.FC<TProps> = (props) => {
@@ -45,6 +46,7 @@ export const EventContent: React.FC<TProps> = (props) => {
             </div>
             <div className={styles.dbField}>
                 <Outlet/>
+
                 <DataView data={data} dataAddHandler={dataAddHandler} dataDelHandler={dataDelHandler}/>
             </div>
         </div>

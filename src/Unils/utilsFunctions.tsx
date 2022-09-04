@@ -62,7 +62,7 @@ export const sortDataMapKeys = (dataKeys: Map<string, Array<string>>): Array<str
 export const sortStrKeys = (a: string, b: string) => {
     return getWeight(a) - getWeight(b)
 }
-const getWeight = (str: string): number => {
+export const getWeight = (str: string): number => {
     switch (str) {
         case 'name':
             return 1;
@@ -99,11 +99,11 @@ export const getElements = (mapVal: object, prevKey: string, formik: FormikProps
         const htmlId = `${prevK}${key}`
         const selArr = selectFieldsOptions[`${dataName}.${key}` as TSelectFieldOptionsKeys];
         if (selArr === undefined) {
-            return AddFields.input(elType, value as string | number, formik.handleChange,
-                htmlId, key, true, i, styles.fieldBox, styles.label, styles.inputText)
+            return AddFields.input(elType, value as string | number, formik,
+                htmlId, key, true, i)
         } else {
             return AddFields.select(value as string | number, formik.handleChange,
-                htmlId, key, i, selArr, styles.fieldBox, styles.label, styles.inputText)
+                htmlId, key, i, selArr)
         }
 
         // }
@@ -137,11 +137,11 @@ export const getElement = (value: string | number, fullKey: string, formik: Form
         //         htmlId, key, true, index, styles.fieldBox, styles.label, styles.inputText, true)
         // }
 
-        return AddFields.input(elType, value as string | number, formik.handleChange,
-            htmlId, key, key!=='Ru' && key!=='Fr', index, styles.fieldBox, styles.label, styles.inputText)
+        return AddFields.input(elType, value as string | number, formik,
+            htmlId, key, key!=='Ru' && key!=='Fr', index)
     } else {
         return AddFields.select(value as string | number, formik.handleChange,
-            htmlId, key, index, selArr, styles.fieldBox, styles.label, styles.inputText)
+            htmlId, key, index, selArr)
     }
 }
 export const getDeepElements = (mapVal: object, prevKey: string, formik: FormikProps<any>, dataName: string, cssGroup:string = ''): JSX.Element => {
@@ -151,7 +151,8 @@ export const getDeepElements = (mapVal: object, prevKey: string, formik: FormikP
             {Object.entries(mapVal)
                 .sort((a, b) => getWeight(a[0]) - getWeight(b[0]))
                 .map(([key, value], i) => {// && dataName !=='gatherpoint'
-                if (((key === 'name') && !prevKey.length)|| key==='_id' || (dataName ==='gatherpoint' && (key==='Ru' || key==='Fr'))) { // @ts-ignore
+                if (((key === 'name') && !prevKey.length)|| key==='_id'
+                    || (dataName ==='gatherpoint' && (key==='Ru' || key==='Fr'))) { // @ts-ignore
                     return null
                 }
                 const curKey = prevKey.length ? `${prevKey}.${key}` : key;
@@ -160,7 +161,7 @@ export const getDeepElements = (mapVal: object, prevKey: string, formik: FormikP
                 else {
                     if(key ==='pos'){
                         // const marPos = useSelector(getMarkerForAddPosSelector)
-                        return AddFields.posField(value['x'],value['y'],formik.handleChange,curKey, i, formik)
+                        return AddFields.posField(value['x'],value['y'],curKey, i, formik)
                     }else{
                         return [getElement(value, curKey, formik, dataName, i)]
 

@@ -2,12 +2,17 @@ import React, {useState} from 'react';
 import styles from './RegionContent.module.css';
 import {useDispatch, useSelector} from "react-redux";
 import {Outlet} from "react-router-dom";
-import {getIsLocationInitSelector, getRegionSelector} from "../../../redux/dataSelectors";
+import {
+    getIsAddPosFieldActiveSelector,
+    getIsLocationInitSelector,
+    getRegionSelector
+} from "../../../redux/dataSelectors";
 import {TAppDispatch} from "../../../redux/store";
 import {DataView} from "../../DataView/DataView";
 import {RegionThunks} from "../../../redux/reducers/regionReducer";
 import {TRegion, TWOid} from "../../../Types/CommonTypes";
 import {GenDataAdd} from "../../DataAdd/GenDataAdd";
+import {MyMap} from "../../Map/MyMap";
 
 type TProps = {};
 export const RegionContent: React.FC<TProps> = (props) => {
@@ -31,6 +36,7 @@ export const RegionContent: React.FC<TProps> = (props) => {
         pos: {x:0,y:0},
         translate: {En: '', Ru: '', Fr: ''},
     }
+    const isMapActive = useSelector(getIsAddPosFieldActiveSelector)
     return (
         <div className={styles.contentBox}>
             <div className={styles.nav}>
@@ -42,7 +48,9 @@ export const RegionContent: React.FC<TProps> = (props) => {
                     curThunks: RegionThunks,
                     dataName: 'region'
                 })}
+                {isMapActive && <MyMap wid={-1} hei={400}/>}
             </div>
+
             <div className={styles.dbField}>
                 <Outlet/>
                 <DataView data={data} dataAddHandler={dataAddHandler} dataDelHandler={dataDelHandler}/>

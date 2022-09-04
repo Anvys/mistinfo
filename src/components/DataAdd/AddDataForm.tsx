@@ -2,6 +2,7 @@ import React from 'react';
 import styles from './DataAdd.module.css';
 import {getDeepElements} from "../../Unils/utilsFunctions";
 import {FormikProps} from "formik";
+import {commonFields} from "./Fields/CommonFields";
 
 type TProps = {
     formik: FormikProps<any>
@@ -15,8 +16,11 @@ export const AddDataForm: React.FC<TProps> = React.memo(({formik, dataName, rese
         <form onSubmit={formik.handleSubmit}>
             <div className={styles.col}>
                 <div className={styles.fieldsBox}>
+                    {/*<div className={styles.fieldsMainParamBox}>*/}
+                    {/*    {getDeepElements(formik.values, '', formik, dataName)}*/}
+                    {/*</div>*/}
                     <div className={styles.fieldsMainParamBox}>
-                        {getDeepElements(formik.values, '', formik, dataName)}
+                        {commonFields(formik,'',formik.values,dataName)}
                     </div>
                 </div>
             </div>

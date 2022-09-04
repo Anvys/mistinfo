@@ -48,7 +48,6 @@ export const FieldDrop: React.FC<TProps> = (props) => {
         addDropFormik.handleChange(e);
     }
     return (
-        <div>
             <div key={props.index} className={styles.mainDropDiv}>
                 <p>Drop piece for loot</p>
                 <p>-------</p>
@@ -95,6 +94,5 @@ export const FieldDrop: React.FC<TProps> = (props) => {
                     <button className={styles.addButton} type={"submit"}>ADD</button>
                 </form>
             </div>
-        </div>
     );
 }

@@ -3,6 +3,8 @@
     display: flex;
     gap: 20px;
     flex-direction: column;
+    width: fit-content;
+    padding: 5px;
 }
 .dropForm {
     display: flex;

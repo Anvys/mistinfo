@@ -8,6 +8,7 @@ import {TAppDispatch} from "../../../redux/store";
 import {DataView} from "../../DataView/DataView";
 import {TNpc, TWOid} from "../../../Types/CommonTypes";
 import {GenDataAdd} from "../../DataAdd/GenDataAdd";
+import {commonFields} from "../../DataAdd/Fields/CommonFields";
 
 type TProps = {};
 export const NpcContent: React.FC<TProps> = (props) => {
@@ -42,6 +43,7 @@ export const NpcContent: React.FC<TProps> = (props) => {
                     curThunks: NpcThunks,
                     dataName: 'npc'
                 })}
+
             </div>
             <div className={styles.dbField}>
                 <Outlet/>
