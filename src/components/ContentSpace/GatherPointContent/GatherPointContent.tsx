@@ -45,7 +45,7 @@ export const GatherPointContent: React.FC<TProps> = (props) => {
         notes:[],
     }
 
-    const isMapActive = useSelector(getIsAddPosFieldActiveSelector)
+    // const isMapActive = useSelector(getIsAddPosFieldActiveSelector)
 
     return (
         <div className={styles.contentBox}>
@@ -60,7 +60,7 @@ export const GatherPointContent: React.FC<TProps> = (props) => {
                         dataName: 'gatherpoint'
                     })}
                 </div>
-                {isMapActive && <MyMap wid={-1} hei={400}/>}
+                {/*{isMapActive && <MyMap wid={-1} hei={400}/>}*/}
             </div>
 
             <div className={styles.dbField}>

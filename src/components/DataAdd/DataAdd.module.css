@@ -1,9 +1,30 @@
-.row{
+.rowDiv {
+    display: flex;
+    gap: 5px;
+    border: 5px #adaaad groove;
+    width: 100%;
+    align-items: flex-start;
+}
+
+.fieldsBox {
+    display: flex;
+    /*flex-direction: column;*/
+    border: 1px dotted #d7d7d7;
+    width: 60%;
+    /*height: 400px;*/
+    flex-wrap: wrap;
+    /*flex-direction: column;*/
+    gap: 10px;
+    align-items: start;
+}
+
+.row {
     display: flex;
     gap: 5px;
     justify-content: space-between;
 }
-.col{
+
+.col {
     display: flex;
     flex-direction: column;
     gap: 5px;
@@ -27,12 +48,7 @@
     padding: 5px;
     box-sizing: border-box;
 }
-.fieldsBox{
-    display: flex;
-    flex-direction: column;
-    border: 1px solid #4a53ce;
-    width: 100%;
-}
+
 .fieldsMainParamBox, .fieldsTranslateBox {
     display: flex;
     flex-direction: column;
@@ -45,19 +61,22 @@
     align-items: flex-start;
     align-content: flex-start;
 }
-.posMainDiv{
+
+.posMainDiv {
     display: flex;
     flex-direction: column;
     gap: 5px;
     border: 1px dotted rgba(157, 9, 157, 0.85);
     min-width: 200px;
 }
-.posCoordDiv{
+
+.posCoordDiv {
     display: flex;
     gap: 5px;
     justify-content: space-between;
 }
-.fieldBoxPos{
+
+.fieldBoxPos {
     display: flex;
     border: 1px solid #ccbf64;
     padding: 5px;
@@ -67,7 +86,8 @@
     flex-grow: 1;
     justify-content: space-between;
 }
-.fieldBoxPos input{
+
+.fieldBoxPos input {
     /*display: flex;*/
     flex-grow: 1;
     padding: 0;
@@ -81,11 +101,13 @@
     gap: 5px;
     justify-content: space-between;
 }
-.fieldAttributesBox{
+
+.fieldAttributesBox {
     justify-content: flex-start;
     flex-wrap: wrap;
     width: 97%;
 }
+
 .fieldNameBox {
     width: 100%;
     justify-content: space-between;
@@ -111,33 +133,39 @@
     overflow: hidden;
     /*max-width: 25%;*/
 }
-.iconMainDiv{
+
+.iconMainDiv {
     display: flex;
     flex-direction: column;
 }
-.iconFieldBox{
+
+.iconFieldBox {
     width: 100px;
     gap: 10px;
 }
-.iconLabel{
+
+.iconLabel {
     width: 20px;
     font-size: 18px;
 }
+
 .iconInput {
     width: 0px;
     visibility: hidden;
 }
+
 .imgIcon {
     width: 50px;
     height: 50px;
 }
 
-.buttonBox{
+.buttonBox {
     display: flex;
     gap: 10px;
     padding: 5px 0 0 5px;
 }
-.formButton{
+
+.formButton {
     padding: 5px;
     border: 1px solid black;
     box-shadow: 1px 1px 2px 2px darkgrey;
@@ -147,11 +175,13 @@
     transition-duration: 0.05s;
     text-align: center;
 }
-.formButton:hover{
+
+.formButton:hover {
     background-color: #828a8a;
     cursor: pointer;
 }
-.formButton:active{
+
+.formButton:active {
     background-color: #8da2a2;
     transform: translate(1px, 1px);
     box-shadow: 0px 0px 2px 2px darkgrey;

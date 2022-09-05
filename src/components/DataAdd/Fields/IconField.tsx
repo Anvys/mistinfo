@@ -1,6 +1,7 @@
 import {FormikProps} from "formik";
 import React, {useState} from "react";
-import styles from "../DataAdd.module.css";
+import styles1 from "../DataAdd.module.css";
+import styles from './Fields.module.css';
 import {IconPicker} from "../../IconPicker/IconPicker";
 
 type IconFieldProps = {
@@ -26,8 +27,8 @@ export const IconField: React.FC<IconFieldProps> = ({index, formik, disabled}) =
     }
 
     return (
-        <div className={styles.iconMainDiv} key={index}>
-            <div className={styles.iconFieldBox}>
+        <div className={styles.fieldBoxCol} key={index}>
+            <div className={styles.fieldBoxIcon}>
                 <label className={styles.iconLabel} htmlFor={'icon'}>icon:</label>
                 <input disabled={disabled} className={styles.iconInput} type={'text'} id={'icon'} name={'icon'}
                     // disabled={true}
@@ -39,7 +40,7 @@ export const IconField: React.FC<IconFieldProps> = ({index, formik, disabled}) =
             </div>
             {isPickIcon &&
                 <IconPicker onClose={onClose} onIconPickHandler={onIconPickHandler} iconPossibleFolders={[]}/>}
-            <button disabled={disabled} onClick={onAddIcon}>Choose Icon</button>
+            <button className={styles.addButton} disabled={disabled} onClick={onAddIcon}>Choose Icon</button>
         </div>
 
     )

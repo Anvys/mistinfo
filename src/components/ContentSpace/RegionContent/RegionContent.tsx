@@ -36,7 +36,7 @@ export const RegionContent: React.FC<TProps> = (props) => {
         pos: {x:0,y:0},
         translate: {En: '', Ru: '', Fr: ''},
     }
-    const isMapActive = useSelector(getIsAddPosFieldActiveSelector)
+    // const isMapActive = useSelector(getIsAddPosFieldActiveSelector)
     return (
         <div className={styles.contentBox}>
             <div className={styles.nav}>
@@ -48,7 +48,7 @@ export const RegionContent: React.FC<TProps> = (props) => {
                     curThunks: RegionThunks,
                     dataName: 'region'
                 })}
-                {isMapActive && <MyMap wid={-1} hei={400}/>}
+                {/*{isMapActive && <MyMap wid={-1} hei={400}/>}*/}
             </div>
 
             <div className={styles.dbField}>

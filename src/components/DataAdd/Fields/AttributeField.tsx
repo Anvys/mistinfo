@@ -43,10 +43,10 @@ export const AttributeField: React.FC<TProps> = (props) => {
         setAttribute('')
     }
     return (
-        <div  className={styles.divRow} key={index}>
-            <div className={styles.divCol}>
+        <div  className={styles.divRow + ' ' + styles.border} key={index}>
+            <div className={styles.fieldBoxCol}>
                 <button className={styles.clearButton} type={'button'} onClick={resetAttributes}>Clear All Attributes</button>
-                <div className={styles.fieldBox} key={index}>
+                <div className={styles.fieldBoxNoBorder} key={index}>
                     <label className={styles.label} htmlFor={'SelectAttributes'}>{'Attribute to add'}</label>
                     <select defaultValue={''}
                             className={styles.inputText}

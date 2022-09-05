@@ -3,6 +3,7 @@ import {getWeight} from "../../../Unils/utilsFunctions";
 import {AddFields, selectFieldsOptions, TSelectFieldOptionsKeys} from "../AddFields";
 import {FormikProps} from "formik";
 import {AttributeField} from "./AttributeField";
+import {LootField} from "./LootField";
 // import styles from './CommonFields.module.css';
 
 
@@ -31,6 +32,8 @@ export const commonFields = (
                         return AddFields.icon(formik, i+100, dataName === 'staminaelixir')
                     case eKey==='attributes':
                         return <AttributeField formik={formik} index={i} dataName={dataName}/>
+                    case eKey==='loot' && dataName==='loot':
+                        return <LootField formik={formik} index={i} dataName={dataName}/>
                     case isSelectAvailable:
                         return AddFields.select(selArr as string[] | number[],value, formik,curKey,eKey,i+50,true )
 

@@ -2,27 +2,50 @@
     display: flex;
     gap: 5px;
     padding: 5px;
+    align-items: flex-start;
 }
 .divCol{
     display: flex;
     flex-direction: column;
     gap: 6px;
     /*padding: 5px;*/
-    /*align-items: flex-start;*/
+
 }
 
-.fieldBox {
-    border: 1px solid #1ee0a8;
+.fieldBox, .fieldBoxCol, .fieldBoxNoBorder, .fieldBoxIcon {
+    border: 3px solid #888686;
+    border-radius: 5px;
     display: flex;
     gap: 10px;
     padding: 5px;
     width: 200px;
     overflow: hidden;
     justify-content: space-between;
+    align-items: center;
+}
+.fieldBoxCol{
+    flex-direction: column;
+}
+.fieldBoxNoBorder{
+    border: none;
+}
+.fieldBoxColNoBorder{
+    gap: 5px;
+    flex-direction: column;
+    border: none;
+}
+.fieldBoxIcon{
+    width: fit-content;
+    /*border: 1px dashed #888686;*/
+    border: none;
+}
+.border{
+    border: 3px #808080 groove;
 }
 .label{
     font-size: 18px;
     font-weight: bold;
+    margin-right: 5px;
 }
 .inputText, .inputNumber{
     font-size: 20px;
@@ -38,47 +61,17 @@
     max-width: 60px;
     padding: 0 5px 0 0;
 }
-
-
-.mainDropDiv {
-    border: 1px solid black;
-    display: flex;
-    gap: 20px;
-    flex-direction: column;
-    width: fit-content;
-    padding: 5px;
+.iconInput {
+    width: 0px;
+    visibility: hidden;
 }
-.dropForm {
-    display: flex;
-    flex-direction: column;
-    gap: 10px;
-    width: 200px;
-}
-
-.dropFormRows {
-    display: flex;
-    gap: 10px;
-    justify-content: space-between;
-    flex-grow: 0;
-}
-.inputNum {
-    text-align: center;
+.imgIcon {
     width: 50px;
-}
-.inputStr {
-    height: 1rem;
-    font-size: 0.8rem;
-    width: 140px;
-}
-.inputStr::placeholder{
-    font-size: 0.6rem;
+    height: 50px;
 }
 
 
-.table, .tableRow, .tableCell {
-    border: 1px solid black;
-    padding: 2px;
-}
+
 .addButton, .clearButton{
     height: 25px;
     /*width: 60px;*/
@@ -88,7 +81,16 @@
     border-radius: 10px;
     border: 2px solid #1ee0a8;
     background: #f3d592;
+    transition-duration: 0.05s;
 }
+.addButton:hover, .clearButton:hover{
+    cursor: pointer;
+    background: #f3d06d;
+}
+.addButton:active, .clearButton:active{
+    background: #ffc00d;
+}
+
 .clearButton{
     border: 2px solid rgba(41, 40, 42, 0.85);
     background: #ff6363;

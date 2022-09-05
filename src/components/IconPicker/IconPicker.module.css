@@ -1,13 +1,17 @@
 .main {
-    border: 1px solid black;
-    min-width: 200px;
+    border: 3px groove black;
+    border-radius: 30px;
+    padding: 20px;
+    background-color: #333333;
 
     display: flex;
-
     flex-direction: column;
     gap: 10px;
+
+    min-width: 200px;
+    max-width: 600px;
+
     position: absolute;
-    background-color: #333333;
 }
 .topMenu{
     display: flex;
@@ -18,6 +22,7 @@
     display: flex;
     gap: 5px;
     justify-content: center;
+    flex-wrap: wrap;
 }
 .iconMenu{
     display: flex;
@@ -25,17 +30,58 @@
     flex-wrap: wrap;
 }
 
-.topMenuButton{
-
-}
-.navMenuButton{
-
-}
-
-
 .iconDiv{
     width: 50px;
     height: 50px;
+
+    padding: 2px;
+    border-radius: 10px;
     background-color: #575656;
+    background-position: center;
+    background-size: cover;
+    background-repeat: no-repeat;
+
     /*background: rgb(225, 137, 121) url("./../../assets/icons/location/Unknown.png")center / cover no-repeat ;*/
+}
+.iconDiv:hover{
+    background-color: #95f395;
+    cursor: pointer;
+
+}
+.iconDiv:hover{
+    background-color: #00ff00;
+    cursor: pointer;
+}
+
+.navMenuButton, .topMenuButton {
+    border: 2px solid #c78b11;
+    border-radius: 10px;
+    width: fit-content;
+    padding: 1px 5px 15px 5px;
+    font-weight: bold;
+    align-self: center;
+    height: 20px;
+    /*background: #8da2a2 url("./../../../assets/icons/edit.svg")  center / cover no-repeat;*/
+    box-shadow: 1px 1px 1px 1px #ffd16a;
+    user-select: none;
+    transition-duration: 0.05s;
+}
+.navMenuButton:hover, .topMenuButton:hover{
+    cursor: pointer;
+}
+.navMenuButton:active, .topMenuButton:active{
+    background-color: #f89400;
+    transform: translate(1px, 1px);
+    box-shadow: 0px 0px 1px 1px #ffaa00;
+    /*cursor: pointer;*/
+}
+.topMenuButton{
+    background-color: #f8939d;
+}
+.topMenuButton:hover {
+
+}
+.topMenuButton:active{
+    background-color: #fd273d;
+    box-shadow: 0px 0px 1px 1px #f80017;
 }

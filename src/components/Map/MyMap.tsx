@@ -7,6 +7,8 @@ import {useSelector} from "react-redux";
 import {getGatherPointSelector, getLocationSelector, getStaminaElixirSelector} from "../../redux/dataSelectors";
 import {MC} from "./Markers/MarkerCreator";
 import {ExampleBound} from "./Bounds/ExampleBound";
+import {useAppDispatch} from "../../redux/store";
+import {MapSlice} from "../../redux/reducers/mapReducer";
 
 // import * as icons from '../../assets/icons'
 const MyComponent: React.FC<{onZoomChange: (z:number)=>void}> = (props) => {
@@ -50,6 +52,7 @@ type TProps = {
 export const MyMap: React.FC<TProps> = (props) => {
     const [customMarkerPos, setCustomMarkerPos] = useState({lat: 0, lng: -40})
     const [isCusMarkerActive, setIsCusMarkerActive] = useState(false)
+    const dispatch = useAppDispatch()
     const [map, setMap] = useState<Leaf.Map | null>(null);
     const [zoom, setZoom] = useState(0)
     const onZoomChange = (z: number)=>setZoom(z)
@@ -90,15 +93,21 @@ export const MyMap: React.FC<TProps> = (props) => {
         setCustomMarkerPos(map === null ? {lat: 0, lng: -40} : map.getCenter())
         console.log(isCusMarkerActive)
     }
+    const onClose = () =>{
+        setIsCusMarkerActive(false)
+        dispatch(MapSlice.actions.setIsAddPosFieldActive(false))
+    }
 
     return (
         <div className={styles.map} style={{width: `${props.wid === -1 ? '50%' : props.wid + 'px'}`}}>
             Map
             <button onClick={onAddMarkerHandler}>AddMarker</button>
+            x
+            <button onClick={onClose}>close</button>
             <div id="map" style={{
                 height: `${props.hei === -1 ? '100%' : props.hei + 'px'}`,
                 overflow: "hidden",
-                padding: '0,0,50px,0'
+                padding: '0,50px,50px,0'
             }} className={styles.map}>
                 <MapContainer className={styles.map} center={[0, -45]} zoom={6} scrollWheelZoom={false} ref={setMap}>
                     a

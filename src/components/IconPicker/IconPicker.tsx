@@ -228,9 +228,12 @@ export const IconPicker: React.FC<TProps> = (props) => {
         const iconURL = iconUrlPicker(iconFolder, iconName)
         // console.log(sub)
         const iconStyle = {
-            width: '50px',
-            height: '50px',
-            background: `#575656 url(${iconURL})  center / cover no-repeat`,
+            // width: '50px',
+            // height: '50px',
+            // background: `#575656 url(${iconURL})  center / cover no-repeat`,
+            backgroundImage: `url(${iconURL})`,
+            // backgroundPosition: 'center / cover no-repeat',
+            // backgroundRepeat: 'no-repeat',
         };
         return (
             <div key={i} className={styles.iconDiv} style={iconStyle}

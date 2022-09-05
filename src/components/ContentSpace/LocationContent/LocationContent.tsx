@@ -37,7 +37,7 @@ export const LocationContent: React.FC<TProps> = (props) => {
         translate: {En: '', Ru: '', Fr: ''},
     }
 
-    const isMapActive = useSelector(getIsAddPosFieldActiveSelector)
+    // const isMapActive = useSelector(getIsAddPosFieldActiveSelector)
 
     return (
         <div className={styles.contentBox}>
@@ -53,7 +53,7 @@ export const LocationContent: React.FC<TProps> = (props) => {
                     })}
                 </div>
                 {/*<IconPicker onIconPickHandler={onIconPickHandler}/>*/}
-                {isMapActive && <MyMap wid={-1} hei={400}/>}
+                {/*{isMapActive && <MyMap wid={-1} hei={400}/>}*/}
             </div>
             <div className={styles.dbField}>
                 <Outlet/>

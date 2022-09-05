@@ -1,6 +1,6 @@
 import React, {useState} from 'react';
 import {TDrop, TDropTypes, TLoot, TWOid} from "../../../Types/CommonTypes";
-import {FormikErrors, useFormik} from "formik";
+import {FormikErrors, useFormik, useFormikContext} from "formik";
 import styles from './Fields.module.css';
 import {selectFieldsOptions} from "../AddFields";
 import {useSelector} from "react-redux";
@@ -12,87 +12,69 @@ type TProps = {
 };
 export const FieldDrop: React.FC<TProps> = (props) => {
     // const [dropArr, setDropArr] = useState<Array<TDrop<TDropTypes>>>([])
+    const [type, setType] = useState<TDropTypes>('Metal')
+    const [name, setName] = useState('')
+    const [count, setCount] = useState(0)
+    const [chance, setChance] = useState(100)
     const [nameArr, setNameArr] = useState<Array<string>>([])
     const materials = useSelector(getMaterialsSelector)
     const components = useSelector(getComponentsSelector)
-    const validates = (values: TDrop<TDropTypes>) => {
-        let errors: FormikErrors<TDrop<TDropTypes>> = {};
-        if (!values.name) {
-            errors.name = 'Required';
-        } else if (values.name.length < 1) {
-            errors.name = 'Need more gold';
-        }
-        return errors;
-    }
-    const addDropFormik = useFormik({
-        initialValues: {
-            type: 'Fiber',
-            name: '',
-            count: 0,
-            chance: 100,
-        } as TDrop<TDropTypes>,
-        validate: validates,
-        onSubmit: async (values, actions) => {
-            actions.setSubmitting(true);
-            props.onAddHandler({...values})
-            // setDropArr([...dropArr, {...values}])
-            // await addLootFormik.setFieldValue('loot', dropArr)
-            addDropFormik.handleReset(1)
-            actions.setSubmitting(false);
-        }
-    })
+
+    // const formik = useFormikContext()
+
     const onTypeChange: React.ChangeEventHandler<HTMLSelectElement> = (e) => {
         const findArr = materials.filter(v => v.type === e.target.value).map(v => v.name)
             .concat(components.filter(v => v.type === e.target.value).map(v => v.name))
         setNameArr(findArr)
-        addDropFormik.handleChange(e);
+        setType(e.target.value as TDropTypes)
+    }
+    const onAddHandler = ()=>{
+        props.onAddHandler({type,name,count,chance})
+
     }
     return (
             <div key={props.index} className={styles.mainDropDiv}>
-                <p>Drop piece for loot</p>
+                <p>Add drop for loot</p>
                 <p>-------</p>
-                <form className={styles.dropForm} onSubmit={addDropFormik.handleSubmit}>
-                    <div className={styles.dropFormRows}>
-                        <label htmlFor={'type'}>type:</label>
-                        <select name={'type'} value={addDropFormik.values.type} onChange={onTypeChange}
+                <div className={styles.fieldBoxColNoBorder}>
+                    <div className={styles.fieldBox}>
+                        <label className={styles.label} htmlFor={'type'}>type:</label>
+                        <select className={styles.inputText} name={'type'} value={type} onChange={onTypeChange}
                                 required autoComplete={'off'} placeholder={'type'}>
                             <option value="" disabled selected hidden>{`Select type`}</option>
-                            {selectFieldsOptions["component.type"].concat(selectFieldsOptions["material.type"]).map(v =>
+                            {selectFieldsOptions["component.type"].concat(selectFieldsOptions["material.type"]).map((v) =>
                                 <option value={v}>{`${v}`}</option>
                             )}
                         </select>
                     </div>
-                    <div className={styles.dropFormRows}>
-                        <label htmlFor={'name'}>res:</label>
-                        <select name={'name'} value={addDropFormik.values.name} onChange={addDropFormik.handleChange}
+
+                    <div className={styles.fieldBox}>
+                        <label className={styles.label} htmlFor={'name'}>res:</label>
+                        <select className={styles.inputText} name={'name'} value={name} onChange={(e)=>setName(e.target.value)}
                                 required autoComplete={'off'} placeholder={'name'}>
                             <option value="" disabled selected hidden>{`Select name`}</option>
-                            {selectFieldsOptions.tier.map(v => <option value={`tier ${v}`}>{`All tier ${v} ${addDropFormik.values.type}s`}</option>)}
+                            {selectFieldsOptions.tier.map(v => <option value={`tier ${v}`}>{`All tier ${v} ${type}s`}</option>)}
                             {nameArr.map(v => <option value={v}>{`${v}`}</option>)}
                         </select>
-                        {/*<label htmlFor={'name'}>or T:</label>*/}
-                        {/*<select name={'name'} value={addDropFormik.values.name} onChange={addDropFormik.handleChange}*/}
-                        {/*        required autoComplete={'off'} placeholder={'name'}>*/}
-                        {/*    <option value="" disabled selected hidden>{`Tier`}</option>*/}
-                        {/*    {selectFieldsOptions.tier.map(v => <option value={v}>{`${v}`}</option>)}*/}
-                        {/*</select>*/}
                     </div>
-                    <div className={styles.dropFormRows}>
-                        <label htmlFor={'count'}>count:</label>
-                        <input className={styles.inputNum} type={'number'} name={'count'} title={'count'}
-                               value={addDropFormik.values.count}
-                               onChange={addDropFormik.handleChange}
+
+                    <div className={styles.fieldBox}>
+                        <label className={styles.label} htmlFor={'count'}>count:</label>
+                        <input className={styles.inputNumber} type={'number'} name={'count'} title={'count'}
+                               value={count}
+                               onChange={e=>setCount(+e.target.value)}
                                required autoComplete={'off'} placeholder={'count'}/>
                     </div>
-                    <div className={styles.dropFormRows}>
-                        <label htmlFor={'chance'}>chance:</label>
-                        <input className={styles.inputNum} type={'number'} name={'chance'}
-                               value={addDropFormik.values.chance}
-                               onChange={addDropFormik.handleChange}
+
+                    <div className={styles.fieldBox}>
+                        <label className={styles.label} htmlFor={'chance'}>chance:</label>
+                        <input className={styles.inputNumber} type={'number'} name={'chance'}
+                               value={chance}
+                               onChange={e=>setChance(+e.target.value)}
                                required autoComplete={'off'} placeholder={'chance'}/>
                     </div>
-                    <button className={styles.addButton} type={"submit"}>ADD</button>
-                </form>
+                    <button className={styles.addButton} type={"button"} onClick={onAddHandler}>ADD</button>
+                </div>
             </div>
     );
 }
