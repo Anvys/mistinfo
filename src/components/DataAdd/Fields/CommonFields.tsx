@@ -4,6 +4,7 @@ import {AddFields, selectFieldsOptions, TSelectFieldOptionsKeys} from "../AddFie
 import {FormikProps} from "formik";
 import {AttributeField} from "./AttributeField";
 import {LootField} from "./LootField";
+import {NotesField} from "./NotesField";
 // import styles from './CommonFields.module.css';
 
 
@@ -34,6 +35,8 @@ export const commonFields = (
                         return <AttributeField formik={formik} index={i} dataName={dataName}/>
                     case eKey==='loot' && dataName==='loot':
                         return <LootField formik={formik} index={i} dataName={dataName}/>
+                    case eKey==='notes':
+                        return <NotesField formik={formik} index={i} dataName={dataName}/>
                     case isSelectAvailable:
                         return AddFields.select(selArr as string[] | number[],value, formik,curKey,eKey,i+50,true )
 

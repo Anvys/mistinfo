@@ -80,6 +80,8 @@ export const getWeight = (str: string): number => {
             return 100;
         case 'loot':
             return 101;
+        case 'notes':
+            return 111;
         case 'icon':
             return 99;
         case 'pos':

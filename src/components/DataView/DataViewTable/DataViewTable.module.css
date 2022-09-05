@@ -3,6 +3,12 @@
     --vidWidth: 111px;
 --vid-width: 100vw;
 }
+.vidInFields {
+    overflow: auto;
+    --vidWidth: 111px;
+--vid-width: 100vw;
+    max-width: 400px;
+}
 .table{
     /*width: 100%;*/
     /*overflow: auto;*/
@@ -46,6 +52,7 @@
 .th1, .th2, .th{
     padding: 2px;
     border: 1px solid black;
+    max-width: 100px;
 }
 .headRow th:nth-child(1){
     background-color: #848cf6;

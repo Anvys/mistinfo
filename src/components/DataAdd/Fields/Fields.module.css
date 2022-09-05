@@ -3,12 +3,14 @@
     gap: 5px;
     padding: 5px;
     align-items: flex-start;
+
 }
 .divCol{
     display: flex;
     flex-direction: column;
     gap: 6px;
     /*padding: 5px;*/
+    min-width: 200px;
 
 }
 
