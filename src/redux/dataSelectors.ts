@@ -31,6 +31,9 @@ export const getIsEventInitSelector = (state: TAppState) => state.event.isInit
 export const getMapObjectSelector = (state: TAppState) => state.mapObject.data
 export const getIsMapObjectInitSelector = (state: TAppState) => state.mapObject.isInit
 
+export const getQuestSelector = (state: TAppState) => state.quest.data
+export const getIsQuestInitSelector = (state: TAppState) => state.quest.isInit
+
 export const getMarkerForAddPosSelector = (state: TAppState) => state.map.markerForAddPos
 export const getIsAddPosFieldActiveSelector = (state: TAppState) => state.map.isAddPosFieldActive
 export const getAddMarkerIconSelector = (state: TAppState) => state.map.addMarkerIcon

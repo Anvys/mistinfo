@@ -44,6 +44,16 @@
 .border{
     border: 3px #808080 groove;
 }
+.infoPar{
+    height: 1.3rem;
+    vertical-align: center;
+    text-align: center;
+    font-size: 20px;
+    font-weight: bold;
+    text-decoration: underline;
+    background-color: #f1bc7e;
+
+}
 .label{
     font-size: 18px;
     font-weight: bold;

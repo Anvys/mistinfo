@@ -11,6 +11,7 @@ import {LootSlice, TLootThunks} from "./reducers/lootReducer";
 import {StaminaElixirSlice, TStaminaElixirThunks} from "./reducers/staminaElixirReducer";
 import {EventSlice, TEventThunks} from "./reducers/eventReducer";
 import {MapObjectSlice} from "./reducers/mapObjectReducer";
+import {QuestSlice, TQuestThunks} from "./reducers/questReducer";
 
 
 export const store = configureStore({
@@ -26,6 +27,7 @@ export const store = configureStore({
         staminaElixir: StaminaElixirSlice.reducer,
         event: EventSlice.reducer,
         mapObject: MapObjectSlice.reducer,
+        quest: QuestSlice.reducer,
 
     },
 })
@@ -36,4 +38,4 @@ export const useAppDispatch = () => useDispatch<TAppDispatch>()
 
 export type TCombineThunks = TMaterialThunks | TComponentThunks
     | TNpcThunks | TLocationThunks | TRegionThunks | TGatherPointThunks
-    | TLootThunks | TStaminaElixirThunks | TEventThunks
+    | TLootThunks | TStaminaElixirThunks | TEventThunks | TQuestThunks

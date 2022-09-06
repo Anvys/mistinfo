@@ -82,9 +82,9 @@ export const MC = {
     getTowns: (zoom: number) => {
         const t = new Image()
         t.src = require('./../../../assets/icons/mapobject/CityKortombourgNew.png')
-        console.log(`${t.width} : ${t.height}`)
+        // console.log(`${t.width} : ${t.height}`)
         const coef = getResizeForTowns(zoom)
-        console.log(`coef ${coef}`)
+        // console.log(`coef ${coef}`)
         let size = [1875 / coef, 1602 / coef]
         let size1 = size[0]
         let size2 = size[1]

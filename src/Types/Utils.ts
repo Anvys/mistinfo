@@ -82,10 +82,11 @@ export const selectFieldsOptions = {
     'tier': [0, 1, 2, 3, 4, 5],
     'terrain': ['Forest', 'Mountain', 'Swamp', 'Underground', 'Desert', 'Mists', 'Urban'],
     'gatherpoint.type': ['Botany', 'Hunting', 'Lumberjacking', 'Mining'],
-
     'event.type':['BlueFlag'],
+    'quest.type':['Quest'],
     'stage.type': ['Adventure'],
     'stage.expr': ['or', 'and'],
+    'stage.postype': ['pos' , 'npc' , 'location'],
 
     'material': undefined as Array<string> | undefined,
     'component': undefined as Array<string> | undefined,
@@ -95,6 +96,7 @@ export const selectFieldsOptions = {
     'loot': undefined as Array<string> | undefined,
     'event': undefined as Array<string> | undefined,
     'mapobject': undefined as Array<string> | undefined,
+    'quest': undefined as Array<string> | undefined,
 
 
     'gatherpoint.Botany': undefined as Array<string> | undefined,

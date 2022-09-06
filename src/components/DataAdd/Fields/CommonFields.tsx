@@ -8,6 +8,7 @@ import {NotesField} from "./NotesField";
 import {selectFieldsOptions} from "../../../Types/Utils";
 import {SelectField} from "./SelectField";
 import {StageField} from "./StageField";
+import {StageQuestField} from "./QuestStageField";
 // import styles from './CommonFields.module.css';
 
 
@@ -41,7 +42,14 @@ export const commonFields = (
                     case eKey==='notes':
                         return <NotesField formik={formik} index={i} dataName={dataName}/>
                     case eKey==='stages':
-                        return <StageField formik={formik} onStageAdd={()=>null}/>
+                        return dataName==='quest'
+                            ?<StageQuestField onStageAdd={()=>console.log('addddddd')} formik={formik} />
+                            :<StageField formik={formik} onStageAdd={()=>null}/>
+                    case eKey==='availableAfter' &&  dataName==='quest' :
+                        let selQuests = selectFieldsOptions[`quest`]// || ['No knows dependencies for this quest']
+                        if(selQuests === undefined || selQuests.length===0) selQuests =  ['No knows dependencies for this quest']
+                        else selQuests = ['No knows dependencies for this quest',...selQuests]
+                        return AddFields.select(selQuests as string[] | number[],value, formik,curKey,eKey,i+50,true )
                     case isSelectAvailable:
                         return AddFields.select(selArr as string[] | number[],value, formik,curKey,eKey,i+50,true )
 

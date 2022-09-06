@@ -5,7 +5,7 @@ import {TCombineThunks, useAppDispatch} from "../../redux/store";
 import {useFormik} from "formik";
 import {AddDataForm} from "./AddDataForm";
 import {getMarkerForAddPosSelector} from "../../redux/dataSelectors";
-import {commonFields} from "./Fields/CommonFields";
+import {StageQuestField} from "./Fields/QuestStageField";
 // import styles from './GenDataAdd.module.css';
 
 
@@ -59,6 +59,8 @@ export const GenDataAdd = <T extends TCombineData, >(props: React.PropsWithChild
         <div>
             {data === null ? `New ${props.dataName}` : `Update ${data.name}/${data._id}`}
             <AddDataForm formik={formik} dataName={props.dataName} resetAddFormData={props.resetAddFormData}/>
+            {/*asd*/}
+            {/**/}
 
         </div>
     );

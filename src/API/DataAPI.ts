@@ -4,7 +4,7 @@ import {
     TGatherPoint,
     TLocation, TLoot, TMapObject,
     TMaterial,
-    TNpc,
+    TNpc, TQuest,
     TRegion,
     TRequestBody,
     TRequestType,
@@ -43,6 +43,7 @@ export const LootAPI = getDataAPI<TLoot, 'Loot'>(`/loot`, 'Loot')
 export const StaminaElixirAPI = getDataAPI<TStaminaElixir, 'StaminaElixir'>(`/staminaelixir`, 'StaminaElixir')
 export const EventAPI = getDataAPI<TEvent, 'Event'>(`/event`, 'Event')
 export const MapObjectAPI = getDataAPI<TMapObject, 'MapObject'>(`/mapobject`, 'MapObject')
+export const QuestAPI = getDataAPI<TQuest, 'Quest'>(`/quest`, 'Quest')
 //     {
 //     getAll: () => instance.get<TMatResponse>(`${materialURI}/all`).then(data => data.data),
 //     getOne: (id: string) => instance.get<TMatResponse>(`${materialURI}/one/:${id}`).then(data => data.data),

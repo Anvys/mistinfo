@@ -1,6 +1,6 @@
 export type TCombineData = TNpc | TRegion | TLocation
     | TMaterial | TComponent | TGatherPoint | TLoot
-    | TStaminaElixir | TEvent | TMapObject
+    | TStaminaElixir | TEvent | TMapObject | TQuest
 
 export type TResources<T, U> = {
     _id: string
@@ -121,6 +121,8 @@ export type TRecipe = {
     translate: TTranslateData
     notes: Array<string>
 }
+export type TStagePosType = 'pos' | 'npc' | 'location'
+export type TStagePos = TMapPosition | TNpc | TLocation
 export type TQuestStage = {
     num: number
     proc: number
@@ -130,7 +132,7 @@ export type TQuestStage = {
     require: TStageRequire
     timeAvailable: string
     timeSpend: number
-    stagePosType: 'pos' | 'npc' | 'location'
+    stagePosType: TStagePosType
     stagePos: TMapPosition | TNpc | TLocation
     loot: TLoot | null
 }
@@ -220,7 +222,7 @@ export type TDrop<T extends TDropTypes> = {
 
 export type TRequestType = 'Material' | 'Component' | 'Npc'
     | 'Location' | 'Region' | 'GatherPoint' | 'Loot'
-    | 'StaminaElixir' | 'Event' | 'MapObject'
+    | 'StaminaElixir' | 'Event' | 'MapObject' | 'Quest'
 export type TRequestBody<T extends TRequestType, D> = {
     type: T
     data: D
