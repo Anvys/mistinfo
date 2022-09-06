@@ -71,7 +71,11 @@ export type TStaminaElixir = {
     translate: TTranslateData
     notes: Array<string>
 }
+export type TExpr = 'or' | 'and'
 export type TStage = {
+    num: number
+    proc: number
+    expr: TExpr
     name: string
     type: string
     require: TStageRequire
@@ -87,6 +91,7 @@ export type TEvent = {
     _id: string
     name: string
     type: string
+    icon: string
     stages: Array<TStage>
     pos: TMapPosition
     translate: TTranslateData
@@ -116,7 +121,28 @@ export type TRecipe = {
     translate: TTranslateData
     notes: Array<string>
 }
-
+export type TQuestStage = {
+    num: number
+    proc: number
+    expr: TExpr
+    name: string
+    type: string
+    require: TStageRequire
+    timeAvailable: string
+    timeSpend: number
+    stagePosType: 'pos' | 'npc' | 'location'
+    stagePos: TMapPosition | TNpc | TLocation
+    loot: TLoot | null
+}
+export type TQuest = {
+    _id: string
+    name: string
+    type: string
+    availableAfter: Array<string>
+    stages: Array<TQuestStage>
+    translate: TTranslateData
+    notes: Array<string>
+}
 
 export type TWOid<T> = Omit<T, '_id'>
 

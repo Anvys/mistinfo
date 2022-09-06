@@ -60,7 +60,7 @@ export const MaterialContent:React.FC<TProps> = (props) => {
             </div>
             <div className={styles.dbField}>
                 <Outlet/>
-                <DataView data={data} dataAddHandler={dataAddHandler} dataDelHandler={dataDelHandler} />
+                <DataView data={data} dataEditHandler={dataAddHandler} dataDelHandler={dataDelHandler} />
             </div>
         </div>
     );

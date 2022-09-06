@@ -65,3 +65,40 @@ export const getDefaultFormikValues = (str: string) => {
             return 0
     }
 }
+export const selectFieldsOptions = {
+    'material.type': ['Bone', 'Fiber', 'Leather', 'Metal', 'Stone', 'Wood'],
+    'material.attributes': ['Absorbity', 'Density', 'Flexibility', 'Hardness', 'Lightness', 'Purity', 'Radiance', 'Rigidity',],
+    'component.attributes': [
+        'Activator', 'Binder', 'Deteriorator', 'Energizer', 'Focuser', 'Fortifier', 'Putrefier', 'Stimulator', 'Toner',
+        'Tranquilizer', 'Elioam', 'Frimam', 'Hydram', 'Lectram', 'Lithram', 'Magnam', 'Psycham', 'Pyram', 'Stratam',
+    ],
+    // 'material.tier': [0, 1, 2, 3, 4, 5],
+    'adventure': ['Academic', 'Athletics', 'Exploration', 'Perception', 'Persuasion', 'Strategy', 'Subterfuge'],
+    'weapon.type': ['Axe', 'Dagger', 'Mace', 'Polearm', 'Staff', 'Sword'],
+    'crafting': ['Alchemy', 'Forge', 'Herbalism', 'Sewing', 'Stoneworking', 'Tanning', 'Woodworking'],
+    'reputation.guild': ['Arcanists', 'Circle of the Great Tree', 'Claw Assembly', 'Lunar caravan', 'Mistwalkers', 'Order of the Hippogriff', 'Protector of the Rose'],
+    'reputation.town': ['Gantras', 'Kortombe', 'Larcen', 'Thorval', 'Wellnear'],
+    'component.type': ['Plant', 'Gem', 'Substance', 'Powder', 'Sap', 'Pollen', 'Artefact'],
+    'tier': [0, 1, 2, 3, 4, 5],
+    'terrain': ['Forest', 'Mountain', 'Swamp', 'Underground', 'Desert', 'Mists', 'Urban'],
+    'gatherpoint.type': ['Botany', 'Hunting', 'Lumberjacking', 'Mining'],
+
+    'event.type':['BlueFlag'],
+    'stage.type': ['Adventure'],
+    'stage.expr': ['or', 'and'],
+
+    'material': undefined as Array<string> | undefined,
+    'component': undefined as Array<string> | undefined,
+    'location': undefined as Array<string> | undefined,
+    'region': undefined as Array<string> | undefined,
+    'npc': undefined as Array<string> | undefined,
+    'loot': undefined as Array<string> | undefined,
+    'event': undefined as Array<string> | undefined,
+    'mapobject': undefined as Array<string> | undefined,
+
+
+    'gatherpoint.Botany': undefined as Array<string> | undefined,
+    'gatherpoint.Hunting': undefined as Array<string> | undefined,
+    'gatherpoint.Lumberjacking': undefined as Array<string> | undefined,
+    'gatherpoint.Mining': undefined as Array<string> | undefined,
+}

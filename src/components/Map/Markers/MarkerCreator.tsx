@@ -1,12 +1,13 @@
 import React from 'react';
 import Leaf, {Icon} from "leaflet";
-import {Marker, Popup, Tooltip} from "react-leaflet";
-import {TGatherPoint, TLocation, TStaminaElixir} from "../../../Types/CommonTypes";
+import {ImageOverlay, Marker, Popup, Tooltip} from "react-leaflet";
+import {TEvent, TGatherPoint, TLocation, TStaminaElixir} from "../../../Types/CommonTypes";
 import {useAppDispatch} from "../../../redux/store";
 import {MapSlice} from "../../../redux/reducers/mapReducer";
 import {useSelector} from "react-redux";
 import {getAddMarkerIconSelector, getAddMarkerSizeSelector} from "../../../redux/dataSelectors";
 import {iconUrlPicker} from "../../IconPicker/IconPicker";
+import {getStagesStr} from "../../../Unils/utilsFunctions";
 // import styles from './MarkerCreator.module.css';
 
 const iconPicker = (type: string) => {
@@ -14,7 +15,7 @@ const iconPicker = (type: string) => {
     const iPath = type.split('/')
     if (iPath.length === 2) {
         // return require(`./../../../assets/icons/material/${iPath[1]}/${iPath[2]}.png`)
-        return iconUrlPicker(iPath[0],iPath[1])
+        return iconUrlPicker(iPath[0], iPath[1])
         // switch (type){
         //     case 'Lumberjacking': return require('./../../../assets/icons/material/Wood/t1.png')
         //     // case 'Lumberjacking': return require('./../../../assets/icons/material/Wood/t1.png')
@@ -38,7 +39,7 @@ type TAddDataMarkerProps = {
     markerRef: React.RefObject<Leaf.Marker>
     eventHandlers: { dragend(): void }
 };
-const getResizeForTowns = (zoom: number): number=> {
+const getResizeForTowns = (zoom: number): number => {
     switch (zoom) {
         case 5:
             return 25
@@ -48,36 +49,88 @@ const getResizeForTowns = (zoom: number): number=> {
             return 6
         case 8:
             return 3
-        default: return 1
+        default:
+            return 1
     }
 }
 export const MC = {
+    events: (data: TEvent, zoom: number) => {
+        const t = new Image()
+        t.src = iconPicker(data.icon)
+        const iW = t.width / 4 * (zoom - 4) * 0.5
+        const iH = t.height / 4 * (zoom - 4) * 0.5
+
+        return (
+            <Marker
+                autoPan={false}
+                draggable={false}
+                icon={new Icon({
+                    iconAnchor: [iW/2, iH*5/6],
+                    iconUrl: t.src,
+                    iconSize: [iW, iH],
+                    popupAnchor: [iW / 2 - iW/2, 0 - iH*5/6],
+                })}
+                position={{lat: data.pos.x, lng: data.pos.y}}>
+                <Popup autoPan={false}>
+                    <p>{data.name}</p>
+                    <p>{getStagesStr(data.stages)}</p>
+                </Popup>
+
+            </Marker>
+        )
+    },
     getTowns: (zoom: number) => {
         const t = new Image()
         t.src = require('./../../../assets/icons/mapobject/CityKortombourgNew.png')
         console.log(`${t.width} : ${t.height}`)
         const coef = getResizeForTowns(zoom)
-        let size = [1875/coef,	1602/coef]
+        console.log(`coef ${coef}`)
+        let size = [1875 / coef, 1602 / coef]
         let size1 = size[0]
         let size2 = size[1]
+        const dopCoef = 1000
+        const dopCoefX = 0.15
+        const dopCoefY = 0.15
         const towns = [
-            <Marker
-            icon={new Icon({
-                iconUrl: require('./../../../assets/icons/mapobject/CityKortombourgNew.png'),
-                iconSize: [1875/coef, 1602/coef],
-                iconAnchor: [1875/coef / 2, 1602/coef / 2],
-            })} position={[-0.18, -45.68]}       />,
-            <Marker
-                icon={new Icon({
-                    iconUrl: require('./../../../assets/icons/mapobject/CityQuara.png'),
-                    iconSize: [1360/coef, 773/coef],
-                    iconAnchor: [1360/coef / 2, 773/coef / 2],
-                })}
-                position={[3.56, -64.64]}
-
-                pane={'shadowPane'}
-
-            />
+            <ImageOverlay
+                // autoPan={false}
+                // bubblingMouseEvents={false}
+                url={require('./../../../assets/icons/mapobject/CityKortombourgNew.png')}
+                bounds={[[-0.18-size1/dopCoef+dopCoefX, -45.68-size2/dopCoef+dopCoefY],[-0.18+size2/dopCoef+dopCoefX, -45.68+size2/dopCoef+dopCoefY]]}
+                // pane={'overlayPane'}
+                // icon={new Icon({
+                //     iconUrl: ,
+                //     iconSize: [1875 / coef, 1602 / coef],
+                //     iconAnchor: [1875 / coef / 2, 1602 / coef / 2],
+                //     pane: 'overlayPane',
+                //
+                // })}
+                // position={[-0.18, -45.68]}
+            />,
+            // <Marker
+            //     autoPan={false}
+            //     bubblingMouseEvents={false}
+            //
+            //     pane={'overlayPane'}
+            //     icon={new Icon({
+            //         iconUrl: require('./../../../assets/icons/mapobject/CityKortombourgNew.png'),
+            //         iconSize: [1875 / coef, 1602 / coef],
+            //         iconAnchor: [1875 / coef / 2, 1602 / coef / 2],
+            //         pane: 'overlayPane',
+            //
+            //     })} position={[-0.18, -45.68]}/>,
+            // <Marker
+            //     autoPan={false}
+            //
+            //     icon={new Icon({
+            //         iconUrl: require('./../../../assets/icons/mapobject/CityQuara.png'),
+            //         iconSize: [1360 / coef, 773 / coef],
+            //         iconAnchor: [1360 / coef / 2, 773 / coef / 2],
+            //     })}
+            //     position={[3.56, -64.64]}
+            //     pane={'shadowPane'}
+            //
+            // />
         ]
         return towns
     },
@@ -95,7 +148,7 @@ export const MC = {
                 icon={new Icon({
                     // iconAnchor: [25*(zoom-4)*0.5,60*(zoom-4)*0.5],
                     // iconUrl: require(`./../../../assets/icons/${loc.icon}.png`),
-                    iconUrl: loc.icon,
+                    iconUrl: iconPicker(loc.icon),
                     iconSize: [30 * (zoom - 4) * 0.5, 30 * (zoom - 4) * 0.5],
                     tooltipAnchor: [10 * (zoom - 4) * 0.5, 0],
                 })}
@@ -111,24 +164,34 @@ export const MC = {
             </Marker>
         )
     },
-    location: (loc: TLocation, zoom: number) => {
+    location: (data: TLocation, zoom: number) => {
+        const t = new Image()
+        t.src = iconPicker(data.icon)
+        const iW = t.width / 4 * (zoom - 4) * 0.5
+        const iH = t.height / 4 * (zoom - 4) * 0.5
         // console.log(zoom)
         return (
             <Marker
+
                 draggable={false}
+                autoPan={false}
                 // eventHandlers={eventHandlers}
                 // ref={markerRef}
                 icon={new Icon({
-                    iconAnchor: [25 * (zoom - 4) * 0.5, 60 * (zoom - 4) * 0.5],
-                    // iconUrl: require(`./../../../assets/icons/${loc.icon}.png`),
-                    iconUrl: locationIconPicker(loc.icon),
-                    iconSize: [40 * (zoom - 4) * 0.5, 50 * (zoom - 4) * 0.5],
-                    popupAnchor: [0, -25],
+                    // iconAnchor: [25 * (zoom - 4) * 0.5, 60 * (zoom - 4) * 0.5],
+                    // // iconUrl: require(`./../../../assets/icons/${data.icon}.png`),
+                    // iconUrl: locationIconPicker(data.icon),
+                    // iconSize: [40 * (zoom - 4) * 0.5, 50 * (zoom - 4) * 0.5],
+                    // popupAnchor: [0, -25],
+                    iconAnchor: [iW/2, iH*5/6],
+                    iconUrl: t.src,
+                    iconSize: [iW, iH],
+                    popupAnchor: [iW / 2 - iW/2, 0 - iH*5/6],
                 })}
-                position={{lat: loc.pos.x, lng: loc.pos.y}}>
-                <Popup>
-                    <p>{loc.name}</p>
-                    {loc.exploreReq > 0 && <p>explore: {loc.exploreReq}</p>}
+                position={{lat: data.pos.x, lng: data.pos.y}}>
+                <Popup autoPan={false}>
+                    <p>{data.name}</p>
+                    {data.exploreReq > 0 && <p>explore: {data.exploreReq}</p>}
                 </Popup>
 
             </Marker>

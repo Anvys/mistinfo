@@ -20,6 +20,7 @@ export const getIsInitGatherPointSelector = (state: TAppState) => state.gatherpo
 
 export const getLootSelector = (state: TAppState) => state.loot.data
 export const getIsLootInitSelector = (state: TAppState) => state.loot.isInit
+export const getLootByNameSelector = (name: string)=>(state: TAppState ) => state.loot.data.find(v=>v.name===name)
 
 export const getStaminaElixirSelector = (state: TAppState) => state.staminaElixir.data
 export const getIsStaminaElixirInitSelector = (state: TAppState) => state.staminaElixir.isInit

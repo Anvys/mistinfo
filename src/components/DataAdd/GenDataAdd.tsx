@@ -27,10 +27,13 @@ export const GenDataAdd = <T extends TCombineData, >(props: React.PropsWithChild
         enableReinitialize: true,
         onSubmit: async (values, actions) => {
 
-            console.log(`pos: ${pos.x}:${pos.y} / dataName: ${props.dataName} have pos: ${dataWithPos.includes(props.dataName)}`)
+            // @ts-ignore
+            console.log(`pos: ${pos.x}:${pos.y} | ownPos: ${values.pos}/ dataName: ${props.dataName} have pos: ${dataWithPos.includes(props.dataName)}`)
             // if (dataWithPos.includes(props.dataName))
+
             const newData = dataWithPos.includes(props.dataName)
-                ? {...values, name: values.translate.En, pos: pos}
+                // @ts-ignore
+                ? {...values, name: values.translate.En, pos: values.pos.x !==0 || values.pos.y !==0 ? values.pos:pos}
                 : {...values, name: values.translate.En}
             // if(props.dataName ==='gatherpoint'){
             //     const mat = useSelector(getMaterialsSelector).find(v=>v.name===newData.name)
@@ -39,16 +42,18 @@ export const GenDataAdd = <T extends TCombineData, >(props: React.PropsWithChild
 
             console.log(newData)
             if (data === null) { // @ts-ignore
-                // dispatch(curThunks.addOne(newData))
+                dispatch(curThunks.addOne(newData))
             } else {
                 console.log(data._id)
                 // @ts-ignore
-                // dispatch(curThunks.updateOne({id: data._id, data: {...newData, _id: data._id}}))
+                dispatch(curThunks.updateOne({id: data._id, data: {...newData, _id: data._id}}))
             }
             props.resetAddFormData();
             actions.setSubmitting(false);
         }
     })
+    // @ts-ignore
+    // console.log(`icon in gendata: ${formik.values.icon}`)
     // console.log(`GenDataAdd`)
     return (
         <div>

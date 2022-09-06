@@ -34,7 +34,7 @@ export const LootContent: React.FC<TProps> = (props) => {
     } as TWOid<TLoot>
 
     const dataAddHandler = (id: string) =>{
-        // setDataToAdd(id.length ? data.find(v=>v._id===id) || null : null)
+        setDataToAdd(id.length ? data.find(v=>v._id===id) || null : null)
     }
     const dataDelHandler = (id: string) => {
         dispatch(LootThunks.deleteOne(id))
@@ -56,7 +56,7 @@ export const LootContent: React.FC<TProps> = (props) => {
             </div>
             <div className={styles.dbField}>
                 <Outlet/>
-                <DataView data={data} dataAddHandler={dataAddHandler} dataDelHandler={dataDelHandler}/>
+                <DataView data={data} dataEditHandler={dataAddHandler} dataDelHandler={dataDelHandler}/>
 
             </div>
         </div>

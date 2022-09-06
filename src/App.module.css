@@ -3,5 +3,6 @@
     /*flex-direction: column;*/
     /*flex-grow: 1;*/
     height: 100%;
-    background-color: #575657;
+    background: #575657 url("./assets/img/b6") center repeat;
+    /*background-color: #575657;*/
 }

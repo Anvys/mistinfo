@@ -30,7 +30,7 @@ export const StaminaElixirContent: React.FC<TProps> = (props) => {
     const resetAddFormData = () => setDataToAdd(null)
     const initObj: TWOid<TStaminaElixir> = {
         name: 'Vigor',
-        icon: require('./../../../assets/icons/staminaElixir.png'),
+        icon: 'staminaElixir/icon',
         pos: {x: 0, y: 0},
         translate: {En: 'Vigor', Ru: 'Vigor', Fr: 'Vigor'},
         notes: [],
@@ -56,7 +56,7 @@ export const StaminaElixirContent: React.FC<TProps> = (props) => {
             </div>
             <div className={styles.dbField}>
                 <Outlet/>
-                <DataView data={data} dataAddHandler={dataAddHandler} dataDelHandler={dataDelHandler}/>
+                <DataView data={data} dataEditHandler={dataAddHandler} dataDelHandler={dataDelHandler}/>
             </div>
         </div>
     );

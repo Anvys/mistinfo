@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import styles from './Fields.module.css';
 import tableStyles from './../../DataView/DataViewTable/DataViewTable.module.css';
 
@@ -18,11 +18,16 @@ export const LootField: React.FC<TProps> = (props) => {
     const dropKeys = ['name', 'type', 'count', '%']
 
     const onDropAddHandler = (drop: TDrop<TDropTypes>) => {
-        setLoot(actual => [...actual, drop])
+        formik.setFieldValue('loot', [formik.values.loot, drop])
+        // setLoot(actual => [...actual, drop])
     }
     const onDropDelHandler = (index: number) => {
-        setLoot(actual => actual.filter((d, i) => i !== index))
+        formik.setFieldValue('loot', formik.values.loot.filter((d:any, i: number) => i !== index))
+        // setLoot(actual => actual.filter((d, i) => i !== index))
     }
+    useEffect(()=>{
+        setLoot(formik.values.loot)
+    },[formik.values.loot])
     return (
         <div className={styles.divRow + ' ' + styles.border} key={index}>
             <FieldDrop index={0} onAddHandler={onDropAddHandler}/>
@@ -37,8 +42,8 @@ export const LootField: React.FC<TProps> = (props) => {
                     <tbody>
                         {loot.length > 0 && loot.map((dropValue, index) =>
                                 <tr className={tableStyles.dataRow} key={index}>
-                                    {Object.values(dropValue).map((v, i) =>
-                                        <td className={i === 0 ? tableStyles.nameTd : tableStyles.notEmptyTd}>{v}</td>)}
+                                    {Object.entries(dropValue).map(([k,v], i) =>
+                                        k==='_id'? null:<td className={i === 0 ? tableStyles.nameTd : tableStyles.notEmptyTd}>{v}</td>)}
                                     <td>
                                         <button className={styles.deleteButton} onClick={() => onDropDelHandler(index)}/>
                                     </td>

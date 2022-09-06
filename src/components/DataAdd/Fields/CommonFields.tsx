@@ -1,10 +1,13 @@
 import React from 'react';
 import {getWeight} from "../../../Unils/utilsFunctions";
-import {AddFields, selectFieldsOptions, TSelectFieldOptionsKeys} from "../AddFields";
+import {AddFields, TSelectFieldOptionsKeys} from "../AddFields";
 import {FormikProps} from "formik";
 import {AttributeField} from "./AttributeField";
 import {LootField} from "./LootField";
 import {NotesField} from "./NotesField";
+import {selectFieldsOptions} from "../../../Types/Utils";
+import {SelectField} from "./SelectField";
+import {StageField} from "./StageField";
 // import styles from './CommonFields.module.css';
 
 
@@ -28,7 +31,7 @@ export const commonFields = (
                     case fieldsIgnoreList.includes(eKey):
                         return null
                     case eKey==='pos':
-                        return AddFields.posField(value['x'], value['y'], curKey, i, formik)
+                        return AddFields.posField(value['x'], value['y'], curKey, i, formik, dataName)
                     case eKey==='icon':
                         return AddFields.icon(formik, i+100, dataName === 'staminaelixir')
                     case eKey==='attributes':
@@ -37,6 +40,8 @@ export const commonFields = (
                         return <LootField formik={formik} index={i} dataName={dataName}/>
                     case eKey==='notes':
                         return <NotesField formik={formik} index={i} dataName={dataName}/>
+                    case eKey==='stages':
+                        return <StageField formik={formik} onStageAdd={()=>null}/>
                     case isSelectAvailable:
                         return AddFields.select(selArr as string[] | number[],value, formik,curKey,eKey,i+50,true )
 

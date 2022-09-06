@@ -18,18 +18,22 @@ export const EventContent: React.FC<TProps> = (props) => {
     const data = useSelector(getEventSelector);
     const [dataToAdd, setDataToAdd] = useState(null as null | TEvent)
     const dataAddHandler = (id: string) => {
-        setDataToAdd(id.length ? data.find(v => v._id === id) || null : null)
+        const temp = id.length ? data.find(v => v._id === id) || null : null
+        setDataToAdd(temp)
+        console.log(`Setted data:`)
+        console.log(temp)
     }
     const dataDelHandler = (id: string) => {
         dispatch(EventThunks.deleteOne(id))
     }
     const resetAddFormData = () => setDataToAdd(null)
     const initObj: TWOid<TEvent> = {
-        name: '',
-        type: '',
+        name: `New Event ${data.length+1}`,
+        type: 'BlueFlag',
+        icon:'event_Flags/eventregionrandom',
         stages:[],
         pos: {x:0,y:0},
-        translate: {En: '', Ru: '', Fr: ''},
+        translate: {En: `New Event ${data.length+1}`, Ru: '', Fr: ''},
         notes: [],
     }
     return (
@@ -47,7 +51,7 @@ export const EventContent: React.FC<TProps> = (props) => {
             <div className={styles.dbField}>
                 <Outlet/>
 
-                <DataView data={data} dataAddHandler={dataAddHandler} dataDelHandler={dataDelHandler}/>
+                <DataView data={data} dataEditHandler={dataAddHandler} dataDelHandler={dataDelHandler}/>
             </div>
         </div>
     );

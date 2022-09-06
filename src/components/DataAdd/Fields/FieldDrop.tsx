@@ -2,9 +2,9 @@ import React, {useState} from 'react';
 import {TDrop, TDropTypes, TLoot, TWOid} from "../../../Types/CommonTypes";
 import {FormikErrors, useFormik, useFormikContext} from "formik";
 import styles from './Fields.module.css';
-import {selectFieldsOptions} from "../AddFields";
 import {useSelector} from "react-redux";
 import {getComponentsSelector, getMaterialsSelector} from "../../../redux/dataSelectors";
+import {selectFieldsOptions} from "../../../Types/Utils";
 
 type TProps = {
     index: number
@@ -51,7 +51,7 @@ export const FieldDrop: React.FC<TProps> = (props) => {
                     <div className={styles.fieldBox}>
                         <label className={styles.label} htmlFor={'name'}>res:</label>
                         <select className={styles.inputText} name={'name'} value={name} onChange={(e)=>setName(e.target.value)}
-                                required autoComplete={'off'} placeholder={'name'}>
+                                 autoComplete={'off'} placeholder={'name'}>
                             <option value="" disabled selected hidden>{`Select name`}</option>
                             {selectFieldsOptions.tier.map(v => <option value={`tier ${v}`}>{`All tier ${v} ${type}s`}</option>)}
                             {nameArr.map(v => <option value={v}>{`${v}`}</option>)}

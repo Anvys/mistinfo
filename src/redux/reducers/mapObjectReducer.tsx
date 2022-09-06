@@ -3,7 +3,7 @@ import {createAsyncThunk, createSlice} from '@reduxjs/toolkit'
 import {TMapObject, TWOid} from "../../Types/CommonTypes";
 import {MapObjectAPI} from "../../API/DataAPI";
 import {checkError} from "../../Unils/utilsFunctions";
-import {selectFieldsOptions} from "../../components/DataAdd/AddFields";
+import {selectFieldsOptions} from "../../Types/Utils";
 
 const reducerPath = 'mif/mapobject'
 

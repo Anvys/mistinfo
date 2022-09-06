@@ -4,7 +4,12 @@ import styles from './Map.module.css';
 import {MapContainer, Marker, Popup, TileLayer, useMap, useMapEvents} from "react-leaflet";
 import {MarkerForDataAdd} from "./Markers/MarkerForDataAdd";
 import {useSelector} from "react-redux";
-import {getGatherPointSelector, getLocationSelector, getStaminaElixirSelector} from "../../redux/dataSelectors";
+import {
+    getEventSelector,
+    getGatherPointSelector,
+    getLocationSelector,
+    getStaminaElixirSelector
+} from "../../redux/dataSelectors";
 import {MC} from "./Markers/MarkerCreator";
 import {ExampleBound} from "./Bounds/ExampleBound";
 import {useAppDispatch} from "../../redux/store";
@@ -50,7 +55,7 @@ type TProps = {
     hei: number
 };
 export const MyMap: React.FC<TProps> = (props) => {
-    const [customMarkerPos, setCustomMarkerPos] = useState({lat: 0, lng: -40})
+    const [customMarkerPos, setCustomMarkerPos] = useState({lat: 0, lng: 0})
     const [isCusMarkerActive, setIsCusMarkerActive] = useState(false)
     const dispatch = useAppDispatch()
     const [map, setMap] = useState<Leaf.Map | null>(null);
@@ -61,6 +66,7 @@ export const MyMap: React.FC<TProps> = (props) => {
     const locationMarkers = useSelector(getLocationSelector).map(v => MC.location(v, zoom))
     const gatjers = useSelector(getGatherPointSelector);
     const gatherMarkers = useSelector(getGatherPointSelector).map(v => MC.gatherPoint(v, zoom))
+    const eventMarkers = useSelector(getEventSelector).map(v => MC.events(v, zoom))
     const staminaElixirMarkers = useSelector(getStaminaElixirSelector).map((v,i) => MC.staminaElixir({...v, name: `${v.name} №${i+1}`}, zoom))
     // console.log(locationMarkers)
     // console.log(markers)
@@ -101,15 +107,15 @@ export const MyMap: React.FC<TProps> = (props) => {
     return (
         <div className={styles.map} style={{width: `${props.wid === -1 ? '50%' : props.wid + 'px'}`}}>
             Map
-            <button onClick={onAddMarkerHandler}>AddMarker</button>
+            <button type={'button'} onClick={onAddMarkerHandler}>AddMarker</button>
             x
-            <button onClick={onClose}>close</button>
+            <button type={'button'} onClick={onClose}>close</button>
             <div id="map" style={{
                 height: `${props.hei === -1 ? '100%' : props.hei + 'px'}`,
                 overflow: "hidden",
                 padding: '0,50px,50px,0'
             }} className={styles.map}>
-                <MapContainer className={styles.map} center={[0, -45]} zoom={6} scrollWheelZoom={false} ref={setMap}>
+                <MapContainer className={styles.map} center={[0, -45]} zoom={6} scrollWheelZoom={false} ref={setMap} markerZoomAnimation={false}>
                     a
                     <MyComponent onZoomChange={onZoomChange}/>
                     b
@@ -155,9 +161,16 @@ export const MyMap: React.FC<TProps> = (props) => {
                     {locationMarkers.length && locationMarkers}
                     {gatherMarkers.length && gatherMarkers}
                     {staminaElixirMarkers.length && staminaElixirMarkers}
+                    {eventMarkers.length && eventMarkers}
                     {/*{isCusMarkerActive &&*/}
                     {/*    // <MarkerForDataAdd markerRef={markerRef} eventHandlers={eventHandlers} pos={customMarkerPos}/>}*/}
-                    {MC.addDataMarker(customMarkerPos, markerRef, eventHandlers)}
+                    {isCusMarkerActive && MC.addDataMarker(
+                        customMarkerPos.lng===0 && customMarkerPos.lat===0
+                            ? map?.getCenter()||customMarkerPos
+                            : customMarkerPos,
+                        markerRef,
+                        eventHandlers)}
+                    {/*{MC.addDataMarker(customMarkerPos, markerRef, eventHandlers)}*/}
 
                     {/*<ExampleBound/>*/}
 

@@ -1,12 +1,15 @@
 import React, {useState} from 'react';
 import styles from './DataViewTable.module.css';
+import fieldsStyles from './../../DataAdd/Fields/Fields.module.css'
+
 import {useAppDispatch} from "../../../redux/store";
+import {iconUrlPicker} from "../../IconPicker/IconPicker";
 
 type TProps = {
     dataKeys: Map<string, Array<string>>
     sortedDataKeys: Array<string>
     dataValues: Array<Array<any>>
-    dataAddHandler: (id: string) => void
+    dataEditHandler: (id: string) => void
     dataDelHandler: (id: string) => void
 
 };
@@ -15,7 +18,7 @@ export const DataViewTable: React.FC<TProps> = (props) => {
     const dispatch = useAppDispatch()
     const data = props.dataValues.map(v => [
         ...v,
-        <button className={styles.editButton} onClick={() => props.dataAddHandler(v[0])}/>,
+        <button className={styles.editButton} onClick={() => props.dataEditHandler(v[0])}/>,
         <button className={styles.deleteButton} onClick={() => props.dataDelHandler(v[0])}/>])
     // const onEdithandler:MouseEventHandler<HTMLButtonElement> = (e)=>{
     //
@@ -24,7 +27,12 @@ export const DataViewTable: React.FC<TProps> = (props) => {
     const onCheck = (e: React.ChangeEvent<HTMLInputElement>) => {
         setIsDeleteModeActive(e.target.checked)
     }
-
+    let iconIndex = props.dataKeys.get('primary')?.indexOf('icon')
+    // console.log(`iconIndexEA: ${iconIndex}`)
+    iconIndex = iconIndex === -1 || iconIndex===undefined ? -1 : iconIndex + 4
+// console.log(`iconIndex: ${iconIndex}`)
+// console.log(props.dataKeys)
+//     console.log(data)
     return (
         <div className={styles.vid}>
             <table className={styles.table}>
@@ -60,12 +68,13 @@ export const DataViewTable: React.FC<TProps> = (props) => {
                         <tr className={styles.dataRow} key={i}>
                             {data.map((val, j) => {
                                     const stl = val ? styles.notEmptyTd : styles.emptyTd
+                                    // if(iconIndex===j) console.log(`incex: ${j}=${iconIndex}/= ${val}`)
                                     // console.log(val?undefined:styles.emptyTd)
                                     return j > 0
                                         ? j < 4
                                             ? <td className={styles.nameTd} key={j}>{val}</td>
                                             : j < data.length - 1
-                                                ? <td className={stl} key={j}>{val}</td>
+                                                ? <td className={stl} key={j}>{iconIndex===j && val?<img className={fieldsStyles.imgIcon} src={iconUrlPicker(val.split('/')[0], val.split('/')[1])}/>:val}</td>
                                                 : (j >= data.length - 1 && isDeleteModeActive)
                                                     ? <td className={stl}
                                                           key={j}>{val}</td>

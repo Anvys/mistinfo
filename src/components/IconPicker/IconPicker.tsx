@@ -17,6 +17,12 @@ export const iconUrlPicker = (folder: string, icon: string) => {
         //     return require(`./../../assets/icons/mapobject/${icon}.png`)
         // case 'material/Wood':
         //     return require(`./../../assets/icons/material/Wood/${icon}.png`)
+        case 'location_Places':
+            return require(`./../../assets/icons/location/${icon}.png`)
+        case 'event_Flags':
+            return require(`./../../assets/icons/event/${icon}.png`)
+        case 'staminaElixir':
+            return require(`./../../assets/icons/staminaElixir.png`)
         case 'mapGather_Tree':
             return require(`./../../assets/icons/mapGather/wood/${icon}.png`)
         case 'mapGather_Boulder':
@@ -58,6 +64,7 @@ export const iconUrlPicker = (folder: string, icon: string) => {
 
         default : {
             console.error(`FAILED ICON PICK:: folder: ${folder}/ icon: ${icon}`)
+            return undefined
             // return require()
         }
     }
@@ -160,34 +167,63 @@ const iconData = {
         'Artefact-Effigy_of_Pior', 'Artefact-Effigy_of_Xiru', 'Artefact-Effigy_of_Zius',
         'Artefact-Lodo_effigy', 'Artefact-Sair_effigy', 'Artefact-Ward_effigy',
     ],
-    component_Gem:[
+    component_Gem: [
         'Gem-1-Ambranos', 'Gem-1-Amethile', 'Gem-1-Azurelle', 'Gem-1-Cassinette', 'Gem-1-Citrinil', 'Gem-1-Grenato', 'Gem-1-Hemolianel', 'Gem-1-Malichone',
         'Gem-2-Morganate', 'Gem-2-Obsidelle', 'Gem-2-Onyxil', 'Gem-2-Opalos', 'Gem-2-Quarzor', 'Gem-2-Rubis', 'Gem-2-Serpentil', 'Gem-2-Tanzanil',
         'Gem-3-Diantine', 'Gem-3-Jaskilo', 'Gem-3-Tukozelle', 'Gem-3-Zirkona',
         'Gem-4-Centaur_Tear', 'Gem-4-Dragon_Tear', 'Gem-4-Glacior_Tear', 'Gem-4-Unicorn_Tear',
     ],
-    component_Pollen:[
+    component_Pollen: [
         'Pollen-1-Beige_pollen', 'Pollen-1-Brown_pollen', 'Pollen-1-Grey_pollen', 'Pollen-1-Orange_pollen',
         'Pollen-2-Blue_pollen', 'Pollen-2-Green_pollen', 'Pollen-2-Purple_pollen', 'Pollen-2-Yellow_pollen',
         'Pollen-3-Algent_pollen', 'Pollen-3-Pink_pollen', 'Pollen-3-Red_pollen', 'Pollen-3-Violet_pollen',
     ],
-    component_Powder:[
+    component_Powder: [
         'Powder-1-Ardosanos', 'Powder-1-Borasixte', 'Powder-1-Grestor', 'Powder-1-Marnitose',
         'Powder-2-Argile', 'Powder-2-Diorule', 'Powder-2-Graslette', 'Powder-2-Martiros',
         'Powder-3-Borfarine', 'Powder-3-Grimalsable', 'Powder-3-Lansel', 'Powder-3-Marabis',
     ],
-    component_Sap:[
+    component_Sap: [
         'Sap-1-Elastic_sap', 'Sap-1-Flowing_sap', 'Sap-1-Fragrant_sap', 'Sap-1-Sticky_sap',
         'Sap-2-Cold_sap', 'Sap-2-Gooey_sap', 'Sap-2-Hot_sap', 'Sap-2-Tasty_sap',
         'Sap-3-Iridescent_sap', 'Sap-3-Luminescent_sap', 'Sap-3-Phosphorescent_sap', 'Sap-3-Radiant_sap',
     ],
-    component_Substance:[
+    component_Substance: [
         'Substance-1-Arachnofur', 'Substance-1-Frapabor_clog', 'Substance-1-Gelatinous_heart', 'Substance-1-Gremfyr_wing', 'Substance-1-Lupus_croc', 'Substance-1-Oryctosensitive_ear', 'Substance-1-Paturon_root', 'Substance-1-Serpentur_scale', 'Substance-1-Sharkateeth', 'Substance-1-Ursinol_claw',
         'Substance-2-Aberantis_feather', 'Substance-2-Duriwood_bark', 'Substance-2-Flexole_wing', 'Substance-2-Greedy_root', 'Substance-2-Lizardis_Phalanx', 'Substance-2-Ondular_wing', 'Substance-2-Pustulus_skin', 'Substance-2-Scorpidus_stinger', 'Substance-2-Sucktopow_tentacle', 'Substance-2-Suilick_horn', 'Substance-2-Sylvan_uvula', 'Substance-2-Vibrato_scale',
         'Substance-3-Cognitive_flower', 'Substance-3-Glutuna_tongle', 'Substance-3-Manticorian_horsehair', 'Substance-3-Scarlet_Sabrofleaf', 'Substance-3-Silvanus_occulus', 'Substance-3-Tortulonus_scale',
         'Substance-4-Cuilivrinus_shell', 'Substance-4-Cybelfly_Egg', 'Substance-4-Draconian_down', 'Substance-4-Dusty_Shards', 'Substance-4-Heavy_Scales', 'Substance-4-Iceblast_Tooth', 'Substance-4-Mucus_gelatinus', 'Substance-4-Nuertoheart', 'Substance-4-Psychotropul_feather', 'Substance-4-Valdiss_spectroflower',
         'Substance-5-Heart_of_Dar\'hon',
     ],
+    event_Flags: [
+        'event', 'event02', 'eventexploration', 'eventmainstory', 'eventrandom', 'eventregiondanger',
+        'eventregionrandom', 'tribal', 'tribal02', 'tribal03', 'tribal04', 'tribal05', 'tribal06', 'trogulnus',
+    ],
+    location_Places: ['1', '10', '11', '12', '13', '14', '15', '16', '17', '18', '19', '2', '20', '21', '22', '23',
+        '24', '25', '26', '27', '28', '29', '3', '30', '31', '32', '33', '4 (2)', '4', '5', '6', '7', '8', '9',
+        'alcharan', 'alderman', 'ancetre', 'aranbourgcenter', 'azrason', 'barracks', 'barrack_of_the_filouderien',
+        'bell', 'bentrocemetery', 'berge_du_thaumaturge', 'berthiers_house', 'blackhorsepavilion', 'bloranossahouse',
+        'camp1', 'camp2', 'campement_icon (2)', 'campement_icon', 'camp_tormul', 'captainjoallery',
+        'caravanserai_of_the_great_eclipse', 'carvanserai', 'caveentrance', 'caveknowledge', 'city', 'cityinn',
+        'cityinnempty', 'citypark', 'clawmarquee', 'combat', 'demalaisemanor', 'dev', 'diademmanor', 'diademquarry',
+        'diadem_manor', 'diadem_quarry', 'domaine_sylvestre', 'domanescissors', 'enorwendyery', 'epirponrelay',
+        'ergoim', 'event', 'event02', 'eventexploration', 'eventmainstory', 'eventrandom', 'eventregiondanger',
+        'eventregionrandom', 'fearpiercingcamp', 'fearpiercing_camp', 'fency', 'fency02', 'fish', 'forgeclif',
+        'forsecmine', 'fortressrose', 'gantrasmap', 'gismonsfarm', 'greathousekortombe', 'grisdomain',
+        'housesalamandese', 'house_of_the_sleeping_sun', 'inn (2)', 'inn', 'innmap (2)', 'innmap', 'issayashipyard',
+        'issaya_shipyard', 'klotosstribe', 'korllightsacademy', 'kortombecastle', 'kortombecenter', 'kortombemarket',
+        'kortomis_statue', 'larfungel', 'lighthouselongnight', 'lostwharf', 'mapcrane', 'mapicon', 'marbleworks',
+        'marques_du_thaumaturge', 'matteuswoodcutter', 'meat', 'mill', 'mine_icon', 'mini (2)', 'mini',
+        'minokiller_outpost', 'multiforge', 'neoaetheraris', 'neoaethernaris', 'none', 'oldrabouf', 'path (2)',
+        'path', 'pathstone', 'peoplearmory', 'platteauvores_camp', 'plindorfarm', 'portal (2)', 'portal',
+        'portallocked', 'portaranbourg', 'portthorbourg', 'quarawoodfurniture', 'quarawood_furnitures',
+        'raboufdomain', 'rabouf_domain', 'raonisblast', 'raven_mansion', 'redmushroom', 'regular', 'roicsantuary',
+        'rose', 'ruinsmalasette', 'scarletwarehouse', 'scratched_rock', 'servreshouse', 'shipyardgrandflood',
+        'sirturaoutpost', 'snakemine', 'sorka_camp', 'station', 'station2', 'station2locked', 'stationlocked',
+        'stone', 'stonebroken', 'struckdowntree', 'theancestor', 'thoraxdistillery', 'thormalekacademy',
+        'thorvalcamp', 'thousandeadcavern', 'tiny', 'tomb', 'towerconstructionsite', 'towertarawest',
+        'tower_construction_site', 'town', 'tree', 'tribal', 'tribal02', 'tribal03', 'tribal04', 'tribal05',
+        'tribal06', 'trogulnus', 'troll_seat', 'watchmanarmory', 'watchmans_armory', 'yolasula',],
 
 }
 type TProps = {
@@ -236,7 +272,7 @@ export const IconPicker: React.FC<TProps> = (props) => {
             // backgroundRepeat: 'no-repeat',
         };
         return (
-            <div key={i} className={styles.iconDiv} style={iconStyle}
+            <div key={i} title={iconName} className={styles.iconDiv} style={iconStyle}
                  onClick={() => iconPickHandler(`${folder}/${v}`, iconURL)}/>)
     }
     return (

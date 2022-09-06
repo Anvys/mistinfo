@@ -1,7 +1,7 @@
-import {TCombineData, TMapPosition, TResponseBody} from "../Types/CommonTypes";
-import {StatusCodes} from "../Types/Utils";
+import {TCombineData, TMapPosition, TResponseBody, TStage, TStageRequire} from "../Types/CommonTypes";
+import {selectFieldsOptions, StatusCodes} from "../Types/Utils";
 import {FormikProps} from "formik";
-import {AddFields, selectFieldsOptions, TSelectFieldOptionsKeys} from "../components/DataAdd/AddFields";
+import {AddFields, TSelectFieldOptionsKeys} from "../components/DataAdd/AddFields";
 import styles from "../components/DataAdd/DataAdd.module.css";
 import {useSelector} from "react-redux";
 import {getMarkerForAddPosSelector, getMaterialsSelector} from "../redux/dataSelectors";
@@ -39,10 +39,16 @@ export const getMapKeys = (data: any) => {
             const tValue = typeof value
             if (tValue !== 'object') dataKeys.get('primary')?.push(key)
             else {
-                if(key==='loot'){
-                    dataKeys.set(key,['Drops'])//...value.map((v:object,i:number)=>`${i}`)
-                }else{
-                    dataKeys.set(key, Object.keys(value as any))
+                switch (key) {
+                    case 'loot':
+                        dataKeys.set(key, ['Drops'])//...value.map((v:object,i:number)=>`${i}`)
+                        break;
+                    case 'stages':
+                        dataKeys.set(key, ['stages'])//...value.map((v:object,i:number)=>`${i}`)
+                        break;
+                    default:
+                        dataKeys.set(key, Object.keys(value as any))
+                        break;
                 }
 
             }
@@ -97,7 +103,17 @@ export const checkError = (data: TResponseBody<TCombineData>): boolean => {
 
     return data.status === StatusCodes.Ok
 }
-
+export const getStageRequireStr = (type: string, req: TStageRequire) =>{
+    switch (type) {
+        case 'Adventure':
+            return `${req.adventure}: ${req.count}`
+        default: return `DefaultStageReqStr`
+    }
+}
+export const getStagesStr = (stages: Array<TStage>):string =>{
+    return stages.map((stage,i)=>
+        `-${stage.expr}-:№${stage.num}:${stage.name}:${stage.proc}%:${getStageRequireStr(stage.type, stage.require)}${i < stages.length - 1 ? '\n' : ''}`).join('')
+}
 // export const getElements = (mapVal: object, prevKey: string, formik: FormikProps<any>, dataName: string) => {
 //     return Object.entries(mapVal).map(([key, value], i) => {
 //         // if (isSkipField(key)) return null

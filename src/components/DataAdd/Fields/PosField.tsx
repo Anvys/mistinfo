@@ -15,8 +15,9 @@ type PosFieldProps = {
     htmlId: string,
     index: number,
     formik: FormikProps<any>
+    dataName: string
 }
-export const PosField: React.FC<PosFieldProps> = ({posX, posY, htmlId, index, formik}) => {
+export const PosField: React.FC<PosFieldProps> = ({posX, posY, htmlId, index, formik, dataName}) => {
     const htmlX = `${htmlId}.x`
     const htmlY = `${htmlId}.x`
     const [isPosFromMarker, setIsPosFromMarker] = useState(false);
@@ -39,6 +40,7 @@ export const PosField: React.FC<PosFieldProps> = ({posX, posY, htmlId, index, fo
     }
     return (
         <div className={styles.fieldBoxCol} key={index}>
+            {dataName==='region' ? 'Center of region' : 'Position on map'}
             <div className={styles.fieldBoxNoBorder}>
                 <div className={styles.fieldBoxPos}>
                     <label className={styles.label} htmlFor={htmlX}>x:</label>

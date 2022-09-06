@@ -35,7 +35,7 @@ export const NotesField: React.FC<TProps> = (props) => {
                     <input className={styles.inputText} type={'text'} name={'note'}
                            value={note}
                            onChange={e => setNote(e.target.value)}
-                           required autoComplete={'off'} placeholder={'note'}/>
+                           autoComplete={'off'} placeholder={'note'}/>
                 </div>
                 <button type={'button'} onClick={onNoteAddHandler} className={styles.addButton}>Add note</button>
 

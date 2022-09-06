@@ -2,7 +2,8 @@ import React, {useState} from 'react';
 import styles from './Fields.module.css';
 import tableStyles from './../../DataView/DataViewTable/DataViewTable.module.css'
 import {FormikProps, useFormik} from "formik";
-import {AddFields, selectFieldsOptions, TSelectFieldOptionsKeys} from "../AddFields";
+import {AddFields, TSelectFieldOptionsKeys} from "../AddFields";
+import {selectFieldsOptions} from "../../../Types/Utils";
 
 type TProps = {
     index: number,

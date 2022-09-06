@@ -2,9 +2,9 @@ import React, {useState} from 'react';
 import {TDrop, TDropTypes, TLoot, TStage, TWOid} from "../../../Types/CommonTypes";
 import {FormikErrors, useFormik} from "formik";
 import styles from './Fields.module.css';
-import {selectFieldsOptions} from "../AddFields";
 import {useSelector} from "react-redux";
 import {getComponentsSelector, getMaterialsSelector} from "../../../redux/dataSelectors";
+import {selectFieldsOptions} from "../../../Types/Utils";
 
 type TProps = {
     index: number
