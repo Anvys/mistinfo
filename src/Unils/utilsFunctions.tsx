@@ -1,4 +1,12 @@
-import {TCombineData, TMapPosition, TResponseBody, TStage, TStageRequire} from "../Types/CommonTypes";
+import {
+    TAbility,
+    TCombineData,
+    TMapPosition,
+    TQuestStage, TRecipePart,
+    TResponseBody,
+    TStage,
+    TStageRequire
+} from "../Types/CommonTypes";
 import {selectFieldsOptions, StatusCodes} from "../Types/Utils";
 import {FormikProps} from "formik";
 import {AddFields, TSelectFieldOptionsKeys} from "../components/DataAdd/AddFields";
@@ -45,6 +53,9 @@ export const getMapKeys = (data: any) => {
                         break;
                     case 'stages':
                         dataKeys.set(key, ['stages'])//...value.map((v:object,i:number)=>`${i}`)
+                        break;
+                    case 'abilities':
+                        dataKeys.set(key, ['abilities'])//...value.map((v:object,i:number)=>`${i}`)
                         break;
                     default:
                         dataKeys.set(key, Object.keys(value as any))
@@ -113,6 +124,15 @@ export const getStageRequireStr = (type: string, req: TStageRequire) =>{
 export const getStagesStr = (stages: Array<TStage>):string =>{
     return stages.map((stage,i)=>
         `-${stage.expr}-:№${stage.num}:${stage.name}:${stage.proc}%:${getStageRequireStr(stage.type, stage.require)}${i < stages.length - 1 ? '\n' : ''}`).join('')
+}
+export const getStageStr = (stage: TStage | TQuestStage):string =>{
+    return `-${stage.expr}-:№${stage.num}:${stage.name}:${stage.proc}%:${getStageRequireStr(stage.type, stage.require)}`
+}
+export const getAbilityStr = (abi: TAbility) => {
+    return `${abi.name}: ${abi.level} lvl (${abi.type}) ${abi.cd>0?`[cd ${abi.cd} turn]`: `[no cd]`} ${abi.stamina>0?`cost ${abi.stamina}mp`:''} [${abi.effect}]`
+}
+export const getRecipePartStr = (rec: TRecipePart) => {
+    return `[${rec.name}] ${rec.component}: ${rec.count}`
 }
 // export const getElements = (mapVal: object, prevKey: string, formik: FormikProps<any>, dataName: string) => {
 //     return Object.entries(mapVal).map(([key, value], i) => {

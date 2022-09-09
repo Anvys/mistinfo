@@ -4,6 +4,7 @@ import fieldsStyles from './../../DataAdd/Fields/Fields.module.css'
 
 import {useAppDispatch} from "../../../redux/store";
 import {iconUrlPicker} from "../../IconPicker/IconPicker";
+import {TTranslateLang} from "../../../Types/CommonTypes";
 
 type TProps = {
     dataKeys: Map<string, Array<string>>
@@ -11,15 +12,19 @@ type TProps = {
     dataValues: Array<Array<any>>
     dataEditHandler: (id: string) => void
     dataDelHandler: (id: string) => void
-
+    isMod: boolean
+    lang: TTranslateLang | undefined
 };
 export const DataViewTable: React.FC<TProps> = (props) => {
+    const {isMod, lang} = props
     const [isDeleteModeActive, setIsDeleteModeActive] = useState(false);
     const dispatch = useAppDispatch()
-    const data = props.dataValues.map(v => [
-        ...v,
-        <button className={styles.editButton} onClick={() => props.dataEditHandler(v[0])}/>,
-        <button className={styles.deleteButton} onClick={() => props.dataDelHandler(v[0])}/>])
+    const data = isMod
+        ? props.dataValues.map(v => [
+            ...v,
+            <button className={styles.editButton} onClick={() => props.dataEditHandler(v[0])}/>,
+            <button className={styles.deleteButton} onClick={() => props.dataDelHandler(v[0])}/>])
+        : props.dataValues.map(v => [...v])
     // const onEdithandler:MouseEventHandler<HTMLButtonElement> = (e)=>{
     //
     // }
@@ -29,7 +34,7 @@ export const DataViewTable: React.FC<TProps> = (props) => {
     }
     let iconIndex = props.dataKeys.get('primary')?.indexOf('icon')
     // console.log(`iconIndexEA: ${iconIndex}`)
-    iconIndex = iconIndex === -1 || iconIndex===undefined ? -1 : iconIndex + 4
+    iconIndex = iconIndex === -1 || iconIndex === undefined ? -1 : iconIndex + 4
 // console.log(`iconIndex: ${iconIndex}`)
 // console.log(props.dataKeys)
 //     console.log(data)
@@ -47,8 +52,8 @@ export const DataViewTable: React.FC<TProps> = (props) => {
 
                         })}
 
-                        <th>Edit</th>
-                        <th>Del?</th>
+                        {isMod && <th>Edit</th>}
+                        {isMod && <th>Del?</th>}
                     </tr>
                     <tr>
                         {/*{ style={i>2?{maxWidth: `calc((95% - 150px)/${props.dataKeys.get(v)?.length||0-3})`}:undefined}}*/}
@@ -58,8 +63,8 @@ export const DataViewTable: React.FC<TProps> = (props) => {
 
                             ))]
                         )}
-                        <th></th>
-                        <th><input type={"checkbox"} checked={isDeleteModeActive} onChange={onCheck}/></th>
+                        {isMod && <th></th>}
+                        {isMod && <th><input type={"checkbox"} checked={isDeleteModeActive} onChange={onCheck}/></th>}
 
                     </tr>
                 </thead>
@@ -74,7 +79,10 @@ export const DataViewTable: React.FC<TProps> = (props) => {
                                         ? j < 4
                                             ? <td className={styles.nameTd} key={j}>{val}</td>
                                             : j < data.length - 1
-                                                ? <td className={stl} key={j}>{iconIndex===j && val?<img className={fieldsStyles.imgIcon} src={iconUrlPicker(val.split('/')[0], val.split('/')[1])}/>:val}</td>
+                                                ? <td className={stl} key={j}>{iconIndex === (lang===undefined? j : j+2) && val
+                                                    ? <img className={fieldsStyles.imgIcon}
+                                                           src={iconUrlPicker(val.split('/')[0], val.split('/')[1])}/>
+                                                    : val}</td>
                                                 : (j >= data.length - 1 && isDeleteModeActive)
                                                     ? <td className={stl}
                                                           key={j}>{val}</td>

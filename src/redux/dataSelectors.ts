@@ -39,3 +39,25 @@ export const getIsAddPosFieldActiveSelector = (state: TAppState) => state.map.is
 export const getAddMarkerIconSelector = (state: TAppState) => state.map.addMarkerIcon
 export const getAddMarkerSizeSelector = (state: TAppState) => state.map.addMarkerSize
 export const getMarkersSelector = (state: TAppState) => state.map.markers
+
+export const AuthSelectors = {
+    isInit: (state: TAppState) => state.auth.isInit,
+    getUser: (state: TAppState) => state.auth.data.login,
+    getUserData: (state: TAppState) => state.auth.data,
+}
+export const RecipeSelectors = {
+    isInit: (state: TAppState) => state.recipe.isInit,
+    getData: (state: TAppState) => state.recipe.data,
+}
+export const MonsterSelectors = {
+    isInit: (state: TAppState) => state.monster.isInit,
+    getData: (state: TAppState) => state.monster.data,
+}
+export const AbilitySelectors = {
+    isInit: (state: TAppState) => state.ability.isInit,
+    getData: (state: TAppState) => state.ability.data,
+}
+export const CompanionSelectors = {
+    isInit: (state: TAppState) => state.companion.isInit,
+    getData: (state: TAppState) => state.companion.data,
+}

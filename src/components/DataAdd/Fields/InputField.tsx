@@ -30,3 +30,31 @@ export const InputField:React.FC<TProps> = (props) => {
         </div>
     );
 }
+
+type TSimpleInputFieldProps = {
+    value: string | number | readonly string[] | undefined,
+    onChange: (value: string)=>void
+    index: number
+    htmlId: string
+    labelText: string
+    required: boolean
+    disabled: boolean
+};
+export const SimpleInputField:React.FC<TSimpleInputFieldProps> = (props) => {
+    const {index, htmlId, labelText, required, disabled, value, onChange} = props
+    const valueType = typeof value;
+    return (
+        <div className={styles.fieldBox} key={index}>
+            <label className={styles.label} htmlFor={htmlId}>{labelText}</label>
+            <input className={valueType === 'string' ? styles.inputText : styles.inputNumber}
+                   type={valueType === 'string' ? 'text': 'number'}
+                   id={htmlId}
+                   name={htmlId}
+                   onChange={e=>onChange(e.target.value)}
+                   required={required}
+                   disabled={disabled}
+                   autoComplete={'off'}
+                   value={value}/>
+        </div>
+    );
+}

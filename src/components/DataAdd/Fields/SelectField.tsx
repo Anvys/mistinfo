@@ -37,7 +37,7 @@ type TSelectSimpleField = {
     onSelChange: (value: string)=>void
     labelText: string
 };
-export const SelectSimpleField:React.FC<TSelectSimpleField> = (props) => {
+export const SimpleSelectField:React.FC<TSelectSimpleField> = (props) => {
     const { value,mapSelectValues, onSelChange, labelText} = props
     const [val, setVal] = useState(value)
     useEffect(()=>{

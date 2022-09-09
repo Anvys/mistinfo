@@ -1,6 +1,7 @@
 export type TCombineData = TNpc | TRegion | TLocation
     | TMaterial | TComponent | TGatherPoint | TLoot
     | TStaminaElixir | TEvent | TMapObject | TQuest
+| TRecipe | TAbility | TCompanion | TMonster
 
 export type TResources<T, U> = {
     _id: string
@@ -106,21 +107,8 @@ export type TMapObject = {
     translate: TTranslateData
     notes: Array<string>
 }
-export type TRecipePart = {
-    name: string
-    component: string
-    count: number
-}
-export type TRecipe = {
-    _id: string
-    name: string
-    icon: string
-    type: TCrafting
-    baseReq: number
-    parts : Array<TRecipePart>
-    translate: TTranslateData
-    notes: Array<string>
-}
+
+
 export type TStagePosType = 'pos' | 'npc' | 'location'
 export type TStagePos = TMapPosition | TNpc | TLocation
 export type TQuestStage = {
@@ -145,12 +133,99 @@ export type TQuest = {
     translate: TTranslateData
     notes: Array<string>
 }
+export type TAbilityType = 'Passive' | 'Active'
+export type TAbility = {
+    _id: string
+    name: string
+    type: TAbilityType
+    level: number
+    stamina: number
+    cd: number
+    effect: string
+    icon: string
+    translate: TTranslateData
+    notes: Array<string>
+}
+export type TSkills = TWeapons | TAdventure | TCrafting | TGathering | TTerrain
+export type TBonus = {
+    skill: TSkills
+    count: number
+}
+export type TCompanion = {
+    _id: string
+    name: string
+    type: 'Human' | 'Transport' | 'Tamed'
+    evoType: 'Gold' | 'Silver'
+    levelMax: number
+    lifeMax: number
+    staminaMax: number
+    armorMax: number
+    location: string
+    evoQuests: Array<string>
+    weapon: TWeapons
+    weaponMaxSkill: number
+    comfort: number
+    skills: Array<TBonus>
+
+    icon: string
+    translate: TTranslateData
+    notes: Array<string>
+}
+export type TMonsterType = 'Monster' | 'Boss'
+export type TMonster = {
+    _id: string
+    name: string
+    type: TMonsterType
+    level: number
+    life: number
+    stamina: number
+    attack: number
+    armor: number
+    abilities: Array<TAbility>
+    loot: TLoot | null
+    region: string
+    icon: string
+    translate: TTranslateData
+    notes: Array<string>
+}
+export type TRecipePart = {
+    name: string
+    component: string
+    count: number
+}
+export type TResultType = TEquipSlot
+export type TRecipe = {
+    _id: string
+    name: string
+    icon: string
+    type: TCrafting
+    resultType: TResultType
+    baseReq: number
+    parts : Array<TRecipePart>
+    translate: TTranslateData
+    notes: Array<string>
+}
+
+
+
+export type TUserType = 'User' | 'Mod' | 'Admin'
+export type TUser = {
+    _id: string | undefined
+    login: string | undefined
+    // type: TUserType | undefined
+    icon: string
+    token: string | undefined
+}
+
 
 export type TWOid<T> = Omit<T, '_id'>
 
 
 export type TMapPosition = { x: number, y: number }
 
+
+export type TEquipSlot = 'Helmet'| 'Torso' | 'Glove' | 'Legs' | 'Boots' | 'Weapon' | 'Lantern' | 'Cape' | 'Coat'
+    | 'Shirt' | 'Pants' | 'Offhand' | 'Pendant' | 'Ring' | 'Bracelet' | 'Crowns'
 export type TWeapons = 'Axe' | 'Dagger' | 'Mace' | 'Polearm' | 'Staff' | 'Sword';
 export type TAdventure = 'Academic' | 'Athletics' | 'Exploration'
     | 'Perception' | 'Persuasion' | 'Strategy' | 'Subterfuge';
@@ -222,7 +297,8 @@ export type TDrop<T extends TDropTypes> = {
 
 export type TRequestType = 'Material' | 'Component' | 'Npc'
     | 'Location' | 'Region' | 'GatherPoint' | 'Loot'
-    | 'StaminaElixir' | 'Event' | 'MapObject' | 'Quest'
+    | 'StaminaElixir' | 'Event' | 'MapObject' | 'Quest' | 'Recipe' | 'Companion' | 'Ability'
+| 'Monster'
 export type TRequestBody<T extends TRequestType, D> = {
     type: T
     data: D

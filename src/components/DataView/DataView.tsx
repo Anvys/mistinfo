@@ -1,7 +1,16 @@
 import React, {useState} from 'react';
 import {DataViewTable} from "./DataViewTable/DataViewTable";
-import {getMapKeys, getStageRequireStr, sortDataMapKeys, sortStrKeys} from "../../Unils/utilsFunctions";
-import {TCombineData, TDrop, TDropTypes, TPrimKeys, TSubKeys} from "../../Types/CommonTypes";
+import {
+    getAbilityStr,
+    getMapKeys,
+    getRecipePartStr,
+    getStageRequireStr,
+    sortDataMapKeys,
+    sortStrKeys
+} from "../../Unils/utilsFunctions";
+import {TCombineData, TDrop, TDropTypes, TPrimKeys, TSubKeys, TTranslateLang} from "../../Types/CommonTypes";
+import {useSelector} from "react-redux";
+import {AuthSelectors} from "../../redux/dataSelectors";
 
 // function DataViewTest<T>(props: React.PropsWithChildren<TProps<T>>) {
 //
@@ -13,9 +22,15 @@ type TProps<T> = {
     data: Array<T>
     dataEditHandler: (id: string) => void
     dataDelHandler: (id: string) => void
+    isMod?: boolean
+    lang?: TTranslateLang
+    isAddTable?:boolean
 };
 export const DataView = <T extends TCombineData>(props: React.PropsWithChildren<TProps<T>>) => {
+    const isMod = useSelector(AuthSelectors.isInit)
     const {data, dataEditHandler, dataDelHandler} = props;
+    const isAddTable = props.isAddTable === undefined ? false : props.isMod
+    // const isMod = props.isMod === undefined ? false : props.isMod
     const [dataOnEdit, setDataOnEdit] = useState<null | { [key: string]: any }>(null)
     if (!data || !data.length) return <>empty bd</>
     type k1 = TPrimKeys<T>
@@ -23,7 +38,11 @@ export const DataView = <T extends TCombineData>(props: React.PropsWithChildren<
 
     const dataKeys = getMapKeys(data[0])
     dataKeys.get('primary')?.sort(sortStrKeys)
+    if(isAddTable){
+        dataKeys.set('translate',dataKeys.get('translate')?.filter(v=>v===props.lang) as Array<string>)
+    }
     const sortedDataKeys = sortDataMapKeys(dataKeys)
+
     // console.log(data)
     const dataValues = data.map(dataVal => {
         let sortedRow: Array<any> = [dataVal['_id']];
@@ -34,6 +53,22 @@ export const DataView = <T extends TCombineData>(props: React.PropsWithChildren<
                     const loot = dataVal[sKey as k1]// as Array<TDrop<TDropTypes>>
                     if (Array.isArray(loot)) {
                         sortedRow.push(loot.map((drop, i) => `${drop.type}:${drop.name}   x${drop.count}(${drop.chance}%)${i < loot.length - 1 ? '\n' : ''}`))
+                    }
+                    // sortedRow.push(`${drop.type}:${drop.name} x${drop.count} ~${drop.chance}%`)
+                    break
+                }
+                case 'abilities': {
+                    const abi = dataVal[sKey as k1]// as Array<TDrop<TDropTypes>>
+                    if (Array.isArray(abi)) {
+                        sortedRow.push(abi.map((v, i) => `${getAbilityStr(v)}${i < abi.length - 1 ? '\n' : ''}`))
+                    }
+                    // sortedRow.push(`${drop.type}:${drop.name} x${drop.count} ~${drop.chance}%`)
+                    break
+                }
+                case 'parts': {
+                    const data = dataVal[sKey as k1]// as Array<TDrop<TDropTypes>>
+                    if (Array.isArray(data)) {
+                        sortedRow.push(data.map((v, i) => `${getRecipePartStr(v)}${i < data.length - 1 ? '\n' : ''}`))
                     }
                     // sortedRow.push(`${drop.type}:${drop.name} x${drop.count} ~${drop.chance}%`)
                     break
@@ -96,6 +131,8 @@ export const DataView = <T extends TCombineData>(props: React.PropsWithChildren<
                 dataValues={dataValues}
                 dataEditHandler={dataEditHandler}
                 dataDelHandler={dataDelHandler}
+                isMod={isMod}
+                lang={props.lang}
             />
         </>
 

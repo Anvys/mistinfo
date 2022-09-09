@@ -2,7 +2,7 @@ import React, {useEffect} from 'react';
 import styles from './App.module.css'
 import {WorkSpace} from "./components/WorkSpace/WorkSpace";
 import {MaterialThunks} from "./redux/reducers/materialReducer";
-import {useDispatch} from "react-redux";
+import {useDispatch, useSelector} from "react-redux";
 import {TAppDispatch} from "./redux/store";
 import {ComponentThunks} from "./redux/reducers/componentReducer";
 import {LocationThunks} from "./redux/reducers/locationReducer";
@@ -13,9 +13,19 @@ import {LootThunks} from "./redux/reducers/lootReducer";
 import {StaminaElixirThunks} from "./redux/reducers/staminaElixirReducer";
 import {EventThunks} from "./redux/reducers/eventReducer";
 import {QuestThunks} from "./redux/reducers/questReducer";
+import {AuthApi} from "./API/AuthAPI";
+import {AuthSelectors} from "./redux/dataSelectors";
+import {AuthSlice, AuthThunks} from "./redux/reducers/authReducer";
+import {Login} from "./components/Auth/Login";
+import {AbilityThunks} from "./redux/reducers/abilityReducer";
+import {RecipeThunks} from "./redux/reducers/recipeReducer";
+import {CompanionThunks} from "./redux/reducers/companionReducer";
+import {MonsterThunks} from "./redux/reducers/monsterReducer";
 
 function App() {
     const dispatch = useDispatch<TAppDispatch>();
+    const user = useSelector(AuthSelectors.getUserData)
+    const isAuth = useSelector(AuthSelectors.isInit)
     useEffect(() => {
         dispatch(MaterialThunks.getAll())
         dispatch(ComponentThunks.getAll())
@@ -27,7 +37,22 @@ function App() {
         dispatch(StaminaElixirThunks.getAll())
         dispatch(EventThunks.getAll())
         dispatch(QuestThunks.getAll())
+        dispatch(AbilityThunks.getAll())
+        dispatch(RecipeThunks.getAll())
+        dispatch(CompanionThunks.getAll())
+        dispatch(MonsterThunks.getAll())
+        if(user.login === undefined || user.token === undefined) {
+            console.log('Not authorized yo')
+            // dispatch(AuthThunks.login({login: 'admi', password: '1234'}))
+        }
+        else {
+            console.log('Authorized')
+            dispatch(AuthThunks.me(user.token))
+        }
     }, [])
+    useEffect(()=>{
+        console.log(`authchanged ${isAuth} / ${user.login}`)
+    },[isAuth])
     // if(!useSelector(getIsMaterialsInitSelector))dispatch(MaterialThunks.getAll())
     // if(!useSelector(getIsComponentsInitSelector))dispatch(ComponentThunks.getAll())
     // if(!useSelector(getIsLocationInitSelector))dispatch(LocationThunks.getAll())
@@ -38,7 +63,16 @@ function App() {
     return (
         <div className={styles.App}>
             <header className="App-header">
-                Mist in Forest
+                Mist in Forest {isAuth ? 'DEV' : 'USER'}
+                {/*<div style={{width: '100px'}}><button style={{width: '50px'}} type={'button'} onClick={()=>{*/}
+                {/*    if(user.token === undefined) console.log('token undefined')*/}
+                {/*    else dispatch(AuthThunks.me(user.token))}*/}
+                {/*}> 1 </button></div>*/}
+                {/*<div style={{width: '100px'}}><button style={{width: '50px'}} type={'button'} onClick={()=>{*/}
+                {/*    if(user.token === undefined) console.log('token undefined')*/}
+                {/*    else dispatch(AuthSlice.actions.logout())}*/}
+                {/*}> logout </button></div>*/}
+                <Login/>
             </header>
             <WorkSpace/>
         </div>

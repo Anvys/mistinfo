@@ -9,6 +9,8 @@ import {selectFieldsOptions} from "../../../Types/Utils";
 import {SelectField} from "./SelectField";
 import {StageField} from "./StageField";
 import {StageQuestField} from "./QuestStageField";
+import {AbilityFiled} from "./AbilityFiled";
+import {RecipePartField} from "./RecipePartFiled";
 // import styles from './CommonFields.module.css';
 
 
@@ -35,6 +37,10 @@ export const commonFields = (
                         return AddFields.posField(value['x'], value['y'], curKey, i, formik, dataName)
                     case eKey==='icon':
                         return AddFields.icon(formik, i+100, dataName === 'staminaelixir')
+                    case eKey==='abilities':
+                        return <AbilityFiled formik={formik} index={i} dataName={dataName}/>
+                    case eKey==='parts':
+                        return <RecipePartField formik={formik} index={i} dataName={dataName}/>
                     case eKey==='attributes':
                         return <AttributeField formik={formik} index={i} dataName={dataName}/>
                     case eKey==='loot' && dataName==='loot':

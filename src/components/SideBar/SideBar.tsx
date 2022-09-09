@@ -18,6 +18,10 @@ export const SideBar: React.FC = () =>{
             <Link to={'/event'} className={styles.navButton}>Events</Link>
             <Link to={'/mapobject'} className={styles.navButton}>Map Objects</Link>
             <Link to={'/quest'} className={styles.navButton}>Quests</Link>
+            <Link to={'/ability'} className={styles.navButton}>Ability</Link>
+            <Link to={'/monster'} className={styles.navButton}>Monster</Link>
+            <Link to={'/recipe'} className={styles.navButton}>Recipe</Link>
+            <Link to={'/companion'} className={styles.navButton}>Companion</Link>
         </div>
     )
 }

@@ -1,7 +1,7 @@
 import React, {useState} from 'react';
 import styles from './MaterialContent.module.css';
 import {useDispatch, useSelector} from "react-redux";
-import {getIsMaterialsInitSelector, getMaterialsSelector} from "../../../redux/dataSelectors";
+import {AuthSelectors, getIsMaterialsInitSelector, getMaterialsSelector} from "../../../redux/dataSelectors";
 import {TAppDispatch} from "../../../redux/store";
 import {Outlet} from "react-router-dom";
 import {DataView} from "../../DataView/DataView";
@@ -11,6 +11,7 @@ import {GenDataAdd} from "../../DataAdd/GenDataAdd";
 
 type TProps = {};
 export const MaterialContent:React.FC<TProps> = (props) => {
+
     const isInit = useSelector(getIsMaterialsInitSelector)
     const dispatch = useDispatch<TAppDispatch>()
     if(!isInit)dispatch(MaterialThunks.getAll())
@@ -46,6 +47,7 @@ export const MaterialContent:React.FC<TProps> = (props) => {
         encumbrance: 0,
         translate: {En: '',Fr:'', Ru:''}
     }
+    const isAuth = useSelector(AuthSelectors.isInit)
     return (
         <div className={styles.contentBox}>
             <div className={styles.nav}>

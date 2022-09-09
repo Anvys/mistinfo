@@ -4,7 +4,7 @@ import {useSelector} from "react-redux";
 import {TCombineThunks, useAppDispatch} from "../../redux/store";
 import {useFormik} from "formik";
 import {AddDataForm} from "./AddDataForm";
-import {getMarkerForAddPosSelector} from "../../redux/dataSelectors";
+import {AuthSelectors, getMarkerForAddPosSelector} from "../../redux/dataSelectors";
 import {StageQuestField} from "./Fields/QuestStageField";
 // import styles from './GenDataAdd.module.css';
 
@@ -19,6 +19,7 @@ export type TDataAddProps<T extends TCombineData> = {
 }
 export const GenDataAdd = <T extends TCombineData, >(props: React.PropsWithChildren<TDataAddProps<T>>) => {
     const {data, curThunks} = props
+    const isMod = useSelector(AuthSelectors.isInit)
     const dispatch = useAppDispatch();
     const initVal = data !== null ? data : props.initObj
     const pos = useSelector(getMarkerForAddPosSelector)
@@ -55,7 +56,7 @@ export const GenDataAdd = <T extends TCombineData, >(props: React.PropsWithChild
     // @ts-ignore
     // console.log(`icon in gendata: ${formik.values.icon}`)
     // console.log(`GenDataAdd`)
-    return (
+    return (isMod ?
         <div>
             {data === null ? `New ${props.dataName}` : `Update ${data.name}/${data._id}`}
             <AddDataForm formik={formik} dataName={props.dataName} resetAddFormData={props.resetAddFormData}/>
@@ -63,6 +64,7 @@ export const GenDataAdd = <T extends TCombineData, >(props: React.PropsWithChild
             {/**/}
 
         </div>
+            :<div> user </div>
     );
 
 }

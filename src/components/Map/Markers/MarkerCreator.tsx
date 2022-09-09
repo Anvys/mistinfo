@@ -1,13 +1,22 @@
 import React from 'react';
-import Leaf, {Icon} from "leaflet";
-import {ImageOverlay, Marker, Popup, Tooltip} from "react-leaflet";
-import {TEvent, TGatherPoint, TLocation, TStaminaElixir} from "../../../Types/CommonTypes";
+import Leaf, {Icon, LatLngExpression} from "leaflet";
+import {Circle, CircleMarker, ImageOverlay, Marker, Polyline, Popup, Tooltip} from "react-leaflet";
+import {
+    TEvent,
+    TGatherPoint,
+    TLocation,
+    TMapPosition, TNpc,
+    TQuest,
+    TStagePos, TStagePosType,
+    TStaminaElixir
+} from "../../../Types/CommonTypes";
 import {useAppDispatch} from "../../../redux/store";
 import {MapSlice} from "../../../redux/reducers/mapReducer";
 import {useSelector} from "react-redux";
 import {getAddMarkerIconSelector, getAddMarkerSizeSelector} from "../../../redux/dataSelectors";
 import {iconUrlPicker} from "../../IconPicker/IconPicker";
-import {getStagesStr} from "../../../Unils/utilsFunctions";
+import {getStagesStr, getStageStr} from "../../../Unils/utilsFunctions";
+import {getPosStr} from "../../DataAdd/Fields/QuestStageField";
 // import styles from './MarkerCreator.module.css';
 
 const iconPicker = (type: string) => {
@@ -53,7 +62,43 @@ const getResizeForTowns = (zoom: number): number => {
             return 1
     }
 }
+const getPosFromQuestStage = (pos: TStagePos, type: TStagePosType, locations: Array<TLocation> | null = null): TMapPosition => {
+    switch (type) {
+        case "pos":
+            // console.log(`pos: ${getPosStr(pos, type)}`)
+            return pos as TMapPosition
+
+        case "location":
+            const locPos = pos as TLocation
+            // console.log(`loc: ${locPos}`)
+            return locPos.pos
+        case "npc":
+            const npcPos = pos as TNpc
+            // console.log(locations)
+            // console.log(npcPos)
+            const findLocPos = locations?.find(v => v.name === npcPos.location)?.pos
+            // console.log(`npc: ${findLocPos}`)
+            return findLocPos ? findLocPos : {x: 0, y: 0}
+        default:
+            // console.error('Failo2')
+            return {x: 0, y: 0}
+    }
+}
 export const MC = {
+    quest: (data: TQuest, zoom: number, locations: Array<TLocation> | null = null) => {
+        const fillOpt = { color: 'lime'}
+        const fillOpt1 = { fillColor: 'blue'}
+        const path = data.stages.map(v => {
+            const pos: TMapPosition = getPosFromQuestStage(v.stagePos, v.stagePosType, locations)
+            return [pos.x, pos.y]
+        }).filter(v=>v[0]!==0 && v[1]!==0) as LatLngExpression[]
+        return <>
+            <Polyline pathOptions={fillOpt} positions={path} />
+            {path.map((v,i)=><CircleMarker  center={v} pathOptions={fillOpt} radius={20}><Popup>
+                {getStageStr(data.stages[i])}
+            </Popup></CircleMarker>)}
+            </>
+    },
     events: (data: TEvent, zoom: number) => {
         const t = new Image()
         t.src = iconPicker(data.icon)
@@ -65,10 +110,10 @@ export const MC = {
                 autoPan={false}
                 draggable={false}
                 icon={new Icon({
-                    iconAnchor: [iW/2, iH*5/6],
+                    iconAnchor: [iW / 2, iH * 5 / 6],
                     iconUrl: t.src,
                     iconSize: [iW, iH],
-                    popupAnchor: [iW / 2 - iW/2, 0 - iH*5/6],
+                    popupAnchor: [iW / 2 - iW / 2, 0 - iH * 5 / 6],
                 })}
                 position={{lat: data.pos.x, lng: data.pos.y}}>
                 <Popup autoPan={false}>
@@ -96,7 +141,7 @@ export const MC = {
                 // autoPan={false}
                 // bubblingMouseEvents={false}
                 url={require('./../../../assets/icons/mapobject/CityKortombourgNew.png')}
-                bounds={[[-0.18-size1/dopCoef+dopCoefX, -45.68-size2/dopCoef+dopCoefY],[-0.18+size2/dopCoef+dopCoefX, -45.68+size2/dopCoef+dopCoefY]]}
+                bounds={[[-0.18 - size1 / dopCoef + dopCoefX, -45.68 - size2 / dopCoef + dopCoefY], [-0.18 + size2 / dopCoef + dopCoefX, -45.68 + size2 / dopCoef + dopCoefY]]}
                 // pane={'overlayPane'}
                 // icon={new Icon({
                 //     iconUrl: ,
@@ -183,10 +228,10 @@ export const MC = {
                     // iconUrl: locationIconPicker(data.icon),
                     // iconSize: [40 * (zoom - 4) * 0.5, 50 * (zoom - 4) * 0.5],
                     // popupAnchor: [0, -25],
-                    iconAnchor: [iW/2, iH*5/6],
+                    iconAnchor: [iW / 2, iH * 5 / 6],
                     iconUrl: t.src,
                     iconSize: [iW, iH],
-                    popupAnchor: [iW / 2 - iW/2, 0 - iH*5/6],
+                    popupAnchor: [iW / 2 - iW / 2, 0 - iH * 5 / 6],
                 })}
                 position={{lat: data.pos.x, lng: data.pos.y}}>
                 <Popup autoPan={false}>

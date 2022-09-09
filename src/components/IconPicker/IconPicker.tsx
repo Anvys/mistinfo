@@ -17,6 +17,8 @@ export const iconUrlPicker = (folder: string, icon: string) => {
         //     return require(`./../../assets/icons/mapobject/${icon}.png`)
         // case 'material/Wood':
         //     return require(`./../../assets/icons/material/Wood/${icon}.png`)
+        case 'other_Other' :
+            return require(`./../../assets/icons/other/${icon}.png`)
         case 'location_Places':
             return require(`./../../assets/icons/location/${icon}.png`)
         case 'event_Flags':
@@ -224,6 +226,30 @@ const iconData = {
         'thorvalcamp', 'thousandeadcavern', 'tiny', 'tomb', 'towerconstructionsite', 'towertarawest',
         'tower_construction_site', 'town', 'tree', 'tribal', 'tribal02', 'tribal03', 'tribal04', 'tribal05',
         'tribal06', 'trogulnus', 'troll_seat', 'watchmanarmory', 'watchmans_armory', 'yolasula',],
+    other_Other: ['Channelizer-Grimoire_of_Virtys', 'Coin-Aureate_Claw', 'Coin-Dye_house_tickets',
+        'Coin-Kortomis_stars', 'Coin-Myriaden_coins', 'Dye-Dye_Remover', 'Foggy_Manifestation-Elixir_of_Vigor',
+        'Food-Fatty_meat', 'Food-Rich_meat', 'Food-Salted_meat', 'Food-Stringy_meat', 'Food-Tender_meat',
+        'Food-Tough_meat', 'Manifestation-Ancestral_orb', 'Manifestation-Insignia_of_bravery',
+        'Manifestation-Mist_shard', 'Manifestation-Symbol_of_glory', 'Manifestation-Symbol_of_virtue',
+        'Manifestation-Symbol_of_wisdom', 'Mastery-Combat_Mastery', 'Mastery-Crafting_Mastery',
+        'Mastery-Harvest_Mastery', 'Mistglass-1-Minoris_mistglass', 'Mistglass-2-Noblias_mistglass',
+        'Mistglass-3-Baronis_mistglass', 'Mistglass-4-Dominas_Mistglass', 'Mistglass-5-Royonar_mistglass', 'Quest-5-Nuertoritual', 'Quest-5-Suckhop_Nest',
+        'Quest-Alcooligron', 'Quest-Alcooligron_concoction', 'Quest-Amanda\'s_necklace', 'Quest-Anodina_plant',
+        'Quest-Arachnid_caviar', 'Quest-Arcanists_Crate', 'Quest-Black_Box', 'Quest-Boar_meat',
+        'Quest-Broken_Mist_Lantern', 'Quest-Caravan_cargo', 'Quest-Cargo_for_excavations', 'Quest-Cargo_of_berries', 'Quest-Cargo_of_fish', 'Quest-Cargo_of_materials',
+        'Quest-Cargo_of_tools_for_Forsec', 'Quest-Carrot', 'Quest-Cliff_sample', 'Quest-Compromising_letter', 'Quest-Corn',
+        'Quest-Delivery_certificate', 'Quest-Delivery_for_Leonidas', 'Quest-Elastic_tongue', 'Quest-Forest_inventory', 'Quest-Fresh_fish',
+        'Quest-Fresh_trout', 'Quest-Fruit_cargo', 'Quest-Funeral_candle', 'Quest-Giant_spider_leg', 'Quest-Glacier_sample',
+        'Quest-Glass_fragment', 'Quest-Grimkush_oil', 'Quest-Grufalo_Mask', 'Quest-Herbarium_pieces', 'Quest-Hop_cargo',
+        'Quest-Human_bones', 'Quest-Incantation_book', 'Quest-Keeper\'s_Key', 'Quest-Letter_for_Aranbourg', 'Quest-Life_Pearl',
+        'Quest-Magic_Missive_for_the_Rose', 'Quest-Old_box', 'Quest-Orb_of_the_Corinna', 'Quest-Orb_of_the_Crucible', 'Quest-Orb_of_the_Fairy',
+        'Quest-Orb_of_the_Maranchons', 'Quest-Orb_of_the_Pandolfo', 'Quest-Orb_of_the_Sleeping', 'Quest-Orb_of_the_Whispers', 'Quest-Package_forQuara',
+        'Quest-Package_for_Charles', 'Quest-Package_for_Leonidas', 'Quest-Package_for_Mylena', 'Quest-Poison_vial', 'Quest-Purification_equipment',
+        'Quest-Red_apple', 'Quest-Reinforced_domane_crate', 'Quest-Savage_boar_meat', 'Quest-Scandalous_flower', 'Quest-Shellfish',
+        'Quest-Shipment_of_dregs', 'Quest-Snap_hook', 'Quest-Stolen_Totem', 'Quest-Tortojaguard_Totem', 'Quest-Tortolion_teeth',
+        'Quest-Vial_of_strange_water', 'Quest-Victims_Information', 'Quest-Volcano_sample', 'Quest-Water_snake_nest', 'Quest-Xaxavi\'s_Rune',
+        'Recipe-Recipe', 'Skill-Profession', 'Skill-Skill', 'Talent-Talent', 'Treasure-Ancient_trinkets',
+        'Treasure-Antique_ornaments', 'Treasure-Common_components', 'Treasure-Fierce_components', 'Treasure-Superior_components',],
 
 }
 type TProps = {

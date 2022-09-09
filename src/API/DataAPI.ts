@@ -1,10 +1,11 @@
 import axios, {AxiosResponse} from "axios";
 import {
+    TAbility, TCompanion,
     TComponent, TEvent,
     TGatherPoint,
     TLocation, TLoot, TMapObject,
-    TMaterial,
-    TNpc, TQuest,
+    TMaterial, TMonster,
+    TNpc, TQuest, TRecipe,
     TRegion,
     TRequestBody,
     TRequestType,
@@ -44,6 +45,10 @@ export const StaminaElixirAPI = getDataAPI<TStaminaElixir, 'StaminaElixir'>(`/st
 export const EventAPI = getDataAPI<TEvent, 'Event'>(`/event`, 'Event')
 export const MapObjectAPI = getDataAPI<TMapObject, 'MapObject'>(`/mapobject`, 'MapObject')
 export const QuestAPI = getDataAPI<TQuest, 'Quest'>(`/quest`, 'Quest')
+export const RecipeAPI = getDataAPI<TRecipe, 'Recipe'>(`/recipe`, 'Recipe')
+export const AbilityAPI = getDataAPI<TAbility, 'Ability'>(`/ability`, 'Ability')
+export const MonsterAPI = getDataAPI<TMonster, 'Monster'>(`/monster`, 'Monster')
+export const CompanionAPI = getDataAPI<TCompanion, 'Companion'>(`/companion`, 'Companion')
 //     {
 //     getAll: () => instance.get<TMatResponse>(`${materialURI}/all`).then(data => data.data),
 //     getOne: (id: string) => instance.get<TMatResponse>(`${materialURI}/one/:${id}`).then(data => data.data),

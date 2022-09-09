@@ -12,6 +12,11 @@ import {StaminaElixirSlice, TStaminaElixirThunks} from "./reducers/staminaElixir
 import {EventSlice, TEventThunks} from "./reducers/eventReducer";
 import {MapObjectSlice} from "./reducers/mapObjectReducer";
 import {QuestSlice, TQuestThunks} from "./reducers/questReducer";
+import {AuthSlice, TAuthThunks} from "./reducers/authReducer";
+import {MonsterSlice, TMonsterThunks} from "./reducers/monsterReducer";
+import {RecipeSlice, TRecipeThunks} from "./reducers/recipeReducer";
+import {AbilitySlice, TAbilityThunks} from "./reducers/abilityReducer";
+import {CompanionSlice, TCompanionThunks} from "./reducers/companionReducer";
 
 
 export const store = configureStore({
@@ -28,6 +33,13 @@ export const store = configureStore({
         event: EventSlice.reducer,
         mapObject: MapObjectSlice.reducer,
         quest: QuestSlice.reducer,
+        recipe: RecipeSlice.reducer,
+        monster: MonsterSlice.reducer,
+        ability: AbilitySlice.reducer,
+        companion: CompanionSlice.reducer,
+
+
+        auth: AuthSlice.reducer,
 
     },
 })
@@ -38,4 +50,5 @@ export const useAppDispatch = () => useDispatch<TAppDispatch>()
 
 export type TCombineThunks = TMaterialThunks | TComponentThunks
     | TNpcThunks | TLocationThunks | TRegionThunks | TGatherPointThunks
-    | TLootThunks | TStaminaElixirThunks | TEventThunks | TQuestThunks
+    | TLootThunks | TStaminaElixirThunks | TEventThunks | TQuestThunks | TAuthThunks
+| TAbilityThunks | TMonsterThunks | TRecipeThunks | TCompanionThunks

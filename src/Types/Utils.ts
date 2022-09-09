@@ -1,11 +1,15 @@
 export enum StatusCodes {
     Ok = 200,
-
+    Created = 201,
+    Accepted = 202,
+    LoginSuccess = 203,
 
     badRequest = 420,
+    badId = 421,
     notFound = 422,
     duplicateFound = 423,
     multipleFound = 424,
+    unknownError = 499,
 }
 
 export const getDefaultFormikValues = (str: string) => {
@@ -88,6 +92,17 @@ export const selectFieldsOptions = {
     'stage.expr': ['or', 'and'],
     'stage.postype': ['pos' , 'npc' , 'location'],
 
+    'ability.type': ['Passive' , 'Active'],
+    'monster.type' : ['Monster' , 'Boss'],
+    'recipe.type' : ['Alchemy' , 'Forge' , 'Herbalism' , 'Sewing' , 'Stoneworking' , 'Tanning' , 'Woodworking'],
+    'resultType' : ['Head' , 'Boots'],
+    'companion.type': ['Human' , 'Transport' , 'Tamed'],
+    'evoType': ['Gold' , 'Silver'],
+    'weapon' : ['Axe', 'Dagger', 'Mace', 'Polearm', 'Staff', 'Sword'],
+    'equip': ['Helmet', 'Torso' , 'Glove' , 'Legs' , 'Boots' , 'Weapon' , 'Lantern' , 'Cape' , 'Coat'
+    , 'Shirt' , 'Pants' , 'Offhand' , 'Pendant' , 'Ring' , 'Bracelet' , 'Crowns'],
+    // 'ability.type': [],
+
     'material': undefined as Array<string> | undefined,
     'component': undefined as Array<string> | undefined,
     'location': undefined as Array<string> | undefined,
@@ -97,6 +112,10 @@ export const selectFieldsOptions = {
     'event': undefined as Array<string> | undefined,
     'mapobject': undefined as Array<string> | undefined,
     'quest': undefined as Array<string> | undefined,
+    'recipe': undefined as Array<string> | undefined,
+    'monster': undefined as Array<string> | undefined,
+    'ability': undefined as Array<string> | undefined,
+    'companion': undefined as Array<string> | undefined,
 
 
     'gatherpoint.Botany': undefined as Array<string> | undefined,

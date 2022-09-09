@@ -13,6 +13,10 @@ import {StaminaElixirContent} from "./StaminaElixirContent/StaminaElixirContent"
 import {EventContent} from "./EventContent/EventContent";
 import {MapObjectContent} from "./MapObjectContent/MapObjectContent";
 import {QuestContent} from "./QuestContent/QuestContent";
+import {AbilityContent} from "./Contents/AbilityContent";
+import {MonsterContent} from "./Contents/MonsterContent";
+import {RecipeContent} from "./Contents/RecipeContent";
+import {CompanionContent} from "./Contents/CompanionContent";
 
 
 export const ContentSpace: React.FC = () => {
@@ -44,6 +48,10 @@ export const ContentSpace: React.FC = () => {
                 <Route path={'/event/'} element={<EventContent/>}/>
                 <Route path={'/mapobject/'} element={<MapObjectContent/>}/>
                 <Route path={'/quest/'} element={<QuestContent/>}/>
+                <Route path={'/ability/'} element={<AbilityContent/>}/>
+                <Route path={'/monster/'} element={<MonsterContent/>}/>
+                <Route path={'/recipe/'} element={<RecipeContent/>}/>
+                <Route path={'/companion/'} element={<CompanionContent/>}/>
             </Routes>
 
         </div>

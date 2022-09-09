@@ -7,7 +7,7 @@ import {useSelector} from "react-redux";
 import {
     getEventSelector,
     getGatherPointSelector,
-    getLocationSelector,
+    getLocationSelector, getQuestSelector,
     getStaminaElixirSelector
 } from "../../redux/dataSelectors";
 import {MC} from "./Markers/MarkerCreator";
@@ -63,11 +63,15 @@ export const MyMap: React.FC<TProps> = (props) => {
     const onZoomChange = (z: number)=>setZoom(z)
     // console.log(`curZoom: ${zoom}`)
     // const markers = useSelector(getMarkersSelector).
+
+    const locations = useSelector(getLocationSelector);
+
     const locationMarkers = useSelector(getLocationSelector).map(v => MC.location(v, zoom))
     const gatjers = useSelector(getGatherPointSelector);
     const gatherMarkers = useSelector(getGatherPointSelector).map(v => MC.gatherPoint(v, zoom))
     const eventMarkers = useSelector(getEventSelector).map(v => MC.events(v, zoom))
     const staminaElixirMarkers = useSelector(getStaminaElixirSelector).map((v,i) => MC.staminaElixir({...v, name: `${v.name} №${i+1}`}, zoom))
+    const questMarkers = useSelector(getQuestSelector).map((v,i)=>MC.quest(v,zoom,locations))
     // console.log(locationMarkers)
     // console.log(markers)
     // var map = L.map('map').setView([51.505, -0.09], 13);
@@ -170,6 +174,7 @@ export const MyMap: React.FC<TProps> = (props) => {
                             : customMarkerPos,
                         markerRef,
                         eventHandlers)}
+                    {questMarkers.length && questMarkers}
                     {/*{MC.addDataMarker(customMarkerPos, markerRef, eventHandlers)}*/}
 
                     {/*<ExampleBound/>*/}

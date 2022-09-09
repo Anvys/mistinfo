@@ -16,9 +16,9 @@ import {useSelector} from "react-redux";
 import {getLocationSelector, getLootByNameSelector, getNpcSelector} from "../../../redux/dataSelectors";
 import {FormikProps} from "formik";
 import {PosField, PosStageField} from "./PosField";
-import {SelectSimpleField} from "./SelectField";
+import {SimpleSelectField} from "./SelectField";
 
-const getPosStr = (pos: TStagePos, type: TStagePosType) =>{
+export const getPosStr = (pos: TStagePos, type: TStagePosType) =>{
     // console.log(pos)
     switch (type) {
 
@@ -213,11 +213,11 @@ export const StageQuestField: React.FC<TProps> = (props) => {
                 </div>
                 <p className={styles.infoPar}>{`pos: ${stagePos==='' || !stagePos?'empty':getPosStr(stagePos as TStagePos, stagePosType)}`}</p>
                 {stagePosType === 'pos' && <PosStageField posX={0} posY={0} onPosChange={onStagePosGeneralChange}/>}
-                {stagePosType === 'location' && <SelectSimpleField
+                {stagePosType === 'location' && <SimpleSelectField
                     labelText={'loc'}
                     mapSelectValues={selectFieldsOptions["location"] || []}
                     value={stagePos as any} onSelChange={onStagePosGeneralChange}/>}
-                {stagePosType === 'npc' && <SelectSimpleField
+                {stagePosType === 'npc' && <SimpleSelectField
                     labelText={'npc'}
                     mapSelectValues={selectFieldsOptions["npc"] || []}
                     value={stagePos as any} onSelChange={onStagePosGeneralChange}/>}
