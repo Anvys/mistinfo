@@ -52,7 +52,7 @@ export const EvoQuestField: React.FC<TProps> = (props) => {
                 {/*<SimpleInputField value={partCount} onChange={(count: string) => setPartCount(+count)} index={2} htmlId={'count'} labelText={'count'} required={true} disabled={false}/>*/}
                 <button type={'button'} className={styles.addButton} onClick={onQuestAdd}>Add</button>
             </div>
-            <div className={ts.vidInFields} style={{minWidth: '200px'}}>
+            {quests.length>0 && <div className={ts.vidInFields} style={{minWidth: '200px'}}>
                 <table className={ts.table} style={{minWidth: '200px'}}>
                     <thead>
                         <tr className={ts.headRow}><td className={ts.th2} colSpan={3}>QUESTS</td></tr>
@@ -71,7 +71,7 @@ export const EvoQuestField: React.FC<TProps> = (props) => {
                         )}
                     </tbody>
                 </table>
-            </div>
+            </div>}
             {/*<DataView data={quests}*/}
             {/*          dataDelHandler={onAbiDel}*/}
             {/*          dataEditHandler={(id: string)=>console.log(`edit: ${id}`)}*/}

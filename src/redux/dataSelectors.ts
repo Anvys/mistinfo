@@ -43,21 +43,38 @@ export const getMarkersSelector = (state: TAppState) => state.map.markers
 export const MapSelectors = {
     isBoundActive:  (state: TAppState) => state.map.isAddBoundsActive,
     getBounds: (state: TAppState) => state.map.bounds,
-    isMapActive : (state: TAppState) => state.map.isAddBoundsActive || state.map.isAddPosFieldActive,
+    isMapActive : (state: TAppState) => state.map.isAddBoundsActive || state.map.isAddPosFieldActive || state.map.isActiveQuestMap,
+    getActiveQuest : (state: TAppState) => state.map.activeQuest
 }
 
 export const LocationSelectors = {
     isInit: (state: TAppState) => state.location.isInit,
     getData: (state: TAppState) => state.location.data,
 }
+export const RegionSelectors = {
+    isInit: (state: TAppState) => state.region.isInit,
+    getData: (state: TAppState) => state.region.data,
+}
 
 export type TSelectors =  | typeof QuestItemSelectors | typeof RecipeSelectors
 | typeof MonsterSelectors | typeof AbilitySelectors | typeof CompanionSelectors
 
-export const AuthSelectors = {
-    isInit: (state: TAppState) => state.auth.isInit,
-    getData: (state: TAppState) => state.auth.data.login,
-    getUserData: (state: TAppState) => state.auth.data,
+
+export const QuestSelectors = {
+    isInit: (state: TAppState) => state.quest.isInit,
+    getData: (state: TAppState) => state.quest.data,
+}
+export const StaminaElixirSelectors = {
+    isInit: (state: TAppState) => state.staminaElixir.isInit,
+    getData: (state: TAppState) => state.staminaElixir.data,
+}
+export const EventSelectors = {
+    isInit: (state: TAppState) => state.event.isInit,
+    getData: (state: TAppState) => state.event.data,
+}
+export const GatherPointSelectors = {
+    isInit: (state: TAppState) => state.gatherpoint.isInit,
+    getData: (state: TAppState) => state.gatherpoint.data,
 }
 export const QuestItemSelectors = {
     isInit: (state: TAppState) => state.questItem.isInit,
@@ -82,4 +99,10 @@ export const AbilitySelectors = {
 export const CompanionSelectors = {
     isInit: (state: TAppState) => state.companion.isInit,
     getData: (state: TAppState) => state.companion.data,
+}
+
+export const AuthSelectors = {
+    isInit: (state: TAppState) => state.auth.isInit,
+    getData: (state: TAppState) => state.auth.data.login,
+    getUserData: (state: TAppState) => state.auth.data,
 }

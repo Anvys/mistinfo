@@ -1,5 +1,5 @@
 import {
-    TAbility,
+    TAbility, TBonus,
     TCombineData,
     TMapPosition, TQuestItemPosType,
     TQuestStage, TRecipePart, TRequireEquip,
@@ -48,6 +48,9 @@ export const getMapKeys = (data: any) => {
             if (tValue !== 'object') dataKeys.get('primary')?.push(key)
             else {
                 switch (key) {
+                    case 'skills':
+                        dataKeys.set(key, ['bonus'])//...value.map((v:object,i:number)=>`${i}`)
+                        break;
                     case 'posQuestItem':
                         dataKeys.set(key, ['type', 'Source'])//...value.map((v:object,i:number)=>`${i}`)
                         break;
@@ -157,11 +160,13 @@ export const getDataObjStr = (field: string, data: any) =>{
                 case 'location':
                     return `[${data.position.name}]`
                 case 'monster':
-                    console.log(data)
+                    // console.log(data)
                     return `[${data.position.name}]`
                 default:
                     return `default posQuestItem DataObjStr`
             }
+        case 'skills':
+            return data.length===0?`-`:data.map((v: TBonus,i:number)=>`${v.skill}: ${v.count}${i < data.length - 1 ? '\n' : ''}`)
         default:
             return `defaultDataObjStr`
     }

@@ -60,14 +60,14 @@ export const RecipePartField: React.FC<TProps> = (props) => {
                     <thead>
                         <tr className={ts.headRow}><td className={ts.th2} colSpan={3}>PARTS</td></tr>
                         <tr className={ts.headRow}>
-                            {tableKeys.map((v,i)=><td className={ts.th2}>{v}</td>)}
+                            {tableKeys.map((v,i)=><td key={i} className={ts.th2}>{v}</td>)}
                         </tr>
                     </thead>
                     <tbody>
                         {recipeParts.map((v,i)=>
                         <tr className={ts.dataRow}>
                             {tableKeys.map((val,i)=>
-                            <td className={ts.th1}>{v[val as keyof typeof v]}</td>
+                            <td key={i} className={ts.th1}>{v[val as keyof typeof v]}</td>
                             )}
                             <button type={'button'} className={styles.deleteButton}
                                     onClick={() => onPartDelHandler(i)}/>

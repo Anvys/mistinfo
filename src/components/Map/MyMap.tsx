@@ -5,19 +5,31 @@ import {LayersControl, MapContainer, Marker, Popup, TileLayer, useMap, useMapEve
 import {MarkerForDataAdd} from "./Markers/MarkerForDataAdd";
 import {useSelector} from "react-redux";
 import {
+    EventSelectors,
+    GatherPointSelectors,
     getEventSelector,
     getGatherPointSelector,
-    getLocationSelector, getQuestSelector,
-    getStaminaElixirSelector, MapSelectors
+    getLocationSelector,
+    getQuestSelector,
+    getStaminaElixirSelector,
+    LocationSelectors,
+    MapSelectors,
+    MonsterSelectors,
+    QuestItemSelectors, QuestItemSourceSelectors,
+    QuestSelectors, RegionSelectors,
+    StaminaElixirSelectors
 } from "../../redux/dataSelectors";
 import {MC} from "./Markers/MarkerCreator";
 import {ExampleBound} from "./Bounds/ExampleBound";
 import {useAppDispatch} from "../../redux/store";
 import {MapSlice} from "../../redux/reducers/mapReducer";
 import {AddBounds} from "./Bounds/AddBounds";
+import {LayerWithFilter} from "./Layer/LayerWithFilter";
+import Control from "react-leaflet-custom-control";
+import {TLocation, TMapPosition, TMonster} from "../../Types/CommonTypes";
 
 // import * as icons from '../../assets/icons'
-const MyComponent: React.FC<{onZoomChange: (z:number)=>void}> = (props) => {
+const MyComponent: React.FC<{ onZoomChange: (z: number) => void, visible: boolean }> = (props) => {
     const [coords, setCoords] = useState({lat: 0, lng: 0});
     const map = useMap()
 
@@ -37,57 +49,92 @@ const MyComponent: React.FC<{onZoomChange: (z:number)=>void}> = (props) => {
             setCoords({lat: e.latlng.lat, lng: e.latlng.lng});
         });
     }, [map]);
-    useEffect(()=>props.onZoomChange(mapEvents.getZoom()),[])
-    return (<div className={styles.coords}>
-            {coords.lat && (
-                <div>
-                    <b>latitude</b>: {coords.lat?.toFixed(3)} <br/>
-                    <b>longitude</b>: {coords.lng?.toFixed(3)}<br/>
-                    {`center: x:${map.getCenter().lat.toFixed(2)} | y:${map.getCenter().lng.toFixed(2)}`}
-                </div>
-            )}
-        </div>
+    useEffect(() => props.onZoomChange(mapEvents.getZoom()), [])
+    return (props.visible ? <div className={styles.coords}>
+                {coords.lat && (
+                    <div>
+                        <b>latitude</b>: {coords.lat?.toFixed(3)} <br/>
+                        <b>longitude</b>: {coords.lng?.toFixed(3)}<br/>
+                        {`center: x:${map.getCenter().lat.toFixed(2)} | y:${map.getCenter().lng.toFixed(2)}`}
+                    </div>
+                )}
+            </div>
+            : <></>
 
     )
 }
 
+
+export type TLayerFilters = {
+    location: boolean
+    event: boolean
+    gather: boolean
+    vigor: boolean
+    questItem: boolean
+}
 type TProps = {
     wid: number
     hei: number
 };
-export const MyMap: React.FC<TProps> = (props) => {
+export const MyMap: React.FC<TProps> = React.memo((props) => {
     const [customMarkerPos, setCustomMarkerPos] = useState({lat: 0, lng: 0})
     const [isCusMarkerActive, setIsCusMarkerActive] = useState(false)
-    const dispatch = useAppDispatch()
     const [map, setMap] = useState<Leaf.Map | null>(null);
     const [zoom, setZoom] = useState(0)
-    const onZoomChange = (z: number)=>setZoom(z)
+    const [layerFilter, setLayerFilter] = useState<TLayerFilters>(() => ({
+        event: true,
+        gather: true,
+        vigor: true,
+        location: true,
+        questItem: true,
+    }))
+
 
     const isBoundsMenu = useSelector(MapSelectors.isBoundActive)
-    // console.log(`curZoom: ${zoom}`)
-    // const markers = useSelector(getMarkersSelector).
+    const locations = useSelector(LocationSelectors.getData);
+    const regions = useSelector(RegionSelectors.getData);
+    const monsters = useSelector(MonsterSelectors.getData);
+    const gatherPoints = useSelector(GatherPointSelectors.getData);
+    const events = useSelector(EventSelectors.getData)
+    const stamina = useSelector(StaminaElixirSelectors.getData)
+    const quests = useSelector(QuestSelectors.getData)
+    const questsItems = useSelector(QuestItemSelectors.getData)
+    const questsItemsSource = useSelector(QuestItemSourceSelectors.getData)
+    const activeQuest = useSelector(MapSelectors.getActiveQuest)
 
-    const locations = useSelector(getLocationSelector);
+    const dispatch = useAppDispatch()
 
-    const locationMarkers = useSelector(getLocationSelector).map(v => MC.location(v, zoom))
-    const gatjers = useSelector(getGatherPointSelector);
-    const gatherMarkers = useSelector(getGatherPointSelector).map(v => MC.gatherPoint(v, zoom))
-    const eventMarkers = useSelector(getEventSelector).map(v => MC.events(v, zoom))
-    const staminaElixirMarkers = useSelector(getStaminaElixirSelector).map((v,i) => MC.staminaElixir({...v, name: `${v.name} №${i+1}`}, zoom))
-    const questMarkers = useSelector(getQuestSelector).map((v,i)=>MC.quest(v,zoom,locations))
-    // console.log(locationMarkers)
-    // console.log(markers)
-    // var map = L.map('map').setView([51.505, -0.09], 13);
+    const onZoomChange = (z: number) => setZoom(z)
 
-    // const map = useMap();
-    // const map = useMapEvents({})
-    // const map = L.map('map');
-    // function changeUbication(e) {
-    //     let {lat, lng} = e.latlng;
-    //     console.info("Lat:", lat);
-    //     console.info("Lng: ",lng);
-    //     setCoords(e.latlng);
-    // }
+
+    const locationMarkers = locations.map(v => MC.location(v, zoom))
+    const gatherMarkers = gatherPoints.map(v => MC.gatherPoint(v, zoom))
+    const eventMarkers = events.map(v => MC.events(v, zoom))
+    const staminaElixirMarkers = stamina.map((v, i) => MC.staminaElixir({
+        ...v,
+        name: `${v.name} №${i + 1}`
+    }, zoom))
+    const questMarkers = quests.map((v, i) => MC.quest(v, zoom, locations))
+    const questItemMarkers = questsItemsSource.map(v=>{
+        let pos: TMapPosition = {x:0, y:0}
+        const icon = questsItems.find(qi=>qi.name===v.name)?.icon || 'Unknown/Unknown'
+        switch (v.posQuestItem.type) {
+            case "pos":
+                const posMap = v.posQuestItem.position as TMapPosition
+                pos = {...posMap}
+                break
+            case "location":
+                const posLoc = v.posQuestItem.position as TLocation
+                pos = posLoc.pos
+                break
+            case "monster":
+                const posMon = v.posQuestItem.position as TMonster
+                pos = regions.find(v=>v.name === posMon.region)?.pos || {x:0, y:0}
+                break
+            default: console.error(`error in questItemMarkers:type ${v.posQuestItem.type}`)
+        }
+        return MC.questItem(v,zoom, pos, icon)
+    })
 
     const markerRef = useRef<L.Marker>(null)
     const eventHandlers = React.useMemo(
@@ -106,87 +153,60 @@ export const MyMap: React.FC<TProps> = (props) => {
         setCustomMarkerPos(map === null ? {lat: 0, lng: -40} : map.getCenter())
         console.log(isCusMarkerActive)
     }
-    const onClose = () =>{
+    const onClose = () => {
         setIsCusMarkerActive(false)
         dispatch(MapSlice.actions.setIsAddPosFieldActive(false))
+        onResetActiveQuest()
     }
+    const onResetActiveQuest = () =>{
+        dispatch(MapSlice.actions.setActiveQuest(undefined))
+        dispatch(MapSlice.actions.setIsActiveQuestMap(false))
+    }
+useEffect(()=>{
+    return ()=>{
+        console.log('endmap')
 
+    }
+},[])
     return (
         <div className={styles.map} style={{width: `${props.wid === -1 ? '50%' : props.wid + 'px'}`}}>
             Map
             <button type={'button'} onClick={onAddMarkerHandler}>AddMarker</button>
             x
             <button type={'button'} onClick={onClose}>close</button>
+            x
+            {activeQuest}
             <div id="map" style={{
                 height: `${props.hei === -1 ? '100%' : props.hei + 'px'}`,
                 overflow: "hidden",
                 padding: '0,50px,50px,0'
             }} className={styles.map}>
-                <MapContainer attributionControl={false} className={styles.map} center={[0, -45]} zoom={6} scrollWheelZoom={false} ref={setMap} markerZoomAnimation={false}>
-                    a
-                    <MyComponent onZoomChange={onZoomChange}/>
-                    b
-                    <TileLayer
-                        // tms={true}
-                        // minNativeZoom={5}
-                        // maxNativeZoom={8}
-                        minZoom={5}
-                        maxZoom={8}
-
-
-                        noWrap={true}
-                        // tileSize={512}
-                        // attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
-                        attribution='&copy; <a href="https://asd.con">Vir</a> (c))'
-                        // url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
-                        // url={mapimg}
-                        // url='https://miro.medium.com/max/1400/0*FPRXzSDmPMQ158jJ'
-                        // url={'World/World_0{x}_0{y}.png'}
-                        url={'http://127.0.0.1:3333/api/map/{x}/{y}/{z}'}
-                        // bounds={new LatLngBounds(new LatLng(10, -60),                            new LatLng(-10, -30))}
-
+                <MapContainer attributionControl={false} className={styles.map} center={[0, -45]} zoom={6}
+                              scrollWheelZoom={false} ref={setMap} markerZoomAnimation={false}>
+                    <MyComponent onZoomChange={onZoomChange} visible={false}/>
+                    <TileLayer minZoom={5} maxZoom={8} noWrap={true}
+                               attribution='&copy; <a href="https://asd.con">Vir</a> (c))'
+                               url={'http://127.0.0.1:3333/api/map/{x}/{y}/{z}'}
                     />
-                    {/*<ImageOverlay*/}
-                    {/*    // attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'*/}
-                    {/*    attribution='&copy; <a href="https://asd.con">Vir</a> (c))'*/}
-                    {/*    // url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"*/}
-                    {/*    // url={mapimg}*/}
-                    {/*    // url='https://miro.medium.com/max/1400/0*FPRXzSDmPMQ158jJ'*/}
-                    {/*    url={'./World/World_{x}_{y}.png'} */}
-                    {/*    bounds={new LatLngBounds(new LatLng(100, 0),*/}
-                    {/*        new LatLng(0, 100))}/>*/}
-                    {/*<Marker icon={new Icon({*/}
-                    {/*    iconUrl: require('./../../assets/icons/testicon.png'),*/}
-                    {/*    iconSize: [50, 50],*/}
-                    {/*    popupAnchor: [0, -25],*/}
-                    {/*})} position={[0, -45]}>*/}
-                    {/*    <Popup>*/}
-                    {/*        A pretty CSS3 popup. <br/> Easily customizable.*/}
-                    {/*    </Popup>*/}
-                    {/*</Marker>*/}
+
                     {MC.getTowns(zoom)}
-                    {locationMarkers.length && locationMarkers}
-                    {gatherMarkers.length && gatherMarkers}
-                    {staminaElixirMarkers.length && staminaElixirMarkers}
-                    {eventMarkers.length && eventMarkers}
-                    {/*{isCusMarkerActive &&*/}
-                    {/*    // <MarkerForDataAdd markerRef={markerRef} eventHandlers={eventHandlers} pos={customMarkerPos}/>}*/}
-                    {isCusMarkerActive && MC.addDataMarker(
-                        customMarkerPos.lng===0 && customMarkerPos.lat===0
-                            ? map?.getCenter()||customMarkerPos
+                    <LayerWithFilter filter={layerFilter} onResetActiveQuest={onResetActiveQuest}
+                                     locationMarkers={locationMarkers}
+                                     eventMarkers={eventMarkers}
+                                     gatherMarkers={gatherMarkers}
+                                     staminaMarkers={staminaElixirMarkers}
+                                     questItemMarkers={questItemMarkers}
+                    />
+                    {isCusMarkerActive && MC.addDataMarker(customMarkerPos.lng === 0 && customMarkerPos.lat === 0
+                            ? map?.getCenter() || customMarkerPos
                             : customMarkerPos,
                         markerRef,
                         eventHandlers)}
-                    {questMarkers.length && questMarkers}
-                    {/*{MC.addDataMarker(customMarkerPos, markerRef, eventHandlers)}*/}
-
-                    {/*<ExampleBound/>*/}
+                    {!!activeQuest && activeQuest.length>0 && quests.filter((fv, i) =>fv.name === activeQuest).map(v=>MC.quest(v, zoom, locations))}
                     {isBoundsMenu && <AddBounds/>}
-
-
-
+                    {!!activeQuest &&  'asd'}
                 </MapContainer>
             </div>
         </div>
     );
-}
+})

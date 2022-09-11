@@ -19,6 +19,9 @@ import {
 } from "../../Types/CommonTypes";
 import {useSelector} from "react-redux";
 import {AuthSelectors} from "../../redux/dataSelectors";
+import {useAppDispatch} from "../../redux/store";
+import {MapSlice} from "../../redux/reducers/mapReducer";
+import {log} from "util";
 
 // function DataViewTest<T>(props: React.PropsWithChildren<TProps<T>>) {
 //
@@ -33,9 +36,11 @@ type TProps<T> = {
     isMod?: boolean
     lang?: TTranslateLang
     isAddTable?: boolean
+    dataName?: string
 };
 export const DataView = <T extends TCombineData>(props: React.PropsWithChildren<TProps<T>>) => {
     const isMod = useSelector(AuthSelectors.isInit)
+    const dispatch = useAppDispatch()
     const {data, dataEditHandler, dataDelHandler} = props;
     const isAddTable = props.isAddTable === undefined ? false : props.isMod
     // const isMod = props.isMod === undefined ? false : props.isMod
@@ -97,10 +102,13 @@ export const DataView = <T extends TCombineData>(props: React.PropsWithChildren<
                 }
                 case 'posQuestItem': {
                     const data = dataVal[sKey as k1] as unknown as TQuestItemPosition
-                    dKey==='type' && sortedRow.push(data.type)
-                    dKey==='Source' && sortedRow.push(getDataObjStr('posQuestItem', data))
+                    dKey === 'type' && sortedRow.push(data.type)
+                    dKey === 'Source' && sortedRow.push(getDataObjStr('posQuestItem', data))
                     break
                 }
+                case 'skills':
+                    sortedRow.push(getDataObjStr('skills', dataVal[sKey as k1]))
+                    break
                 case 'stages': {
                     const stages = dataVal[sKey as k1]// as Array<TDrop<TDropTypes>>
                     // console.log(`stages`)
@@ -119,8 +127,28 @@ export const DataView = <T extends TCombineData>(props: React.PropsWithChildren<
                     sortedRow.push(dataVal[dKey as k1])
                     break
                 case 'translate': {
-                    if (dKey === 'En') sortedRow.push(dataVal['name'])
-                    else sortedRow.push(dataVal[sKey as k1][dKey as k2])
+                    const onClick:React.MouseEventHandler<HTMLSpanElement> = (e) =>{
+                        e.stopPropagation()
+                        e.preventDefault()
+                        console.log(dKey)
+                        dispatch(MapSlice.actions.setActiveQuest(dataVal['name']))
+                        dispatch(MapSlice.actions.setIsActiveQuestMap(true))
+                    }
+                    if (props.dataName && props.dataName === 'quest') {
+                        const trVal = dKey === 'En' ? dataVal['name'] : dataVal[sKey as k1][dKey as k2]
+                        if (dKey === 'En') {
+                            sortedRow.push(<span
+                                onClick={onClick}>{`${trVal}`}</span>)
+                        }
+                        else {
+                            // sortedRow.push(<span
+                            //     onClick={onClick}>{`${trVal}`}</span>)
+                            sortedRow.push(trVal)
+                        }
+                    } else {
+                        if (dKey === 'En') sortedRow.push(dataVal['name'])
+                        else sortedRow.push(dataVal[sKey as k1][dKey as k2])
+                    }
                     break
                 }
                 default:

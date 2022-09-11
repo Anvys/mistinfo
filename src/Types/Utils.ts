@@ -70,6 +70,9 @@ export const getDefaultFormikValues = (str: string) => {
     }
 }
 export type TSelectFieldsKeys = keyof typeof selectFieldsOptions
+export type TAdventureType = typeof selectFieldsOptions['adventure'][number]
+export type TWeaponType = typeof selectFieldsOptions['weapon.type'][number]
+export type TCraftingType = typeof selectFieldsOptions['crafting'][number]
 export const selectFieldsOptions = {
     'material.type': ['Bone', 'Fiber', 'Leather', 'Metal', 'Stone', 'Wood'],
     'material.attributes': ['Absorbity', 'Density', 'Flexibility', 'Hardness', 'Lightness', 'Purity', 'Radiance', 'Rigidity',],
@@ -78,9 +81,9 @@ export const selectFieldsOptions = {
         'Tranquilizer', 'Elioam', 'Frimam', 'Hydram', 'Lectram', 'Lithram', 'Magnam', 'Psycham', 'Pyram','Radiam', 'Stratam',
     ],
     // 'material.tier': [0, 1, 2, 3, 4, 5],
-    'adventure': ['Academic', 'Athletics', 'Exploration', 'Perception', 'Persuasion', 'Strategy', 'Subterfuge'],
-    'weapon.type': ['Axe', 'Dagger', 'Mace', 'Polearm', 'Staff', 'Sword'],
-    'crafting': ['Alchemy', 'Forge', 'Herbalism', 'Sewing', 'Stoneworking', 'Tanning', 'Woodworking'],
+    'adventure': ['Academic', 'Athletics', 'Exploration', 'Perception', 'Persuasion', 'Strategy', 'Subterfuge'] as const,
+    'weapon.type': ['Axe', 'Dagger', 'Mace', 'Polearm', 'Staff', 'Sword'] as const,
+    'crafting': ['Alchemy', 'Forge', 'Herbalism', 'Sewing', 'Stoneworking', 'Tanning', 'Woodworking'] as const,
     'reputation.guild': ['Arcanists', 'Circle of the Great Tree', 'Claw Assembly', 'Lunar caravan', 'Mistwalkers', 'Order of the Hippogriff', 'Protector of the Rose'],
     'reputation.town': ['Gantras', 'Kortombe', 'Larcen', 'Thorval', 'Wellnear'],
     'component.type': ['Plant', 'Gem', 'Substance', 'Powder', 'Sap', 'Pollen', 'Artefact'],

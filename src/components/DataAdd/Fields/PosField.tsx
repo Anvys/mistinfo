@@ -142,22 +142,44 @@ export const PosStageField: React.FC<TPosStageField> = ({posX, posY, onPosChange
 
 type TQuestItemPosProps = {
     onPositionChange: (position: TQuestItemPosition) => void
+    formik: FormikProps<any>
+    type?: string
+    position?: TQuestItemPosType
 }
 
 export const PosQuestItemField: React.FC<TQuestItemPosProps> = (props) => {
-    const {onPositionChange} = props
-    const [type, setType] = useState<TQuestItemPosType>('pos')
-    const [name, setName] = useState<string>('')
+    // console.log(props.formik.values)
+    const {onPositionChange, formik} = props
+    const dispatch = useAppDispatch()
+    const [type, setType] = useState<TQuestItemPosType>(formik.values.posQuestItem.type)
+    // const [name, setName] = useState<string>(formik.values.name)
     const [mapPos, setMapPos] = useState<TMapPosition | null>(null)
-    const [genPos, setGenPos] = useState<string | TMapPosition | null>(null)
+    const [genPos, setGenPos] = useState<string | TMapPosition | null>(()=>formik.values.posQuestItem.position)
 
     const locations = useSelector(LocationSelectors.getData)
     const monsters = useSelector(MonsterSelectors.getData)
 
+    useEffect(()=>{
+        setType(formik.values.posQuestItem.type)
+
+    },[formik.values.posQuestItem.type])
+    useEffect(()=>{
+        // if(type === 'pos'){
+            dispatch(MapSlice.actions.setMarkerForAddPos(formik.values.posQuestItem.position.x ? formik.values.posQuestItem.position: {x:23,y:-23}))
+            setMapPos(formik.values.posQuestItem.position)
+        // }
+        // else
+            setGenPos(formik.values.posQuestItem.position)
+
+
+
+
+    },[formik.values.posQuestItem.position])
     useEffect(() => {
         // console.log(`setGen ${type}:${type === 'pos' ? mapPos : name}`)
-        setGenPos(type === 'pos' ? mapPos : name)
-    }, [name, mapPos])
+        setGenPos(mapPos)
+        // setGenPos(type === 'pos' ? mapPos : name)
+    }, [mapPos])
     useEffect(() => {
         // console.log(`effect type => gen = null`)
         setGenPos(null)
@@ -203,7 +225,8 @@ export const PosQuestItemField: React.FC<TQuestItemPosProps> = (props) => {
 }
 
 type TSimplePosField = {
-
+    x0?:number
+    y0?:number
     onPosChange: (pos: TMapPosition) => void
 }
 export const SimplePosField: React.FC<TSimplePosField> = (props) => {

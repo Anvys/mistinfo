@@ -21,7 +21,7 @@ export const GenDataAdd = <T extends TCombineData, >(props: React.PropsWithChild
     const {data, curThunks} = props
     const isMod = useSelector(AuthSelectors.isInit)
     const dispatch = useAppDispatch();
-    const initVal = data !== null ? data : props.initObj
+    const initVal = data !== null ? {...data} : props.initObj
     const pos = useSelector(getMarkerForAddPosSelector)
     const formik = useFormik({
         initialValues: initVal,
@@ -50,6 +50,7 @@ export const GenDataAdd = <T extends TCombineData, >(props: React.PropsWithChild
                 dispatch(curThunks.updateOne({id: data._id, data: {...newData, _id: data._id}}))
             }
             props.resetAddFormData();
+
             actions.setSubmitting(false);
         }
     })

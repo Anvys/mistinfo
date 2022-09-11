@@ -41,11 +41,13 @@ type TSelectSimpleField = {
 export const SimpleSelectField:React.FC<TSelectSimpleField> = (props) => {
     const { value,mapSelectValues, onSelChange, labelText, } = props
     const required = props.required === undefined? false: props.required
-    const [val, setVal] = useState('')
+    const [val, setVal] = useState(value|| '')
     useEffect(()=>{
         onSelChange(val as string)
     },[val])
-
+    useEffect(()=>{
+        if(value !== val) setVal(value as string)
+    },[value])
     return (
         <div className={styles.fieldBox} key={0}>
             <label className={styles.label} htmlFor={`htmlId`}>{labelText}</label>

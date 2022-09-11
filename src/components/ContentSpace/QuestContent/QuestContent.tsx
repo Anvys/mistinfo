@@ -49,7 +49,7 @@ export const QuestContent: React.FC<TProps> = (props) => {
             <div className={styles.dbField}>
                 <Outlet/>
 
-                <DataView data={data} dataEditHandler={dataAddHandler} dataDelHandler={dataDelHandler}/>
+                <DataView data={data} dataEditHandler={dataAddHandler} dataDelHandler={dataDelHandler} dataName={'quest'}/>
             </div>
         </div>
     );

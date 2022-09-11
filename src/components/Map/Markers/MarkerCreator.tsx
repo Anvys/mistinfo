@@ -6,7 +6,7 @@ import {
     TGatherPoint,
     TLocation,
     TMapPosition, TNpc,
-    TQuest,
+    TQuest, TQuestItemSource,
     TStagePos, TStagePosType,
     TStaminaElixir
 } from "../../../Types/CommonTypes";
@@ -85,19 +85,36 @@ const getPosFromQuestStage = (pos: TStagePos, type: TStagePosType, locations: Ar
     }
 }
 export const MC = {
+    questItem: (data: TQuestItemSource, zoom: number, pos: TMapPosition, icon: string) =>{
+
+        return (
+            <Marker
+                icon={new Icon({
+
+                    iconUrl: iconPicker(icon),
+                    iconSize: [30 * (zoom - 4) * 0.5, 30 * (zoom - 4) * 0.5],
+                    tooltipAnchor: [10 * (zoom - 4) * 0.5, 0],
+                })}
+                position={{lat: pos.x, lng: pos.y}}>
+                <Tooltip>
+                    {data.name}
+                </Tooltip>
+            </Marker>
+        )
+    },
     quest: (data: TQuest, zoom: number, locations: Array<TLocation> | null = null) => {
-        const fillOpt = { color: 'lime'}
-        const fillOpt1 = { fillColor: 'blue'}
+        const fillOpt = {color: 'lime'}
+        const fillOpt1 = {fillColor: 'blue'}
         const path = data.stages.map(v => {
             const pos: TMapPosition = getPosFromQuestStage(v.stagePos, v.stagePosType, locations)
             return [pos.x, pos.y]
-        }).filter(v=>v[0]!==0 && v[1]!==0) as LatLngExpression[]
+        }).filter(v => v[0] !== 0 && v[1] !== 0) as LatLngExpression[]
         return <>
-            <Polyline pathOptions={fillOpt} positions={path} />
-            {path.map((v,i)=><CircleMarker  center={v} pathOptions={fillOpt} radius={20}><Popup>
+            <Polyline pathOptions={fillOpt} positions={path}/>
+            {path.map((v, i) => <CircleMarker center={v} pathOptions={fillOpt} radius={20}><Popup>
                 {getStageStr(data.stages[i])}
             </Popup></CircleMarker>)}
-            </>
+        </>
     },
     events: (data: TEvent, zoom: number) => {
         const t = new Image()

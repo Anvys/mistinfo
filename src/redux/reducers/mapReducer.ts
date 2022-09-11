@@ -14,6 +14,8 @@ export type TInitialState = {
     }
     isAddBoundsActive: boolean
     bounds: Array<[number, number]>
+    activeQuest: string | undefined
+    isActiveQuestMap: boolean
 }
 const initialState: TInitialState = {
     markerForAddPos: {x:0,y:0},
@@ -25,7 +27,8 @@ const initialState: TInitialState = {
     },
     isAddBoundsActive: false,
     bounds: [],
-
+    activeQuest: undefined,
+    isActiveQuestMap: false,
 }
 
 export const MapSlice = createSlice({
@@ -55,6 +58,12 @@ export const MapSlice = createSlice({
         },
         setBounds: (state, action: PayloadAction<Array<[number, number]>>) => {
             state.bounds = action.payload;
+        },
+        setActiveQuest: (state, action: PayloadAction<string | undefined>) => {
+            state.activeQuest = action.payload;
+        },
+        setIsActiveQuestMap: (state, action: PayloadAction<boolean>) => {
+            state.isActiveQuestMap = action.payload;
         },
 
     },

@@ -15,6 +15,10 @@ type TProps = {
 export const AddDataForm: React.FC<TProps> = React.memo(({formik, dataName, resetAddFormData}) => {
     const isMapActive = useSelector(MapSelectors.isMapActive)
     // console.log(`AddDataForm`)
+    const onReset = () =>{
+        resetAddFormData()
+        formik.handleReset()
+    }
     return (
         <form onSubmit={formik.handleSubmit}>
             <div className={styles.rowDiv}>
@@ -30,7 +34,7 @@ export const AddDataForm: React.FC<TProps> = React.memo(({formik, dataName, rese
             </div>
             <div className={styles.buttonBox}>
                 <button className={styles.formButton} type={"submit"}>Save</button>
-                <button className={styles.formButton} type={"button"} onClick={formik.handleReset}>New / clear</button>
+                <button className={styles.formButton} type={"button"} onClick={onReset}>New / clear</button>
             </div>
 
         </form>

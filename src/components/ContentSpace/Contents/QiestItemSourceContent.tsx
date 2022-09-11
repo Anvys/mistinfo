@@ -23,21 +23,23 @@ export const QuestItemSourceContent: React.FC<TProps> = (props) => {
     if (!isInit) dispatch(thunks.getAll())
     const data = useSelector(selector.getData);
     const [dataToAdd, setDataToAdd] = useState(null as null | TQuestItemSource)
-    const dataAddHandler = (id: string) => {
+    const dataEditHandler = (id: string) => {
         const temp = id.length ? data.find(v => v._id === id) || null : null
-        setDataToAdd(temp)
+        setDataToAdd({...temp} as TQuestItemSource)
     }
     const dataDelHandler = (id: string) => {
         dispatch(thunks.deleteOne(id))
     }
     const resetAddFormData = () => setDataToAdd(null)
-    const newDefName = `New ${str} ${data.length + 1}`
-    const initObj: TWOid<TQuestItemSource> = {
+    const newDefName = ``
+
+    const initObj: TWOid<TQuestItemSource> = dataToAdd === null? {
         name: newDefName,
         posQuestItem:{type:"pos",position:{x:0,y:0}},
         translate: {En: newDefName, Ru: '', Fr: ''},
         notes: [],
-    }
+    } : {...dataToAdd}
+    console.log(initObj)
     return (
         <div className={styles.contentBox}>
             <div className={styles.nav}>
@@ -52,7 +54,7 @@ export const QuestItemSourceContent: React.FC<TProps> = (props) => {
             </div>
             <div className={styles.dbField}>
                 <Outlet/>
-                <DataView data={data} dataEditHandler={dataAddHandler} dataDelHandler={dataDelHandler}/>
+                <DataView data={data} dataEditHandler={dataEditHandler} dataDelHandler={dataDelHandler}/>
             </div>
         </div>
     );

@@ -210,7 +210,7 @@ export const StageAdventureForm: React.FC<TStageAdventureFormProps> = (props) =>
         <div className={styles.divCol}>
             <p>Add adventure stage</p>
             <div className={styles.fieldBoxColNoBorder}>
-                <SimpleSelectField mapSelectValues={selectFieldsOptions['adventure']} value={adventure}
+                <SimpleSelectField mapSelectValues={[...selectFieldsOptions['adventure']]} value={adventure}
                                    onSelChange={(val) => setAdventure(val as TAdventure)} labelText={'skill'}/>
                 <SimpleInputField value={count} onChange={(val) => setCount(+val)} index={1} htmlId={'count'}
                                   labelText={'count'} required={false} disabled={false}/>

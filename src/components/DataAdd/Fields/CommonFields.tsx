@@ -14,6 +14,7 @@ import {RecipePartField} from "./RecipePartFiled";
 import {EvoQuestField} from "./EvoQuestFiled";
 import {BoundField} from "./BoundField";
 import {PosQuestItemField} from "./PosField";
+import {CompanionSkillField} from "./CompanionSkillField";
 // import styles from './CommonFields.module.css';
 
 
@@ -46,6 +47,8 @@ export const commonFields = (
                         return AddFields.icon(formik, i+100, dataName === 'staminaelixir')
                     case eKey==='abilities':
                         return <AbilityFiled formik={formik} index={i} dataName={dataName}/>
+                    case eKey==='skills':
+                        return <CompanionSkillField formik={formik} index={i} dataName={dataName}/>
                     case eKey==='bound':
                         return <BoundField formik={formik} index={i} dataName={dataName}/>
                     case eKey==='parts':
@@ -58,8 +61,8 @@ export const commonFields = (
                         return <LootField formik={formik} index={i} dataName={dataName}/>
                     case eKey==='notes':
                         return <NotesField formik={formik} index={i} dataName={dataName}/>
-                    case eKey==='posQuestItem':
-                        return <PosQuestItemField onPositionChange={(pos)=>formik.values.posQuestItem = {...pos}}/>
+                    case eKey==='posQuestItem': // type={formik.values.type} position={formik.values.posQuestItem.}
+                        return <PosQuestItemField formik={formik} onPositionChange={(pos)=>formik.values.posQuestItem = {...pos}}/>
                     case eKey==='stages':
                         return dataName==='quest'
                             ?<StageQuestField onStageAdd={()=>console.log('addddddd')} formik={formik} />
