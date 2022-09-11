@@ -31,6 +31,7 @@ export const LocationContent: React.FC<TProps> = (props) => {
     const initObj: TWOid<TLocation> = {
         name: '',
         exploreReq: 0,
+        quest:'',
         pos: {x: 0, y: 0},
         icon: '',
         region: '',

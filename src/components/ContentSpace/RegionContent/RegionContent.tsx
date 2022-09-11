@@ -13,6 +13,7 @@ import {RegionThunks} from "../../../redux/reducers/regionReducer";
 import {TRegion, TWOid} from "../../../Types/CommonTypes";
 import {GenDataAdd} from "../../DataAdd/GenDataAdd";
 import {MyMap} from "../../Map/MyMap";
+import {MapSlice} from "../../../redux/reducers/mapReducer";
 
 type TProps = {};
 export const RegionContent: React.FC<TProps> = (props) => {
@@ -21,8 +22,11 @@ export const RegionContent: React.FC<TProps> = (props) => {
     if (!isInit) dispatch(RegionThunks.getAll())
     const data = useSelector(getRegionSelector);
     const [dataToAdd, setDataToAdd] = useState(null as null | TRegion)
-    const dataAddHandler = (id: string) => {
-        setDataToAdd(id.length ? data.find(v => v._id === id) || null : null)
+    const dataEditHandler = (id: string) => {
+        const findres = data.find(v => v._id === id) || null
+        setDataToAdd(id.length ? findres : null)
+        if(findres!==null) dispatch(MapSlice.actions.setBounds(findres.bound))
+
     }
     const dataDelHandler = (id: string) => {
         dispatch(RegionThunks.deleteOne(id))
@@ -53,7 +57,7 @@ export const RegionContent: React.FC<TProps> = (props) => {
 
             <div className={styles.dbField}>
                 <Outlet/>
-                <DataView data={data} dataEditHandler={dataAddHandler} dataDelHandler={dataDelHandler}/>
+                <DataView data={data} dataEditHandler={dataEditHandler} dataDelHandler={dataDelHandler}/>
             </div>
         </div>
     );

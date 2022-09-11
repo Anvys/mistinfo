@@ -1,8 +1,8 @@
 import {
     TAbility,
     TCombineData,
-    TMapPosition,
-    TQuestStage, TRecipePart,
+    TMapPosition, TQuestItemPosType,
+    TQuestStage, TRecipePart, TRequireEquip,
     TResponseBody,
     TStage,
     TStageRequire
@@ -48,6 +48,12 @@ export const getMapKeys = (data: any) => {
             if (tValue !== 'object') dataKeys.get('primary')?.push(key)
             else {
                 switch (key) {
+                    case 'posQuestItem':
+                        dataKeys.set(key, ['type', 'Source'])//...value.map((v:object,i:number)=>`${i}`)
+                        break;
+                    case 'bound':
+                        dataKeys.set(key, ['Bound'])//...value.map((v:object,i:number)=>`${i}`)
+                        break;
                     case 'loot':
                         dataKeys.set(key, ['Drops'])//...value.map((v:object,i:number)=>`${i}`)
                         break;
@@ -56,6 +62,9 @@ export const getMapKeys = (data: any) => {
                         break;
                     case 'abilities':
                         dataKeys.set(key, ['abilities'])//...value.map((v:object,i:number)=>`${i}`)
+                        break;
+                    case 'evoQuests':
+                        dataKeys.set(key, ['quests'])//...value.map((v:object,i:number)=>`${i}`)
                         break;
                     default:
                         dataKeys.set(key, Object.keys(value as any))
@@ -115,9 +124,14 @@ export const checkError = (data: TResponseBody<TCombineData>): boolean => {
     return data.status === StatusCodes.Ok
 }
 export const getStageRequireStr = (type: string, req: TStageRequire) =>{
+    // console.log(req)
     switch (type) {
         case 'Adventure':
-            return `${req.adventure}: ${req.count}`
+            return `${req.type}: ${req.count}`
+        case 'Equip':
+            const eq = req as TRequireEquip
+            if(!eq.type.recipe) return `empty`
+            return `${eq.count}x ${eq.type.recipe.name}: \n${eq.type.recipe.parts.map((v,i)=>`--${v.name}: ${eq.type.components[i]} x${v.count}${i < eq.type.recipe.parts.length - 1 ? '\n' : ''}`).join('')}`
         default: return `DefaultStageReqStr`
     }
 }
@@ -133,6 +147,24 @@ export const getAbilityStr = (abi: TAbility) => {
 }
 export const getRecipePartStr = (rec: TRecipePart) => {
     return `[${rec.name}] ${rec.component}: ${rec.count}`
+}
+export const getDataObjStr = (field: string, data: any) =>{
+    switch (field){
+        case 'posQuestItem':
+            switch (data.type as TQuestItemPosType){
+                case 'pos':
+                    return `x:${data.position.x}|y:${data.position.y}`
+                case 'location':
+                    return `[${data.position.name}]`
+                case 'monster':
+                    console.log(data)
+                    return `[${data.position.name}]`
+                default:
+                    return `default posQuestItem DataObjStr`
+            }
+        default:
+            return `defaultDataObjStr`
+    }
 }
 // export const getElements = (mapVal: object, prevKey: string, formik: FormikProps<any>, dataName: string) => {
 //     return Object.entries(mapVal).map(([key, value], i) => {

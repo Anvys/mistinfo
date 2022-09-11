@@ -1,19 +1,20 @@
 import Leaf, {Icon, LatLng, LatLngBounds} from 'leaflet';
 import React, {useEffect, useRef, useState} from 'react';
 import styles from './Map.module.css';
-import {MapContainer, Marker, Popup, TileLayer, useMap, useMapEvents} from "react-leaflet";
+import {LayersControl, MapContainer, Marker, Popup, TileLayer, useMap, useMapEvents} from "react-leaflet";
 import {MarkerForDataAdd} from "./Markers/MarkerForDataAdd";
 import {useSelector} from "react-redux";
 import {
     getEventSelector,
     getGatherPointSelector,
     getLocationSelector, getQuestSelector,
-    getStaminaElixirSelector
+    getStaminaElixirSelector, MapSelectors
 } from "../../redux/dataSelectors";
 import {MC} from "./Markers/MarkerCreator";
 import {ExampleBound} from "./Bounds/ExampleBound";
 import {useAppDispatch} from "../../redux/store";
 import {MapSlice} from "../../redux/reducers/mapReducer";
+import {AddBounds} from "./Bounds/AddBounds";
 
 // import * as icons from '../../assets/icons'
 const MyComponent: React.FC<{onZoomChange: (z:number)=>void}> = (props) => {
@@ -61,6 +62,8 @@ export const MyMap: React.FC<TProps> = (props) => {
     const [map, setMap] = useState<Leaf.Map | null>(null);
     const [zoom, setZoom] = useState(0)
     const onZoomChange = (z: number)=>setZoom(z)
+
+    const isBoundsMenu = useSelector(MapSelectors.isBoundActive)
     // console.log(`curZoom: ${zoom}`)
     // const markers = useSelector(getMarkersSelector).
 
@@ -119,7 +122,7 @@ export const MyMap: React.FC<TProps> = (props) => {
                 overflow: "hidden",
                 padding: '0,50px,50px,0'
             }} className={styles.map}>
-                <MapContainer className={styles.map} center={[0, -45]} zoom={6} scrollWheelZoom={false} ref={setMap} markerZoomAnimation={false}>
+                <MapContainer attributionControl={false} className={styles.map} center={[0, -45]} zoom={6} scrollWheelZoom={false} ref={setMap} markerZoomAnimation={false}>
                     a
                     <MyComponent onZoomChange={onZoomChange}/>
                     b
@@ -178,6 +181,8 @@ export const MyMap: React.FC<TProps> = (props) => {
                     {/*{MC.addDataMarker(customMarkerPos, markerRef, eventHandlers)}*/}
 
                     {/*<ExampleBound/>*/}
+                    {isBoundsMenu && <AddBounds/>}
+
 
 
                 </MapContainer>

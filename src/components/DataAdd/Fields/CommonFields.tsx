@@ -6,11 +6,14 @@ import {AttributeField} from "./AttributeField";
 import {LootField} from "./LootField";
 import {NotesField} from "./NotesField";
 import {selectFieldsOptions} from "../../../Types/Utils";
-import {SelectField} from "./SelectField";
+import {SelectField, SimpleSelectField} from "./SelectField";
 import {StageField} from "./StageField";
 import {StageQuestField} from "./QuestStageField";
 import {AbilityFiled} from "./AbilityFiled";
 import {RecipePartField} from "./RecipePartFiled";
+import {EvoQuestField} from "./EvoQuestFiled";
+import {BoundField} from "./BoundField";
+import {PosQuestItemField} from "./PosField";
 // import styles from './CommonFields.module.css';
 
 
@@ -33,24 +36,36 @@ export const commonFields = (
                 switch (true) {
                     case fieldsIgnoreList.includes(eKey):
                         return null
+                    case dataName==='questItemSource' && eKey==='En':
+                        return <SimpleSelectField mapSelectValues={selectFieldsOptions['questitem'] || ['Error']}
+                                                  value={formik.values.translate.En}
+                                                  onSelChange={v=>formik.setFieldValue('translate.En', v)} labelText={'Quest Item name'}/>
                     case eKey==='pos':
                         return AddFields.posField(value['x'], value['y'], curKey, i, formik, dataName)
                     case eKey==='icon':
                         return AddFields.icon(formik, i+100, dataName === 'staminaelixir')
                     case eKey==='abilities':
                         return <AbilityFiled formik={formik} index={i} dataName={dataName}/>
+                    case eKey==='bound':
+                        return <BoundField formik={formik} index={i} dataName={dataName}/>
                     case eKey==='parts':
                         return <RecipePartField formik={formik} index={i} dataName={dataName}/>
+                    case eKey==='evoQuests':
+                        return <EvoQuestField formik={formik} index={i} dataName={dataName}/>
                     case eKey==='attributes':
                         return <AttributeField formik={formik} index={i} dataName={dataName}/>
                     case eKey==='loot' && dataName==='loot':
                         return <LootField formik={formik} index={i} dataName={dataName}/>
                     case eKey==='notes':
                         return <NotesField formik={formik} index={i} dataName={dataName}/>
+                    case eKey==='posQuestItem':
+                        return <PosQuestItemField onPositionChange={(pos)=>formik.values.posQuestItem = {...pos}}/>
                     case eKey==='stages':
                         return dataName==='quest'
                             ?<StageQuestField onStageAdd={()=>console.log('addddddd')} formik={formik} />
                             :<StageField formik={formik} onStageAdd={()=>null}/>
+                    case eKey==='quest' &&  dataName==='location' :
+                        return AddFields.select(selectFieldsOptions[`quest`] as string[] | number[],value, formik,curKey,eKey,i+50,false )
                     case eKey==='availableAfter' &&  dataName==='quest' :
                         let selQuests = selectFieldsOptions[`quest`]// || ['No knows dependencies for this quest']
                         if(selQuests === undefined || selQuests.length===0) selQuests =  ['No knows dependencies for this quest']

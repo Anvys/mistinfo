@@ -12,3 +12,52 @@
     z-index: 1000 !important;
     /*top: -40px;*/
 }
+
+.controlBoundMenu{
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+background-color: white;
+    border-radius: 10px;
+    padding: 5px;
+}
+.controlButton, .controlButtonActive{
+    padding: 3px;
+    border-radius: 10px;
+    background-color: #b0b2b2;
+    box-shadow: 1px 1px 1px 1px #718181;
+    user-select: none;
+}
+.controlButton:hover, .controlButtonActive:hover{
+    cursor: pointer;
+    background-color: #7a7d7d;
+}
+.controlButton:active, .controlButtonActive:active{
+    background-color: #689b4a;
+    transform: translate(1px, 1px);
+    box-shadow: 0px 0px 1px 1px #718181;
+}
+.controlButtonActive{
+    background-color: #689b4a;
+    box-shadow: 0px 0px 1px 1px #718181;
+    transform: translate(1px, 1px);
+}
+
+
+/*.editButton, .deleteButton {*/
+/*    width: 20px;*/
+/*    height: 20px;*/
+/*    background: #8da2a2 url("./../../../assets/icons/edit.svg")  center / cover no-repeat;*/
+/*    box-shadow: 1px 1px 1px 1px #718181;*/
+/*    user-select: none;*/
+/*    transition-duration: 0.05s;*/
+/*}*/
+/*.editButton:hover, .deleteButton:hover{*/
+/*    cursor: pointer;*/
+/*}*/
+/*.editButton:active, .deleteButton:active{*/
+/*    background-color: #99b7b7;*/
+/*    transform: translate(1px, 1px);*/
+/*    box-shadow: 0px 0px 1px 1px #718181;*/
+/*    !*cursor: pointer;*!*/
+/*}*/

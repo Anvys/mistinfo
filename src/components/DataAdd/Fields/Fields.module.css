@@ -59,6 +59,13 @@
     font-weight: bold;
     margin-right: 5px;
 }
+.selectWithDef:nth-child(1){
+    background-color: #ad4332;
+}
+.optionDefault{
+    font-size: 16px;
+    background-color: #ad4332;
+}
 .inputText, .inputNumber{
     font-size: 20px;
     min-width: 30px;

@@ -20,9 +20,11 @@ export const AbilityFiled: React.FC<TProps> = (props) => {
     const [abilities, setAbilities] = useState<Array<TAbility>>(() => formik.values.abilities)
     const allAbility = useSelector(AbilitySelectors.getData)
     const onAbiSelect = (aName: string) => {
-        const findRes = allAbility.find(v => v.name === aName)
-        if (findRes === undefined) console.error('error in find abilities')
-        else setSelectedAbi(findRes)
+        if(aName){
+            const findRes = allAbility.find(v => v.name === aName)
+            if (findRes === undefined) console.error('error in find abilities')
+            else setSelectedAbi(findRes)
+        }
     }
     const onAbiAdd = () => {
         if (selectedAbi !== undefined) {
@@ -39,7 +41,7 @@ export const AbilityFiled: React.FC<TProps> = (props) => {
         <div className={`${styles.divRow} ${styles.border}`}>
             <div className={styles.fieldBoxCol}>
                 <SimpleSelectField mapSelectValues={selectFieldsOptions.ability || ['Empty Abilities db']} value={''}
-                                   onSelChange={onAbiSelect} labelText={'Ability'}/>
+                                   onSelChange={onAbiSelect} labelText={'Ability'} required={false}/>
                 <button type={'button'} className={styles.addButton} onClick={onAbiAdd}>Add</button>
             </div>
             <DataView data={abilities}

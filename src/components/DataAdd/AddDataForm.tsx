@@ -3,7 +3,7 @@ import styles from './DataAdd.module.css';
 import {FormikProps} from "formik";
 import {commonFields} from "./Fields/CommonFields";
 import {useSelector} from "react-redux";
-import {getIsAddPosFieldActiveSelector} from "../../redux/dataSelectors";
+import {getIsAddPosFieldActiveSelector, MapSelectors} from "../../redux/dataSelectors";
 import {MyMap} from "../Map/MyMap";
 
 type TProps = {
@@ -13,7 +13,7 @@ type TProps = {
 
 };
 export const AddDataForm: React.FC<TProps> = React.memo(({formik, dataName, resetAddFormData}) => {
-    const isMapActive = useSelector(getIsAddPosFieldActiveSelector)
+    const isMapActive = useSelector(MapSelectors.isMapActive)
     // console.log(`AddDataForm`)
     return (
         <form onSubmit={formik.handleSubmit}>

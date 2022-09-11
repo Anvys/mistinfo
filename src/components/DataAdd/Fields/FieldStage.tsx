@@ -29,7 +29,7 @@ export const FieldStage: React.FC<TProps> = (props) => {
             name: '',
             type: '',
             time: 20,
-            require:{adventure: 'Academic', count:0},
+            require:{type: 'Academic', count:0},
             loot: null
         } as TStage,
         validate: validates,

@@ -14,10 +14,15 @@ export const AttributeField: React.FC<TProps> = (props) => {
     const {formik, index, dataName} = props
     const [attributes, setAttributes] = useState<Array<string>>([])
     const [attribute, setAttribute] = useState('')
+
     const selArr = selectFieldsOptions[`${dataName}.attributes` as TSelectFieldOptionsKeys] as Array<string>
+    // if(formik.values.type === 'Substance'){
+    //     console.log('sub')
+    // }
     const newAttrArr: Array<string> = []
-    selArr.forEach(v => { //const checkFilledAttributes = () =>{     }
-        if (formik.values.attributes[v] !== 0 && !attributes.includes(v)) {
+    selArr.forEach((v: string) => { //const checkFilledAttributes = () =>{     }
+        if (formik.values.attributes[v]!== undefined && formik.values.attributes[v] !== 0 && !attributes.includes(v)) {
+            // console.log(v)
             newAttrArr.push(v)
         }
     })

@@ -8,7 +8,7 @@ import {AuthSelectors} from "../../redux/dataSelectors";
 type TProps = {};
 export const Login: React.FC<TProps> = (props) => {
     const isAuth = useSelector(AuthSelectors.isInit)
-    const user = useSelector(AuthSelectors.getUser)
+    const user = useSelector(AuthSelectors.getData)
     const [login, setLogin] = useState('')
     const [pswd, setPswd] = useState('')
     const dispatch = useAppDispatch()

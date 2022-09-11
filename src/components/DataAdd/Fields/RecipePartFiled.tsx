@@ -35,6 +35,9 @@ export const RecipePartField: React.FC<TProps> = (props) => {
                 [...formik.values.parts, {name: partName, component: partComp, count: partCount}])
         }
     }
+    const onPartDelHandler = (index: number) =>{
+        formik.setFieldValue('parts', formik.values.parts.filter((v: any,i: number) => i!==index))
+    }
     const onAbiDel = (id: string) =>{
         formik.setFieldValue('abilities', formik.values.abilities.filter((v: TAbility)=>v._id !== id))
     }
@@ -46,10 +49,10 @@ export const RecipePartField: React.FC<TProps> = (props) => {
     return (
         <div className={`${styles.divRow} ${styles.border}`}>
             <div className={styles.fieldBoxCol}>
-                <SimpleInputField value={partName} onChange={(name: string) => setPartName(name)} index={0} htmlId={'name'} labelText={'name'} required={true} disabled={false}/>
-                <SimpleSelectField mapSelectValues={selectFieldsOptions.material?.concat(selectFieldsOptions.component || []) || ['Empty component & material db']} value={partComp}
-                                   onSelChange={(comp: string) => setPartComp(comp)} labelText={'Component'}/>
-                <SimpleInputField value={partCount} onChange={(count: string) => setPartCount(+count)} index={2} htmlId={'count'} labelText={'count'} required={true} disabled={false}/>
+                <SimpleInputField value={partName} onChange={(name: string) => setPartName(name)} index={0} htmlId={'name'} labelText={'name'} required={false} disabled={false}/>
+                <SimpleSelectField mapSelectValues={selectFieldsOptions['material.type']?.concat(selectFieldsOptions['component.type'] || []) || ['Empty component & material db']} value={partComp}
+                                   onSelChange={(comp: string) => setPartComp(comp)} labelText={'Component'} required={false}/>
+                <SimpleInputField value={partCount} onChange={(count: string) => setPartCount(+count)} index={2} htmlId={'count'} labelText={'count'} required={false} disabled={false}/>
                 <button type={'button'} className={styles.addButton} onClick={onPartAdd}>Add</button>
             </div>
             <div>
@@ -66,6 +69,8 @@ export const RecipePartField: React.FC<TProps> = (props) => {
                             {tableKeys.map((val,i)=>
                             <td className={ts.th1}>{v[val as keyof typeof v]}</td>
                             )}
+                            <button type={'button'} className={styles.deleteButton}
+                                    onClick={() => onPartDelHandler(i)}/>
                         </tr>
                         )}
                     </tbody>

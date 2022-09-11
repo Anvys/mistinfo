@@ -17,6 +17,8 @@ import {getLocationSelector, getLootByNameSelector, getNpcSelector} from "../../
 import {FormikProps} from "formik";
 import {PosField, PosStageField} from "./PosField";
 import {SimpleSelectField} from "./SelectField";
+import {StageAdventureForm, StageRequireEquipForm, StageRequireQuestItemForm} from "./StageField";
+import {getStageRequireStr} from "../../../Unils/utilsFunctions";
 
 export const getPosStr = (pos: TStagePos, type: TStagePosType) =>{
     // console.log(pos)
@@ -51,7 +53,7 @@ export const StageQuestField: React.FC<TProps> = (props) => {
     const [stagePosType, setStagePosType] = useState<TStagePosType>('pos')
     const [stagePos, setStagePos] = useState<TStagePos | ''>({x:0, y:0})
     const [loot, setLoot] = useState('')
-    const [req, setReq] = useState<TStageRequire>(() => ({adventure: 'Academic', count: 0}))
+    const [req, setReq] = useState<TStageRequire>(() => ({type: 'Academic', count: 0}))
 
     const locations = useSelector(getLocationSelector)
     const npc = useSelector(getNpcSelector)
@@ -62,10 +64,11 @@ export const StageQuestField: React.FC<TProps> = (props) => {
 
     //formik.values.stages.length>0?formik.values.stages : []
     const [stages, setStages] = useState<Array<TQuestStage>>(() => formik.values.stages)
-    console.log(stages)
+    // console.log(stages)
     const stageKeys = ['num', 'expr', 'name', 'type', 'require', 'timeAvailable', 'timeSpend', 'stagePos', 'loot']
 
     const onTypeChange: React.ChangeEventHandler<HTMLSelectElement> = (e) => {
+        console.log(`type: ${e.target.value}`)
         setType(e.target.value)
     }
     const onRequireAdd = (req: TStageRequire) => {
@@ -172,8 +175,10 @@ export const StageQuestField: React.FC<TProps> = (props) => {
                     </div>
 
                 </div>
-                <p className={styles.infoPar}>{`----> ${req.adventure}: ${req.count}`}</p>
+                <p className={styles.infoPar}>{`----> ${getStageRequireStr(type, req)}`}</p>
                 {type === 'Adventure' && <StageAdventureForm onSubmit={onRequireAdd}/>}
+                {type === 'QuestItem' && <StageRequireQuestItemForm type={type} onSubmit={onRequireAdd}/>}
+                {type === 'Equip' && <StageRequireEquipForm type={type} onSubmit={onRequireAdd}/>}
 
             </div>
 
@@ -264,6 +269,7 @@ export const StageQuestField: React.FC<TProps> = (props) => {
                                     const val: any = st[key as keyof typeof st]
                                     switch (key) {
                                         case 'require':
+                                            if(st.type === 'Equip') return <td>{getStageRequireStr('Equip', st.require)}</td>
                                             return <td>{Object.entries(val).map(([r1, r2], i, arr) => `${r2}${i < arr.length - 1 ? ': ' : ''}`)}</td>
                                         case 'loot':
                                             return <td>{val?.map((drop: TDrop<TDropTypes>, i: number) => `${drop.type}#${drop.name}#x${drop.count}(${drop.chance}%)${i < val.length - 1 ? '\n' : ''}`)}</td>
@@ -303,47 +309,47 @@ export const StageQuestField: React.FC<TProps> = (props) => {
 
     );
 }
-type TStageAdventureFormProps = {
-    onSubmit: (require: TRequireAdventure) => void
-};
-export const StageAdventureForm: React.FC<TStageAdventureFormProps> = (props) => {
-    const [adventure, setAdventure] = useState<TAdventure>('Academic')
-    const [count, setCount] = useState(0)
-    // const formik = useFormik({
-    //     initialValues: {
-    //         adventure: 'Academic',
-    //         count: 0,
-    //     } as TRequireAdventure,
-    //     onSubmit: async (values, actions) => {
-    //         props.onSubmit({...values})
-    //         formik.handleReset(0)
-    //     }
-    // })
-    const onSaveHandler = () => {
-        props.onSubmit({adventure, count})
-    }
-    return (
-        <div className={styles.divCol}>
-            <p>Add adventure stage</p>
-            <div className={styles.fieldBoxColNoBorder}>
-                <div className={styles.fieldBox}>
-                    <label className={styles.label} htmlFor={'adventure'}>skill:</label>
-                    <select className={styles.inputText} name={'adventure'} value={adventure}
-                            onChange={(e) => setAdventure(e.target.value as TAdventure)}
-                            required autoComplete={'off'} placeholder={'adventure'}>
-                        <option value="" disabled selected hidden>{`Select adventure`}</option>
-                        {selectFieldsOptions['adventure'].map(v => <option value={v}>{`${v}`}</option>)}
-                    </select>
-                </div>
-                <div className={styles.fieldBox}>
-                    <label className={styles.label} htmlFor={'count'}>count:</label>
-                    <input className={styles.inputNumber} type={'number'} name={'count'} value={count}
-                           onChange={(e) => setCount(+e.target.value)}
-                           required autoComplete={'off'} placeholder={'count'}>
-                    </input>
-                </div>
-                <button type={'button'} className={styles.addButton} onClick={onSaveHandler}>Save</button>
-            </div>
-        </div>
-    )
-}
+// type TStageAdventureFormProps = {
+//     onSubmit: (require: TRequireAdventure) => void
+// };
+// export const StageAdventureForm: React.FC<TStageAdventureFormProps> = (props) => {
+//     const [adventure, setAdventure] = useState<TAdventure>('Academic')
+//     const [count, setCount] = useState(0)
+//     // const formik = useFormik({
+//     //     initialValues: {
+//     //         adventure: 'Academic',
+//     //         count: 0,
+//     //     } as TRequireAdventure,
+//     //     onSubmit: async (values, actions) => {
+//     //         props.onSubmit({...values})
+//     //         formik.handleReset(0)
+//     //     }
+//     // })
+//     const onSaveHandler = () => {
+//         props.onSubmit({adventure, count})
+//     }
+//     return (
+//         <div className={styles.divCol}>
+//             <p>Add adventure stage</p>
+//             <div className={styles.fieldBoxColNoBorder}>
+//                 <div className={styles.fieldBox}>
+//                     <label className={styles.label} htmlFor={'adventure'}>skill:</label>
+//                     <select className={styles.inputText} name={'adventure'} value={adventure}
+//                             onChange={(e) => setAdventure(e.target.value as TAdventure)}
+//                             required autoComplete={'off'} placeholder={'adventure'}>
+//                         <option value="" disabled selected hidden>{`Select adventure`}</option>
+//                         {selectFieldsOptions['adventure'].map(v => <option value={v}>{`${v}`}</option>)}
+//                     </select>
+//                 </div>
+//                 <div className={styles.fieldBox}>
+//                     <label className={styles.label} htmlFor={'count'}>count:</label>
+//                     <input className={styles.inputNumber} type={'number'} name={'count'} value={count}
+//                            onChange={(e) => setCount(+e.target.value)}
+//                            required autoComplete={'off'} placeholder={'count'}>
+//                     </input>
+//                 </div>
+//                 <button type={'button'} className={styles.addButton} onClick={onSaveHandler}>Save</button>
+//             </div>
+//         </div>
+//     )
+// }

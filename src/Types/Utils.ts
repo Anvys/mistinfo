@@ -69,12 +69,13 @@ export const getDefaultFormikValues = (str: string) => {
             return 0
     }
 }
+export type TSelectFieldsKeys = keyof typeof selectFieldsOptions
 export const selectFieldsOptions = {
     'material.type': ['Bone', 'Fiber', 'Leather', 'Metal', 'Stone', 'Wood'],
     'material.attributes': ['Absorbity', 'Density', 'Flexibility', 'Hardness', 'Lightness', 'Purity', 'Radiance', 'Rigidity',],
     'component.attributes': [
         'Activator', 'Binder', 'Deteriorator', 'Energizer', 'Focuser', 'Fortifier', 'Putrefier', 'Stimulator', 'Toner',
-        'Tranquilizer', 'Elioam', 'Frimam', 'Hydram', 'Lectram', 'Lithram', 'Magnam', 'Psycham', 'Pyram', 'Stratam',
+        'Tranquilizer', 'Elioam', 'Frimam', 'Hydram', 'Lectram', 'Lithram', 'Magnam', 'Psycham', 'Pyram','Radiam', 'Stratam',
     ],
     // 'material.tier': [0, 1, 2, 3, 4, 5],
     'adventure': ['Academic', 'Athletics', 'Exploration', 'Perception', 'Persuasion', 'Strategy', 'Subterfuge'],
@@ -88,9 +89,10 @@ export const selectFieldsOptions = {
     'gatherpoint.type': ['Botany', 'Hunting', 'Lumberjacking', 'Mining'],
     'event.type':['BlueFlag'],
     'quest.type':['Quest'],
-    'stage.type': ['Adventure'],
+    'stage.type': ['Adventure', 'QuestItem', 'Equip'],
     'stage.expr': ['or', 'and'],
     'stage.postype': ['pos' , 'npc' , 'location'],
+    'questItem.postype': ['pos' , 'monster' , 'location'] as const,
 
     'ability.type': ['Passive' , 'Active'],
     'monster.type' : ['Monster' , 'Boss'],
@@ -116,6 +118,8 @@ export const selectFieldsOptions = {
     'monster': undefined as Array<string> | undefined,
     'ability': undefined as Array<string> | undefined,
     'companion': undefined as Array<string> | undefined,
+    'questitem': undefined as Array<string> | undefined,
+    'questitemsource': undefined as Array<string> | undefined,
 
 
     'gatherpoint.Botany': undefined as Array<string> | undefined,

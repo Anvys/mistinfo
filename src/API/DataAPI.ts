@@ -5,7 +5,7 @@ import {
     TGatherPoint,
     TLocation, TLoot, TMapObject,
     TMaterial, TMonster,
-    TNpc, TQuest, TRecipe,
+    TNpc, TQuest, TQuestItem, TQuestItemSource, TRecipe,
     TRegion,
     TRequestBody,
     TRequestType,
@@ -49,6 +49,8 @@ export const RecipeAPI = getDataAPI<TRecipe, 'Recipe'>(`/recipe`, 'Recipe')
 export const AbilityAPI = getDataAPI<TAbility, 'Ability'>(`/ability`, 'Ability')
 export const MonsterAPI = getDataAPI<TMonster, 'Monster'>(`/monster`, 'Monster')
 export const CompanionAPI = getDataAPI<TCompanion, 'Companion'>(`/companion`, 'Companion')
+export const QuestItemAPI = getDataAPI<TQuestItem, 'QuestItem'>(`/questitem`, 'QuestItem')
+export const QuestItemSourceAPI = getDataAPI<TQuestItemSource, 'QuestItemSource'>(`/questitemsource`, 'QuestItemSource')
 //     {
 //     getAll: () => instance.get<TMatResponse>(`${materialURI}/all`).then(data => data.data),
 //     getOne: (id: string) => instance.get<TMatResponse>(`${materialURI}/one/:${id}`).then(data => data.data),

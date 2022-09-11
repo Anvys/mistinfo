@@ -40,10 +40,32 @@ export const getAddMarkerIconSelector = (state: TAppState) => state.map.addMarke
 export const getAddMarkerSizeSelector = (state: TAppState) => state.map.addMarkerSize
 export const getMarkersSelector = (state: TAppState) => state.map.markers
 
+export const MapSelectors = {
+    isBoundActive:  (state: TAppState) => state.map.isAddBoundsActive,
+    getBounds: (state: TAppState) => state.map.bounds,
+    isMapActive : (state: TAppState) => state.map.isAddBoundsActive || state.map.isAddPosFieldActive,
+}
+
+export const LocationSelectors = {
+    isInit: (state: TAppState) => state.location.isInit,
+    getData: (state: TAppState) => state.location.data,
+}
+
+export type TSelectors =  | typeof QuestItemSelectors | typeof RecipeSelectors
+| typeof MonsterSelectors | typeof AbilitySelectors | typeof CompanionSelectors
+
 export const AuthSelectors = {
     isInit: (state: TAppState) => state.auth.isInit,
-    getUser: (state: TAppState) => state.auth.data.login,
+    getData: (state: TAppState) => state.auth.data.login,
     getUserData: (state: TAppState) => state.auth.data,
+}
+export const QuestItemSelectors = {
+    isInit: (state: TAppState) => state.questItem.isInit,
+    getData: (state: TAppState) => state.questItem.data,
+}
+export const QuestItemSourceSelectors = {
+    isInit: (state: TAppState) => state.questItemSource.isInit,
+    getData: (state: TAppState) => state.questItemSource.data,
 }
 export const RecipeSelectors = {
     isInit: (state: TAppState) => state.recipe.isInit,

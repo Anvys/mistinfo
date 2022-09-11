@@ -19,12 +19,12 @@ export const SelectField:React.FC<TProps> = (props) => {
         <div className={styles.fieldBox} key={index}>
             <label className={styles.label} htmlFor={htmlId}>{labelText}</label>
             <select defaultValue={mapSelectValues[0]}
-                    className={styles.inputText}
+                    className={styles.inputText + ' '+  styles.selectWithDef}
                     name={htmlId}
                     onChange={formik.handleChange}
                     value={value}
                     required={required}>
-                {labelText !== 'type' && <option value="" disabled selected>{`Select ${labelText}`}</option>}
+                {labelText !== 'type' && <option className={styles.optionDefault} value="" disabled selected>{`Select ${labelText}`}</option>}
                 {mapSelectValues.map((v, i) => (<option key={i} selected={i === 0} value={v}>{v}</option>))}
             </select>
         </div>
@@ -36,10 +36,12 @@ type TSelectSimpleField = {
     value: string | number | readonly string[] | undefined,
     onSelChange: (value: string)=>void
     labelText: string
+    required?: boolean
 };
 export const SimpleSelectField:React.FC<TSelectSimpleField> = (props) => {
-    const { value,mapSelectValues, onSelChange, labelText} = props
-    const [val, setVal] = useState(value)
+    const { value,mapSelectValues, onSelChange, labelText, } = props
+    const required = props.required === undefined? false: props.required
+    const [val, setVal] = useState('')
     useEffect(()=>{
         onSelChange(val as string)
     },[val])
@@ -48,12 +50,12 @@ export const SimpleSelectField:React.FC<TSelectSimpleField> = (props) => {
         <div className={styles.fieldBox} key={0}>
             <label className={styles.label} htmlFor={`htmlId`}>{labelText}</label>
             <select defaultValue={mapSelectValues[0]}
-                    className={styles.inputText}
+                    className={styles.inputText + ' '+  styles.selectWithDef}
                     name={`htmlId`}
                     onChange={e=>setVal(e.target.value)}
                     value={val}
-                    required={true}>
-                {labelText !== 'type' && <option value="" disabled selected>{`Select ${labelText}`}</option>}
+                    required={required}>
+                {labelText !== 'type' && <option className={styles.optionDefault} value="" disabled selected>{`Select ${labelText}`}</option>}
                 {mapSelectValues.map((v, i) => (<option key={i} selected={i === 0} value={v}>{v}</option>))}
             </select>
         </div>

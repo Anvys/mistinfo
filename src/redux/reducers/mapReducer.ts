@@ -12,6 +12,8 @@ export type TInitialState = {
     markers: {
         location: Array<JSX.Element>
     }
+    isAddBoundsActive: boolean
+    bounds: Array<[number, number]>
 }
 const initialState: TInitialState = {
     markerForAddPos: {x:0,y:0},
@@ -20,7 +22,10 @@ const initialState: TInitialState = {
     addMarkerSize:[30, 30],
     markers: {
         location: []
-    }
+    },
+    isAddBoundsActive: false,
+    bounds: [],
+
 }
 
 export const MapSlice = createSlice({
@@ -44,6 +49,12 @@ export const MapSlice = createSlice({
         },
         resetAddMarkerIcon: (state, action: PayloadAction<{ }>) => {
             state.addMarkerIcon = require('./../../assets/icons/targetYellow.png')
+        },
+        setIsAddBoundsActive: (state, action: PayloadAction<boolean>) => {
+            state.isAddBoundsActive = action.payload;
+        },
+        setBounds: (state, action: PayloadAction<Array<[number, number]>>) => {
+            state.bounds = action.payload;
         },
 
     },

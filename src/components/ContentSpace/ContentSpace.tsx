@@ -17,6 +17,8 @@ import {AbilityContent} from "./Contents/AbilityContent";
 import {MonsterContent} from "./Contents/MonsterContent";
 import {RecipeContent} from "./Contents/RecipeContent";
 import {CompanionContent} from "./Contents/CompanionContent";
+import {QuestItemContent} from "./Contents/QiestItemContent";
+import {QuestItemSourceContent} from "./Contents/QiestItemSourceContent";
 
 
 export const ContentSpace: React.FC = () => {
@@ -52,6 +54,8 @@ export const ContentSpace: React.FC = () => {
                 <Route path={'/monster/'} element={<MonsterContent/>}/>
                 <Route path={'/recipe/'} element={<RecipeContent/>}/>
                 <Route path={'/companion/'} element={<CompanionContent/>}/>
+                <Route path={'/questitem/'} element={<QuestItemContent/>}/>
+                <Route path={'/questitemsource/'} element={<QuestItemSourceContent/>}/>
             </Routes>
 
         </div>

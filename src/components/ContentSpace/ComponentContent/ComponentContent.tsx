@@ -50,6 +50,7 @@ export const ComponentContent: React.FC<TProps> = (props) => {
             Magnam: 0,
             Psycham: 0,
             Pyram: 0,
+            Radiam: 0,
             Stratam: 0,
         },
         goldCost: 0,

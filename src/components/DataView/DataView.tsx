@@ -1,14 +1,22 @@
 import React, {useState} from 'react';
 import {DataViewTable} from "./DataViewTable/DataViewTable";
 import {
-    getAbilityStr,
+    getAbilityStr, getDataObjStr,
     getMapKeys,
     getRecipePartStr,
     getStageRequireStr,
     sortDataMapKeys,
     sortStrKeys
 } from "../../Unils/utilsFunctions";
-import {TCombineData, TDrop, TDropTypes, TPrimKeys, TSubKeys, TTranslateLang} from "../../Types/CommonTypes";
+import {
+    TCombineData,
+    TDrop,
+    TDropTypes,
+    TPrimKeys,
+    TQuestItemPosition,
+    TSubKeys,
+    TTranslateLang
+} from "../../Types/CommonTypes";
 import {useSelector} from "react-redux";
 import {AuthSelectors} from "../../redux/dataSelectors";
 
@@ -24,7 +32,7 @@ type TProps<T> = {
     dataDelHandler: (id: string) => void
     isMod?: boolean
     lang?: TTranslateLang
-    isAddTable?:boolean
+    isAddTable?: boolean
 };
 export const DataView = <T extends TCombineData>(props: React.PropsWithChildren<TProps<T>>) => {
     const isMod = useSelector(AuthSelectors.isInit)
@@ -38,8 +46,8 @@ export const DataView = <T extends TCombineData>(props: React.PropsWithChildren<
 
     const dataKeys = getMapKeys(data[0])
     dataKeys.get('primary')?.sort(sortStrKeys)
-    if(isAddTable){
-        dataKeys.set('translate',dataKeys.get('translate')?.filter(v=>v===props.lang) as Array<string>)
+    if (isAddTable) {
+        dataKeys.set('translate', dataKeys.get('translate')?.filter(v => v === props.lang) as Array<string>)
     }
     const sortedDataKeys = sortDataMapKeys(dataKeys)
 
@@ -57,6 +65,14 @@ export const DataView = <T extends TCombineData>(props: React.PropsWithChildren<
                     // sortedRow.push(`${drop.type}:${drop.name} x${drop.count} ~${drop.chance}%`)
                     break
                 }
+                case 'bound': {
+                    const data = dataVal[sKey as k1]// as Array<TDrop<TDropTypes>>
+                    if (Array.isArray(data)) {
+                        sortedRow.push(data.length)
+                    }
+                    // sortedRow.push(`${drop.type}:${drop.name} x${drop.count} ~${drop.chance}%`)
+                    break
+                }
                 case 'abilities': {
                     const abi = dataVal[sKey as k1]// as Array<TDrop<TDropTypes>>
                     if (Array.isArray(abi)) {
@@ -70,7 +86,19 @@ export const DataView = <T extends TCombineData>(props: React.PropsWithChildren<
                     if (Array.isArray(data)) {
                         sortedRow.push(data.map((v, i) => `${getRecipePartStr(v)}${i < data.length - 1 ? '\n' : ''}`))
                     }
-                    // sortedRow.push(`${drop.type}:${drop.name} x${drop.count} ~${drop.chance}%`)
+                    break
+                }
+                case 'evoQuests': {
+                    const data = dataVal[sKey as k1]// as Array<TDrop<TDropTypes>>
+                    if (Array.isArray(data)) {
+                        sortedRow.push(data.map((v, i) => `${v}${i < data.length - 1 ? '\n' : ''}`))
+                    }
+                    break
+                }
+                case 'posQuestItem': {
+                    const data = dataVal[sKey as k1] as unknown as TQuestItemPosition
+                    dKey==='type' && sortedRow.push(data.type)
+                    dKey==='Source' && sortedRow.push(getDataObjStr('posQuestItem', data))
                     break
                 }
                 case 'stages': {

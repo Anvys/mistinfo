@@ -1,7 +1,12 @@
+import {selectFieldsOptions} from "./Utils";
+
 export type TCombineData = TNpc | TRegion | TLocation
     | TMaterial | TComponent | TGatherPoint | TLoot
     | TStaminaElixir | TEvent | TMapObject | TQuest
-| TRecipe | TAbility | TCompanion | TMonster
+| TRecipe | TAbility | TCompanion | TMonster | TQuestItem | TQuestItemSource
+
+export type TComponent = TResources<TComponentType, TComponentAttributes>
+export type TMaterial = TResources<TMaterialType, TMaterialAttributes>
 
 export type TResources<T, U> = {
     _id: string
@@ -30,7 +35,7 @@ export type TRegion = {
     name: string
     terrain: TTerrain
     terrainReq: number
-    bound: Array<Array<number>>
+    bound: Array<[number, number]>
     pos: TMapPosition
     translate: TTranslateData
 }
@@ -38,6 +43,7 @@ export type TLocation = {
     _id: string
     name: string
     exploreReq: number
+    quest: string
     pos: TMapPosition
     icon: string
     region: string
@@ -83,9 +89,46 @@ export type TStage = {
     time: number
     loot: TLoot | null
 }
-export type TStageRequire = TRequireAdventure
+export type TStageRequire = TRequireAdventure | TRequireQuestItem | TRequireEquip
 export type TRequireAdventure = {
-    adventure: TAdventure
+    type: TAdventure
+    count: number
+}
+export type TRequireResource = {
+    type: TMaterial | TComponent
+    count: number
+}
+export type TQuestItem = {
+    _id: string
+    name: string
+    icon: string
+
+    translate: TTranslateData
+    notes: Array<string>
+}
+export type TQuestItemPosType = typeof selectFieldsOptions['questItem.postype'][number]
+export type TQuestItemPosition = {
+    type: TQuestItemPosType,
+    position: TMapPosition | TLocation | TMonster
+}
+export type TQuestItemSource = {
+    _id: string
+    name: string
+    posQuestItem: TQuestItemPosition
+
+    translate: TTranslateData
+    notes: Array<string>
+}
+export type TRequireQuestItem = {
+    type: TQuestItem
+    count: number
+}
+export type TEquip = {
+    recipe: TRecipe
+    components:Array<string>
+}
+export type TRequireEquip = {
+    type: TEquip
     count: number
 }
 export type TEvent = {
@@ -260,7 +303,6 @@ export type TMaterialAttributes = {
     Radiance: number
     Rigidity: number
 }
-export type TMaterial = TResources<TMaterialType, TMaterialAttributes>
 export type TComponentType = 'Plant' | 'Gem' | 'Substance' | 'Powder' | 'Sap' | 'Pollen' | 'Artefact'
 export type TComponentAttributes = {
     Activator: number
@@ -281,9 +323,10 @@ export type TComponentAttributes = {
     Magnam: number
     Psycham: number
     Pyram: number
+    Radiam: number
     Stratam: number
 }
-export type TComponent = TResources<TComponentType, TComponentAttributes>
+
 
 
 export type TDropTypes = TComponentType | TMaterialType
@@ -297,8 +340,8 @@ export type TDrop<T extends TDropTypes> = {
 
 export type TRequestType = 'Material' | 'Component' | 'Npc'
     | 'Location' | 'Region' | 'GatherPoint' | 'Loot'
-    | 'StaminaElixir' | 'Event' | 'MapObject' | 'Quest' | 'Recipe' | 'Companion' | 'Ability'
-| 'Monster'
+    | 'StaminaElixir' | 'Event' | 'MapObject' | 'Quest' | 'Recipe' | 'Companion' | 'Ability' | 'QuestItem'
+| 'Monster' | 'QuestItemSource'
 export type TRequestBody<T extends TRequestType, D> = {
     type: T
     data: D
