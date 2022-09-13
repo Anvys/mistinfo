@@ -1,6 +1,6 @@
 import {
     TAbility, TBonus,
-    TCombineData,
+    TCombineData, TEquip,
     TMapPosition, TQuestItemPosType,
     TQuestStage, TRecipePart, TRequireEquip,
     TResponseBody,
@@ -43,11 +43,14 @@ export const getMapKeys = (data: any) => {
     const dataKeys = new Map<string, Array<string>>([['primary', []]])
     Object.entries(data).forEach((dataObj: any) => {
         const [key, value] = dataObj;
-        if (key !== '_id' && key !== '__v' && key !== 'name'&& key !== 'notes'&& key !== 'drop') {
+        if (key !== '_id' && key !== '__v' && key !== 'name' && key !== 'notes' && key !== 'drop') {
             const tValue = typeof value
             if (tValue !== 'object') dataKeys.get('primary')?.push(key)
             else {
                 switch (key) {
+                    case 'content':
+                        dataKeys.set(key, ['content'])//...value.map((v:object,i:number)=>`${i}`)
+                        break;
                     case 'skills':
                         dataKeys.set(key, ['bonus'])//...value.map((v:object,i:number)=>`${i}`)
                         break;
@@ -126,35 +129,36 @@ export const checkError = (data: TResponseBody<TCombineData>): boolean => {
 
     return data.status === StatusCodes.Ok
 }
-export const getStageRequireStr = (type: string, req: TStageRequire) =>{
+export const getStageRequireStr = (type: string, req: TStageRequire) => {
     // console.log(req)
     switch (type) {
         case 'Adventure':
             return `${req.type}: ${req.count}`
         case 'Equip':
             const eq = req as TRequireEquip
-            if(!eq.type.recipe) return `empty`
-            return `${eq.count}x ${eq.type.recipe.name}: \n${eq.type.recipe.parts.map((v,i)=>`--${v.name}: ${eq.type.components[i]} x${v.count}${i < eq.type.recipe.parts.length - 1 ? '\n' : ''}`).join('')}`
-        default: return `DefaultStageReqStr`
+            if (!eq.type.recipe) return `empty`
+            return `${eq.count}x ${eq.type.recipe.name}: \n${eq.type.recipe.parts.map((v, i) => `--${v.name}: ${eq.type.components[i]} x${v.count}${i < eq.type.recipe.parts.length - 1 ? '\n' : ''}`).join('')}`
+        default:
+            return `DefaultStageReqStr`
     }
 }
-export const getStagesStr = (stages: Array<TStage>):string =>{
-    return stages.map((stage,i)=>
+export const getStagesStr = (stages: Array<TStage>): string => {
+    return stages.map((stage, i) =>
         `-${stage.expr}-:№${stage.num}:${stage.name}:${stage.proc}%:${getStageRequireStr(stage.type, stage.require)}${i < stages.length - 1 ? '\n' : ''}`).join('')
 }
-export const getStageStr = (stage: TStage | TQuestStage):string =>{
+export const getStageStr = (stage: TStage | TQuestStage): string => {
     return `-${stage.expr}-:№${stage.num}:${stage.name}:${stage.proc}%:${getStageRequireStr(stage.type, stage.require)}`
 }
 export const getAbilityStr = (abi: TAbility) => {
-    return `${abi.name}: ${abi.level} lvl (${abi.type}) ${abi.cd>0?`[cd ${abi.cd} turn]`: `[no cd]`} ${abi.stamina>0?`cost ${abi.stamina}mp`:''} [${abi.effect}]`
+    return `${abi.name}: ${abi.level} lvl (${abi.type}) ${abi.cd > 0 ? `[cd ${abi.cd} turn]` : `[no cd]`} ${abi.stamina > 0 ? `cost ${abi.stamina}mp` : ''} [${abi.effect}]`
 }
 export const getRecipePartStr = (rec: TRecipePart) => {
     return `[${rec.name}] ${rec.component}: ${rec.count}`
 }
-export const getDataObjStr = (field: string, data: any) =>{
-    switch (field){
+export const getDataObjStr = (field: string, data: any) => {
+    switch (field) {
         case 'posQuestItem':
-            switch (data.type as TQuestItemPosType){
+            switch (data.type as TQuestItemPosType) {
                 case 'pos':
                     return `x:${data.position.x}|y:${data.position.y}`
                 case 'location':
@@ -166,7 +170,19 @@ export const getDataObjStr = (field: string, data: any) =>{
                     return `default posQuestItem DataObjStr`
             }
         case 'skills':
-            return data.length===0?`-`:data.map((v: TBonus,i:number)=>`${v.skill}: ${v.count}${i < data.length - 1 ? '\n' : ''}`)
+            return data.length === 0 ? `-` : data.map((v: TBonus, i: number) => `${v.skill}: ${v.count}${i < data.length - 1 ? '\n' : ''}`)
+        case 'content':
+            return data.length === 0 ? `-`
+                : `Shop with ${data.length} items`
+        case 'equip':
+            const eq = data as TEquip
+            return `${eq.recipe.name}: \n${eq.recipe.parts.map((v, i) => `--${v.name}: ${eq.components[i]} x${v.count}${i < eq.recipe.parts.length - 1 ? '\n' : ''}`).join('')}`
+        case 'ability':
+            return `${data.name} ${data.level}`
+        case 'recipe':
+            return `rec ${data.name}`
+        case 'reputation':
+            return `${data.reputation}: ${data.count}`
         default:
             return `defaultDataObjStr`
     }

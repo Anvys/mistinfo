@@ -4,7 +4,7 @@ import {useSelector} from "react-redux";
 import {TCombineThunks, useAppDispatch} from "../../redux/store";
 import {useFormik} from "formik";
 import {AddDataForm} from "./AddDataForm";
-import {AuthSelectors, getMarkerForAddPosSelector} from "../../redux/dataSelectors";
+import {AuthSelectors, getMarkerForAddPosSelector, MapSelectors} from "../../redux/dataSelectors";
 import {StageQuestField} from "./Fields/QuestStageField";
 // import styles from './GenDataAdd.module.css';
 
@@ -23,18 +23,19 @@ export const GenDataAdd = <T extends TCombineData, >(props: React.PropsWithChild
     const dispatch = useAppDispatch();
     const initVal = data !== null ? {...data} : props.initObj
     const pos = useSelector(getMarkerForAddPosSelector)
+    const isMarkerAdd = useSelector(MapSelectors.isAddActive)
     const formik = useFormik({
         initialValues: initVal,
         enableReinitialize: true,
         onSubmit: async (values, actions) => {
 
             // @ts-ignore
-            console.log(`pos: ${pos.x}:${pos.y} | ownPos: ${values.pos}/ dataName: ${props.dataName} have pos: ${dataWithPos.includes(props.dataName)}`)
+            console.log(`pos: ${pos.x}:${pos.y} | ownPos: ${values.pos?.x}:${values.pos?.y}/ dataName: ${props.dataName} have pos: ${dataWithPos.includes(props.dataName)}`)
             // if (dataWithPos.includes(props.dataName))
 
             const newData = dataWithPos.includes(props.dataName)
                 // @ts-ignore
-                ? {...values, name: values.translate.En, pos: values.pos.x !==0 || values.pos.y !==0 ? values.pos:pos}
+                ? {...values, name: values.translate.En, pos: !isMarkerAdd ? values.pos:pos}
                 : {...values, name: values.translate.En}
             // if(props.dataName ==='gatherpoint'){
             //     const mat = useSelector(getMaterialsSelector).find(v=>v.name===newData.name)

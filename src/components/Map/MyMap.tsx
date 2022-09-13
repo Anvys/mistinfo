@@ -71,6 +71,7 @@ export type TLayerFilters = {
     gather: boolean
     vigor: boolean
     questItem: boolean
+    region: boolean
 }
 type TProps = {
     wid: number
@@ -87,10 +88,12 @@ export const MyMap: React.FC<TProps> = React.memo((props) => {
         vigor: true,
         location: true,
         questItem: true,
+        region: false,
     }))
 
-
+    const isAddMarkerActive = useSelector(MapSelectors.isAddActive)
     const isBoundsMenu = useSelector(MapSelectors.isBoundActive)
+
     const locations = useSelector(LocationSelectors.getData);
     const regions = useSelector(RegionSelectors.getData);
     const monsters = useSelector(MonsterSelectors.getData);
@@ -108,6 +111,7 @@ export const MyMap: React.FC<TProps> = React.memo((props) => {
 
 
     const locationMarkers = locations.map(v => MC.location(v, zoom))
+    const regionMarkers = regions.map(v => MC.region(v, zoom))
     const gatherMarkers = gatherPoints.map(v => MC.gatherPoint(v, zoom))
     const eventMarkers = events.map(v => MC.events(v, zoom))
     const staminaElixirMarkers = stamina.map((v, i) => MC.staminaElixir({
@@ -115,9 +119,9 @@ export const MyMap: React.FC<TProps> = React.memo((props) => {
         name: `${v.name} №${i + 1}`
     }, zoom))
     const questMarkers = quests.map((v, i) => MC.quest(v, zoom, locations))
-    const questItemMarkers = questsItemsSource.map(v=>{
-        let pos: TMapPosition = {x:0, y:0}
-        const icon = questsItems.find(qi=>qi.name===v.name)?.icon || 'Unknown/Unknown'
+    const questItemMarkers = questsItemsSource.map(v => {
+        let pos: TMapPosition = {x: 0, y: 0}
+        const icon = questsItems.find(qi => qi.name === v.name)?.icon || 'Unknown/Unknown'
         switch (v.posQuestItem.type) {
             case "pos":
                 const posMap = v.posQuestItem.position as TMapPosition
@@ -129,11 +133,12 @@ export const MyMap: React.FC<TProps> = React.memo((props) => {
                 break
             case "monster":
                 const posMon = v.posQuestItem.position as TMonster
-                pos = regions.find(v=>v.name === posMon.region)?.pos || {x:0, y:0}
+                pos = regions.find(v => v.name === posMon.region)?.pos || {x: 0, y: 0}
                 break
-            default: console.error(`error in questItemMarkers:type ${v.posQuestItem.type}`)
+            default:
+                console.error(`error in questItemMarkers:type ${v.posQuestItem.type}`)
         }
-        return MC.questItem(v,zoom, pos, icon)
+        return MC.questItem(v, zoom, pos, icon)
     })
 
     const markerRef = useRef<L.Marker>(null)
@@ -153,21 +158,45 @@ export const MyMap: React.FC<TProps> = React.memo((props) => {
         setCustomMarkerPos(map === null ? {lat: 0, lng: -40} : map.getCenter())
         console.log(isCusMarkerActive)
     }
+
     const onClose = () => {
         setIsCusMarkerActive(false)
         dispatch(MapSlice.actions.setIsAddPosFieldActive(false))
         onResetActiveQuest()
     }
-    const onResetActiveQuest = () =>{
+    const onResetActiveQuest = () => {
         dispatch(MapSlice.actions.setActiveQuest(undefined))
         dispatch(MapSlice.actions.setIsActiveQuestMap(false))
     }
-useEffect(()=>{
-    return ()=>{
-        console.log('endmap')
+    useEffect(() => {
+        if(isAddMarkerActive && map) map.addEventListener("click", addMarkerPosOnClick);
+        return () => {
+            map?.removeEventListener("click", addMarkerPosOnClick)
+            console.log('endmap')
 
+        }
+    }, [map])
+    const addMarkerPosOnClick:  Leaf.LeafletMouseEventHandlerFn = (e) => {
+        if(!isBoundsMenu){
+            // console.log(`click ${e.latlng.lat}`)
+            markerRef.current?.setLatLng({lat: e.latlng.lat, lng: e.latlng.lng})
+            // const mPos = markerRef.current?.getLatLng();
+            dispatch(MapSlice.actions.setMarkerForAddPos({
+                x: Number(e.latlng.lat.toFixed(2)) || 0,
+                y: Number(e.latlng.lng.toFixed(2)) || 0
+            }))
+            e.originalEvent.stopPropagation()
+            // setCustomMarkerPos({lat: e.latlng.lat, lng: e.latlng.lng})
+        }
     }
-},[])
+    // console.log(isAddMarkerActive)
+    useEffect(() => {
+        setIsCusMarkerActive(isAddMarkerActive)
+        if(isAddMarkerActive && map) map.addEventListener("click", addMarkerPosOnClick);
+        return ()=>{
+            map?.removeEventListener("click", addMarkerPosOnClick)
+        }
+    }, [isAddMarkerActive])
     return (
         <div className={styles.map} style={{width: `${props.wid === -1 ? '50%' : props.wid + 'px'}`}}>
             Map
@@ -181,7 +210,7 @@ useEffect(()=>{
                 overflow: "hidden",
                 padding: '0,50px,50px,0'
             }} className={styles.map}>
-                <MapContainer attributionControl={false} className={styles.map} center={[0, -45]} zoom={6}
+                <MapContainer attributionControl={false} className={styles.map} center={[0, -45]} zoom={7}
                               scrollWheelZoom={false} ref={setMap} markerZoomAnimation={false}>
                     <MyComponent onZoomChange={onZoomChange} visible={false}/>
                     <TileLayer minZoom={5} maxZoom={8} noWrap={true}
@@ -196,15 +225,16 @@ useEffect(()=>{
                                      gatherMarkers={gatherMarkers}
                                      staminaMarkers={staminaElixirMarkers}
                                      questItemMarkers={questItemMarkers}
+                                     regionMarkers={regionMarkers}
                     />
                     {isCusMarkerActive && MC.addDataMarker(customMarkerPos.lng === 0 && customMarkerPos.lat === 0
                             ? map?.getCenter() || customMarkerPos
                             : customMarkerPos,
                         markerRef,
                         eventHandlers)}
-                    {!!activeQuest && activeQuest.length>0 && quests.filter((fv, i) =>fv.name === activeQuest).map(v=>MC.quest(v, zoom, locations))}
+                    {!!activeQuest && activeQuest.length > 0 && quests.filter((fv, i) => fv.name === activeQuest).map(v => MC.quest(v, zoom, locations))}
                     {isBoundsMenu && <AddBounds/>}
-                    {!!activeQuest &&  'asd'}
+                    {!!activeQuest && 'asd'}
                 </MapContainer>
             </div>
         </div>

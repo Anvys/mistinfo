@@ -19,6 +19,7 @@ import {AbilitySlice, TAbilityThunks} from "./reducers/abilityReducer";
 import {CompanionSlice, TCompanionThunks} from "./reducers/companionReducer";
 import {QuestItemSlice, TQuestItemThunks} from "./reducers/questItemReducer";
 import {QuestItemSourceSlice, TQuestItemSourceThunks} from "./reducers/questItemSourceReducer";
+import {ShopSlice, TShopThunks} from "./reducers/shopReducer";
 
 
 export const store = configureStore({
@@ -41,6 +42,7 @@ export const store = configureStore({
         companion: CompanionSlice.reducer,
         questItem: QuestItemSlice.reducer,
         questItemSource: QuestItemSourceSlice.reducer,
+        shop: ShopSlice.reducer,
 
 
         auth: AuthSlice.reducer,
@@ -56,4 +58,4 @@ export type TCombineThunks = TMaterialThunks | TComponentThunks
     | TNpcThunks | TLocationThunks | TRegionThunks | TGatherPointThunks
     | TLootThunks | TStaminaElixirThunks | TEventThunks | TQuestThunks | TAuthThunks
 | TAbilityThunks | TMonsterThunks | TRecipeThunks | TCompanionThunks | TQuestItemThunks
-| TQuestItemSourceThunks
+| TQuestItemSourceThunks | TShopThunks

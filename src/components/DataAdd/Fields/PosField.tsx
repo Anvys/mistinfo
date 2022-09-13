@@ -2,7 +2,12 @@ import {FormikProps} from "formik";
 import React, {useEffect, useState} from "react";
 import {useAppDispatch} from "../../../redux/store";
 import {useSelector} from "react-redux";
-import {getMarkerForAddPosSelector, LocationSelectors, MonsterSelectors} from "../../../redux/dataSelectors";
+import {
+    getMarkerForAddPosSelector,
+    LocationSelectors,
+    MapSelectors,
+    MonsterSelectors
+} from "../../../redux/dataSelectors";
 import {MapSlice} from "../../../redux/reducers/mapReducer";
 import posStyles from "../DataAdd.module.css";
 import styles from './Fields.module.css';
@@ -31,9 +36,12 @@ type PosFieldProps = {
 export const PosField: React.FC<PosFieldProps> = ({posX, posY, htmlId, index, formik, dataName}) => {
     const htmlX = `${htmlId}.x`
     const htmlY = `${htmlId}.x`
-    const [isPosFromMarker, setIsPosFromMarker] = useState(false);
+    const [isPosFromMarker, setIsPosFromMarker] = useState(true);
     const dispatch = useAppDispatch()
     const markerPos = useSelector(getMarkerForAddPosSelector)
+
+    const isAddActive = useSelector(MapSelectors.isAddActive)
+    // const isBoundActive = useSelector(MapSelectors.isBoundActive)
     const onOpenMapHandler = () => {
         setIsPosFromMarker(true)
         dispatch(MapSlice.actions.setIsAddPosFieldActive(true))
@@ -53,6 +61,9 @@ export const PosField: React.FC<PosFieldProps> = ({posX, posY, htmlId, index, fo
         formik.handleChange(e)
         console.log(formik.values.pos)
     }
+    // useEffect(()=>{
+    //     formik.setFieldValue('pos', {x: Number(mapPos.x.toFixed(3)), y: Number(mapPos.y.toFixed(3))})
+    // },[mapPos])
     return (
         <div className={styles.fieldBoxCol} key={index}>
             {dataName === 'region' ? 'Center of region' : 'Position on map'}
@@ -73,9 +84,9 @@ export const PosField: React.FC<PosFieldProps> = ({posX, posY, htmlId, index, fo
                 </div>
 
             </div>
-            {!isPosFromMarker &&
+            {!isAddActive &&
                 <button className={styles.addButton} type={'button'} onClick={onOpenMapHandler}>OpenMap</button>}
-            {isPosFromMarker &&
+            {isAddActive &&
                 <button className={styles.addButton} type={'button'} onClick={onCloseMapHandler}>CloseMap</button>}
         </div>
     )
@@ -89,6 +100,7 @@ export const PosStageField: React.FC<TPosStageField> = ({posX, posY, onPosChange
     const [isPosFromMarker, setIsPosFromMarker] = useState(false);
     const [coord, setCoord] = useState<TMapPosition>({x: posX, y: posY})
     const dispatch = useAppDispatch()
+    const isBoundActive = useSelector(MapSelectors.isBoundActive)
     const markerPos = useSelector(getMarkerForAddPosSelector)
     const onOpenMapHandler = () => {
         // console.log(`post: ${isPosFromMarker}`)
@@ -132,9 +144,9 @@ export const PosStageField: React.FC<TPosStageField> = ({posX, posY, onPosChange
                            value={coord.y}/>
                 </div>
             </div>
-            {!isPosFromMarker &&
+            {!isBoundActive &&
                 <button className={styles.addButton} type={'button'} onClick={onOpenMapHandler}>OpenMap</button>}
-            {isPosFromMarker &&
+            {isBoundActive &&
                 <button className={styles.addButton} type={'button'} onClick={onCloseMapHandler}>CloseMap</button>}
         </div>
     )
@@ -235,6 +247,8 @@ export const SimplePosField: React.FC<TSimplePosField> = (props) => {
     const [isPosFromMarker, setIsPosFromMarker] = useState(false);
 
     const dispatch = useAppDispatch()
+    const isAddActive = useSelector(MapSelectors.isAddActive)
+    // const isBoundActive = useSelector(MapSelectors.isBoundActive)
     const markerPos = useSelector(getMarkerForAddPosSelector)
 
     const onOpenMapHandler = () => {
@@ -263,9 +277,9 @@ export const SimplePosField: React.FC<TSimplePosField> = (props) => {
                 <SimpleInputField value={Number(mapPos.y.toFixed(3))} onChange={v => v} index={1} htmlId={'y'}
                                   labelText={'y'} required={false} disabled={false}/>
             </div>
-            {!isPosFromMarker &&
+            {!isAddActive &&
                 <button className={styles.addButton} type={'button'} onClick={onOpenMapHandler}>OpenMap</button>}
-            {isPosFromMarker &&
+            {isAddActive &&
                 <button className={styles.addButton} type={'button'} onClick={onCloseMapHandler}>CloseMap</button>}
         </div>
     )

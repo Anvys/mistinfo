@@ -7,6 +7,7 @@ export const SideBar: React.FC = () =>{
         <div className={styles.sideBox}>
         Database menu
             <Link to={'/map'} className={styles.navButton}>Map</Link>
+            <Link to={'/shop'} className={styles.navButton}>Shop</Link>
             <Link to={'/material'} className={styles.navButton}>Material</Link>
             <Link to={'/component'} className={styles.navButton}>Component</Link>
             <Link to={'/npc'} className={styles.navButton}>Npc</Link>
@@ -24,6 +25,7 @@ export const SideBar: React.FC = () =>{
             <Link to={'/companion'} className={styles.navButton}>Companion</Link>
             <Link to={'/questitem'} className={styles.navButton}>Quest Item</Link>
             <Link to={'/questitemsource'} className={styles.navButton}>Quest Item Source</Link>
+
         </div>
     )
 }

@@ -19,6 +19,7 @@ import {RecipeContent} from "./Contents/RecipeContent";
 import {CompanionContent} from "./Contents/CompanionContent";
 import {QuestItemContent} from "./Contents/QiestItemContent";
 import {QuestItemSourceContent} from "./Contents/QiestItemSourceContent";
+import {ShopContent} from "./Contents/ShopContent";
 
 
 export const ContentSpace: React.FC = () => {
@@ -56,6 +57,7 @@ export const ContentSpace: React.FC = () => {
                 <Route path={'/companion/'} element={<CompanionContent/>}/>
                 <Route path={'/questitem/'} element={<QuestItemContent/>}/>
                 <Route path={'/questitemsource/'} element={<QuestItemSourceContent/>}/>
+                <Route path={'/shop/'} element={<ShopContent/>}/>
             </Routes>
 
         </div>

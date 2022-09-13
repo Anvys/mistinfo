@@ -14,7 +14,8 @@ export const FieldDrop: React.FC<TProps> = (props) => {
     // const [dropArr, setDropArr] = useState<Array<TDrop<TDropTypes>>>([])
     const [type, setType] = useState<TDropTypes>('Metal')
     const [name, setName] = useState('')
-    const [count, setCount] = useState(0)
+    const [countMin, setCountMin] = useState(0)
+    const [countMax, setCountMax] = useState(0)
     const [chance, setChance] = useState(100)
     const [nameArr, setNameArr] = useState<Array<string>>([])
     const materials = useSelector(getMaterialsSelector)
@@ -29,7 +30,7 @@ export const FieldDrop: React.FC<TProps> = (props) => {
         setType(e.target.value as TDropTypes)
     }
     const onAddHandler = ()=>{
-        props.onAddHandler({type,name,count,chance})
+        props.onAddHandler({type,name,countMin, countMax,chance})
 
     }
     return (
@@ -59,10 +60,21 @@ export const FieldDrop: React.FC<TProps> = (props) => {
                     </div>
 
                     <div className={styles.fieldBox}>
-                        <label className={styles.label} htmlFor={'count'}>count:</label>
-                        <input className={styles.inputNumber} type={'number'} name={'count'} title={'count'}
-                               value={count}
-                               onChange={e=>setCount(+e.target.value)}
+                        <label className={styles.label} htmlFor={'count'}>min count:</label>
+                        <input className={styles.inputNumber} type={'number'} name={'mincount'} title={'min count'}
+                               value={countMin}
+                               onChange={e=>{
+                                   const val = +e.target.value
+                                   if(countMax< val)setCountMax(val)
+                                   setCountMin(val)
+                               }}
+                               required autoComplete={'off'} placeholder={'count'}/>
+                    </div>
+                    <div className={styles.fieldBox}>
+                        <label className={styles.label} htmlFor={'count'}>max count:</label>
+                        <input className={styles.inputNumber} type={'number'} name={'maxcount'} title={'max count'}
+                               value={countMax}
+                               onChange={e=>setCountMax(+e.target.value)}
                                required autoComplete={'off'} placeholder={'count'}/>
                     </div>
 

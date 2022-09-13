@@ -107,6 +107,7 @@ export const selectFieldsOptions = {
     'equip': ['Helmet', 'Torso' , 'Glove' , 'Legs' , 'Boots' , 'Weapon' , 'Lantern' , 'Cape' , 'Coat'
     , 'Shirt' , 'Pants' , 'Offhand' , 'Pendant' , 'Ring' , 'Bracelet' , 'Crowns'],
     // 'ability.type': [],
+    'shopContentItemTypes': ['Recipe' , 'Ability' , 'Equip' , 'Empty'],
 
     'material': undefined as Array<string> | undefined,
     'component': undefined as Array<string> | undefined,
@@ -123,6 +124,7 @@ export const selectFieldsOptions = {
     'companion': undefined as Array<string> | undefined,
     'questitem': undefined as Array<string> | undefined,
     'questitemsource': undefined as Array<string> | undefined,
+    'shop': undefined as Array<string> | undefined,
 
 
     'gatherpoint.Botany': undefined as Array<string> | undefined,

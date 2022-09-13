@@ -15,10 +15,10 @@ export const LootField: React.FC<TProps> = (props) => {
     const {formik, index, dataName} = props
     const [loot, setLoot] = useState<Array<TDrop<TDropTypes>>>(() => formik.values.loot)
 
-    const dropKeys = ['name', 'type', 'count', '%']
+    const dropKeys = ['name', 'type', 'min', 'max','%']
 
     const onDropAddHandler = (drop: TDrop<TDropTypes>) => {
-        formik.setFieldValue('loot', [formik.values.loot, drop])
+        formik.setFieldValue('loot', [...formik.values.loot, drop])
         // setLoot(actual => [...actual, drop])
     }
     const onDropDelHandler = (index: number) => {
@@ -45,7 +45,7 @@ export const LootField: React.FC<TProps> = (props) => {
                                     {Object.entries(dropValue).map(([k,v], i) =>
                                         k==='_id'? null:<td className={i === 0 ? tableStyles.nameTd : tableStyles.notEmptyTd}>{v}</td>)}
                                     <td>
-                                        <button className={styles.deleteButton} onClick={() => onDropDelHandler(index)}/>
+                                        <button type={'button'} className={styles.deleteButton} onClick={() => onDropDelHandler(index)}/>
                                     </td>
                                 </tr>)
                             || <tr>

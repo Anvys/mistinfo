@@ -25,6 +25,7 @@ export const BoundField: React.FC<PosFieldProps> = (props) => {
     const dispatch = useAppDispatch()
     // const markerPos = useSelector(getMarkerForAddPosSelector)
     const bounds = useSelector(MapSelectors.getBounds)
+    const isBoundsActive = useSelector(MapSelectors.isBoundActive)
     const onOpenMapHandler = () => {
         setIsBoundsFromMap(true)
         dispatch(MapSlice.actions.setIsAddBoundsActive(true))
@@ -40,11 +41,12 @@ export const BoundField: React.FC<PosFieldProps> = (props) => {
         <div className={styles.fieldBoxCol} key={index}>
             {'Bounds'}
             <div className={styles.fieldBoxNoBorder}>
-                {bounds.map(v=>`${v[0]}:${v[1]}, `)}
+                {bounds.length}
+                {/*{bounds.map(v=>`${v[0]}:${v[1]}, `)}*/}
             </div>
 
-            {!isBoundsFromMap && <button className={styles.addButton} type={'button'} onClick={onOpenMapHandler}>OpenMap</button>}
-            {isBoundsFromMap && <button className={styles.addButton} type={'button'} onClick={onCloseMapHandler}>CloseMap</button>}
+            {!isBoundsActive && <button className={styles.addButton} type={'button'} onClick={onOpenMapHandler}>OpenMap</button>}
+            {isBoundsActive && <button className={styles.addButton} type={'button'} onClick={onCloseMapHandler}>CloseMap</button>}
         </div>
     )
 }

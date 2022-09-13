@@ -1,12 +1,12 @@
 import React from 'react';
 import Leaf, {Icon, LatLngExpression} from "leaflet";
-import {Circle, CircleMarker, ImageOverlay, Marker, Polyline, Popup, Tooltip} from "react-leaflet";
+import {Circle, CircleMarker, ImageOverlay, Marker, Polygon, Polyline, Popup, Tooltip} from "react-leaflet";
 import {
     TEvent,
     TGatherPoint,
     TLocation,
     TMapPosition, TNpc,
-    TQuest, TQuestItemSource,
+    TQuest, TQuestItemSource, TRegion,
     TStagePos, TStagePosType,
     TStaminaElixir
 } from "../../../Types/CommonTypes";
@@ -85,6 +85,20 @@ const getPosFromQuestStage = (pos: TStagePos, type: TStagePosType, locations: Ar
     }
 }
 export const MC = {
+    region: (data: TRegion, zoom: number) =>{
+        const bounds = data.bound
+        // if(bounds.length > 0){
+        //     const path = bounds.map(bound => (
+        //
+        //     ))
+        // }else return null
+
+            return <Polygon pathOptions={{color: 'lime'}} positions={bounds}>
+                <Popup>
+                    {data.name}
+                </Popup>
+            </Polygon>
+    },
     questItem: (data: TQuestItemSource, zoom: number, pos: TMapPosition, icon: string) =>{
 
         return (
@@ -155,44 +169,10 @@ export const MC = {
         const dopCoefY = 0.15
         const towns = [
             <ImageOverlay
-                // autoPan={false}
-                // bubblingMouseEvents={false}
                 url={require('./../../../assets/icons/mapobject/CityKortombourgNew.png')}
                 bounds={[[-0.18 - size1 / dopCoef + dopCoefX, -45.68 - size2 / dopCoef + dopCoefY], [-0.18 + size2 / dopCoef + dopCoefX, -45.68 + size2 / dopCoef + dopCoefY]]}
-                // pane={'overlayPane'}
-                // icon={new Icon({
-                //     iconUrl: ,
-                //     iconSize: [1875 / coef, 1602 / coef],
-                //     iconAnchor: [1875 / coef / 2, 1602 / coef / 2],
-                //     pane: 'overlayPane',
-                //
-                // })}
-                // position={[-0.18, -45.68]}
             />,
-            // <Marker
-            //     autoPan={false}
-            //     bubblingMouseEvents={false}
-            //
-            //     pane={'overlayPane'}
-            //     icon={new Icon({
-            //         iconUrl: require('./../../../assets/icons/mapobject/CityKortombourgNew.png'),
-            //         iconSize: [1875 / coef, 1602 / coef],
-            //         iconAnchor: [1875 / coef / 2, 1602 / coef / 2],
-            //         pane: 'overlayPane',
-            //
-            //     })} position={[-0.18, -45.68]}/>,
-            // <Marker
-            //     autoPan={false}
-            //
-            //     icon={new Icon({
-            //         iconUrl: require('./../../../assets/icons/mapobject/CityQuara.png'),
-            //         iconSize: [1360 / coef, 773 / coef],
-            //         iconAnchor: [1360 / coef / 2, 773 / coef / 2],
-            //     })}
-            //     position={[3.56, -64.64]}
-            //     pane={'shadowPane'}
-            //
-            // />
+
         ]
         return towns
     },
@@ -262,6 +242,11 @@ export const MC = {
     gatherPoint: (loc: TGatherPoint, zoom: number) => {
         // const icon = `./../../../assets/icons/${iconPicker(loc.type)}.png`
         // console.log(icon)
+        // const t = new Image()
+        // t.src = iconPicker(loc.icon)
+        // console.log(`${t.width}:${t.height}`)
+        const iW = 128/ 6 * (zoom - 4) * 0.5
+        const iH = 128 / 6 * (zoom - 4) * 0.5
         return (
             <Marker
                 draggable={false}
@@ -270,8 +255,10 @@ export const MC = {
                 icon={new Icon({
                     // iconUrl: require(`./../../../assets/icons/${loc.icon}.png`),
                     iconUrl: iconPicker(loc.icon),
-                    iconSize: [50 * (zoom - 4) * 0.3, 50 * (zoom - 4) * 0.3],
-                    popupAnchor: [0, -25],
+                    iconSize: [iW, iH],
+                    iconAnchor:[iW/2, iH/2],
+                    popupAnchor: [0, -iH/2],
+                    tooltipAnchor:[iW/2, 0],
                 })}
                 position={{lat: loc.pos.x, lng: loc.pos.y}}>
                 <Popup>
@@ -311,6 +298,7 @@ const AddDataMarker: React.FC<TAddDataMarkerProps> = (props) => {
             icon={new Icon({
                 iconUrl: icon,
                 iconSize: [iconSize[0], iconSize[1]],
+                iconAnchor: [iconSize[0]/2, iconSize[1]/2],
                 popupAnchor: [0, -25],
             })}
             position={pos}

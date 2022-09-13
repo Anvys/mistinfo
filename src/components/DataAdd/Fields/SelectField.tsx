@@ -18,14 +18,14 @@ export const SelectField:React.FC<TProps> = (props) => {
     return (
         <div className={styles.fieldBox} key={index}>
             <label className={styles.label} htmlFor={htmlId}>{labelText}</label>
-            <select defaultValue={mapSelectValues[0]}
+            <select defaultValue={undefined}
                     className={styles.inputText + ' '+  styles.selectWithDef}
                     name={htmlId}
                     onChange={formik.handleChange}
                     value={value}
                     required={required}>
                 {labelText !== 'type' && <option className={styles.optionDefault} value="" disabled selected>{`Select ${labelText}`}</option>}
-                {mapSelectValues.map((v, i) => (<option key={i} selected={i === 0} value={v}>{v}</option>))}
+                {mapSelectValues?.length>0 && mapSelectValues.map((v, i) => (<option key={i} selected={i === 0} value={v}>{v}</option>))}
             </select>
         </div>
     );

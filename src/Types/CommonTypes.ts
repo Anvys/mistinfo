@@ -1,9 +1,11 @@
 import {selectFieldsOptions} from "./Utils";
+import {TShopItemReputation} from "../components/DataAdd/Fields/ShopContentField";
 
 export type TCombineData = TNpc | TRegion | TLocation
     | TMaterial | TComponent | TGatherPoint | TLoot
     | TStaminaElixir | TEvent | TMapObject | TQuest
 | TRecipe | TAbility | TCompanion | TMonster | TQuestItem | TQuestItemSource
+| TShop
 
 export type TComponent = TResources<TComponentType, TComponentAttributes>
 export type TMaterial = TResources<TMaterialType, TMaterialAttributes>
@@ -141,6 +143,31 @@ export type TEvent = {
     translate: TTranslateData
     notes: Array<string>
 }
+export type TShopContentItem = TRecipe | TAbility | TEquip | undefined
+export type TShopContentType = 'Recipe' | 'Ability' | 'Equip' | 'Empty'
+
+export type TReputationRequire = {
+    reputation: TShopItemReputation
+    count: number
+}
+export type TShopContent = {
+    type: TShopContentType
+    item: TShopContentItem
+    count: number
+    price: number
+    reputationRequire: TReputationRequire | null
+}
+export type TShop = {
+    _id: string
+    name: string
+    npc: string
+    content: Array<TShopContent>
+
+    icon: string
+    translate: TTranslateData
+    notes: Array<string>
+}
+
 
 export type TMapObject = {
     _id: string
@@ -333,7 +360,8 @@ export type TDropTypes = TComponentType | TMaterialType
 export type TDrop<T extends TDropTypes> = {
     type: T
     name: string
-    count: number
+    countMin: number
+    countMax: number
     chance: number
 }
 
@@ -341,7 +369,7 @@ export type TDrop<T extends TDropTypes> = {
 export type TRequestType = 'Material' | 'Component' | 'Npc'
     | 'Location' | 'Region' | 'GatherPoint' | 'Loot'
     | 'StaminaElixir' | 'Event' | 'MapObject' | 'Quest' | 'Recipe' | 'Companion' | 'Ability' | 'QuestItem'
-| 'Monster' | 'QuestItemSource'
+| 'Monster' | 'QuestItemSource' | 'Shop'
 export type TRequestBody<T extends TRequestType, D> = {
     type: T
     data: D

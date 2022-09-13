@@ -10,7 +10,7 @@ import {
     TRequestBody,
     TRequestType,
     TResponseBody,
-    TResResponse, TStaminaElixir,
+    TResResponse, TShop, TStaminaElixir,
     TWOid
 } from "../Types/CommonTypes";
 
@@ -51,6 +51,7 @@ export const MonsterAPI = getDataAPI<TMonster, 'Monster'>(`/monster`, 'Monster')
 export const CompanionAPI = getDataAPI<TCompanion, 'Companion'>(`/companion`, 'Companion')
 export const QuestItemAPI = getDataAPI<TQuestItem, 'QuestItem'>(`/questitem`, 'QuestItem')
 export const QuestItemSourceAPI = getDataAPI<TQuestItemSource, 'QuestItemSource'>(`/questitemsource`, 'QuestItemSource')
+export const ShopAPI = getDataAPI<TShop, 'Shop'>(`/shop`, 'Shop')
 //     {
 //     getAll: () => instance.get<TMatResponse>(`${materialURI}/all`).then(data => data.data),
 //     getOne: (id: string) => instance.get<TMatResponse>(`${materialURI}/one/:${id}`).then(data => data.data),

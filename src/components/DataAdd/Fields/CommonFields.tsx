@@ -15,6 +15,7 @@ import {EvoQuestField} from "./EvoQuestFiled";
 import {BoundField} from "./BoundField";
 import {PosQuestItemField} from "./PosField";
 import {CompanionSkillField} from "./CompanionSkillField";
+import {ShopContentField} from "./ShopContentField";
 // import styles from './CommonFields.module.css';
 
 
@@ -41,6 +42,8 @@ export const commonFields = (
                         return <SimpleSelectField mapSelectValues={selectFieldsOptions['questitem'] || ['Error']}
                                                   value={formik.values.translate.En}
                                                   onSelChange={v=>formik.setFieldValue('translate.En', v)} labelText={'Quest Item name'}/>
+                    case eKey==='content':
+                        return <ShopContentField  formik={formik} index={i} dataName={dataName}/>
                     case eKey==='pos':
                         return AddFields.posField(value['x'], value['y'], curKey, i, formik, dataName)
                     case eKey==='icon':
@@ -48,6 +51,8 @@ export const commonFields = (
                     case eKey==='abilities':
                         return <AbilityFiled formik={formik} index={i} dataName={dataName}/>
                     case eKey==='skills':
+                        console.log(`skilll ${dataName} ${eKey} ${value}`)
+                        console.log(value)
                         return <CompanionSkillField formik={formik} index={i} dataName={dataName}/>
                     case eKey==='bound':
                         return <BoundField formik={formik} index={i} dataName={dataName}/>

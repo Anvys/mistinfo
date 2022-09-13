@@ -23,6 +23,7 @@ import {CompanionThunks} from "./redux/reducers/companionReducer";
 import {MonsterThunks} from "./redux/reducers/monsterReducer";
 import {QuestItemThunks} from "./redux/reducers/questItemReducer";
 import {QuestItemSourceThunks} from "./redux/reducers/questItemSourceReducer";
+import {ShopThunks} from "./redux/reducers/shopReducer";
 
 function App() {
     const dispatch = useDispatch<TAppDispatch>();
@@ -45,6 +46,7 @@ function App() {
         dispatch(MonsterThunks.getAll())
         dispatch(QuestItemThunks.getAll())
         dispatch(QuestItemSourceThunks.getAll())
+        dispatch(ShopThunks.getAll())
         if(user.login === undefined || user.token === undefined) {
             console.log('Not authorized yo')
             // dispatch(AuthThunks.login({login: 'admi', password: '1234'}))

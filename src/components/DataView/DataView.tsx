@@ -62,10 +62,15 @@ export const DataView = <T extends TCombineData>(props: React.PropsWithChildren<
         sortedDataKeys.forEach((sKey) => dataKeys.get(sKey)?.forEach((dKey) => {
             // console.log(`sKey=${sKey}`)
             switch (sKey) {
+                case 'content': {
+                    const data = dataVal[sKey as k1]// as Array<TDrop<TDropTypes>>
+                    if (Array.isArray(data)) sortedRow.push(getDataObjStr(sKey, data))
+                    break
+                }
                 case 'loot': {
                     const loot = dataVal[sKey as k1]// as Array<TDrop<TDropTypes>>
                     if (Array.isArray(loot)) {
-                        sortedRow.push(loot.map((drop, i) => `${drop.type}:${drop.name}   x${drop.count}(${drop.chance}%)${i < loot.length - 1 ? '\n' : ''}`))
+                        sortedRow.push(loot.map((drop, i) => `${drop.type}:${drop.name}   x${drop.countMin}${drop.countMax<=drop.countMin?'':`-${drop.countMax}`}(${drop.chance}%)${i < loot.length - 1 ? '\n' : ''}`))
                     }
                     // sortedRow.push(`${drop.type}:${drop.name} x${drop.count} ~${drop.chance}%`)
                     break
@@ -127,7 +132,7 @@ export const DataView = <T extends TCombineData>(props: React.PropsWithChildren<
                     sortedRow.push(dataVal[dKey as k1])
                     break
                 case 'translate': {
-                    const onClick:React.MouseEventHandler<HTMLSpanElement> = (e) =>{
+                    const onClick: React.MouseEventHandler<HTMLSpanElement> = (e) => {
                         e.stopPropagation()
                         e.preventDefault()
                         console.log(dKey)
@@ -139,8 +144,7 @@ export const DataView = <T extends TCombineData>(props: React.PropsWithChildren<
                         if (dKey === 'En') {
                             sortedRow.push(<span
                                 onClick={onClick}>{`${trVal}`}</span>)
-                        }
-                        else {
+                        } else {
                             // sortedRow.push(<span
                             //     onClick={onClick}>{`${trVal}`}</span>)
                             sortedRow.push(trVal)

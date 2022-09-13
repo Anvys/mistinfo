@@ -31,7 +31,12 @@ export const RegionContent: React.FC<TProps> = (props) => {
     const dataDelHandler = (id: string) => {
         dispatch(RegionThunks.deleteOne(id))
     }
-    const resetAddFormData = () => setDataToAdd(null)
+    const resetAddFormData = () => {
+        dispatch(MapSlice.actions.setBounds([]))
+        dispatch(MapSlice.actions.setIsAddPosFieldActive(false))
+        dispatch(MapSlice.actions.setIsAddBoundsActive(false))
+        setDataToAdd(null)
+    }
     const initObj: TWOid<TRegion> = {
         name: '',
         terrain: 'Forest',

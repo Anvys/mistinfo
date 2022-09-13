@@ -41,12 +41,25 @@ export const getAddMarkerSizeSelector = (state: TAppState) => state.map.addMarke
 export const getMarkersSelector = (state: TAppState) => state.map.markers
 
 export const MapSelectors = {
+    isAddActive: (state: TAppState) => state.map.isAddPosFieldActive,
     isBoundActive:  (state: TAppState) => state.map.isAddBoundsActive,
     getBounds: (state: TAppState) => state.map.bounds,
     isMapActive : (state: TAppState) => state.map.isAddBoundsActive || state.map.isAddPosFieldActive || state.map.isActiveQuestMap,
     getActiveQuest : (state: TAppState) => state.map.activeQuest
 }
 
+export const MaterialSelectors = {
+    isInit: (state: TAppState) => state.material.isInit,
+    getData: (state: TAppState) => state.material.data,
+}
+export const ComponentSelectors = {
+    isInit: (state: TAppState) => state.component.isInit,
+    getData: (state: TAppState) => state.component.data,
+}
+export const ShopSelectors = {
+    isInit: (state: TAppState) => state.shop.isInit,
+    getData: (state: TAppState) => state.shop.data,
+}
 export const LocationSelectors = {
     isInit: (state: TAppState) => state.location.isInit,
     getData: (state: TAppState) => state.location.data,

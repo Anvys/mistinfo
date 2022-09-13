@@ -272,7 +272,7 @@ export const StageQuestField: React.FC<TProps> = (props) => {
                                             if(st.type === 'Equip') return <td>{getStageRequireStr('Equip', st.require)}</td>
                                             return <td>{Object.entries(val).map(([r1, r2], i, arr) => `${r2}${i < arr.length - 1 ? ': ' : ''}`)}</td>
                                         case 'loot':
-                                            return <td>{val?.map((drop: TDrop<TDropTypes>, i: number) => `${drop.type}#${drop.name}#x${drop.count}(${drop.chance}%)${i < val.length - 1 ? '\n' : ''}`)}</td>
+                                            return <td>{val?.map((drop: TDrop<TDropTypes>, i: number) => `${drop.type}#${drop.name}#x${drop.countMin}-${drop.countMax}(${drop.chance}%)${i < val.length - 1 ? '\n' : ''}`)}</td>
                                         case 'stagePosType':
                                         case '_id' :
                                             return null
