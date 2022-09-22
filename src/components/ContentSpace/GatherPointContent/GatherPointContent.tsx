@@ -2,19 +2,13 @@ import React, {useState} from 'react';
 import styles from './GatherPointContent.module.css';
 import {useDispatch, useSelector} from "react-redux";
 import {Outlet} from "react-router-dom";
-import {
-    getGatherPointSelector,
-    getIsAddPosFieldActiveSelector,
-    getIsLocationInitSelector
-} from "../../../redux/dataSelectors";
+import {getGatherPointSelector, getIsLocationInitSelector} from "../../../redux/dataSelectors";
 import {TAppDispatch} from "../../../redux/store";
 import {DataView} from "../../DataView/DataView";
 import {LocationThunks} from "../../../redux/reducers/locationReducer";
 import {TGatherPoint, TWOid} from "../../../Types/CommonTypes";
 import {GenDataAdd} from "../../DataAdd/GenDataAdd";
-import {MyMap} from "../../Map/MyMap";
 import {GatherPointThunks} from "../../../redux/reducers/gatherPointReducer";
-import {FieldDrop} from "../../DataAdd/Fields/FieldDrop";
 
 type TProps = {};
 export const GatherPointContent: React.FC<TProps> = (props) => {
@@ -61,11 +55,10 @@ export const GatherPointContent: React.FC<TProps> = (props) => {
                 </div>
                 {/*{isMapActive && <MyMap wid={-1} hei={400}/>}*/}
             </div>
-
             <div className={styles.dbField}>
                 <Outlet/>
                 <DataView data={data} dataEditHandler={dataAddHandler} dataDelHandler={dataDelHandler}/>
             </div>
         </div>
-    );
+    )
 }

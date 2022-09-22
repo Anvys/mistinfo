@@ -10,23 +10,32 @@ type TProps = {
     formik: FormikProps<any>
     dataName: string
 };
-export const AttributeField: React.FC<TProps> = (props) => {
+export const AttributeField: React.FC<TProps> = React.memo((props) => {
+
     const {formik, index, dataName} = props
     const [attributes, setAttributes] = useState<Array<string>>([])
     const [attribute, setAttribute] = useState('')
-
+    // console.log(`Attribute / ${attributes.length}`)
     const selArr = selectFieldsOptions[`${dataName}.attributes` as TSelectFieldOptionsKeys] as Array<string>
     // if(formik.values.type === 'Substance'){
     //     console.log('sub')
     // }
     const newAttrArr: Array<string> = []
     selArr.forEach((v: string) => { //const checkFilledAttributes = () =>{     }
-        if (formik.values.attributes[v]!== undefined && formik.values.attributes[v] !== 0 && !attributes.includes(v)) {
+        if (formik.values.attributes[v]!== undefined && formik.values.attributes[v] !== 0 ) { //&& !attributes.includes(v)
             // console.log(v)
             newAttrArr.push(v)
         }
     })
-    if(newAttrArr.length>0) setAttributes(newAttrArr)
+
+    if(newAttrArr.length>0 && !newAttrArr.every(v=>attributes.includes(v))) {
+        console.log(`-S--`)
+        console.log(newAttrArr)
+        console.log(attributes)
+        console.log(`-E--`)
+        // setAttributes(actual=>[...actual, ...newAttrArr])
+        setAttributes(newAttrArr)
+    }
     const availableAttributes = selArr.filter((v: string) => !attributes.includes(v))
     // console.log(`Attr: ${attribute}, attrs: ${attributes.length}`)
     // console.log(attributes)
@@ -87,7 +96,7 @@ export const AttributeField: React.FC<TProps> = (props) => {
             </div>
         </div>
     );
-}
+})
 
 type TAttributeAddForm = {
     name: string

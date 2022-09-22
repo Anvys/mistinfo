@@ -28,8 +28,14 @@ export const MaterialContent:React.FC<TProps> = React.memo((props) => {
     // const isAuth = useSelector(AuthSelectors.isInit)
     const data = useSelector(getMaterialsSelector);
     const [dataToAdd, setDataToAdd] = useState(()=>null as null | TMaterial)
-    const editData = useSelector(MaterialSelectors.getEditTarget)
+    // const editData = useSelector(MaterialSelectors.getEditTarget)
+    const dataAddHandler = (id: string) => {
+        setDataToAdd(id.length ? data.find(v => v._id === id) || null : null)
+    }
     const resetAddFormData = () => setDataToAdd(null)
+    const dataDelHandler = (id: string) => {
+        dispatch(MaterialThunks.deleteOne(id))
+    }
     const initObj: TWOid<TMaterial> = {
         name: '',
         icon: '',
@@ -54,33 +60,29 @@ export const MaterialContent:React.FC<TProps> = React.memo((props) => {
     }
 
     console.log(dataToAdd)
-    const dataAddHandler = (id: string) =>{
-        console.log(`id=${id}`)
+    // const dataAddHandler = (id: string) =>{
+    //     console.log(`id=${id}`)
+    //     // if(!!dataToAdd && dataToAdd._id === id) return
+    //     // let res = null;
+    //     // if(id.length){
+    //     //     res = data.find(v=>v._id===id) || null
+    //     // }
+    //     // if(editData !== null) dispatch(MaterialSlice.actions.setEditTarget(null))
+    //     // dispatch(MaterialSlice.actions.setEditTarget(res))
+    //     // if(res !== undefined) res = {...res}
+    //     setDataToAdd( actual => data.find(v=>v._id===id) || null)
+    // }
 
-        // if(!!dataToAdd && dataToAdd._id === id) return
-        let res = null;
-        if(id.length){
-            res = data.find(v=>v._id===id) || null
-        }
-        if(editData !== null) dispatch(MaterialSlice.actions.setEditTarget(null))
-        dispatch(MaterialSlice.actions.setEditTarget(res))
-        // if(res !== undefined) res = {...res}
-        // setDataToAdd( !!res ? res : null)
-    }
-    const dataDelHandler = (id: string) => {
-        dispatch(MaterialThunks.deleteOne(id))
-    }
     return (
         <div className={styles.contentBox}>
             <div className={styles.nav}>
                 {/*<MaterialDataAdd data={dataToAdd} resetAddFormData={resetAddFormData}/>*/}
                 {GenDataAdd({
-                    // data: dataToAdd,
+                    data: dataToAdd,
                     resetAddFormData,
                     initObj,
                     curThunks: MaterialThunks,
                     dataName: 'material',
-                    selector: MaterialSelectors
                 })}
             </div>
             <div className={styles.dbField}>

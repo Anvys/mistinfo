@@ -4,37 +4,27 @@ import {useSelector} from "react-redux";
 import {TCombineThunks, useAppDispatch} from "../../redux/store";
 import {useFormik} from "formik";
 import {AddDataForm} from "./AddDataForm";
-import {
-    AuthSelectors,
-    getMarkerForAddPosSelector,
-    MapSelectors,
-    MaterialSelectors,
-    TSelectors
-} from "../../redux/dataSelectors";
-import {StageQuestField} from "./Fields/QuestStageField";
+import {getMarkerForAddPosSelector, MapSelectors, TSelectors} from "../../redux/dataSelectors";
 // import styles from './GenDataAdd.module.css';
 
 
 const dataWithPos = ['gatherpoint', 'location', 'staminaelixir', 'region', 'event', 'mapobject']
 export type TDataAddProps<T extends TCombineData> = {
-    data?: T | null
+    data: T | null
     resetAddFormData: () => void
     initObj: TWOid<T>
     curThunks: TCombineThunks
     dataName: string
-    selector?:TSelectors
 }
 export const GenDataAdd = <T extends TCombineData, >(props: React.PropsWithChildren<TDataAddProps<T>>) => {
-    const { curThunks} = props
-    const data = null
-    const isMod = useSelector(AuthSelectors.isInit)
+    const { curThunks, data} = props
+    // const data = null
+    const isMod = true //useSelector(AuthSelectors.isInit)
     const dispatch = useAppDispatch();
 
-    const editData = useSelector(MaterialSelectors.getEditTarget)
-    console.log(`editdata: ${editData}`)
     const pos = useSelector(getMarkerForAddPosSelector)
     const isMarkerAdd = useSelector(MapSelectors.isAddActive)
-    const initVal = editData!==null ?editData: data !== null ? data : props.initObj
+    const initVal = data !== null ? data : props.initObj
     const formik = useFormik({
         initialValues: initVal,
         enableReinitialize: true,
