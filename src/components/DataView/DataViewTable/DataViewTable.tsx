@@ -4,7 +4,79 @@ import fieldsStyles from './../../DataAdd/Fields/Fields.module.css'
 
 import {useAppDispatch} from "../../../redux/store";
 import {iconUrlPicker} from "../../IconPicker/IconPicker";
-import {TTranslateLang} from "../../../Types/CommonTypes";
+import {TCombineData, TTranslateLang} from "../../../Types/CommonTypes";
+import {getDataView, getTableTdKey, TDataViewObj} from "../DataView";
+import {useSelector} from "react-redux";
+import {AuthSelectors, GlobalSettingsSelectors} from "../../../redux/dataSelectors";
+
+
+type TDataViewTable2Props = {
+    data: Array<TCombineData>
+    dataEditHandler: (id: string) => void
+    dataDelHandler: (id: string) => void
+    isMod: boolean
+}
+export const DataViewTable2: React.FC<TDataViewTable2Props> = React.memo((props) => {
+    const {dataEditHandler, dataDelHandler, isMod} = props
+    const data = [...props.data]
+    const [isDeleteModeActive, setIsDeleteModeActive] = useState(false);
+    const lang = useSelector(GlobalSettingsSelectors.getLang)
+
+    const dataView: TDataViewObj | null = getDataView(data, lang)
+    if (!dataView) return <>Empty dataView</>
+
+    const onCheck = (e: React.ChangeEvent<HTMLInputElement>) => {
+        setIsDeleteModeActive(e.target.checked)
+    }
+    return (
+        <>
+            <table className={styles.table}>
+                <thead>
+                    <tr>
+                        {dataView.keys1.map(([key, num], i) => {
+                                const rowSpan = num > 1 ? 1 : dataView.keys2.some(([k2, num2]) => k2 === key) ? 2 : 1
+                                return <th className={styles.th1} rowSpan={rowSpan} colSpan={num} key={i}>
+                                    {getTableTdKey(key)}</th>
+                            }
+                        )}
+                        {isMod && <th className={styles.th1} rowSpan={2}>Edit</th>}
+                        {isMod && <th className={styles.th1} rowSpan={1}>Delete</th>}
+
+                            </tr>
+                    <tr>
+                        {dataView.keys2.map(([key, num], i) => dataView.keys1.some(([k1, num1]) => k1 === key) ? null :
+                            <th className={styles.th1} colSpan={num} key={i}>{getTableTdKey(key)}</th>)}
+                        {isMod && <th className={styles.th1}><input type={"checkbox"} checked={isDeleteModeActive}
+                                                                    onChange={onCheck}/></th>}
+                    </tr>
+                </thead>
+                <tbody>
+                    {dataView.values.map((val, index) =>
+                        <tr className={styles.dataRow} key={index}>
+                            {val.map((str, index2) => {
+                                if (index2 === 0 && dataView.keys1[0][0] === 'icon') {
+                                    return (
+                                        <img className={fieldsStyles.imgIcon}
+                                                src={iconUrlPicker(str.split('/')[0], str.split('/')[1])}/>)
+                                }
+                                const stl = !(!str || str ==='-') ? styles.notEmptyTd : styles.emptyTd
+                                return <td className={stl} key={index2}>
+                                    {str}
+                                </td>
+                            })}
+                            {isMod && <td className={styles.notEmptyTd}>
+                                <button type={'button'} className={styles.editButton} onClick={() => dataEditHandler(data[index]._id)}/>
+                            </td>}
+                            {isMod && isDeleteModeActive &&
+                                <td className={styles.notEmptyTd}>
+                                    <button type={'button'} className={styles.deleteButton} onClick={() => dataDelHandler(data[index]._id)}/>
+                                </td>}
+                        </tr>)}
+                </tbody>
+            </table>
+        </>
+    )
+})
 
 type TProps = {
     dataKeys: Map<string, Array<string>>
@@ -15,6 +87,7 @@ type TProps = {
     isMod: boolean
     lang: TTranslateLang | undefined
 };
+
 export const DataViewTable: React.FC<TProps> = (props) => {
     const {isMod, lang} = props
     const [isDeleteModeActive, setIsDeleteModeActive] = useState(false);
@@ -79,7 +152,8 @@ export const DataViewTable: React.FC<TProps> = (props) => {
                                         ? j < 4
                                             ? <td className={styles.nameTd} key={j}>{val}</td>
                                             : j < data.length - 1
-                                                ? <td className={stl} key={j}>{iconIndex === (lang===undefined? j : j+2) && val
+                                                ? <td className={stl}
+                                                      key={j}>{iconIndex === (lang === undefined ? j : j + 2) && val
                                                     ? <img className={fieldsStyles.imgIcon}
                                                            src={iconUrlPicker(val.split('/')[0], val.split('/')[1])}/>
                                                     : val}</td>

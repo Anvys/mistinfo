@@ -143,11 +143,14 @@ export const getStageRequireStr = (type: string, req: TStageRequire) => {
     }
 }
 export const getStagesStr = (stages: Array<TStage>): string => {
+    const totalStages = stages.reduce((p,c)=>{return c.num>p?c.num:p},0)
     return stages.map((stage, i) =>
-        `-${stage.expr}-:№${stage.num}:${stage.name}:${stage.proc}%:${getStageRequireStr(stage.type, stage.require)}${i < stages.length - 1 ? '\n' : ''}`).join('')
+        // `-${stage.expr}-:№${stage.num}:${stage.name}:${stage.proc}%:${getStageRequireStr(stage.type, stage.require)}${i < stages.length - 1 ? '\n' : ''}`).join('')
+        `${totalStages>1?`№${stage.num} `:''}[${stage.name.length> 12 ? stage.name.substring(0,12)+'..':stage.name}]  ${getStageRequireStr(stage.type, stage.require)}(${stage.proc}%)${i < stages.length - 1 ? '\n' : ''}`).join('')
 }
 export const getStageStr = (stage: TStage | TQuestStage): string => {
-    return `-${stage.expr}-:№${stage.num}:${stage.name}:${stage.proc}%:${getStageRequireStr(stage.type, stage.require)}`
+    // return `-${stage.expr}-:№${stage.num}:${stage.name}:${stage.proc}%:${getStageRequireStr(stage.type, stage.require)}`
+    return `№${stage.num}: ${getStageRequireStr(stage.type, stage.require)}(${stage.proc}%)`
 }
 export const getAbilityStr = (abi: TAbility) => {
     return `${abi.name}: ${abi.level} lvl (${abi.type}) ${abi.cd > 0 ? `[cd ${abi.cd} turn]` : `[no cd]`} ${abi.stamina > 0 ? `cost ${abi.stamina}mp` : ''} [${abi.effect}]`

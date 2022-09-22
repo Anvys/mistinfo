@@ -17,7 +17,7 @@ import {getAddMarkerIconSelector, getAddMarkerSizeSelector} from "../../../redux
 import {iconUrlPicker} from "../../IconPicker/IconPicker";
 import {getStagesStr, getStageStr} from "../../../Unils/utilsFunctions";
 import {getPosStr} from "../../DataAdd/Fields/QuestStageField";
-// import styles from './MarkerCreator.module.css';
+import s from './MarkerCreator.module.css';
 
 const iconPicker = (type: string) => {
     if (!type) return require('./../../../assets/icons/temp.png')
@@ -85,7 +85,7 @@ const getPosFromQuestStage = (pos: TStagePos, type: TStagePosType, locations: Ar
     }
 }
 export const MC = {
-    region: (data: TRegion, zoom: number) =>{
+    region: (data: TRegion, zoom: number) => {
         const bounds = data.bound
         // if(bounds.length > 0){
         //     const path = bounds.map(bound => (
@@ -93,13 +93,13 @@ export const MC = {
         //     ))
         // }else return null
 
-            return <Polygon pathOptions={{color: 'lime'}} positions={bounds}>
-                <Popup>
-                    {data.name}
-                </Popup>
-            </Polygon>
+        return <Polygon pathOptions={{color: 'lime'}} positions={bounds}>
+            <Popup>
+                {data.name}
+            </Popup>
+        </Polygon>
     },
-    questItem: (data: TQuestItemSource, zoom: number, pos: TMapPosition, icon: string) =>{
+    questItem: (data: TQuestItemSource, zoom: number, pos: TMapPosition, icon: string) => {
 
         return (
             <Marker
@@ -117,17 +117,28 @@ export const MC = {
         )
     },
     quest: (data: TQuest, zoom: number, locations: Array<TLocation> | null = null) => {
-        const fillOpt = {color: 'lime'}
-        const fillOpt1 = {fillColor: 'blue'}
+        const fillLime = {color: 'lime'}
+        const follOrange = {color: 'orange'}
+        const fillBlue = {fillColor: 'blue'}
         const path = data.stages.map(v => {
             const pos: TMapPosition = getPosFromQuestStage(v.stagePos, v.stagePosType, locations)
             return [pos.x, pos.y]
         }).filter(v => v[0] !== 0 && v[1] !== 0) as LatLngExpression[]
         return <>
-            <Polyline pathOptions={fillOpt} positions={path}/>
-            {path.map((v, i) => <CircleMarker center={v} pathOptions={fillOpt} radius={20}><Popup>
-                {getStageStr(data.stages[i])}
-            </Popup></CircleMarker>)}
+            {path.length > 2 ?
+                <>
+                    <Polyline pathOptions={fillLime} positions={[path[0], path[1]]}/>
+                    <Polyline pathOptions={follOrange} positions={path.filter((v, i) => i > 0)}/>
+                </>
+                : <Polyline pathOptions={fillLime} positions={path}/>}
+            {path.map((v, i) =>
+                <CircleMarker center={v} pathOptions={i === 0 ? fillLime : follOrange} radius={20} >
+                    <Popup>
+                        <div className={s.popupDiv}>{getStageStr(data.stages[i])}</div>
+                    </Popup>
+                    {(path.length>1 && i===0) ? <Tooltip offset={[20,0]} direction={'right'} permanent>Start</Tooltip>
+                    :<Tooltip offset={[20,0]} direction={'right'}>{`${data.stages[i].num}: ${data.stages[i].name}`}</Tooltip>}
+                </CircleMarker>)}
         </>
     },
     events: (data: TEvent, zoom: number) => {
@@ -148,8 +159,10 @@ export const MC = {
                 })}
                 position={{lat: data.pos.x, lng: data.pos.y}}>
                 <Popup autoPan={false}>
-                    <p>{data.name}</p>
-                    <p>{getStagesStr(data.stages)}</p>
+                    <div className={s.popupDiv}>
+                        {`${data.name}\n`}
+                        {getStagesStr(data.stages)}
+                    </div>
                 </Popup>
 
             </Marker>
@@ -239,37 +252,41 @@ export const MC = {
             </Marker>
         )
     },
-    gatherPoint: (loc: TGatherPoint, zoom: number) => {
-        // const icon = `./../../../assets/icons/${iconPicker(loc.type)}.png`
+    gatherPoint: (data: TGatherPoint, zoom: number, gatherDifficult: number) => {
+        // const icon = `./../../../assets/icons/${iconPicker(data.type)}.png`
         // console.log(icon)
         // const t = new Image()
-        // t.src = iconPicker(loc.icon)
+        // t.src = iconPicker(data.icon)
         // console.log(`${t.width}:${t.height}`)
-        const iW = 128/ 6 * (zoom - 4) * 0.5
-        const iH = 128 / 6 * (zoom - 4) * 0.5
+        const iconSize = data.type==='Hunting'? 200: 128;
+        const iW = iconSize / 6 * (zoom - 4) * 0.5
+        const iH = iconSize / 6 * (zoom - 4) * 0.5
         return (
             <Marker
                 draggable={false}
                 // eventHandlers={eventHandlers}
                 // ref={markerRef}
                 icon={new Icon({
-                    // iconUrl: require(`./../../../assets/icons/${loc.icon}.png`),
-                    iconUrl: iconPicker(loc.icon),
+                    // iconUrl: require(`./../../../assets/icons/${data.icon}.png`),
+                    iconUrl: iconPicker(data.icon),
                     iconSize: [iW, iH],
-                    iconAnchor:[iW/2, iH/2],
-                    popupAnchor: [0, -iH/2],
-                    tooltipAnchor:[iW/2, 0],
+                    iconAnchor: [iW / 2, iH / 2],
+                    popupAnchor: [0, -iH / 2],
+                    tooltipAnchor: [iW / 2, 0],
                 })}
-                position={{lat: loc.pos.x, lng: loc.pos.y}}>
+                position={{lat: data.pos.x, lng: data.pos.y}}>
                 <Popup>
-                    <p>{loc.name}</p>
-                    <p>{loc.type}</p>
-                    <p>icon: {loc.icon}</p>
-                    {/*<p>dif:{loc.difficult}</p>*/}
-                    <p>count:{loc.count}</p>
-                    {/*{loc.exploreReq>0 && <p>explore: {loc.exploreReq}</p>}*/}
+                    <div className={s.popupDiv}>
+                        {`${data.name} [${data.type} ${gatherDifficult}]`}
+                    </div>
+                    {/*<p>{data.name}</p>*/}
+                    {/*<p>{data.type}</p>*/}
+                    {/*<p>icon: {data.icon}</p>*/}
+                    {/*/!*<p>dif:{data.difficult}</p>*!/*/}
+                    {/*<p>count:{data.count}</p>*/}
+                    {/*{data.exploreReq>0 && <p>explore: {data.exploreReq}</p>}*/}
                 </Popup>
-                <Tooltip><p>{loc.name}</p></Tooltip>
+                <Tooltip><p>{`${data.name} x${data.count}`}</p></Tooltip>
             </Marker>
         )
     },
@@ -298,7 +315,7 @@ const AddDataMarker: React.FC<TAddDataMarkerProps> = (props) => {
             icon={new Icon({
                 iconUrl: icon,
                 iconSize: [iconSize[0], iconSize[1]],
-                iconAnchor: [iconSize[0]/2, iconSize[1]/2],
+                iconAnchor: [iconSize[0] / 2, iconSize[1] / 2],
                 popupAnchor: [0, -25],
             })}
             position={pos}

@@ -1,0 +1,41 @@
+.loginMain {
+    display: flex;
+    flex-direction: row;
+    align-items: start;
+    gap: 10px;
+    justify-self: end;
+}
+.welcome{
+    font-size: 26px;
+    color: #5fcade;
+}
+.notAuth{
+  color: #ccbf64;
+    text-decoration: underline;
+}
+.logoutBtn, .loginBtn{
+    font-size: 20px;
+    color: #000000;
+    background-color: #de815f;
+    padding: 2px 10px;
+    border-radius: 20px;
+}
+.logoutBtn:hover, .loginBtn:hover{
+    cursor: pointer;
+}
+.loginFrom{
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+    align-items: center;
+}
+.loginBtn {
+    background-color: #a1bb59;
+}
+.input{
+    font-size: 22px;
+    padding: 2px 5px;
+    border-radius: 5px;
+    max-width: 150px;
+    width: fit-content;
+}

@@ -24,6 +24,7 @@ import {MonsterThunks} from "./redux/reducers/monsterReducer";
 import {QuestItemThunks} from "./redux/reducers/questItemReducer";
 import {QuestItemSourceThunks} from "./redux/reducers/questItemSourceReducer";
 import {ShopThunks} from "./redux/reducers/shopReducer";
+import {Header} from "./components/Header/Header";
 
 function App() {
     const dispatch = useDispatch<TAppDispatch>();
@@ -59,27 +60,22 @@ function App() {
     useEffect(()=>{
         console.log(`authchanged ${isAuth} / ${user.login}`)
     },[isAuth])
-    // if(!useSelector(getIsMaterialsInitSelector))dispatch(MaterialThunks.getAll())
-    // if(!useSelector(getIsComponentsInitSelector))dispatch(ComponentThunks.getAll())
-    // if(!useSelector(getIsLocationInitSelector))dispatch(LocationThunks.getAll())
-    // if(!useSelector(getIsRegionInitSelector))dispatch(RegionThunks.getAll())
-    // if(!useSelector(getIsNpcInitSelector))dispatch(NpcThunks.getAll())
-    // if(!useSelector(getIsInitGatherPointSelector))dispatch(GatherPointThunks.getAll())
 
     return (
         <div className={styles.App}>
-            <header className="App-header">
-                Mist in Forest {isAuth ? 'DEV' : 'USER'}
-                {/*<div style={{width: '100px'}}><button style={{width: '50px'}} type={'button'} onClick={()=>{*/}
-                {/*    if(user.token === undefined) console.log('token undefined')*/}
-                {/*    else dispatch(AuthThunks.me(user.token))}*/}
-                {/*}> 1 </button></div>*/}
-                {/*<div style={{width: '100px'}}><button style={{width: '50px'}} type={'button'} onClick={()=>{*/}
-                {/*    if(user.token === undefined) console.log('token undefined')*/}
-                {/*    else dispatch(AuthSlice.actions.logout())}*/}
-                {/*}> logout </button></div>*/}
-                <Login/>
-            </header>
+            <Header/>
+            {/*<header className="App-header">*/}
+            {/*    Mist in Forest {isAuth ? 'DEV' : 'USER'}*/}
+            {/*    /!*<div style={{width: '100px'}}><button style={{width: '50px'}} type={'button'} onClick={()=>{*!/*/}
+            {/*    /!*    if(user.token === undefined) console.log('token undefined')*!/*/}
+            {/*    /!*    else dispatch(AuthThunks.me(user.token))}*!/*/}
+            {/*    /!*}> 1 </button></div>*!/*/}
+            {/*    /!*<div style={{width: '100px'}}><button style={{width: '50px'}} type={'button'} onClick={()=>{*!/*/}
+            {/*    /!*    if(user.token === undefined) console.log('token undefined')*!/*/}
+            {/*    /!*    else dispatch(AuthSlice.actions.logout())}*!/*/}
+            {/*    /!*}> logout </button></div>*!/*/}
+            {/*    <Login/>*/}
+            {/*</header>*/}
             <WorkSpace/>
         </div>
     );

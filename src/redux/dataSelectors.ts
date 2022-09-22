@@ -40,6 +40,9 @@ export const getAddMarkerIconSelector = (state: TAppState) => state.map.addMarke
 export const getAddMarkerSizeSelector = (state: TAppState) => state.map.addMarkerSize
 export const getMarkersSelector = (state: TAppState) => state.map.markers
 
+export const GlobalSettingsSelectors = {
+    getLang: (state: TAppState) => state.globalSettings.language
+}
 export const MapSelectors = {
     isAddActive: (state: TAppState) => state.map.isAddPosFieldActive,
     isBoundActive:  (state: TAppState) => state.map.isAddBoundsActive,
@@ -48,9 +51,14 @@ export const MapSelectors = {
     getActiveQuest : (state: TAppState) => state.map.activeQuest
 }
 
+export const LootSelectors = {
+    isInit: (state: TAppState) => state.loot.isInit,
+    getData: (state: TAppState) => state.loot.data,
+}
 export const MaterialSelectors = {
     isInit: (state: TAppState) => state.material.isInit,
     getData: (state: TAppState) => state.material.data,
+    getEditTarget: (state: TAppState) => state.material.editTarget,
 }
 export const ComponentSelectors = {
     isInit: (state: TAppState) => state.component.isInit,
@@ -69,7 +77,7 @@ export const RegionSelectors = {
     getData: (state: TAppState) => state.region.data,
 }
 
-export type TSelectors =  | typeof QuestItemSelectors | typeof RecipeSelectors
+export type TSelectors =  | typeof MaterialSelectors | typeof QuestItemSelectors | typeof RecipeSelectors
 | typeof MonsterSelectors | typeof AbilitySelectors | typeof CompanionSelectors
 
 

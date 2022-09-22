@@ -20,6 +20,7 @@ import {CompanionSlice, TCompanionThunks} from "./reducers/companionReducer";
 import {QuestItemSlice, TQuestItemThunks} from "./reducers/questItemReducer";
 import {QuestItemSourceSlice, TQuestItemSourceThunks} from "./reducers/questItemSourceReducer";
 import {ShopSlice, TShopThunks} from "./reducers/shopReducer";
+import {GlobalSettingsSlice} from "./reducers/globalSettingsReducer";
 
 
 export const store = configureStore({
@@ -44,7 +45,7 @@ export const store = configureStore({
         questItemSource: QuestItemSourceSlice.reducer,
         shop: ShopSlice.reducer,
 
-
+        globalSettings: GlobalSettingsSlice.reducer,
         auth: AuthSlice.reducer,
 
     },

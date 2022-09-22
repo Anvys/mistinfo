@@ -1,30 +1,57 @@
-import React from "react";
+import React, {useState} from "react";
 import {Link} from "react-router-dom";
-import styles from './SideBar.module.css'
+import s from './SideBar.module.css'
+import {useSelector} from "react-redux";
+import {AuthSelectors} from "../../redux/dataSelectors";
 
-export const SideBar: React.FC = () =>{
-    return(
-        <div className={styles.sideBox}>
-        Database menu
-            <Link to={'/map'} className={styles.navButton}>Map</Link>
-            <Link to={'/shop'} className={styles.navButton}>Shop</Link>
-            <Link to={'/material'} className={styles.navButton}>Material</Link>
-            <Link to={'/component'} className={styles.navButton}>Component</Link>
-            <Link to={'/npc'} className={styles.navButton}>Npc</Link>
-            <Link to={'/region'} className={styles.navButton}>Region</Link>
-            <Link to={'/location'} className={styles.navButton}>Location</Link>
-            <Link to={'/gatherpoint'} className={styles.navButton}>GatherPoint</Link>
-            <Link to={'/loot'} className={styles.navButton}>Loot</Link>
-            <Link to={'/staminaelixir'} className={styles.navButton}>Stamina</Link>
-            <Link to={'/event'} className={styles.navButton}>Events</Link>
-            <Link to={'/mapobject'} className={styles.navButton}>Map Objects</Link>
-            <Link to={'/quest'} className={styles.navButton}>Quests</Link>
-            <Link to={'/ability'} className={styles.navButton}>Ability</Link>
-            <Link to={'/monster'} className={styles.navButton}>Monster</Link>
-            <Link to={'/recipe'} className={styles.navButton}>Recipe</Link>
-            <Link to={'/companion'} className={styles.navButton}>Companion</Link>
-            <Link to={'/questitem'} className={styles.navButton}>Quest Item</Link>
-            <Link to={'/questitemsource'} className={styles.navButton}>Quest Item Source</Link>
+export const SideBar: React.FC = () => {
+    const [cat1, setCat1] = useState(false)
+    const [cat2, setCat2] = useState(false)
+    const isAuth = useSelector(AuthSelectors.isInit)
+    return (
+        <div className={s.sideBox}>
+            Database menu
+
+            <Link to={'/AdminLoginForm38n8g32chrtm56'} className={s.navButton}>Login</Link>
+            <Link to={'/map'} className={s.navButton}>Map</Link>
+
+            <Link to={'/material'} className={s.navButton}>Material</Link>
+            <Link to={'/component'} className={s.navButton}>Component</Link>
+
+            <Link to={'/quest'} className={s.navButton}>Quests</Link>
+            <Link to={'/ability'} className={s.navButton}>Ability</Link>
+            <Link to={'/monster'} className={s.navButton}>Monster</Link>
+            <Link to={'/companion'} className={s.navButton}>Companion</Link>
+
+            <button className={cat1 ? s.catBtnActive : s.catBtn} type={'button'}
+                    onClick={() => setCat1(a => !a)}>Other</button>
+            {cat1 &&
+                <div className={s.catMenu}>
+                    <Link to={'/shop'} className={s.navButton}>Shop</Link>
+                    <Link to={'/loot'} className={s.navButton}>Loot</Link>
+                    <Link to={'/npc'} className={s.navButton}>Npc</Link>
+                    <Link to={'/recipe'} className={s.navButton}>Recipe</Link>
+                </div>}
+
+            <button className={cat2 ? s.catBtnActive : s.catBtn} type={'button'}
+                    onClick={() => setCat2(a => !a)}>Other2</button>
+            {cat2 &&
+                <div className={s.catMenu}>
+                    <Link to={'/region'} className={s.navButton}>Region</Link>
+                    <Link to={'/location'} className={s.navButton}>Location</Link>
+                    <Link to={'/event'} className={s.navButton}>Events</Link>
+                    <Link to={'/questitemsource'} className={s.navButton}>Quest Item Source</Link>
+                </div>}
+
+            {isAuth && `Dev`}
+            {isAuth &&
+                <>
+                    <Link to={'/staminaelixir'} className={s.navButton}>Stamina</Link>
+                    <Link to={'/gatherpoint'} className={s.navButton}>GatherPoint</Link>
+                    <Link to={'/mapobject'} className={s.navButton}>Map Objects</Link>
+                    <Link to={'/questitem'} className={s.navButton}>Quest Item</Link>
+                </>}
+
 
         </div>
     )

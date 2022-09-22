@@ -24,3 +24,18 @@
     transform: translate(1px, 1px);
     box-shadow: 0px 0px 2px 2px darkgrey;
 }
+.catMenu{
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+}
+.catBtn, .catBtnActive{
+    font-size: 18px;
+    user-select: none;
+    transition-duration: 0.05s;
+    text-align: center;
+    background-color: #9facb0;
+}
+.catBtnActive{
+    background-color: #9ee78b;
+}

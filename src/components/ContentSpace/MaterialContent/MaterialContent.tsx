@@ -1,33 +1,38 @@
 import React, {useState} from 'react';
 import styles from './MaterialContent.module.css';
 import {useDispatch, useSelector} from "react-redux";
-import {AuthSelectors, getIsMaterialsInitSelector, getMaterialsSelector} from "../../../redux/dataSelectors";
+import {
+    AuthSelectors,
+    getIsMaterialsInitSelector,
+    getMaterialsSelector,
+    MaterialSelectors
+} from "../../../redux/dataSelectors";
 import {TAppDispatch} from "../../../redux/store";
 import {Outlet} from "react-router-dom";
 import {DataView} from "../../DataView/DataView";
-import {MaterialThunks} from "../../../redux/reducers/materialReducer";
+import {MaterialSlice, MaterialThunks} from "../../../redux/reducers/materialReducer";
 import {TMaterial, TMaterialType, TWOid} from "../../../Types/CommonTypes";
 import {GenDataAdd} from "../../DataAdd/GenDataAdd";
+import {DataViewTable2} from "../../DataView/DataViewTable/DataViewTable";
 
 type TProps = {};
-export const MaterialContent:React.FC<TProps> = (props) => {
-
-    const isInit = useSelector(getIsMaterialsInitSelector)
+export const MaterialContent:React.FC<TProps> = React.memo((props) => {
+    console.log('rerender material')
+    // const isInit = useSelector(getIsMaterialsInitSelector)
     const dispatch = useDispatch<TAppDispatch>()
-    if(!isInit)dispatch(MaterialThunks.getAll())
+    // if(!isInit){
+    //     console.log('initiader')
+    //     dispatch(MaterialThunks.getAll())
+    //
+    // }
+    // const isAuth = useSelector(AuthSelectors.isInit)
     const data = useSelector(getMaterialsSelector);
-    const [dataToAdd, setDataToAdd] = useState(null as null | TMaterial)
-    const dataAddHandler = (id: string) =>{
-        setDataToAdd(id.length ? data.find(v=>v._id===id) || null : null)
-    }
-    const dataDelHandler = (id: string) => {
-        dispatch(MaterialThunks.deleteOne(id))
-    }
+    const [dataToAdd, setDataToAdd] = useState(()=>null as null | TMaterial)
+    const editData = useSelector(MaterialSelectors.getEditTarget)
     const resetAddFormData = () => setDataToAdd(null)
     const initObj: TWOid<TMaterial> = {
         name: '',
         icon: '',
-
         type: 'Bone' as TMaterialType,
         durability: 0,
         craftDifficulty: 0,
@@ -47,23 +52,42 @@ export const MaterialContent:React.FC<TProps> = (props) => {
         encumbrance: 0,
         translate: {En: '',Fr:'', Ru:''}
     }
-    const isAuth = useSelector(AuthSelectors.isInit)
+
+    console.log(dataToAdd)
+    const dataAddHandler = (id: string) =>{
+        console.log(`id=${id}`)
+
+        // if(!!dataToAdd && dataToAdd._id === id) return
+        let res = null;
+        if(id.length){
+            res = data.find(v=>v._id===id) || null
+        }
+        if(editData !== null) dispatch(MaterialSlice.actions.setEditTarget(null))
+        dispatch(MaterialSlice.actions.setEditTarget(res))
+        // if(res !== undefined) res = {...res}
+        // setDataToAdd( !!res ? res : null)
+    }
+    const dataDelHandler = (id: string) => {
+        dispatch(MaterialThunks.deleteOne(id))
+    }
     return (
         <div className={styles.contentBox}>
             <div className={styles.nav}>
                 {/*<MaterialDataAdd data={dataToAdd} resetAddFormData={resetAddFormData}/>*/}
                 {GenDataAdd({
-                    data: dataToAdd,
+                    // data: dataToAdd,
                     resetAddFormData,
                     initObj,
                     curThunks: MaterialThunks,
-                    dataName: 'material'
+                    dataName: 'material',
+                    selector: MaterialSelectors
                 })}
             </div>
             <div className={styles.dbField}>
                 <Outlet/>
+                {/*<DataViewTable2 isMod={isAuth} dataEditHandler={dataAddHandler} dataDelHandler={dataDelHandler} data={data}/>*/}
                 <DataView data={data} dataEditHandler={dataAddHandler} dataDelHandler={dataDelHandler} />
             </div>
         </div>
     );
-}
+})

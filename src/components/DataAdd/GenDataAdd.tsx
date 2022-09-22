@@ -4,26 +4,37 @@ import {useSelector} from "react-redux";
 import {TCombineThunks, useAppDispatch} from "../../redux/store";
 import {useFormik} from "formik";
 import {AddDataForm} from "./AddDataForm";
-import {AuthSelectors, getMarkerForAddPosSelector, MapSelectors} from "../../redux/dataSelectors";
+import {
+    AuthSelectors,
+    getMarkerForAddPosSelector,
+    MapSelectors,
+    MaterialSelectors,
+    TSelectors
+} from "../../redux/dataSelectors";
 import {StageQuestField} from "./Fields/QuestStageField";
 // import styles from './GenDataAdd.module.css';
 
 
 const dataWithPos = ['gatherpoint', 'location', 'staminaelixir', 'region', 'event', 'mapobject']
 export type TDataAddProps<T extends TCombineData> = {
-    data: T | null
+    data?: T | null
     resetAddFormData: () => void
     initObj: TWOid<T>
     curThunks: TCombineThunks
     dataName: string
+    selector?:TSelectors
 }
 export const GenDataAdd = <T extends TCombineData, >(props: React.PropsWithChildren<TDataAddProps<T>>) => {
-    const {data, curThunks} = props
+    const { curThunks} = props
+    const data = null
     const isMod = useSelector(AuthSelectors.isInit)
     const dispatch = useAppDispatch();
-    const initVal = data !== null ? {...data} : props.initObj
+
+    const editData = useSelector(MaterialSelectors.getEditTarget)
+    console.log(`editdata: ${editData}`)
     const pos = useSelector(getMarkerForAddPosSelector)
     const isMarkerAdd = useSelector(MapSelectors.isAddActive)
+    const initVal = editData!==null ?editData: data !== null ? data : props.initObj
     const formik = useFormik({
         initialValues: initVal,
         enableReinitialize: true,
@@ -46,7 +57,7 @@ export const GenDataAdd = <T extends TCombineData, >(props: React.PropsWithChild
             if (data === null) { // @ts-ignore
                 dispatch(curThunks.addOne(newData))
             } else {
-                console.log(data._id)
+                // console.log(data._id)
                 // @ts-ignore
                 dispatch(curThunks.updateOne({id: data._id, data: {...newData, _id: data._id}}))
             }
@@ -60,7 +71,7 @@ export const GenDataAdd = <T extends TCombineData, >(props: React.PropsWithChild
     // console.log(`GenDataAdd`)
     return (isMod ?
         <div>
-            {data === null ? `New ${props.dataName}` : `Update ${data.name}/${data._id}`}
+            {/*{data === null ? `New ${props.dataName}` : `Update ${data.name}/${data._id}`}*/}
             <AddDataForm formik={formik} dataName={props.dataName} resetAddFormData={props.resetAddFormData}/>
             {/*asd*/}
             {/**/}

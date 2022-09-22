@@ -57,15 +57,16 @@ export const StageField: React.FC<TProps> = (props) => {
         // props.onStageAdd(req)
     }
     const onStageAdd = () => {
-        const newStage = {
+        const newStage: TStage = {
             num,
+            proc,
             name: name === 'Stage' ? `Stage ${num}` : name,
             expr,
             type,
             require: req,
             time,
             loot: findLoot || null
-        } as TStage
+        }
         // console.log('Add new stage')
         // console.log(newStage)
         // formik.setFieldValue('stages', [...formik.values.stages, newStage])

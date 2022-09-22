@@ -78,7 +78,7 @@ export const commonFields = (
                         let selQuests = selectFieldsOptions[`quest`]// || ['No knows dependencies for this quest']
                         if(selQuests === undefined || selQuests.length===0) selQuests =  ['No knows dependencies for this quest']
                         else selQuests = ['No knows dependencies for this quest',...selQuests]
-                        return AddFields.select(selQuests as string[] | number[],value, formik,curKey,eKey,i+50,true )
+                        return AddFields.select(selQuests as string[] | number[],value, formik,curKey,eKey,i+50,false )
                     case isSelectAvailable:
                         return AddFields.select(selArr as string[] | number[],value, formik,curKey,eKey,i+50,true )
 

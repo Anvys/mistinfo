@@ -3,10 +3,12 @@ import {LayerGroup, LayersControl} from "react-leaflet";
 import Control from 'react-leaflet-custom-control';
 import {TLayerFilters} from "../MyMap";
 import {useSelector} from "react-redux";
-import {MapSelectors} from "../../../redux/dataSelectors";
+import {MapSelectors, QuestSelectors} from "../../../redux/dataSelectors";
 import {useAppDispatch} from "../../../redux/store";
 import {MapSlice} from "../../../redux/reducers/mapReducer";
-// import styles from './LayerFilter.module.css';
+import s from './LayerFilter.module.css';
+import {SimpleSelectField} from "../../DataAdd/Fields/SelectField";
+import {selectFieldsOptions} from "../../../Types/Utils";
 
 type TProps = {
     filter: TLayerFilters
@@ -21,20 +23,27 @@ type TProps = {
 export const LayerWithFilter: React.FC<TProps> = (props) => {
     const {filter} = props
     const isAddActive = useSelector(MapSelectors.isAddActive)
+    const activeQuest = useSelector(MapSelectors.getActiveQuest)
+    const quests = useSelector(QuestSelectors.getData)
     const dispatch = useAppDispatch()
+    const onQuestSelect = (qName: string) =>{
+        const findRes = quests.find(v=>v.name===qName)
+        if(findRes) dispatch(MapSlice.actions.setActiveQuest(qName))
+    }
     return (
         <div>
             <Control position={"topright"}>
-                <div style={{display: 'flex', flexDirection: 'column', gap: '5px'}}>
-                    <button onClick={(e) => {
+                <div className={s.controlDiv}>
+                    <button className={s.controlButton} type={'button'} onClick={(e) => {
                         e.stopPropagation()
                         props.onResetActiveQuest()
                     }}>Reset active quest
                     </button>
-                    {<button style={{backgroundColor: `${isAddActive ? 'red' : 'green'}`}} onClick={(e) => {
+                    {<button className={s.controlButton} type={'button'}  style={{backgroundColor: `${isAddActive ? 'red' : 'green'}`}} onClick={(e) => {
                         e.stopPropagation()
                         dispatch(MapSlice.actions.setIsAddPosFieldActive(!isAddActive))
                     }}>Toggle add marker</button>}
+                    {quests.length>0 && <SimpleSelectField mapSelectValues={quests.map(v=>v.name)} value={activeQuest} onSelChange={onQuestSelect} labelText={'quest'}/>}
                 </div>
             </Control>
             <LayersControl position="topright" collapsed={false}>

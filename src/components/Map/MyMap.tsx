@@ -1,34 +1,30 @@
-import Leaf, {Icon, LatLng, LatLngBounds} from 'leaflet';
+import Leaf from 'leaflet';
 import React, {useEffect, useRef, useState} from 'react';
 import styles from './Map.module.css';
-import {LayersControl, MapContainer, Marker, Popup, TileLayer, useMap, useMapEvents} from "react-leaflet";
-import {MarkerForDataAdd} from "./Markers/MarkerForDataAdd";
+import {MapContainer, TileLayer, useMap, useMapEvents} from "react-leaflet";
 import {useSelector} from "react-redux";
 import {
+    ComponentSelectors,
     EventSelectors,
     GatherPointSelectors,
-    getEventSelector,
-    getGatherPointSelector,
-    getLocationSelector,
-    getQuestSelector,
-    getStaminaElixirSelector,
     LocationSelectors,
+    LootSelectors,
     MapSelectors,
+    MaterialSelectors,
     MonsterSelectors,
-    QuestItemSelectors, QuestItemSourceSelectors,
-    QuestSelectors, RegionSelectors,
+    QuestItemSelectors,
+    QuestItemSourceSelectors,
+    QuestSelectors,
+    RegionSelectors,
     StaminaElixirSelectors
 } from "../../redux/dataSelectors";
 import {MC} from "./Markers/MarkerCreator";
-import {ExampleBound} from "./Bounds/ExampleBound";
 import {useAppDispatch} from "../../redux/store";
 import {MapSlice} from "../../redux/reducers/mapReducer";
 import {AddBounds} from "./Bounds/AddBounds";
 import {LayerWithFilter} from "./Layer/LayerWithFilter";
-import Control from "react-leaflet-custom-control";
 import {TLocation, TMapPosition, TMonster} from "../../Types/CommonTypes";
 
-// import * as icons from '../../assets/icons'
 const MyComponent: React.FC<{ onZoomChange: (z: number) => void, visible: boolean }> = (props) => {
     const [coords, setCoords] = useState({lat: 0, lng: 0});
     const map = useMap()
@@ -41,7 +37,6 @@ const MyComponent: React.FC<{ onZoomChange: (z: number) => void, visible: boolea
     });
     const [zoomLevel, setZoomLevel] = useState(mapEvents.getZoom()); // initial zoom level provided for MapContainer
 
-    // console.log('map center:', map.getCenter())
     useEffect(() => {
         if (!map) return;
 
@@ -94,6 +89,11 @@ export const MyMap: React.FC<TProps> = React.memo((props) => {
     const isAddMarkerActive = useSelector(MapSelectors.isAddActive)
     const isBoundsMenu = useSelector(MapSelectors.isBoundActive)
 
+
+    const materials = useSelector(MaterialSelectors.getData);
+    const components = useSelector(ComponentSelectors.getData);
+    const resources = [...materials, ...components]
+    const loots = useSelector(LootSelectors.getData);
     const locations = useSelector(LocationSelectors.getData);
     const regions = useSelector(RegionSelectors.getData);
     const monsters = useSelector(MonsterSelectors.getData);
@@ -112,7 +112,14 @@ export const MyMap: React.FC<TProps> = React.memo((props) => {
 
     const locationMarkers = locations.map(v => MC.location(v, zoom))
     const regionMarkers = regions.map(v => MC.region(v, zoom))
-    const gatherMarkers = gatherPoints.map(v => MC.gatherPoint(v, zoom))
+    const gatherMarkers = gatherPoints.map(gp => {
+        const gatherDifficult = loots.find(loot => loot.name === gp.loot)?.loot.reduce((p, c) => {
+            const dif = resources.find(res => res.name === c.name)?.gatherDifficulty
+            if (!!dif) return dif > p ? dif : p
+            else return p
+        }, 0)
+        return MC.gatherPoint(gp, zoom, gatherDifficult || 0)
+    })
     const eventMarkers = events.map(v => MC.events(v, zoom))
     const staminaElixirMarkers = stamina.map((v, i) => MC.staminaElixir({
         ...v,
@@ -169,15 +176,15 @@ export const MyMap: React.FC<TProps> = React.memo((props) => {
         dispatch(MapSlice.actions.setIsActiveQuestMap(false))
     }
     useEffect(() => {
-        if(isAddMarkerActive && map) map.addEventListener("click", addMarkerPosOnClick);
+        if (isAddMarkerActive && map) map.addEventListener("click", addMarkerPosOnClick);
         return () => {
             map?.removeEventListener("click", addMarkerPosOnClick)
             console.log('endmap')
 
         }
     }, [map])
-    const addMarkerPosOnClick:  Leaf.LeafletMouseEventHandlerFn = (e) => {
-        if(!isBoundsMenu){
+    const addMarkerPosOnClick: Leaf.LeafletMouseEventHandlerFn = (e) => {
+        if (!isBoundsMenu) {
             // console.log(`click ${e.latlng.lat}`)
             markerRef.current?.setLatLng({lat: e.latlng.lat, lng: e.latlng.lng})
             // const mPos = markerRef.current?.getLatLng();
@@ -192,24 +199,24 @@ export const MyMap: React.FC<TProps> = React.memo((props) => {
     // console.log(isAddMarkerActive)
     useEffect(() => {
         setIsCusMarkerActive(isAddMarkerActive)
-        if(isAddMarkerActive && map) map.addEventListener("click", addMarkerPosOnClick);
-        return ()=>{
+        if (isAddMarkerActive && map) map.addEventListener("click", addMarkerPosOnClick);
+        return () => {
             map?.removeEventListener("click", addMarkerPosOnClick)
         }
     }, [isAddMarkerActive])
-    return (
-        <div className={styles.map} style={{width: `${props.wid === -1 ? '50%' : props.wid + 'px'}`}}>
-            Map
-            <button type={'button'} onClick={onAddMarkerHandler}>AddMarker</button>
-            x
-            <button type={'button'} onClick={onClose}>close</button>
-            x
-            {activeQuest}
+    return (//`${props.wid === -1 ? '50%' : props.wid + 'px'}`
+        <div className={styles.map} style={{width: '100%'}}>
+            {/*Map*/}
+            {/*<button type={'button'} onClick={onAddMarkerHandler}>AddMarker</button>*/}
+            {/*x*/}
+            {/*<button type={'button'} onClick={onClose}>close</button>*/}
+            {/*x*/}
+            {/*{activeQuest}*/}
             <div id="map" style={{
                 height: `${props.hei === -1 ? '100%' : props.hei + 'px'}`,
                 overflow: "hidden",
                 padding: '0,50px,50px,0'
-            }} className={styles.map}>
+            }}>
                 <MapContainer attributionControl={false} className={styles.map} center={[0, -45]} zoom={7}
                               scrollWheelZoom={false} ref={setMap} markerZoomAnimation={false}>
                     <MyComponent onZoomChange={onZoomChange} visible={false}/>

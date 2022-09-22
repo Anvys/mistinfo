@@ -92,10 +92,10 @@ export const StageQuestField: React.FC<TProps> = (props) => {
             loot: findLoot || null,
         } as TQuestStage
         // console.log('Add new stage')
-        // console.log(newStage)
+        console.log(newStage)
         // formik.setFieldValue('stages', [...formik.values.stages, newStage])
         // setStages(actual=>[...actual, newStage])
-        formik.setFieldValue('stages', [...stages, newStage])
+        formik.setFieldValue('stages', [...stages, newStage].sort((a,b)=>a.num - b.num))
     }
     const onStageDelHandler = (index: number) => {
         formik.setFieldValue('stages', formik.values.stages.filter((v: any, i: number) => i !== index))
@@ -109,6 +109,7 @@ export const StageQuestField: React.FC<TProps> = (props) => {
                 setStagePos(pos as TMapPosition)
                 break;
             case "location":
+                console.log(`find pos: ${pos}`)
                 setStagePos(locations.find(v=>v.name===pos) as TLocation)
                 break;
             case "npc":
@@ -127,6 +128,7 @@ export const StageQuestField: React.FC<TProps> = (props) => {
     useEffect(() => {
         setStages(formik.values.stages)
     }, [formik.values.stages])
+    console.log(stagePos)
     return (
         <div className={`${styles.divRow} ${styles.border}`}>
 
@@ -221,11 +223,11 @@ export const StageQuestField: React.FC<TProps> = (props) => {
                 {stagePosType === 'location' && <SimpleSelectField
                     labelText={'loc'}
                     mapSelectValues={selectFieldsOptions["location"] || []}
-                    value={stagePos as any} onSelChange={onStagePosGeneralChange}/>}
+                    value={undefined} onSelChange={onStagePosGeneralChange}/>}
                 {stagePosType === 'npc' && <SimpleSelectField
                     labelText={'npc'}
                     mapSelectValues={selectFieldsOptions["npc"] || []}
-                    value={stagePos as any} onSelChange={onStagePosGeneralChange}/>}
+                    value={undefined} onSelChange={onStagePosGeneralChange}/>}
 
             </div>
             <div className={styles.fieldBoxCol}>
@@ -282,7 +284,8 @@ export const StageQuestField: React.FC<TProps> = (props) => {
                                                     // console.log(val)
                                                     return <td>{`${val?.x || '?'}:${val?.y || '?'}`}</td>
                                                 case "location":
-                                                    // console.log(`loca ${val}`)
+                                                    console.log(`loca ${val} type: ${stagePosType}`)
+                                                    console.log(stages)
                                                     return <td>{`${val.name}`}</td>
                                                 case "npc":
                                                     // console.log(`npc ${val}`)

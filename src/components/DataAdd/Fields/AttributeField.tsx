@@ -76,8 +76,8 @@ export const AttributeField: React.FC<TProps> = (props) => {
                     </thead>
                     <tbody>
                         {attributes.length > 0
-                            ? attributes.map(v =>
-                                <tr className={tableStyles.dataRow}>
+                            ? attributes.map((v,i) =>
+                                <tr className={tableStyles.dataRow} key={i}>
                                     <td className={tableStyles.notEmptyTd}>{v}</td>
                                     <td className={tableStyles.notEmptyTd}>{formik.values.attributes[v]}</td>
                                 </tr>)

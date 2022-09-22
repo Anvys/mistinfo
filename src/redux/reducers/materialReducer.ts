@@ -10,10 +10,12 @@ const reducerPath = 'mif/material'
 export type TInitialState = {
     data: Array<TMaterial>
     isInit: boolean
+    editTarget: null | TMaterial
 }
 const initialState: TInitialState = {
     data: [],
     isInit: false,
+    editTarget: null
 }
 
 export const MaterialSlice = createSlice({
@@ -32,6 +34,9 @@ export const MaterialSlice = createSlice({
         },
         deleteOne: (state, action: PayloadAction<{ id: string }>) => {
             state.data = state.data.filter(v => v._id !== action.payload.id)
+        },
+        setEditTarget: (state, action: PayloadAction<TMaterial | null>) => {
+            state.editTarget = action.payload
         },
     },
     extraReducers: (builder) => {

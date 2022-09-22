@@ -1,33 +1,19 @@
 import React, {useState} from 'react';
-import {DataViewTable} from "./DataViewTable/DataViewTable";
+import {DataViewTable, DataViewTable2} from "./DataViewTable/DataViewTable";
 import {
-    getAbilityStr, getDataObjStr,
+    getAbilityStr,
+    getDataObjStr,
     getMapKeys,
     getRecipePartStr,
     getStageRequireStr,
     sortDataMapKeys,
     sortStrKeys
 } from "../../Unils/utilsFunctions";
-import {
-    TCombineData,
-    TDrop,
-    TDropTypes,
-    TPrimKeys,
-    TQuestItemPosition,
-    TSubKeys,
-    TTranslateLang
-} from "../../Types/CommonTypes";
+import {TBonus, TCombineData, TPrimKeys, TQuestItemPosition, TSubKeys, TTranslateLang} from "../../Types/CommonTypes";
 import {useSelector} from "react-redux";
 import {AuthSelectors} from "../../redux/dataSelectors";
 import {useAppDispatch} from "../../redux/store";
 import {MapSlice} from "../../redux/reducers/mapReducer";
-import {log} from "util";
-
-// function DataViewTest<T>(props: React.PropsWithChildren<TProps<T>>) {
-//
-//     return <span>Some component logic</span>;
-// }
-
 
 type TProps<T> = {
     data: Array<T>
@@ -42,6 +28,7 @@ export const DataView = <T extends TCombineData>(props: React.PropsWithChildren<
     const isMod = useSelector(AuthSelectors.isInit)
     const dispatch = useAppDispatch()
     const {data, dataEditHandler, dataDelHandler} = props;
+
     const isAddTable = props.isAddTable === undefined ? false : props.isMod
     // const isMod = props.isMod === undefined ? false : props.isMod
     const [dataOnEdit, setDataOnEdit] = useState<null | { [key: string]: any }>(null)
@@ -70,7 +57,7 @@ export const DataView = <T extends TCombineData>(props: React.PropsWithChildren<
                 case 'loot': {
                     const loot = dataVal[sKey as k1]// as Array<TDrop<TDropTypes>>
                     if (Array.isArray(loot)) {
-                        sortedRow.push(loot.map((drop, i) => `${drop.type}:${drop.name}   x${drop.countMin}${drop.countMax<=drop.countMin?'':`-${drop.countMax}`}(${drop.chance}%)${i < loot.length - 1 ? '\n' : ''}`))
+                        sortedRow.push(loot.map((drop, i) => `${drop.type}:${drop.name}   x${drop.countMin}${drop.countMax <= drop.countMin ? '' : `-${drop.countMax}`}(${drop.chance}%)${i < loot.length - 1 ? '\n' : ''}`))
                     }
                     // sortedRow.push(`${drop.type}:${drop.name} x${drop.count} ~${drop.chance}%`)
                     break
@@ -184,6 +171,7 @@ export const DataView = <T extends TCombineData>(props: React.PropsWithChildren<
     }
     return (
         <>
+
             {/*<DataAdd dataKeys={dataKeys} sortedDataKeys={sortedDataKeys} data={dataOnEdit}/>*/}
             <DataViewTable
                 dataKeys={dataKeys}
@@ -197,4 +185,128 @@ export const DataView = <T extends TCombineData>(props: React.PropsWithChildren<
         </>
 
     )
+}
+
+
+const getDataWeight = (key: string) => {
+    switch (key) {
+        case 'icon':
+            return 0
+        case 'name':
+            return 1
+        case 'primary':
+            return 50
+        case 'obj':
+            return 98
+        case 'translate':
+            return 99
+
+        default:
+            return 50
+    }
+}
+//Sorting function for data entries => sorting columns for table
+const dataEntriesSort: (a: [string, any], b: [string, any]) => number = (a, b) => {
+    const wA = getDataWeight(typeof a[1] === 'object' ? 'obj' : a[0])
+    const wB = getDataWeight(typeof b[1] === 'object' ? 'obj' : b[0])
+    return wA - wB
+}
+
+const getDataViewTdStr = (key: string, data: any): [Array<string>, Array<string>] => {
+    if (typeof data === 'object') {
+        const dataEntries = Object.entries(data)
+        switch (key) {
+            case 'translate' :
+            case 'pos':
+            case 'attributes' :
+                return [[...dataEntries.map(v => v[0])], [...dataEntries.map(v => v[1])] as Array<string>]
+            case 'notes':
+                return [[key], data.length === 0 ? [`-`] : [data.map((v: string) => `${v}\n`).join('')]]
+            case 'skills':
+                return [[key], [data.length === 0 ? `-`
+                    : data.map((v: TBonus, i: number) =>
+                        `${v.skill}: ${v.count}${i < data.length - 1 ? '\n' : ''}`)]]
+            default:
+                return [[key], ['error']]
+        }
+    } else {
+        switch (key) {
+            case 'quest':
+                return [[key], [data.length ? data : '-']]
+            default:
+                return [[key], [data]]
+        }
+
+    }
+
+}
+export const getTableTdKey = (key: string): string => {
+    switch (key) {
+        case 'exploreReq':
+            return 'Explore'
+        case 'craftDifficulty':
+            return 'Craft'
+        case 'gatherDifficulty':
+            return 'Gather'
+        case 'goldCost':
+            return 'Gold'
+        case 'attributes':
+            return 'Attributes'
+        // case 'durability': return 'dura'
+        default:
+            return toUpperFirstLetterCase(key.length > 6 ? `${key.substring(0, 6)}.` : key)
+    }
+}
+export const toUpperFirstLetterCase = (str: string): string => {
+    return str.length > 0 ? str.split('').map((v, i) => i === 0 ? v.toUpperCase() : v).join('') : ''
+}
+export const ignoredFields = ['_id', '__v', 'translate']
+// export const DataView2 = <T extends TCombineData>(props: React.PropsWithChildren<TProps<T>>) =>{
+
+export type TDataViewObj = {
+    keys1: Array<[string, number]>
+    keys2: Array<[string, number]>
+    values: Array<Array<string>>
+}
+export const getDataView = (data: Array<TCombineData>, lang: TTranslateLang) => {
+    console.log(`------------dw2-----------`)
+    // const {data} = props
+    if (data.length === 0) return null
+    const dataEntries = [...Object.entries(data[0]).sort(dataEntriesSort)]
+    // console.log(Object.entries(data[0]))
+    const _dataView: TDataViewObj = {
+        keys1: [],
+        keys2: [],
+        values: [],
+    }
+    dataEntries.forEach(([key, value], index) => {
+        if (ignoredFields.includes(key)) return
+        // if object - add keys in 2 rows else add as simple
+        if (typeof value === 'object') {
+            _dataView.keys1.push([key, (Array.isArray(value) ? 1 : Object.keys(value).length)])
+            const [valueKeys, valueData] = getDataViewTdStr(key, value)
+            // console.log(`---key: ${key}`)
+            // console.log(valueData)
+            valueKeys.forEach((k2, i2) => {
+                _dataView.keys2.push([k2, 1])
+            })
+        } else {
+            _dataView.keys1.push([key, 1])
+            _dataView.keys2.push([key, 1])
+        }
+    })
+    data.forEach((val, index) => {
+        let newValues: Array<string> = []
+        Object.entries(val).sort(dataEntriesSort).forEach(([key, value]) => {
+            if (ignoredFields.includes(key)) return
+            const [valueKeys, valueData] = getDataViewTdStr(key, key === 'name'
+                ? val.translate[lang] === '' ? val.translate.En : val.translate[lang]
+                : value)
+            newValues = [...newValues, ...valueData]
+        })
+        _dataView.values.push(newValues)
+    })
+    // console.log(data[0])
+    // console.log(_dataView)
+    return _dataView
 }
