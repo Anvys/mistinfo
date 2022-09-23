@@ -16,6 +16,7 @@ import {BoundField} from "./BoundField";
 import {PosQuestItemField} from "./PosField";
 import {CompanionSkillField} from "./CompanionSkillField";
 import {ShopContentField} from "./ShopContentField";
+import {NO_LOOT} from "../../../Types/CommonTypes";
 // import styles from './CommonFields.module.css';
 
 
@@ -27,6 +28,7 @@ export const commonFields = (
     key:string,
     values: object,
     dataName: string): JSX.Element => {
+    // console.log(`key: ${key}, valuse: ${values}`)
     const entries = Object.entries(values).sort((a, b) => getWeight(a[0]) - getWeight(b[0]))
     return (
         <>
@@ -39,39 +41,41 @@ export const commonFields = (
                     case fieldsIgnoreList.includes(eKey):
                         return null
                     case dataName==='questItemSource' && eKey==='En':
-                        return <SimpleSelectField mapSelectValues={selectFieldsOptions['questitem'] || ['Error']}
+                        return <SimpleSelectField key={i} mapSelectValues={selectFieldsOptions['questitem'] || ['Error']}
                                                   value={formik.values.translate.En}
                                                   onSelChange={v=>formik.setFieldValue('translate.En', v)} labelText={'Quest Item name'}/>
                     case eKey==='content':
-                        return <ShopContentField  formik={formik} index={i} dataName={dataName}/>
+                        return <ShopContentField key={i}  formik={formik} index={i} dataName={dataName}/>
                     case eKey==='pos':
                         return AddFields.posField(value['x'], value['y'], curKey, i, formik, dataName)
                     case eKey==='icon':
                         return AddFields.icon(formik, i+100, dataName === 'staminaelixir')
                     case eKey==='abilities':
-                        return <AbilityFiled formik={formik} index={i} dataName={dataName}/>
+                        return <AbilityFiled key={i} formik={formik} index={i} dataName={dataName}/>
                     case eKey==='skills':
                         console.log(`skilll ${dataName} ${eKey} ${value}`)
                         console.log(value)
-                        return <CompanionSkillField formik={formik} index={i} dataName={dataName}/>
+                        return <CompanionSkillField key={i} formik={formik} index={i} dataName={dataName}/>
                     case eKey==='bound':
-                        return <BoundField formik={formik} index={i} dataName={dataName}/>
+                        return <BoundField key={i} formik={formik} index={i} dataName={dataName}/>
                     case eKey==='parts':
-                        return <RecipePartField formik={formik} index={i} dataName={dataName}/>
+                        return <RecipePartField key={i} formik={formik} index={i} dataName={dataName}/>
                     case eKey==='evoQuests':
-                        return <EvoQuestField formik={formik} index={i} dataName={dataName}/>
+                        return <EvoQuestField key={i} formik={formik} index={i} dataName={dataName}/>
                     case eKey==='attributes':
-                        return <AttributeField formik={formik} index={i} dataName={dataName}/>
+                        return <AttributeField key={i} formik={formik} index={i} dataName={dataName}/>
                     case eKey==='loot' && dataName==='loot':
-                        return <LootField formik={formik} index={i} dataName={dataName}/>
+                        return <LootField key={i} formik={formik} index={i} dataName={dataName}/>
+                    case eKey==='loot' && dataName!=='loot':
+                        return AddFields.select([NO_LOOT, ...selectFieldsOptions[`loot`] || ['empty db']] as string[] | number[],value, formik,curKey,eKey,i+50,false )
                     case eKey==='notes':
-                        return <NotesField formik={formik} index={i} dataName={dataName}/>
+                        return <NotesField key={i} formik={formik} index={i} dataName={dataName}/>
                     case eKey==='posQuestItem': // type={formik.values.type} position={formik.values.posQuestItem.}
-                        return <PosQuestItemField formik={formik} onPositionChange={(pos)=>formik.values.posQuestItem = {...pos}}/>
-                    case eKey==='stages':
+                        return <PosQuestItemField key={i} formik={formik} onPositionChange={(pos)=>formik.values.posQuestItem = {...pos}}/>
+                    case eKey==='qStages' || eKey==='eStages':
                         return dataName==='quest'
-                            ?<StageQuestField onStageAdd={()=>console.log('addddddd')} formik={formik} />
-                            :<StageField formik={formik} onStageAdd={()=>null}/>
+                            ?<StageQuestField key={i} onStageAdd={()=>console.log('addddddd')} formik={formik} />
+                            :<StageField key={i} formik={formik} onStageAdd={()=>null}/>
                     case eKey==='quest' &&  dataName==='location' :
                         return AddFields.select(selectFieldsOptions[`quest`] as string[] | number[],value, formik,curKey,eKey,i+50,false )
                     case eKey==='availableAfter' &&  dataName==='quest' :

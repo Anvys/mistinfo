@@ -111,7 +111,7 @@ export const MyMap: React.FC<TProps> = React.memo((props) => {
 
 
     const locationMarkers = locations.map(v => MC.location(v, zoom))
-    const regionMarkers = regions.map(v => MC.region(v, zoom))
+    const regionMarkers = regions.map(v => MC.region(v, zoom, locations, gatherPoints, events, loots, resources))
     const gatherMarkers = gatherPoints.map(gp => {
         const gatherDifficult = loots.find(loot => loot.name === gp.loot)?.loot.reduce((p, c) => {
             const dif = resources.find(res => res.name === c.name)?.gatherDifficulty

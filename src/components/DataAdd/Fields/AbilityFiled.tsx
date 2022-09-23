@@ -38,7 +38,7 @@ export const AbilityFiled: React.FC<TProps> = (props) => {
         setAbilities(formik.values.abilities)
     }, [formik.values.abilities])
     return (
-        <div className={`${styles.divRow} ${styles.border}`}>
+        <div className={`${styles.divRow} ${styles.border}`} key={index}>
             <div className={styles.fieldBoxCol}>
                 <SimpleSelectField mapSelectValues={selectFieldsOptions.ability || ['Empty Abilities db']} value={''}
                                    onSelChange={onAbiSelect} labelText={'Ability'} required={false}/>

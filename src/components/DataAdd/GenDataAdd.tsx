@@ -4,7 +4,7 @@ import {useSelector} from "react-redux";
 import {TCombineThunks, useAppDispatch} from "../../redux/store";
 import {useFormik} from "formik";
 import {AddDataForm} from "./AddDataForm";
-import {getMarkerForAddPosSelector, MapSelectors, TSelectors} from "../../redux/dataSelectors";
+import {AuthSelectors, getMarkerForAddPosSelector, MapSelectors, TSelectors} from "../../redux/dataSelectors";
 // import styles from './GenDataAdd.module.css';
 
 
@@ -19,9 +19,8 @@ export type TDataAddProps<T extends TCombineData> = {
 export const GenDataAdd = <T extends TCombineData, >(props: React.PropsWithChildren<TDataAddProps<T>>) => {
     const { curThunks, data} = props
     // const data = null
-    const isMod = true //useSelector(AuthSelectors.isInit)
+    const isMod = useSelector(AuthSelectors.isInit)
     const dispatch = useAppDispatch();
-
     const pos = useSelector(getMarkerForAddPosSelector)
     const isMarkerAdd = useSelector(MapSelectors.isAddActive)
     const initVal = data !== null ? data : props.initObj

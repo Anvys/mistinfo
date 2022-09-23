@@ -1,6 +1,6 @@
 import {selectFieldsOptions} from "./Utils";
 import {TShopItemReputation} from "../components/DataAdd/Fields/ShopContentField";
-
+export const NO_LOOT = '--No loot--' as const
 export type TCombineData = TNpc | TRegion | TLocation
     | TMaterial | TComponent | TGatherPoint | TLoot
     | TStaminaElixir | TEvent | TMapObject | TQuest
@@ -138,7 +138,8 @@ export type TEvent = {
     name: string
     type: string
     icon: string
-    stages: Array<TStage>
+    region: string
+    eStages: Array<TStage>
     pos: TMapPosition
     translate: TTranslateData
     notes: Array<string>
@@ -199,7 +200,7 @@ export type TQuest = {
     name: string
     type: string
     availableAfter: Array<string>
-    stages: Array<TQuestStage>
+    qStages: Array<TQuestStage>
     translate: TTranslateData
     notes: Array<string>
 }
@@ -252,7 +253,7 @@ export type TMonster = {
     attack: number
     armor: number
     abilities: Array<TAbility>
-    loot: TLoot | null
+    loot: TLoot | typeof NO_LOOT
     region: string
     icon: string
     translate: TTranslateData

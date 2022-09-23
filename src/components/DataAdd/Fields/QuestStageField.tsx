@@ -3,6 +3,7 @@ import styles from "./Fields.module.css";
 import tableStyles from "./../../DataView/DataViewTable/DataViewTable.module.css";
 
 import {
+    NO_LOOT,
     TAdventure,
     TDrop,
     TDropTypes,
@@ -63,7 +64,7 @@ export const StageQuestField: React.FC<TProps> = (props) => {
     // console.log(`stages: ${formik.values.stages.length}`)
 
     //formik.values.stages.length>0?formik.values.stages : []
-    const [stages, setStages] = useState<Array<TQuestStage>>(() => formik.values.stages)
+    const [stages, setStages] = useState<Array<TQuestStage>>(() => formik.values.qStages)
     // console.log(stages)
     const stageKeys = ['num', 'expr', 'name', 'type', 'require', 'timeAvailable', 'timeSpend', 'stagePos', 'loot']
 
@@ -95,10 +96,10 @@ export const StageQuestField: React.FC<TProps> = (props) => {
         console.log(newStage)
         // formik.setFieldValue('stages', [...formik.values.stages, newStage])
         // setStages(actual=>[...actual, newStage])
-        formik.setFieldValue('stages', [...stages, newStage].sort((a,b)=>a.num - b.num))
+        formik.setFieldValue('qStages', [...stages, newStage].sort((a,b)=>a.num - b.num))
     }
     const onStageDelHandler = (index: number) => {
-        formik.setFieldValue('stages', formik.values.stages.filter((v: any, i: number) => i !== index))
+        formik.setFieldValue('qStages', formik.values.qStages.filter((v: any, i: number) => i !== index))
         // setStages(actual=>actual.filter((v,i)=>i!==index))
     }
     const onStagePosGeneralChange = (pos: TStagePos | string) => {
@@ -126,9 +127,9 @@ export const StageQuestField: React.FC<TProps> = (props) => {
     //     formik.setFieldValue('stages', stages)
     // },[stages])
     useEffect(() => {
-        setStages(formik.values.stages)
-    }, [formik.values.stages])
-    console.log(stagePos)
+        setStages(formik.values.qStages)
+    }, [formik.values.qStages])
+    // console.log(stagePos)
     return (
         <div className={`${styles.divRow} ${styles.border}`}>
 
@@ -181,6 +182,7 @@ export const StageQuestField: React.FC<TProps> = (props) => {
                 {type === 'Adventure' && <StageAdventureForm onSubmit={onRequireAdd}/>}
                 {type === 'QuestItem' && <StageRequireQuestItemForm type={type} onSubmit={onRequireAdd}/>}
                 {type === 'Equip' && <StageRequireEquipForm type={type} onSubmit={onRequireAdd}/>}
+                {type === 'Battle' && <div>TODO</div>}
 
             </div>
 
@@ -245,7 +247,7 @@ export const StageQuestField: React.FC<TProps> = (props) => {
                     <select className={styles.inputText} name={'loot'} value={loot}
                             onChange={e => setLoot(e.target.value)}
                             autoComplete={'off'} placeholder={'expr'}>
-                        <option value="" disabled selected hidden>{`no loot`}</option>
+                        <option value="" disabled selected hidden>{NO_LOOT}</option>
                         {selectFieldsOptions['loot']?.map(v => <option value={v}>{`${v}`}</option>)}
                     </select>
                 </div>
@@ -284,8 +286,8 @@ export const StageQuestField: React.FC<TProps> = (props) => {
                                                     // console.log(val)
                                                     return <td>{`${val?.x || '?'}:${val?.y || '?'}`}</td>
                                                 case "location":
-                                                    console.log(`loca ${val} type: ${stagePosType}`)
-                                                    console.log(stages)
+                                                    // console.log(`loca ${val} type: ${stagePosType}`)
+                                                    // console.log(stages)
                                                     return <td>{`${val.name}`}</td>
                                                 case "npc":
                                                     // console.log(`npc ${val}`)
@@ -294,7 +296,7 @@ export const StageQuestField: React.FC<TProps> = (props) => {
                                             }
 
                                         default:
-                                            return <td>{val as string}</td>
+                                            return <td>{ val as string || 'def'}</td>
                                     }
 
                                 })}

@@ -1,6 +1,6 @@
 import type {PayloadAction} from '@reduxjs/toolkit'
 import {createAsyncThunk, createSlice} from '@reduxjs/toolkit'
-import {TLoot, TWOid} from "../../Types/CommonTypes";
+import {NO_LOOT, TLoot, TWOid} from "../../Types/CommonTypes";
 import {LootAPI, RegionAPI} from "../../API/DataAPI";
 import {checkError} from "../../Unils/utilsFunctions";
 import {selectFieldsOptions} from "../../Types/Utils";
@@ -53,7 +53,7 @@ export type TLootThunks = typeof LootThunks;
 export const LootThunks = {
     getAll: createAsyncThunk(`${reducerPath}/getAll`, async (_, thunkAPI) => {
             const res = await CurAPI.getAll()
-            if (res.data.length) selectFieldsOptions.loot = res.data.map(v=>v.name);
+            if (res.data.length) selectFieldsOptions.loot = [NO_LOOT, ...res.data.map(v=>v.name)];
             if (checkError(res)) thunkAPI.dispatch(CurSlice.actions.init(res.data))
         }
     ),

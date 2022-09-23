@@ -3,6 +3,7 @@ import styles from "./Fields.module.css";
 import tableStyles from "./../../DataView/DataViewTable/DataViewTable.module.css";
 
 import {
+    NO_LOOT,
     TAdventure, TCombineData,
     TDrop,
     TDropTypes, TEquip,
@@ -42,9 +43,9 @@ export const StageField: React.FC<TProps> = (props) => {
     const [req, setReq] = useState<TStageRequire>(() => ({type: 'Academic', count: 0}))
     // console.log(`find loot ${loot} /  ${loot.split('#')[1]} : ${useSelector(getLootByNameSelector(loot))}`)
     const findLoot = useSelector(getLootByNameSelector(loot))
-    console.log(`stages: ${formik.values.stages.length}`)
+    console.log(`stages: ${formik.values.eStages.length}`)
     //formik.values.stages.length>0?formik.values.stages : []
-    const [stages, setStages] = useState<Array<TStage>>(() => formik.values.stages)
+    const [stages, setStages] = useState<Array<TStage>>(() => formik.values.eStages)
     const stageKeys = ['num', 'expr', 'name', 'type', 'require', 'time', 'loot']
 
     const onTypeChange: React.ChangeEventHandler<HTMLSelectElement> = (e) => {
@@ -71,18 +72,18 @@ export const StageField: React.FC<TProps> = (props) => {
         // console.log(newStage)
         // formik.setFieldValue('stages', [...formik.values.stages, newStage])
         // setStages(actual=>[...actual, newStage])
-        formik.setFieldValue('stages', [...stages, newStage])
+        formik.setFieldValue('eStages', [...stages, newStage])
     }
     const onStageDelHandler = (index: number) => {
-        formik.setFieldValue('stages', formik.values.stages.filter((v: any, i: number) => i !== index))
+        formik.setFieldValue('eStages', formik.values.eStages.filter((v: any, i: number) => i !== index))
         // setStages(actual=>actual.filter((v,i)=>i!==index))
     }
     // useEffect(()=>{
     //     formik.setFieldValue('stages', stages)
     // },[stages])
     useEffect(() => {
-        setStages(formik.values.stages)
-    }, [formik.values.stages])
+        setStages(formik.values.eStages)
+    }, [formik.values.eStages])
     return (
         <div className={styles.divRow}>
             <div className={styles.divCol} style={{width: '200px'}}>
@@ -91,8 +92,8 @@ export const StageField: React.FC<TProps> = (props) => {
                         <label htmlFor={'type'}>reqtype:</label>
                         <select className={styles.inputText} name={'type'} value={type} onChange={onTypeChange}
                                 autoComplete={'off'} placeholder={'type'}>
-                            <option value="" disabled selected hidden>{`Select type`}</option>
-                            {selectFieldsOptions['stage.type'].map(v => <option value={v}>{`${v}`}</option>)}
+                            <option value="" disabled hidden  key={0}>{`Select type`}</option>
+                            {selectFieldsOptions['eStage.type'].map((v,i) => <option value={v} key={i+1}>{`${v}`}</option>)}
                         </select>
                     </div>
 
@@ -101,6 +102,8 @@ export const StageField: React.FC<TProps> = (props) => {
 
 
                 {type === 'Adventure' && <StageAdventureForm onSubmit={onRequireAdd}/>}
+                {type === 'Resource' && <div>TODO</div>}
+                {type === 'Battle' && <div>TODO</div>}
 
             </div>
             <div className={styles.fieldBoxCol}>
@@ -141,8 +144,8 @@ export const StageField: React.FC<TProps> = (props) => {
                     <select className={styles.inputText} name={'expr'} value={expr}
                             onChange={e => setExpr(e.target.value as TExpr)}
                             required autoComplete={'off'} placeholder={'expr'}>
-                        <option value="" disabled selected hidden>{`Select expr`}</option>
-                        {selectFieldsOptions['stage.expr'].map(v => <option value={v}>{`${v}`}</option>)}
+                        <option value="" disabled hidden key={0}>{`Select expr`}</option>
+                        {selectFieldsOptions['stage.expr'].map((v,i) => <option value={v} key={i+1}>{`${v}`}</option>)}
                     </select>
                 </div>
                 <div className={styles.fieldBoxNoBorder}>
@@ -150,8 +153,8 @@ export const StageField: React.FC<TProps> = (props) => {
                     <select className={styles.inputText} name={'loot'} value={loot}
                             onChange={e => setLoot(e.target.value)}
                             autoComplete={'off'} placeholder={'expr'}>
-                        <option value="" disabled selected hidden>{`no loot`}</option>
-                        {selectFieldsOptions['loot']?.map(v => <option value={v}>{`${v}`}</option>)}
+                        <option value="" disabled hidden key={0}>{NO_LOOT}</option>
+                        {selectFieldsOptions['loot']?.map((v,i) => <option value={v}  key={i+1}>{`${v}`}</option>)}
                     </select>
                 </div>
                 <button className={styles.addButton} type={'button'} onClick={onStageAdd}>AddStage</button>
@@ -163,24 +166,24 @@ export const StageField: React.FC<TProps> = (props) => {
                             <th colSpan={stageKeys.length}>Event STAGES</th>
                         </tr>
                         <tr>
-                            {stageKeys.map(v => <td>{v}</td>)}
+                            {stageKeys.map((v,i) => <td key={i}>{v}</td>)}
                         </tr>
                     </thead>
                     <tbody>
                         {stages.map((st, i) =>
                             <tr key={st.num * 10 + i}>
                                 {/*{Object.entries(st).map(([key, val]:[string, any])=>{*/}
-                                {stageKeys.map((key, i) => {
+                                {stageKeys.map((key, j) => {
                                     const val: any = st[key as keyof typeof st]
                                     switch (key) {
                                         case 'require':
-                                            return <td>{Object.entries(val).map(([r1, r2], i, arr) => `${r2}${i < arr.length - 1 ? ': ' : ''}`)}</td>
+                                            return <td key={j}>{Object.entries(val).map(([r1, r2], i, arr) => `${r2}${i < arr.length - 1 ? ': ' : ''}`)}</td>
                                         case 'loot':
-                                            return <td>{val?.map((drop: TDrop<TDropTypes>, i: number) => `${drop.type}#${drop.name}#x${drop.countMin}-${drop.countMax}(${drop.chance}%)${i < val.length - 1 ? '\n' : ''}`)}</td>
+                                            return <td key={j}>{val?.map((drop: TDrop<TDropTypes>, i: number) => `${drop.type}#${drop.name}#x${drop.countMin}-${drop.countMax}(${drop.chance}%)${i < val.length - 1 ? '\n' : ''}`)}</td>
                                         case '_id' :
                                             return null
                                         default:
-                                            return <td>{val as string}</td>
+                                            return <td key={j}>{val as string}</td>
                                     }
 
                                 })}

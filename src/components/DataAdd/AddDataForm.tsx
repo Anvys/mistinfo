@@ -12,7 +12,7 @@ type TProps = {
     resetAddFormData: () => void
 
 };
-export const AddDataForm: React.FC<TProps> = React.memo(({formik, dataName, resetAddFormData}) => {
+export const AddDataForm: React.FC<TProps> = ({formik, dataName, resetAddFormData}) => {
     const isMapActive = useSelector(MapSelectors.isMapActive)
     // console.log(`AddDataForm`)
     const onReset = () =>{
@@ -39,4 +39,4 @@ export const AddDataForm: React.FC<TProps> = React.memo(({formik, dataName, rese
 
         </form>
     )
-})
+}

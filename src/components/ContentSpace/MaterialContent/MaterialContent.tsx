@@ -17,18 +17,9 @@ import {DataViewTable2} from "../../DataView/DataViewTable/DataViewTable";
 
 type TProps = {};
 export const MaterialContent:React.FC<TProps> = React.memo((props) => {
-    console.log('rerender material')
-    // const isInit = useSelector(getIsMaterialsInitSelector)
     const dispatch = useDispatch<TAppDispatch>()
-    // if(!isInit){
-    //     console.log('initiader')
-    //     dispatch(MaterialThunks.getAll())
-    //
-    // }
-    // const isAuth = useSelector(AuthSelectors.isInit)
     const data = useSelector(getMaterialsSelector);
     const [dataToAdd, setDataToAdd] = useState(()=>null as null | TMaterial)
-    // const editData = useSelector(MaterialSelectors.getEditTarget)
     const dataAddHandler = (id: string) => {
         setDataToAdd(id.length ? data.find(v => v._id === id) || null : null)
     }
@@ -59,20 +50,6 @@ export const MaterialContent:React.FC<TProps> = React.memo((props) => {
         translate: {En: '',Fr:'', Ru:''}
     }
 
-    console.log(dataToAdd)
-    // const dataAddHandler = (id: string) =>{
-    //     console.log(`id=${id}`)
-    //     // if(!!dataToAdd && dataToAdd._id === id) return
-    //     // let res = null;
-    //     // if(id.length){
-    //     //     res = data.find(v=>v._id===id) || null
-    //     // }
-    //     // if(editData !== null) dispatch(MaterialSlice.actions.setEditTarget(null))
-    //     // dispatch(MaterialSlice.actions.setEditTarget(res))
-    //     // if(res !== undefined) res = {...res}
-    //     setDataToAdd( actual => data.find(v=>v._id===id) || null)
-    // }
-
     return (
         <div className={styles.contentBox}>
             <div className={styles.nav}>
@@ -87,7 +64,7 @@ export const MaterialContent:React.FC<TProps> = React.memo((props) => {
             </div>
             <div className={styles.dbField}>
                 <Outlet/>
-                {/*<DataViewTable2 isMod={isAuth} dataEditHandler={dataAddHandler} dataDelHandler={dataDelHandler} data={data}/>*/}
+                {/*<DataViewTable2 dataEditHandler={dataAddHandler} dataDelHandler={dataDelHandler} data={data}/>*/}
                 <DataView data={data} dataEditHandler={dataAddHandler} dataDelHandler={dataDelHandler} />
             </div>
         </div>

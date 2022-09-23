@@ -2,10 +2,11 @@ import React from 'react';
 import Leaf, {Icon, LatLngExpression} from "leaflet";
 import {Circle, CircleMarker, ImageOverlay, Marker, Polygon, Polyline, Popup, Tooltip} from "react-leaflet";
 import {
+    TComponent,
     TEvent,
     TGatherPoint,
-    TLocation,
-    TMapPosition, TNpc,
+    TLocation, TLoot,
+    TMapPosition, TMaterial, TNpc,
     TQuest, TQuestItemSource, TRegion,
     TStagePos, TStagePosType,
     TStaminaElixir
@@ -15,7 +16,7 @@ import {MapSlice} from "../../../redux/reducers/mapReducer";
 import {useSelector} from "react-redux";
 import {getAddMarkerIconSelector, getAddMarkerSizeSelector} from "../../../redux/dataSelectors";
 import {iconUrlPicker} from "../../IconPicker/IconPicker";
-import {getStagesStr, getStageStr} from "../../../Unils/utilsFunctions";
+import {getStagesStr, getStageStr, getTimeStr} from "../../../Unils/utilsFunctions";
 import {getPosStr} from "../../DataAdd/Fields/QuestStageField";
 import s from './MarkerCreator.module.css';
 
@@ -85,7 +86,11 @@ const getPosFromQuestStage = (pos: TStagePos, type: TStagePosType, locations: Ar
     }
 }
 export const MC = {
-    region: (data: TRegion, zoom: number) => {
+    region: (data: TRegion, zoom: number, locations: Array<TLocation>, gatherPoints:Array<TGatherPoint>,
+             events: Array<TEvent>, loots: Array<TLoot>, resources: Array<TMaterial | TComponent>) => {
+        const ownLocations = locations.filter(v=>v.region === data.name)
+        const ownGather = gatherPoints.filter(v=>v.region === data.name)
+        const ownEvent = events.filter(v=>v.region === data.name)
         const bounds = data.bound
         // if(bounds.length > 0){
         //     const path = bounds.map(bound => (
@@ -94,8 +99,25 @@ export const MC = {
         // }else return null
 
         return <Polygon pathOptions={{color: 'lime'}} positions={bounds}>
-            <Popup>
-                {data.name}
+            <Tooltip>
+                {data.terrainReq>0 ? `${data.terrain} ${data.terrainReq}`: `No land require`}
+            </Tooltip>
+            <Popup className={s.popupDiv}>
+                {`\t${data.name}(${data.terrain} ${data.terrainReq})`}
+                {`\nLocations: ${ownLocations.length}`}
+                {`\nEvents: ${ownEvent.length}`}
+                {ownGather.length>0 && <details>
+                    <summary>{`Gathers: ${ownGather.length}`}</summary>
+                    {ownGather.map(v=>{
+                        const gatherDifficult = loots.find(loot => loot.name === v.loot)?.loot.reduce((p, c) => {
+                            const dif = resources.find(res => res.name === c.name)?.gatherDifficulty
+                            if (!!dif) return dif > p ? dif : p
+                            else return p
+                        }, 0)
+                        return ` ~ ${v.count}x${v.name}(${getTimeStr(v.cooldown)}) [${v.type.substring(0,1)}. ${gatherDifficult}]`
+                    }).join('\n')}
+                </details>}
+
             </Popup>
         </Polygon>
     },
@@ -120,7 +142,7 @@ export const MC = {
         const fillLime = {color: 'lime'}
         const follOrange = {color: 'orange'}
         const fillBlue = {fillColor: 'blue'}
-        const path = data.stages.map(v => {
+        const path = data.qStages.map(v => {
             const pos: TMapPosition = getPosFromQuestStage(v.stagePos, v.stagePosType, locations)
             return [pos.x, pos.y]
         }).filter(v => v[0] !== 0 && v[1] !== 0) as LatLngExpression[]
@@ -134,10 +156,10 @@ export const MC = {
             {path.map((v, i) =>
                 <CircleMarker center={v} pathOptions={i === 0 ? fillLime : follOrange} radius={20} >
                     <Popup>
-                        <div className={s.popupDiv}>{getStageStr(data.stages[i])}</div>
+                        <div className={s.popupDiv}>{getStageStr(data.qStages[i])}</div>
                     </Popup>
                     {(path.length>1 && i===0) ? <Tooltip offset={[20,0]} direction={'right'} permanent>Start</Tooltip>
-                    :<Tooltip offset={[20,0]} direction={'right'}>{`${data.stages[i].num}: ${data.stages[i].name}`}</Tooltip>}
+                    :<Tooltip offset={[20,0]} direction={'right'}>{`${data.qStages[i].num}: ${data.qStages[i].name}`}</Tooltip>}
                 </CircleMarker>)}
         </>
     },
@@ -161,7 +183,7 @@ export const MC = {
                 <Popup autoPan={false}>
                     <div className={s.popupDiv}>
                         {`${data.name}\n`}
-                        {getStagesStr(data.stages)}
+                        {getStagesStr(data.eStages)}
                     </div>
                 </Popup>
 
@@ -277,16 +299,10 @@ export const MC = {
                 position={{lat: data.pos.x, lng: data.pos.y}}>
                 <Popup>
                     <div className={s.popupDiv}>
-                        {`${data.name} [${data.type} ${gatherDifficult}]`}
+                        {`${data.name} [${data.type} ${gatherDifficult}]  (${getTimeStr(data.cooldown)})`}
                     </div>
-                    {/*<p>{data.name}</p>*/}
-                    {/*<p>{data.type}</p>*/}
-                    {/*<p>icon: {data.icon}</p>*/}
-                    {/*/!*<p>dif:{data.difficult}</p>*!/*/}
-                    {/*<p>count:{data.count}</p>*/}
-                    {/*{data.exploreReq>0 && <p>explore: {data.exploreReq}</p>}*/}
                 </Popup>
-                <Tooltip><p>{`${data.name} x${data.count}`}</p></Tooltip>
+                <Tooltip><p>{`${data.count}x${data.name}`}</p></Tooltip>
             </Marker>
         )
     },

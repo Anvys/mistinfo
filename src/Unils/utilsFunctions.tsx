@@ -190,6 +190,19 @@ export const getDataObjStr = (field: string, data: any) => {
             return `defaultDataObjStr`
     }
 }
+export const getTimeStr = (min: number) =>{
+    if(min < 60) return `${min}m`
+    else {
+        const h = Math.floor(min/60)
+        const m = min%60
+        if(h<25) return `${h}h:${m}m`
+        else{
+            const d = Math.floor(h/24)
+            const lastHours = h%24
+            return `${d}d:${lastHours}h:${m}m`
+        }
+    }
+}
 // export const getElements = (mapVal: object, prevKey: string, formik: FormikProps<any>, dataName: string) => {
 //     return Object.entries(mapVal).map(([key, value], i) => {
 //         // if (isSkipField(key)) return null

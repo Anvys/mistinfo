@@ -29,9 +29,10 @@ export const EventContent: React.FC<TProps> = (props) => {
     const resetAddFormData = () => setDataToAdd(null)
     const initObj: TWOid<TEvent> = {
         name: `New Event ${data.length+1}`,
+        region: '',
         type: 'BlueFlag',
         icon:'event_Flags/eventregionrandom',
-        stages:[],
+        eStages:[],
         pos: {x:0,y:0},
         translate: {En: `New Event ${data.length+1}`, Ru: '', Fr: ''},
         notes: [],

@@ -19,7 +19,7 @@ export const AddFields = {
             required: boolean = false,
             disabled: boolean = false
     ) =>
-        <InputField index={index} formik={formik} value={value} htmlId={htmlId} labelText={labelText}
+        <InputField key={index} index={index} formik={formik} value={value} htmlId={htmlId} labelText={labelText}
                     disabled={disabled} required={required}/>,
     select: (
         mapSelectValues: Array<string> | Array<number>,
@@ -31,7 +31,7 @@ export const AddFields = {
         required: boolean = false,
         disabled: boolean = false,
     ) =>
-        <SelectField mapSelectValues={mapSelectValues} index={index} formik={formik} value={value} htmlId={htmlId}
+        <SelectField key={index} mapSelectValues={mapSelectValues} index={index} formik={formik} value={value} htmlId={htmlId}
                      labelText={labelText}
                      disabled={disabled} required={required}/>,
     posField: (
@@ -84,7 +84,7 @@ export const AddFields = {
         index: number = 0,
         disabled: boolean = false) => {
         return (
-            <IconField index={index} formik={formik} disabled={disabled}/>
+            <IconField key={index} index={index} formik={formik} disabled={disabled}/>
         )
     }
 }

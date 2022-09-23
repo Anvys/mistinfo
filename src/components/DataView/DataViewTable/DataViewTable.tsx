@@ -14,13 +14,15 @@ type TDataViewTable2Props = {
     data: Array<TCombineData>
     dataEditHandler: (id: string) => void
     dataDelHandler: (id: string) => void
-    isMod: boolean
+    // dataName: string
+    // isMod: boolean
 }
 export const DataViewTable2: React.FC<TDataViewTable2Props> = React.memo((props) => {
-    const {dataEditHandler, dataDelHandler, isMod} = props
+    const {dataEditHandler, dataDelHandler} = props
     const data = [...props.data]
     const [isDeleteModeActive, setIsDeleteModeActive] = useState(false);
     const lang = useSelector(GlobalSettingsSelectors.getLang)
+    const isMod = useSelector(AuthSelectors.isInit)
 
     const dataView: TDataViewObj | null = getDataView(data, lang)
     if (!dataView) return <>Empty dataView</>
@@ -29,14 +31,14 @@ export const DataViewTable2: React.FC<TDataViewTable2Props> = React.memo((props)
         setIsDeleteModeActive(e.target.checked)
     }
     return (
-        <>
+        <div className={styles.vid}>
             <table className={styles.table}>
                 <thead>
                     <tr>
                         {dataView.keys1.map(([key, num], i) => {
                                 const rowSpan = num > 1 ? 1 : dataView.keys2.some(([k2, num2]) => k2 === key) ? 2 : 1
-                                return <th className={styles.th1} rowSpan={rowSpan} colSpan={num} key={i}>
-                                    {getTableTdKey(key)}</th>
+                                return <th className={styles.th1} rowSpan={rowSpan} colSpan={num} key={i} title={key}>
+                                    {getTableTdKey(key, 4)}</th>
                             }
                         )}
                         {isMod && <th className={styles.th1} rowSpan={2}>Edit</th>}
@@ -45,7 +47,7 @@ export const DataViewTable2: React.FC<TDataViewTable2Props> = React.memo((props)
                             </tr>
                     <tr>
                         {dataView.keys2.map(([key, num], i) => dataView.keys1.some(([k1, num1]) => k1 === key) ? null :
-                            <th className={styles.th1} colSpan={num} key={i}>{getTableTdKey(key)}</th>)}
+                            <th className={styles.th1} colSpan={num} key={i} title={key}>{getTableTdKey(key,3)}</th>)}
                         {isMod && <th className={styles.th1}><input type={"checkbox"} checked={isDeleteModeActive}
                                                                     onChange={onCheck}/></th>}
                     </tr>
@@ -55,9 +57,9 @@ export const DataViewTable2: React.FC<TDataViewTable2Props> = React.memo((props)
                         <tr className={styles.dataRow} key={index}>
                             {val.map((str, index2) => {
                                 if (index2 === 0 && dataView.keys1[0][0] === 'icon') {
-                                    return (
-                                        <img className={fieldsStyles.imgIcon}
-                                                src={iconUrlPicker(str.split('/')[0], str.split('/')[1])}/>)
+                                    return (typeof str === 'string' ?
+                                        <td key={index2}><img className={fieldsStyles.imgIcon} key={index2}
+                                                  src={iconUrlPicker(str.split('/')[0], str.split('/')[1])}/></td> : null)
                                 }
                                 const stl = !(!str || str ==='-') ? styles.notEmptyTd : styles.emptyTd
                                 return <td className={stl} key={index2}>
@@ -74,7 +76,7 @@ export const DataViewTable2: React.FC<TDataViewTable2Props> = React.memo((props)
                         </tr>)}
                 </tbody>
             </table>
-        </>
+        </div>
     )
 })
 

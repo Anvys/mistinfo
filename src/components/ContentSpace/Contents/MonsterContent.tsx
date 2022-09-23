@@ -36,7 +36,7 @@ export const MonsterContent: React.FC<TProps> = (props) => {
         attack: 0,
         armor: 0,
         abilities: [],
-        loot: null,
+        loot: '--No loot--',
         region: '',
         icon: '',
         translate: {En: newDefName, Ru: '', Fr: ''},
