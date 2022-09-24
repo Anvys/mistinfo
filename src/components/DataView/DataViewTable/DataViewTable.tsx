@@ -4,10 +4,14 @@ import fieldsStyles from './../../DataAdd/Fields/Fields.module.css'
 
 import {useAppDispatch} from "../../../redux/store";
 import {iconUrlPicker} from "../../IconPicker/IconPicker";
-import {TCombineData, TTranslateLang} from "../../../Types/CommonTypes";
+import {TCombineData, TRegion, TTranslateLang} from "../../../Types/CommonTypes";
 import {getDataView, getTableTdKey, TDataViewObj} from "../DataView";
 import {useSelector} from "react-redux";
 import {AuthSelectors, GlobalSettingsSelectors} from "../../../redux/dataSelectors";
+import {SimpleInputField} from "../../DataAdd/Fields/InputField";
+import {useLocation} from "react-router-dom";
+import {SimpleSelectField} from "../../DataAdd/Fields/SelectField";
+import {selectFieldsOptions} from "../../../Types/Utils";
 
 
 type TDataViewTable2Props = {
@@ -19,63 +23,82 @@ type TDataViewTable2Props = {
 }
 export const DataViewTable2: React.FC<TDataViewTable2Props> = React.memo((props) => {
     const {dataEditHandler, dataDelHandler} = props
-    const data = [...props.data]
     const [isDeleteModeActive, setIsDeleteModeActive] = useState(false);
+    const [search, setSearch] = useState('')
+    const [regionFilters, setRegionFilters] = useState({land:'all', count:0})
+    let data = [...props.data.filter(v=>search.length>0 ? v.name.toLocaleLowerCase().includes(search.toLowerCase()) :true)]
+
     const lang = useSelector(GlobalSettingsSelectors.getLang)
     const isMod = useSelector(AuthSelectors.isInit)
-
+    const path = useLocation().pathname
+    if(path === '/region') data = data.filter((v: any)=>(regionFilters.land === 'all'? true : v.terrain===regionFilters.land)
+        && v.terrainReq>=regionFilters.count)
     const dataView: TDataViewObj | null = getDataView(data, lang)
-    if (!dataView) return <>Empty dataView</>
-
+    if (!dataView && search.length===0 && path !== '/region') return <>Empty dataView</>
     const onCheck = (e: React.ChangeEvent<HTMLInputElement>) => {
         setIsDeleteModeActive(e.target.checked)
     }
     return (
-        <div className={styles.vid}>
-            <table className={styles.table}>
-                <thead>
-                    <tr>
-                        {dataView.keys1.map(([key, num], i) => {
-                                const rowSpan = num > 1 ? 1 : dataView.keys2.some(([k2, num2]) => k2 === key) ? 2 : 1
-                                return <th className={styles.th1} rowSpan={rowSpan} colSpan={num} key={i} title={key}>
-                                    {getTableTdKey(key, 4)}</th>
-                            }
-                        )}
-                        {isMod && <th className={styles.th1} rowSpan={2}>Edit</th>}
-                        {isMod && <th className={styles.th1} rowSpan={1}>Delete</th>}
-
-                            </tr>
-                    <tr>
-                        {dataView.keys2.map(([key, num], i) => dataView.keys1.some(([k1, num1]) => k1 === key) ? null :
-                            <th className={styles.th1} colSpan={num} key={i} title={key}>{getTableTdKey(key,3)}</th>)}
-                        {isMod && <th className={styles.th1}><input type={"checkbox"} checked={isDeleteModeActive}
-                                                                    onChange={onCheck}/></th>}
-                    </tr>
-                </thead>
-                <tbody>
-                    {dataView.values.map((val, index) =>
-                        <tr className={styles.dataRow} key={index}>
-                            {val.map((str, index2) => {
-                                if (index2 === 0 && dataView.keys1[0][0] === 'icon') {
-                                    return (typeof str === 'string' ?
-                                        <td key={index2}><img className={fieldsStyles.imgIcon} key={index2}
-                                                  src={iconUrlPicker(str.split('/')[0], str.split('/')[1])}/></td> : null)
+        <div className={styles.mainBox}>
+            <div className={styles.searchDiv}>
+                <SimpleInputField value={search} onChange={str=>setSearch(str)} index={0} htmlId={'search'} labelText={'Search:'} required={false} disabled={false}/>
+                {path==='/region' &&<>
+                    <SimpleSelectField mapSelectValues={['all',...selectFieldsOptions['terrain']]} value={regionFilters.land} onSelChange={str=>setRegionFilters(a=>({...a,land: str}))} labelText={'region'}/>
+                    <SimpleInputField value={regionFilters.count} onChange={str=>setRegionFilters(a=>({...a,count: +str}))} index={0} htmlId={'dif'} labelText={'dif:'} required={false} disabled={false}/>
+                </>}
+            </div>
+            {(search.length>0 && data.length===0 && ( path === '/region' && (regionFilters.land!=='all' || regionFilters.count>0))) || !dataView ? <p>Nothing found</p> :
+            <div className={styles.vid}>
+                <table className={styles.table}>
+                    <thead>
+                        <tr>
+                            {dataView.keys1.map(([key, num], i) => {
+                                    const rowSpan = num > 1 ? 1 : dataView.keys2.some(([k2, num2]) => k2 === key) ? 2 : 1
+                                    return <th className={styles.th1} rowSpan={rowSpan} colSpan={num} key={i} title={key}>
+                                        {getTableTdKey(key, 4)}</th>
                                 }
-                                const stl = !(!str || str ==='-') ? styles.notEmptyTd : styles.emptyTd
-                                return <td className={stl} key={index2}>
-                                    {str}
-                                </td>
-                            })}
-                            {isMod && <td className={styles.notEmptyTd}>
-                                <button type={'button'} className={styles.editButton} onClick={() => dataEditHandler(data[index]._id)}/>
-                            </td>}
-                            {isMod && isDeleteModeActive &&
-                                <td className={styles.notEmptyTd}>
-                                    <button type={'button'} className={styles.deleteButton} onClick={() => dataDelHandler(data[index]._id)}/>
+                            )}
+                            {isMod && <th className={styles.th1} rowSpan={2}>Edit</th>}
+                            {isMod && <th className={styles.th1} rowSpan={1}>Delete</th>}
+
+                        </tr>
+                        <tr>
+                            {dataView.keys2.map(([key, num], i) => dataView.keys1.some(([k1, num1]) => k1 === key) ? null :
+                                <th className={styles.th1} colSpan={num} key={i}
+                                    title={key}>{getTableTdKey(key, 3)}</th>)}
+                            {isMod && <th className={styles.th1}><input type={"checkbox"} checked={isDeleteModeActive}
+                                                                        onChange={onCheck}/></th>}
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {dataView.values.map((val, index) =>
+                            <tr className={styles.dataRow} key={index}>
+                                {val.map((str, index2) => {
+                                    if (index2 === 0 && dataView.keys1[0][0] === 'icon') {
+                                        return (typeof str === 'string' ?
+                                            <td key={index2}><img className={fieldsStyles.imgIcon} key={index2}
+                                                                  src={iconUrlPicker(str.split('/')[0], str.split('/')[1])}/>
+                                            </td> : null)
+                                    }
+                                    const stl = !(!str || str === '-') ? styles.notEmptyTd : styles.emptyTd
+                                    return <td className={stl} key={index2}>
+                                        {str}
+                                    </td>
+                                })}
+                                {isMod && <td className={styles.notEmptyTd}>
+                                    <button type={'button'} className={styles.editButton}
+                                            onClick={() => dataEditHandler(data[index]._id)}/>
                                 </td>}
-                        </tr>)}
-                </tbody>
-            </table>
+                                {isMod && isDeleteModeActive &&
+                                    <td className={styles.notEmptyTd}>
+                                        <button type={'button'} className={styles.deleteButton}
+                                                onClick={() => dataDelHandler(data[index]._id)}/>
+                                    </td>}
+                            </tr>)}
+                    </tbody>
+                </table>
+            </div>
+            }
         </div>
     )
 })

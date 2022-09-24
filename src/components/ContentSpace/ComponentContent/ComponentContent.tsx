@@ -5,10 +5,12 @@ import {getComponentsSelector, getIsComponentsInitSelector} from "../../../redux
 import {TAppDispatch} from "../../../redux/store";
 import {ComponentThunks} from "../../../redux/reducers/componentReducer";
 import {DataView} from "../../DataView/DataView";
-import {TComponent, TComponentType, TWOid} from "../../../Types/CommonTypes";
+import {TComponent, TComponentType, TMaterialType, TWOid} from "../../../Types/CommonTypes";
 import {GenDataAdd} from "../../DataAdd/GenDataAdd";
 
-type TProps = {};
+type TProps = {
+    type?:TComponentType
+};
 export const ComponentContent: React.FC<TProps> = (props) => {
 
     const isInit = useSelector(getIsComponentsInitSelector)
@@ -71,7 +73,7 @@ export const ComponentContent: React.FC<TProps> = (props) => {
                 })}
             </div>
             <div className={styles.dbField}>
-                <DataView data={data} dataEditHandler={dataAddHandler} dataDelHandler={dataDelHandler}/>
+                <DataView type={props.type} data={data} dataEditHandler={dataAddHandler} dataDelHandler={dataDelHandler}/>
             </div>
         </div>
     );

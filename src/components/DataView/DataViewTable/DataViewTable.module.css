@@ -1,3 +1,13 @@
+.mainBox{
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+.searchDiv{
+    display: flex;
+    justify-content: start;
+}
+
 .vid {
     overflow: auto;
     --vidWidth: 111px;

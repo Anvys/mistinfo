@@ -15,7 +15,9 @@ import {TMaterial, TMaterialType, TWOid} from "../../../Types/CommonTypes";
 import {GenDataAdd} from "../../DataAdd/GenDataAdd";
 import {DataViewTable2} from "../../DataView/DataViewTable/DataViewTable";
 
-type TProps = {};
+type TProps = {
+    type?:TMaterialType
+};
 export const MaterialContent:React.FC<TProps> = React.memo((props) => {
     const dispatch = useDispatch<TAppDispatch>()
     const data = useSelector(getMaterialsSelector);
@@ -65,7 +67,7 @@ export const MaterialContent:React.FC<TProps> = React.memo((props) => {
             <div className={styles.dbField}>
                 <Outlet/>
                 {/*<DataViewTable2 dataEditHandler={dataAddHandler} dataDelHandler={dataDelHandler} data={data}/>*/}
-                <DataView data={data} dataEditHandler={dataAddHandler} dataDelHandler={dataDelHandler} />
+                <DataView type={props.type} data={data} dataEditHandler={dataAddHandler} dataDelHandler={dataDelHandler} />
             </div>
         </div>
     );

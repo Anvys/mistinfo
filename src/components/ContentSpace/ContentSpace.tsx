@@ -35,13 +35,24 @@ export const ContentSpace: React.FC = () => {
         <div className={styles.contentBox}>
             <Routes>
                 <Route path={'/map'} element={<MyMap wid={800} hei={600}/>}/>
-                <Route path={'/material/'} element={<MaterialContent/>}>
-                    {/*<Route path={'/material/add'} element={<AddMaterial selectFields={materialSelectFields}/>}/>*/}
-                </Route>
-                <Route path={'/component/'} element={<ComponentContent/>}>
+                <Route path={'/material/'} element={<MaterialContent/>}/>
+                <Route path={'/material/bone'} element={<MaterialContent type={'Bone'}/>}/>
+                <Route path={'/material/fiber'} element={<MaterialContent type={'Fiber'}/>}/>
+                <Route path={'/material/leather'} element={<MaterialContent type={'Leather'}/>}/>
+                <Route path={'/material/metal'} element={<MaterialContent type={'Metal'}/>}/>
+                <Route path={'/material/stone'} element={<MaterialContent type={'Stone'}/>}/>
+                <Route path={'/material/wood'} element={<MaterialContent type={'Wood'}/>}/>
+
+                <Route path={'/component/'} element={<ComponentContent/>}/>
+                <Route path={'/component/Plant'} element={<ComponentContent type={'Plant'}/>}/>
+                <Route path={'/component/Gem'} element={<ComponentContent type={'Gem'}/>}/>
+                <Route path={'/component/Substance'} element={<ComponentContent type={'Substance'}/>}/>
+                <Route path={'/component/Powder'} element={<ComponentContent type={'Powder'}/>}/>
+                <Route path={'/component/Sap'} element={<ComponentContent type={'Sap'}/>}/>
+                <Route path={'/component/Pollen'} element={<ComponentContent type={'Pollen'}/>}/>
+                <Route path={'/component/Artefact'} element={<ComponentContent type={'Artefact'}/>}/>
 
                     {/*<Route path={'/component/add'} element={<AddComponent selectFields={componentSelectFields}/>}/>*/}
-                </Route>
                 <Route path={'/npc/'} element={<NpcContent/>}/>
                 <Route path={'/location/'} element={<LocationContent/>}/>
                 <Route path={'/region/'} element={<RegionContent/>}/>

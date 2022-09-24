@@ -1,28 +1,93 @@
 .sideBox {
     display: flex;
-    border: 1px solid black;
-    padding: 10px;
+    /*border: 1px solid black;*/
+    background-color: rgba(29, 29, 42, 0.7);
+    min-width: 150px;
+    /*padding: 10px;*/
     flex-direction: column;
-    gap: 7px;
+    gap: 2px;
 }
-.navButton {
-    padding: 5px;
+.categoryBox{
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+}
+.sbActive, .sbInactive,.sbActiveSub, .sbInactiveSub{
+    position: relative;
+}
+.sbActive::before, .sbInactive::before,
+.sbActiveSub::before, .sbInactiveSub::before{
+    content: '';
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    background-color: #78ce2d;
+    color: #1ee0a8;
+    position: absolute;
+    top: 10px;
+    left: 13px;
     border: 1px solid black;
-    box-shadow: 1px 1px 2px 2px darkgrey;
-    background-color: #5fcade;
+}
+.sbInactive::before{
+    background-color: #cbc624;
+}
+.sbActiveSub::before{
+    top: 12px;
+    left: 30px;
+    width: 5px;
+    height: 5px;
+    background-color: #78ce2d;
+}
+
+.sbInactiveSub::before{
+    top: 12px;
+    left: 30px;
+    width: 5px;
+    height: 5px;
+    background-color: #cbc624;
+}
+.catDiv, .catDivBtn{
+    min-height: 30px;
+    position: relative;
+    display: flex;
+    justify-content: center;
+    overflow: hidden;
+}
+.catDivBtn{
+    padding-left: 20px;
+}
+.catDivBtn:hover{
+
+}
+.navButton, .navButtonL {
+    min-width: 130px;
+    padding: 5px 5px 5px 30px;
+
+    /*border: 1px solid black;*/
+    /*box-shadow: 1px 1px 2px 2px darkgrey;*/
+
     font-size: 18px;
     user-select: none;
     transition-duration: 0.05s;
     text-align: center;
+    background-color: #5d6364;
+    color: #dcdcdc;
+    text-decoration: none;
 }
-.navButton:hover{
+.navButton:hover, .navButtonL:hover{
     background-color: #60d3ec;
     cursor: pointer;
 }
-.navButton:active{
+.navButton:active, .navButtonL:active{
     background-color: #0a99b9;
     transform: translate(1px, 1px);
     box-shadow: 0px 0px 2px 2px darkgrey;
+}
+.navButtonL{
+    min-width: 110px;
+    padding-left: 5px;
+    text-align: center;
 }
 .catMenu{
     display: flex;
@@ -30,12 +95,20 @@
     gap: 5px;
 }
 .catBtn, .catBtnActive{
+    border: none;
     font-size: 18px;
+    border-radius: 3px;
     user-select: none;
     transition-duration: 0.05s;
-    text-align: center;
-    background-color: #9facb0;
+    /*text-align: center;*/
+    background-color: #5d6364;
+    color: #dcdcdc;
 }
 .catBtnActive{
-    background-color: #9ee78b;
+    /*background-color: #bdc4c7;*/
+    color: #4fff4b;
+}
+.catBtnActive:hover, .catBtn:hover{
+    cursor: pointer;
+    background-color: #bdc4c7;
 }
