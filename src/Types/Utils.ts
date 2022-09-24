@@ -92,7 +92,7 @@ export const selectFieldsOptions = {
     'gatherpoint.type': ['Botany', 'Hunting', 'Lumberjacking', 'Mining'],
     'event.type':['BlueFlag'],
     'quest.type':['Quest'],
-    'stage.type': ['Adventure', 'QuestItem', 'Equip' ,'Battle'],
+    'stage.type': ['Adventure', 'QuestItem', 'Equip','Resource' ,'Battle', 'Kill'],
     'eStage.type': ['Adventure', 'Resource', 'Battle'],
     'stage.expr': ['or', 'and'],
     'stage.postype': ['pos' , 'npc' , 'location'],

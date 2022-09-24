@@ -98,7 +98,7 @@ export const MC = {
         //     ))
         // }else return null
 
-        return <Polygon pathOptions={{color: 'lime'}} positions={bounds}>
+        return <Polygon pathOptions={{color: 'lime'}}  positions={bounds}>
             <Tooltip>
                 {data.terrainReq>0 ? `${data.terrain} ${data.terrainReq}`: `No land require`}
             </Tooltip>
@@ -298,7 +298,7 @@ export const MC = {
                 })}
                 position={{lat: data.pos.x, lng: data.pos.y}}>
                 <Popup>
-                    <div className={s.popupDiv}>
+                    <div className={s.popupgDiv}>
                         {`${data.name} [${data.type} ${gatherDifficult}]  (${getTimeStr(data.cooldown)})`}
                     </div>
                 </Popup>

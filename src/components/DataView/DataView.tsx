@@ -12,10 +12,25 @@ import {
 import {
     TAbility,
     TBonus,
-    TCombineData, TDrop, TDropTypes, TEquip, TLocation, TLoot, TMapPosition, TMonster,
+    TCombineData,
+    TDrop,
+    TDropTypes,
+    TEquip,
+    TLocation,
+    TLoot,
+    TMapPosition,
+    TMonster,
     TPrimKeys,
     TQuestItemPosition,
-    TQuestStage, TRecipe, TRecipePart, TShopContent, TStage, TStageRequire,
+    TQuestStage,
+    TRecipe,
+    TRecipePart,
+    TRequireAdventure, TRequireBattle,
+    TRequireEquip, TRequireKill, TRequireQuestItem,
+    TRequireResource,
+    TShopContent,
+    TStage,
+    TStageRequire,
     TSubKeys,
     TTranslateLang
 } from "../../Types/CommonTypes";
@@ -238,7 +253,7 @@ export const supFuncGetStr = {
     },
 }
 //display data in table
-const getDataViewTdStr = (key: string, data: any): [Array<string>, Array<string | JSX.Element>] => {
+export const getDataViewTdStr = (key: string, data: any): [Array<string>, Array<string | JSX.Element>] => {
     if (typeof data === 'object') {
         const dataEntries = Object.entries(data)
         switch (key) {
@@ -333,6 +348,36 @@ const getDataViewTdStr = (key: string, data: any): [Array<string>, Array<string 
             case 'parts':
                 const local = data as Array<TRecipePart>
                 return [[key], [data.length === 0 ? `-` : `${local.map(part => `${part.count} ${part.component}`).join(' / ')}`]]
+            case 'require':
+                const reqStage = data as TStage
+                if(reqStage.require===null || (Array.isArray(reqStage.require.type) && reqStage.require.type.length === 0)) return [[key], [`Empty`]]
+                switch (reqStage.type){
+                    case 'Adventure':
+                        const reqAdv = reqStage.require as TRequireAdventure
+                        return [[key], [`${reqAdv.type} ${reqAdv.count}`]]
+                    case 'Resource':
+                        const reqRes = reqStage.require as TRequireResource
+                        return [[key], [`${reqRes.type.name} ${reqRes.count}`]]
+                    case 'QuestItem':
+                        const reqQuestItem = reqStage.require as TRequireQuestItem
+                        return [[key], [`${reqQuestItem.type.name} ${reqQuestItem.count}`]]
+                    case 'Kill':
+                        const reqKill = reqStage.require as TRequireKill
+                        return [[key], [`${reqKill.type.name} ${reqKill.count}`]]
+                    case 'Battle':
+                        const reqBattle = reqStage.require as TRequireBattle
+                        console.log(reqBattle)
+                        return [[key], [reqBattle.type.length === 0 || typeof reqBattle.type !=='object' ? `-` :
+                            <details>
+                                <summary>{`${reqBattle.type.length} monsters`}</summary>
+                                {reqBattle.type.map(v=>`${v.name} Lv.${v.level} (Life:${v.life})`).join('\n')}
+                            </details>
+                        ]]
+                    case 'Equip':
+                        const reqEquip = reqStage.require as TRequireEquip
+                        return [[key], [`${reqEquip.type.recipe.name} [${reqEquip.type.recipe.parts.map((part, i) => `${reqEquip.type.components[i]} x${part.count}`).join(' / ')}]`]]
+                    default: return [[key], [`error stage req`]]
+                }
             default:
                 console.log(key)
                 console.log(data)

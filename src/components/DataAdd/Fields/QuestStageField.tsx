@@ -18,8 +18,14 @@ import {getLocationSelector, getLootByNameSelector, getNpcSelector} from "../../
 import {FormikProps} from "formik";
 import {PosField, PosStageField} from "./PosField";
 import {SimpleSelectField} from "./SelectField";
-import {StageAdventureForm, StageRequireEquipForm, StageRequireQuestItemForm} from "./StageField";
+import {
+    StageAdventureForm, StageRequireBattleForm,
+    StageRequireEquipForm, StageRequireKillMonsterForm,
+    StageRequireQuestItemForm,
+    StageRequireResourceForm
+} from "./StageField";
 import {getStageRequireStr} from "../../../Unils/utilsFunctions";
+import {getDataViewTdStr} from "../../DataView/DataView";
 
 export const getPosStr = (pos: TStagePos, type: TStagePosType) =>{
     // console.log(pos)
@@ -54,7 +60,7 @@ export const StageQuestField: React.FC<TProps> = (props) => {
     const [stagePosType, setStagePosType] = useState<TStagePosType>('pos')
     const [stagePos, setStagePos] = useState<TStagePos | ''>({x:0, y:0})
     const [loot, setLoot] = useState('')
-    const [req, setReq] = useState<TStageRequire>(() => ({type: 'Academic', count: 0}))
+    const [req, setReq] = useState<TStageRequire | null>(() => ({type: 'Academic', count: 0}))
 
     const locations = useSelector(getLocationSelector)
     const npc = useSelector(getNpcSelector)
@@ -69,8 +75,10 @@ export const StageQuestField: React.FC<TProps> = (props) => {
     const stageKeys = ['num', 'expr', 'name', 'type', 'require', 'timeAvailable', 'timeSpend', 'stagePos', 'loot']
 
     const onTypeChange: React.ChangeEventHandler<HTMLSelectElement> = (e) => {
+        setReq(null)
         console.log(`type: ${e.target.value}`)
         setType(e.target.value)
+
     }
     const onRequireAdd = (req: TStageRequire) => {
         setReq(req)
@@ -178,11 +186,19 @@ export const StageQuestField: React.FC<TProps> = (props) => {
                     </div>
 
                 </div>
-                <p className={styles.infoPar}>{`----> ${getStageRequireStr(type, req)}`}</p>
+                {/*<p className={styles.infoPar}>{`----> ${getStageRequireStr(type, req)}`}</p>*/}
+                {/*{getDataViewTdStr('require', {type:type, require:req})[1]}*/}
+                <p style={{fontSize: '16px', fontWeight: 'bold'}}>
+                    {/*{`Cur req: ${type==='Resource'?req.type.name : req.type}: ${req.count}`}*/}
+                    {getDataViewTdStr('require', {type:type, require:req})[1]}
+                </p>
+                {/*<p className={styles.infoPar}>{`${getDataViewTdStr('require', {type:type, require:req})[1]}`}</p>*/}
                 {type === 'Adventure' && <StageAdventureForm onSubmit={onRequireAdd}/>}
                 {type === 'QuestItem' && <StageRequireQuestItemForm type={type} onSubmit={onRequireAdd}/>}
                 {type === 'Equip' && <StageRequireEquipForm type={type} onSubmit={onRequireAdd}/>}
-                {type === 'Battle' && <div>TODO</div>}
+                {type === 'Resource' && <StageRequireResourceForm type={type} onSubmit={onRequireAdd}/>}
+                {type === 'Kill' && <StageRequireKillMonsterForm type={type} onSubmit={onRequireAdd}/>}
+                {type === 'Battle' && <StageRequireBattleForm type={type} onSubmit={onRequireAdd}/>}
 
             </div>
 
@@ -273,8 +289,10 @@ export const StageQuestField: React.FC<TProps> = (props) => {
                                     const val: any = st[key as keyof typeof st]
                                     switch (key) {
                                         case 'require':
-                                            if(st.type === 'Equip') return <td>{getStageRequireStr('Equip', st.require)}</td>
-                                            return <td>{Object.entries(val).map(([r1, r2], i, arr) => `${r2}${i < arr.length - 1 ? ': ' : ''}`)}</td>
+                                            const reqResult = getDataViewTdStr('require', st)
+                                            return <td key={i}>{reqResult[1]}</td>
+                                            // if(st.type === 'Equip') return <td>{getStageRequireStr('Equip', st.require)}</td>
+                                            // return <td>{Object.entries(val).map(([r1, r2], i, arr) => `${r2}${i < arr.length - 1 ? ': ' : ''}`)}</td>
                                         case 'loot':
                                             return <td>{val?.map((drop: TDrop<TDropTypes>, i: number) => `${drop.type}#${drop.name}#x${drop.countMin}-${drop.countMax}(${drop.chance}%)${i < val.length - 1 ? '\n' : ''}`)}</td>
                                         case 'stagePosType':

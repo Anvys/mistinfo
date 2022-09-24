@@ -7,7 +7,7 @@ import {
     TAdventure, TCombineData,
     TDrop,
     TDropTypes, TEquip,
-    TExpr, TLoot, TQuestItem, TRecipePart,
+    TExpr, TLoot, TMonster, TQuestItem, TRecipePart,
     TRequireAdventure, TRequireQuestItem,
     TStage,
     TStageRequire
@@ -15,9 +15,10 @@ import {
 import {selectFieldsOptions, TSelectFieldsKeys} from "../../../Types/Utils";
 import {useSelector} from "react-redux";
 import {
+    ComponentSelectors,
     getComponentsSelector,
     getLootByNameSelector,
-    getMaterialsSelector,
+    getMaterialsSelector, MaterialSelectors, MonsterSelectors,
     QuestItemSelectors,
     RecipeSelectors,
     TSelectors
@@ -25,6 +26,8 @@ import {
 import {FormikProps} from "formik";
 import {SimpleSelectField} from "./SelectField";
 import {SimpleInputField} from "./InputField";
+import {log} from "util";
+import {getDataViewTdStr} from "../../DataView/DataView";
 
 type TProps = {
     formik: FormikProps<any>
@@ -40,50 +43,46 @@ export const StageField: React.FC<TProps> = (props) => {
     const [proc, setProc] = useState(100)
     const [time, setTime] = useState(0)
     const [loot, setLoot] = useState('')
-    const [req, setReq] = useState<TStageRequire>(() => ({type: 'Academic', count: 0}))
+    const [req, setReq] = useState<TStageRequire | null>(() => ({type: 'Academic', count: 0}))
     // console.log(`find loot ${loot} /  ${loot.split('#')[1]} : ${useSelector(getLootByNameSelector(loot))}`)
     const findLoot = useSelector(getLootByNameSelector(loot))
-    console.log(`stages: ${formik.values.eStages.length}`)
+    // console.log(`stages: ${formik.values.eStages.length}`)
     //formik.values.stages.length>0?formik.values.stages : []
     const [stages, setStages] = useState<Array<TStage>>(() => formik.values.eStages)
     const stageKeys = ['num', 'expr', 'name', 'type', 'require', 'time', 'loot']
 
     const onTypeChange: React.ChangeEventHandler<HTMLSelectElement> = (e) => {
+        setReq(null)
         setType(e.target.value)
     }
     const onRequireAdd = (req: TStageRequire) => {
         setReq(req)
         console.log(req)
-        // setType('')
-        // props.onStageAdd(req)
     }
     const onStageAdd = () => {
-        const newStage: TStage = {
-            num,
-            proc,
-            name: name === 'Stage' ? `Stage ${num}` : name,
-            expr,
-            type,
-            require: req,
-            time,
-            loot: findLoot || null
+        if (req !== null) {
+            const newStage: TStage = {
+                num,
+                proc,
+                name: name === 'Stage' ? `Stage ${num}` : name,
+                expr,
+                type,
+                require: req,
+                time,
+                loot: findLoot || null
+            }
+            formik.setFieldValue('eStages', [...stages, newStage])
+            setType('Adventure')
+            setReq({type: 'Academic', count: 0})
         }
-        // console.log('Add new stage')
-        // console.log(newStage)
-        // formik.setFieldValue('stages', [...formik.values.stages, newStage])
-        // setStages(actual=>[...actual, newStage])
-        formik.setFieldValue('eStages', [...stages, newStage])
     }
     const onStageDelHandler = (index: number) => {
         formik.setFieldValue('eStages', formik.values.eStages.filter((v: any, i: number) => i !== index))
-        // setStages(actual=>actual.filter((v,i)=>i!==index))
     }
-    // useEffect(()=>{
-    //     formik.setFieldValue('stages', stages)
-    // },[stages])
     useEffect(() => {
         setStages(formik.values.eStages)
     }, [formik.values.eStages])
+
     return (
         <div className={styles.divRow}>
             <div className={styles.divCol} style={{width: '200px'}}>
@@ -92,18 +91,27 @@ export const StageField: React.FC<TProps> = (props) => {
                         <label htmlFor={'type'}>reqtype:</label>
                         <select className={styles.inputText} name={'type'} value={type} onChange={onTypeChange}
                                 autoComplete={'off'} placeholder={'type'}>
-                            <option value="" disabled hidden  key={0}>{`Select type`}</option>
-                            {selectFieldsOptions['eStage.type'].map((v,i) => <option value={v} key={i+1}>{`${v}`}</option>)}
+                            <option value="" disabled hidden key={0}>{`Select type`}</option>
+                            {selectFieldsOptions['stage.type'].map((v, i) => <option value={v}
+                                                                                     key={i + 1}>{`${v}`}</option>)}
                         </select>
                     </div>
 
                 </div>
-                <p style={{fontSize: '16px', fontWeight: 'bold'}}>{`Cur req: ${req.type}: ${req.count}`}</p>
+                {/* @ts-ignore*/}
+                <p style={{fontSize: '16px', fontWeight: 'bold'}}>
+                    {/*{`Cur req: ${type==='Resource'?req.type.name : req.type}: ${req.count}`}*/}
+                    {getDataViewTdStr('require', {type: type, require: req})[1]}
+
+                </p>
+                <p>----------</p>
 
 
                 {type === 'Adventure' && <StageAdventureForm onSubmit={onRequireAdd}/>}
-                {type === 'Resource' && <div>TODO</div>}
-                {type === 'Battle' && <div>TODO</div>}
+                {type === 'Resource' && <StageRequireResourceForm type={type} onSubmit={onRequireAdd}/>}
+                {type === 'Kill' && <StageRequireKillMonsterForm type={type} onSubmit={onRequireAdd}/>}
+                {type === 'Equip' && <StageRequireEquipForm type={type} onSubmit={onRequireAdd}/>}
+                {type === 'Battle' && <StageRequireBattleForm type={type} onSubmit={onRequireAdd}/>}
 
             </div>
             <div className={styles.fieldBoxCol}>
@@ -145,7 +153,8 @@ export const StageField: React.FC<TProps> = (props) => {
                             onChange={e => setExpr(e.target.value as TExpr)}
                             required autoComplete={'off'} placeholder={'expr'}>
                         <option value="" disabled hidden key={0}>{`Select expr`}</option>
-                        {selectFieldsOptions['stage.expr'].map((v,i) => <option value={v} key={i+1}>{`${v}`}</option>)}
+                        {selectFieldsOptions['stage.expr'].map((v, i) => <option value={v}
+                                                                                 key={i + 1}>{`${v}`}</option>)}
                     </select>
                 </div>
                 <div className={styles.fieldBoxNoBorder}>
@@ -154,7 +163,7 @@ export const StageField: React.FC<TProps> = (props) => {
                             onChange={e => setLoot(e.target.value)}
                             autoComplete={'off'} placeholder={'expr'}>
                         <option value="" disabled hidden key={0}>{NO_LOOT}</option>
-                        {selectFieldsOptions['loot']?.map((v,i) => <option value={v}  key={i+1}>{`${v}`}</option>)}
+                        {selectFieldsOptions['loot']?.map((v, i) => <option value={v} key={i + 1}>{`${v}`}</option>)}
                     </select>
                 </div>
                 <button className={styles.addButton} type={'button'} onClick={onStageAdd}>AddStage</button>
@@ -166,7 +175,7 @@ export const StageField: React.FC<TProps> = (props) => {
                             <th colSpan={stageKeys.length}>Event STAGES</th>
                         </tr>
                         <tr>
-                            {stageKeys.map((v,i) => <td key={i}>{v}</td>)}
+                            {stageKeys.map((v, i) => <td key={i}>{v}</td>)}
                         </tr>
                     </thead>
                     <tbody>
@@ -177,9 +186,13 @@ export const StageField: React.FC<TProps> = (props) => {
                                     const val: any = st[key as keyof typeof st]
                                     switch (key) {
                                         case 'require':
-                                            return <td key={j}>{Object.entries(val).map(([r1, r2], i, arr) => `${r2}${i < arr.length - 1 ? ': ' : ''}`)}</td>
+                                            // console.log(val)
+                                            const reqResult = getDataViewTdStr('require', st)
+                                            return <td key={j}>{reqResult[1]}</td>
+                                        // return <td key={j}>{Object.entries(val).map(([r1, r2], i, arr) => `${r2}${i < arr.length - 1 ? ': ' : ''}`)}</td>
                                         case 'loot':
-                                            return <td key={j}>{val?.map((drop: TDrop<TDropTypes>, i: number) => `${drop.type}#${drop.name}#x${drop.countMin}-${drop.countMax}(${drop.chance}%)${i < val.length - 1 ? '\n' : ''}`)}</td>
+                                            return <td
+                                                key={j}>{val?.map((drop: TDrop<TDropTypes>, i: number) => `${drop.type}#${drop.name}#x${drop.countMin}-${drop.countMax}(${drop.chance}%)${i < val.length - 1 ? '\n' : ''}`)}</td>
                                         case '_id' :
                                             return null
                                         default:
@@ -212,7 +225,9 @@ export const StageAdventureForm: React.FC<TStageAdventureFormProps> = (props) =>
     }
     return (
         <div className={styles.divCol}>
-            <p>Add adventure stage</p>
+            <div style={{fontSize: '14px', fontWeight: 'bold'}}>
+                <p>Add adventure stage</p>
+            </div>
             <div className={styles.fieldBoxColNoBorder}>
                 <SimpleSelectField mapSelectValues={[...selectFieldsOptions['adventure']]} value={adventure}
                                    onSelChange={(val) => setAdventure(val as TAdventure)} labelText={'skill'}/>
@@ -239,13 +254,100 @@ export const StageRequireQuestItemForm: React.FC<TStageRequireQuestItemFormProps
     }
     return (
         <div className={styles.divCol}>
-            <p>Add quest item stage</p>
+            <div style={{fontSize: '14px', fontWeight: 'bold'}}>
+                <p>Add quest item stage</p>
+            </div>
             <div className={styles.fieldBoxColNoBorder}>
                 <SimpleSelectField mapSelectValues={selectFieldsOptions['questitem'] || ['not found']}
                                    value={requireData} onSelChange={(val) => setRequireData(val as TAdventure)}
                                    labelText={'quest item'}/>
                 <SimpleInputField value={count} onChange={(val) => setCount(+val)} index={1} htmlId={'count'}
                                   labelText={'count'} required={false} disabled={false}/>
+                <button type={'button'} className={styles.addButton} onClick={onSaveHandler}>Save</button>
+            </div>
+        </div>
+    )
+}
+export const StageRequireResourceForm: React.FC<TStageRequireQuestItemFormProps> = (props) => {
+    const [requireData, setRequireData] = useState<string>('')
+    const [count, setCount] = useState(0)
+    const materials = useSelector(MaterialSelectors.getData)
+    const components = useSelector(ComponentSelectors.getData)
+    const resources = [...materials, ...components]
+    const onSaveHandler = () => {
+        const findRes = resources.find(v => v.name === requireData)
+        if (findRes !== undefined) props.onSubmit({type: findRes, count: count})
+    }
+    return (
+        <div className={styles.divCol}>
+            <div style={{fontSize: '14px', fontWeight: 'bold'}}>
+                <p>Add resource stage</p>
+            </div>
+            <div className={styles.fieldBoxColNoBorder}>
+                <SimpleSelectField mapSelectValues={[...resources.map(v => v.name)] || ['not found']}
+                                   value={requireData} onSelChange={(val) => setRequireData(val as TAdventure)}
+                                   labelText={'Res'}/>
+                <SimpleInputField value={count} onChange={(val) => setCount(+val)} index={1} htmlId={'count'}
+                                  labelText={'count'} required={false} disabled={false}/>
+                <button type={'button'} className={styles.addButton} onClick={onSaveHandler}>Save</button>
+            </div>
+        </div>
+    )
+}
+export const StageRequireKillMonsterForm: React.FC<TStageRequireQuestItemFormProps> = (props) => {
+    const [requireData, setRequireData] = useState<string>('')
+    const [count, setCount] = useState(0)
+    const monsters = useSelector(MonsterSelectors.getData)
+    const onSaveHandler = () => {
+        const findRes = monsters.find(v => v.name === requireData)
+        if (findRes !== undefined) props.onSubmit({type: findRes, count: count})
+    }
+    return (
+        <div className={styles.divCol}>
+            <div style={{fontSize: '14px', fontWeight: 'bold'}}>
+                <p>Add kill monster stage</p>
+            </div>
+            <div className={styles.fieldBoxColNoBorder}>
+                <SimpleSelectField mapSelectValues={[...monsters.map(v => v.name)] || ['not found']}
+                                   value={requireData} onSelChange={(val) => setRequireData(val as TAdventure)}
+                                   labelText={'Monster'}/>
+                <SimpleInputField value={count} onChange={(val) => setCount(+val)} index={1} htmlId={'count'}
+                                  labelText={'count'} required={false} disabled={false}/>
+                <button type={'button'} className={styles.addButton} onClick={onSaveHandler}>Save</button>
+            </div>
+        </div>
+    )
+}
+export const StageRequireBattleForm: React.FC<TStageRequireQuestItemFormProps> = (props) => {
+    const [requireData, setRequireData] = useState<string>('')
+    const [count, setCount] = useState(0)
+    const [monsterArr, setMonsterArr] = useState<Array<TMonster>>([])
+    const monsters = useSelector(MonsterSelectors.getData)
+    const onMonsterAdd = () => {
+        const findRes = monsters.find(v => v.name === requireData)
+        if (findRes !== undefined) setMonsterArr(actual => [...actual, findRes])
+    }
+    const onSaveHandler = () => {
+        console.log(monsterArr)
+        if (monsterArr.length > 0) props.onSubmit({type: monsterArr, count: count})
+    }
+    return (
+        <div className={styles.divCol}>
+            <div style={{fontSize: '14px', fontWeight: 'bold'}}>
+                <p>Add kill monster stage</p>
+                <details>
+                    <summary>Current monster party: {monsterArr.length}</summary>
+                    <p style={{whiteSpace: 'pre'}}>{monsterArr.map(v => v.name).join('\n')}</p>
+                </details>
+            </div>
+
+            <div className={styles.fieldBoxColNoBorder}>
+                <SimpleSelectField mapSelectValues={[...monsters.map(v => v.name)] || ['not found']}
+                                   value={requireData} onSelChange={(val) => setRequireData(val)}
+                                   labelText={'Monster'}/>
+                <SimpleInputField value={count} onChange={(val) => setCount(+val)} index={1} htmlId={'count'}
+                                  labelText={'count'} required={false} disabled={false}/>
+                <button type={'button'} className={styles.addButton} onClick={onMonsterAdd}>Add monster</button>
                 <button type={'button'} className={styles.addButton} onClick={onSaveHandler}>Save</button>
             </div>
         </div>
@@ -263,7 +365,10 @@ export const StageRequireEquipForm: React.FC<TStageRequireQuestItemFormProps> = 
 
     const onSaveHandler = () => {
         const findRes = dataItems.find(v => v.name === requireData)
-        if (findRes !== undefined) props.onSubmit({type: {recipe: findRes, components: equipComp} as TEquip, count: count})
+        if (findRes !== undefined) props.onSubmit({
+            type: {recipe: findRes, components: equipComp} as TEquip,
+            count: count
+        })
         else console.log(`fail Save ${requireData}`)
     }
     const onRecipeSelectHandler = (value: string) => {
@@ -276,21 +381,23 @@ export const StageRequireEquipForm: React.FC<TStageRequireQuestItemFormProps> = 
             console.log(value)
         }
     }
-    useEffect(()=>{
-        if(parts === null || parts.length===0) setEquipComp([])
-        else setEquipComp(parts.map(v=>'?'))
-    },[parts])
+    useEffect(() => {
+        if (parts === null || parts.length === 0) setEquipComp([])
+        else setEquipComp(parts.map(v => '?'))
+    }, [parts])
     return (
         <div className={styles.divCol}>
-            <p>{`Add ${str} stage`}</p>
+            <div style={{fontSize: '14px', fontWeight: 'bold'}}>
+                <p>{`Add ${str} stage`}</p>
+            </div>
             <div className={styles.fieldBoxColNoBorder}>
                 <SimpleSelectField mapSelectValues={selectFieldsOptions['recipe'] || ['not found']}
                                    value={requireData} onSelChange={onRecipeSelectHandler}
                                    labelText={`${str}`}/>
                 {parts?.map((v: TRecipePart, i: number) => {
                     const selectStrings = materials
-                        .filter(mat=>mat.type===v.component).map(v=>v.name)
-                        .concat(components.filter(com=>com.type===v.component).map(v=>v.name))
+                        .filter(mat => mat.type === v.component).map(v => v.name)
+                        .concat(components.filter(com => com.type === v.component).map(v => v.name))
                     return <SimpleSelectField mapSelectValues={selectStrings || ['not found']}
                                               value={equipComp[i]}
                                               onSelChange={(val) => equipComp[i] = val}

@@ -80,26 +80,8 @@ export type TStaminaElixir = {
     translate: TTranslateData
     notes: Array<string>
 }
-export type TExpr = 'or' | 'and'
-export type TStage = {
-    num: number
-    proc: number
-    expr: TExpr
-    name: string
-    type: string
-    require: TStageRequire
-    time: number
-    loot: TLoot | null
-}
-export type TStageRequire = TRequireAdventure | TRequireQuestItem | TRequireEquip
-export type TRequireAdventure = {
-    type: TAdventure
-    count: number
-}
-export type TRequireResource = {
-    type: TMaterial | TComponent
-    count: number
-}
+
+
 export type TQuestItem = {
     _id: string
     name: string
@@ -121,32 +103,14 @@ export type TQuestItemSource = {
     translate: TTranslateData
     notes: Array<string>
 }
-export type TRequireQuestItem = {
-    type: TQuestItem
-    count: number
-}
+
 export type TEquip = {
     recipe: TRecipe
     components:Array<string>
 }
-export type TRequireEquip = {
-    type: TEquip
-    count: number
-}
-export type TEvent = {
-    _id: string
-    name: string
-    type: string
-    icon: string
-    region: string
-    eStages: Array<TStage>
-    pos: TMapPosition
-    translate: TTranslateData
-    notes: Array<string>
-}
+
 export type TShopContentItem = TRecipe | TAbility | TEquip | undefined
 export type TShopContentType = 'Recipe' | 'Ability' | 'Equip' | 'Empty'
-
 export type TReputationRequire = {
     reputation: TShopItemReputation
     count: number
@@ -168,39 +132,11 @@ export type TShop = {
     translate: TTranslateData
     notes: Array<string>
 }
-
-
 export type TMapObject = {
     _id: string
     name: string
     icon: string
     pos: TMapPosition
-    translate: TTranslateData
-    notes: Array<string>
-}
-
-
-export type TStagePosType = 'pos' | 'npc' | 'location'
-export type TStagePos = TMapPosition | TNpc | TLocation
-export type TQuestStage = {
-    num: number
-    proc: number
-    expr: TExpr
-    name: string
-    type: string
-    require: TStageRequire
-    timeAvailable: string
-    timeSpend: number
-    stagePosType: TStagePosType
-    stagePos: TMapPosition | TNpc | TLocation
-    loot: TLoot | null
-}
-export type TQuest = {
-    _id: string
-    name: string
-    type: string
-    availableAfter: Array<string>
-    qStages: Array<TQuestStage>
     translate: TTranslateData
     notes: Array<string>
 }
@@ -277,6 +213,77 @@ export type TRecipe = {
     notes: Array<string>
 }
 
+export type TQuest = {
+    _id: string
+    name: string
+    type: string
+    availableAfter: Array<string>
+    qStages: Array<TQuestStage>
+    translate: TTranslateData
+    notes: Array<string>
+}
+export type TEvent = {
+    _id: string
+    name: string
+    type: string
+    icon: string
+    region: string
+    eStages: Array<TStage>
+    pos: TMapPosition
+    translate: TTranslateData
+    notes: Array<string>
+}
+export type TStageRequire = TRequireAdventure | TRequireQuestItem | TRequireEquip | TRequireResource | TRequireKill | TRequireBattle
+export type TRequireAdventure = {
+    type: TAdventure
+    count: number
+}
+export type TRequireResource = {
+    type: TMaterial | TComponent
+    count: number
+}
+export type TRequireKill = {
+    type: TMonster
+    count: number
+}
+export type TRequireBattle = {
+    type: Array<TMonster>
+    count: number
+}
+export type TRequireEquip = {
+    type: TEquip
+    count: number
+}
+export type TRequireQuestItem = {
+    type: TQuestItem
+    count: number
+}
+export type TStagePosType = 'pos' | 'npc' | 'location'
+export type TStagePos = TMapPosition | TNpc | TLocation
+export type TQuestStage = {
+    num: number
+    proc: number
+    expr: TExpr
+    name: string
+    type: string
+    require: TStageRequire
+    timeAvailable: string
+    timeSpend: number
+    stagePosType: TStagePosType
+    stagePos: TMapPosition | TNpc | TLocation
+    loot: TLoot | null
+}
+export type TStage = {
+    num: number
+    proc: number
+    expr: TExpr
+    name: string
+    type: string
+    require: TStageRequire
+    time: number
+    loot: TLoot | null
+}
+export type TExpr = 'or' | 'and'
 
 
 export type TUserType = 'User' | 'Mod' | 'Admin'
@@ -287,13 +294,8 @@ export type TUser = {
     icon: string
     token: string | undefined
 }
-
-
 export type TWOid<T> = Omit<T, '_id'>
-
-
 export type TMapPosition = { x: number, y: number }
-
 
 export type TEquipSlot = 'Helmet'| 'Torso' | 'Glove' | 'Legs' | 'Boots' | 'Weapon' | 'Lantern' | 'Cape' | 'Coat'
     | 'Shirt' | 'Pants' | 'Offhand' | 'Pendant' | 'Ring' | 'Bracelet' | 'Crowns'
