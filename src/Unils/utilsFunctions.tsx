@@ -186,8 +186,10 @@ export const getDataObjStr = (field: string, data: any) => {
             return `rec ${data.name}`
         case 'reputation':
             return `${data.reputation}: ${data.count}`
+        case 'book':
+            return `${data.skill} +${data.count}`
         default:
-            return `defaultDataObjStr`
+            return `defaultDataObjStr in getDataObjStr func`
     }
 }
 export const getTimeStr = (min: number) =>{

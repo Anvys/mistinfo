@@ -35,7 +35,9 @@ export const LocationContent: React.FC<TProps> = (props) => {
         pos: {x: 0, y: 0},
         icon: '',
         region: '',
+        moveTo: '',
         translate: {En: '', Ru: '', Fr: ''},
+        notes:[],
     }
 
     // const isMapActive = useSelector(getIsAddPosFieldActiveSelector)

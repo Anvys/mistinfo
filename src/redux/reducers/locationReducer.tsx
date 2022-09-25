@@ -24,6 +24,9 @@ export const LocationSlice = createSlice({
             state.data = [...action.payload];
             state.isInit = true;
         },
+        initSelectArr: (state, action: PayloadAction) => {
+            selectFieldsOptions['location'] = state.data.map(v => v.name)
+        },
         addOne: (state, action: PayloadAction<Array<TLocation>>) => {
             state.data.push(action.payload[0])
         },
@@ -66,6 +69,7 @@ export const LocationThunks = {
         }
     ),
     getOne: createAsyncThunk(`${reducerPath}/getOne`, async (id: string, thunkAPI) => {
+            thunkAPI.dispatch(CurSlice.actions.initSelectArr())
             const res = await CurAPI.getOne(id)
             if (checkError(res)) return res.data
         }

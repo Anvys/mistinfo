@@ -2,14 +2,11 @@ import React, {useState} from 'react';
 import styles from './../ContentSpace.module.css';
 import {useDispatch, useSelector} from "react-redux";
 import {Outlet} from "react-router-dom";
-import {AbilitySelectors, QuestItemSelectors, QuestItemSourceSelectors} from "../../../redux/dataSelectors";
+import {QuestItemSourceSelectors} from "../../../redux/dataSelectors";
 import {TAppDispatch} from "../../../redux/store";
 import {DataView} from "../../DataView/DataView";
 import {TQuestItemSource, TWOid} from "../../../Types/CommonTypes";
 import {GenDataAdd} from "../../DataAdd/GenDataAdd";
-import {AbilityThunks} from "../../../redux/reducers/abilityReducer";
-import {QuestItemThunks} from "../../../redux/reducers/questItemReducer";
-import {PosQuestItemField} from "../../DataAdd/Fields/PosField";
 import {QuestItemSourceThunks} from "../../../redux/reducers/questItemSourceReducer";
 
 type TProps = {};

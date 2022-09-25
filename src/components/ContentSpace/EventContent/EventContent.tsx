@@ -33,6 +33,7 @@ export const EventContent: React.FC<TProps> = (props) => {
         type: 'BlueFlag',
         icon:'event_Flags/eventregionrandom',
         eStages:[],
+        loot:'--No loot--',
         pos: {x:0,y:0},
         translate: {En: `New Event ${data.length+1}`, Ru: '', Fr: ''},
         notes: [],

@@ -1,4 +1,4 @@
-import {selectFieldsOptions} from "./Utils";
+import {selectFieldsOptions, TShopContentType} from "./Utils";
 import {TShopItemReputation} from "../components/DataAdd/Fields/ShopContentField";
 export const NO_LOOT = '--No loot--' as const
 export type TCombineData = TNpc | TRegion | TLocation
@@ -40,6 +40,7 @@ export type TRegion = {
     bound: Array<[number, number]>
     pos: TMapPosition
     translate: TTranslateData
+    notes: Array<string>
 }
 export type TLocation = {
     _id: string
@@ -49,7 +50,9 @@ export type TLocation = {
     pos: TMapPosition
     icon: string
     region: string
+    moveTo: string | ''
     translate: TTranslateData
+    notes: Array<string>
 }
 export type TGatherPoint = {
     _id: string
@@ -109,8 +112,12 @@ export type TEquip = {
     components:Array<string>
 }
 
-export type TShopContentItem = TRecipe | TAbility | TEquip | undefined
-export type TShopContentType = 'Recipe' | 'Ability' | 'Equip' | 'Empty'
+export type TShopContentItem = TRecipe | TAbility | TEquip | TBook | undefined
+export type TBook = {
+    skill: TSkills
+    count: number
+}
+
 export type TReputationRequire = {
     reputation: TShopItemReputation
     count: number
@@ -218,7 +225,10 @@ export type TQuest = {
     name: string
     type: string
     availableAfter: Array<string>
+    startAt: string | 'auto'
+    endAt: string | 'auto'
     qStages: Array<TQuestStage>
+    loot: TLoot | typeof NO_LOOT
     translate: TTranslateData
     notes: Array<string>
 }
@@ -229,13 +239,14 @@ export type TEvent = {
     icon: string
     region: string
     eStages: Array<TStage>
+    loot: TLoot | typeof NO_LOOT
     pos: TMapPosition
     translate: TTranslateData
     notes: Array<string>
 }
 export type TStageRequire = TRequireAdventure | TRequireQuestItem | TRequireEquip | TRequireResource | TRequireKill | TRequireBattle
 export type TRequireAdventure = {
-    type: TAdventure
+    type: TSkills
     count: number
 }
 export type TRequireResource = {
@@ -271,7 +282,7 @@ export type TQuestStage = {
     timeSpend: number
     stagePosType: TStagePosType
     stagePos: TMapPosition | TNpc | TLocation
-    loot: TLoot | null
+    // loot: TLoot | null
 }
 export type TStage = {
     num: number
@@ -281,7 +292,6 @@ export type TStage = {
     type: string
     require: TStageRequire
     time: number
-    loot: TLoot | null
 }
 export type TExpr = 'or' | 'and'
 
@@ -359,7 +369,7 @@ export type TComponentAttributes = {
 
 
 
-export type TDropTypes = TComponentType | TMaterialType
+export type TDropTypes = TComponentType | TMaterialType | 'Book' | 'Reputation'
 export type TDrop<T extends TDropTypes> = {
     type: T
     name: string

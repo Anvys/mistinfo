@@ -24,6 +24,9 @@ export const RegionSlice = createSlice({
             state.data = [...action.payload];
             state.isInit = true;
         },
+        initSelectArr: (state, action: PayloadAction) => {
+            selectFieldsOptions['region'] = state.data.map(v => v.name)
+        },
         addOne: (state, action: PayloadAction<Array<TRegion>>) => {
             state.data.push(action.payload[0])
         },
@@ -53,11 +56,12 @@ export type TRegionThunks = typeof RegionThunks;
 export const RegionThunks = {
     getAll: createAsyncThunk(`${reducerPath}/getAll`, async (_, thunkAPI) => {
             const res = await CurAPI.getAll()
-            if (res.data.length) selectFieldsOptions.region = res.data.map(v=>v.name);
+            if (res.data.length) selectFieldsOptions.region = res.data.map(v => v.name);
             if (checkError(res)) thunkAPI.dispatch(CurSlice.actions.init(res.data))
         }
     ),
     getOne: createAsyncThunk(`${reducerPath}/getOne`, async (id: string, thunkAPI) => {
+            thunkAPI.dispatch(CurSlice.actions.initSelectArr())
             const res = await CurAPI.getOne(id)
             if (checkError(res)) return res.data
         }

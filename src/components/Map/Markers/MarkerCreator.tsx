@@ -1,6 +1,6 @@
 import React from 'react';
-import Leaf, {Icon, LatLngExpression} from "leaflet";
-import {Circle, CircleMarker, ImageOverlay, Marker, Polygon, Polyline, Popup, Tooltip} from "react-leaflet";
+import Leaf, {Icon, LatLngExpression, PointExpression} from "leaflet";
+import {Circle, CircleMarker, ImageOverlay, Marker, Polygon, Polyline, Popup, Tooltip, useMap} from "react-leaflet";
 import {
     TComponent,
     TEvent,
@@ -136,7 +136,7 @@ export const MC = {
                 icon={new Icon({
 
                     iconUrl: iconPicker(icon),
-                    iconSize: [30 * (zoom - 4) * 0.5, 30 * (zoom - 4) * 0.5],
+                    iconSize: [15 * (zoom - 4) * 0.5, 15 * (zoom - 4) * 0.5],
                     tooltipAnchor: [10 * (zoom - 4) * 0.5, 0],
                 })}
                 position={{lat: pos.x, lng: pos.y}}>
@@ -146,30 +146,46 @@ export const MC = {
             </Marker>
         )
     },
-    quest: (data: TQuest, zoom: number, locations: Array<TLocation> | null = null) => {
-        const fillLime = {color: 'lime'}
-        const follOrange = {color: 'orange'}
+    quest: (data: TQuest, zoom: number, locations: Array<TLocation> | null = null, npc: Array<TNpc>) => {
+        const fillLime = {color: 'lime',fillColor: 'lime', fillOpacity: 0.9}
+        const follOrange = {color: 'orange',fillColor: 'orange', fillOpacity: 0}
         const fillBlue = {fillColor: 'blue'}
-        const path = data.qStages.map(v => {
+        const npcStart = npc.find(v=>v.name===data.startAt)
+        const npcEnd = npc.find(v=>v.name===data.endAt)
+        const startPos = data.startAt==='auto'? '': locations!.find(v=>v.name===npcStart?.location)
+        const endPos = data.startAt==='auto'? '': locations!.find(v=>v.name===npcEnd?.location)
+        const stagePath = data.qStages.map(v => {
             const pos: TMapPosition = getPosFromQuestStage(v.stagePos, v.stagePosType, locations)
             return [pos.x, pos.y]
         }).filter(v => v[0] !== 0 && v[1] !== 0) as LatLngExpression[]
+        let path: LatLngExpression[] = []
+        if(startPos !== undefined && startPos !== '') path = [[startPos.pos.x, startPos.pos.y]]
+        path = [...path, ...stagePath]
+        if(endPos !== undefined && endPos !== '') path = [[endPos.pos.x, endPos.pos.y]]
+        // console.log(startPos)
+        // console.log(endPos)
         return <>
-            {path.length > 2 ?
+            {path.length + (!!startPos?1:0)+ (!!endPos?1:0) > 2 ?
                 <>
                     <Polyline pathOptions={fillLime} positions={[path[0], path[1]]}/>
                     <Polyline pathOptions={follOrange} positions={path.filter((v, i) => i > 0)}/>
                 </>
                 : <Polyline pathOptions={fillLime} positions={path}/>}
             {path.map((v, i) =>
-                <CircleMarker center={v} pathOptions={i === 0 ? fillLime : follOrange} radius={20}>
+                <CircleMarker center={v} pathOptions={i === 0 ? fillLime : follOrange} radius={10}>
+                    {!!startPos && i===0 && <Tooltip offset={[-20, 0]} direction={'left'} permanent>Start</Tooltip>}
+                    {!!startPos && i>0 && (!endPos || (endPos && i<path.length-1)) && <>
                     <Popup>
-                        <div className={s.popupDiv}>{getStageStr(data.qStages[i])}</div>
+                        <div className={s.popupDiv}>{getStageStr(data.qStages[i-(!!startPos?1:0)])}</div>
                     </Popup>
-                    {(path.length > 1 && i === 0) ?
-                        <Tooltip offset={[20, 0]} direction={'right'} permanent>Start</Tooltip>
-                        : <Tooltip offset={[20, 0]}
-                                   direction={'right'}>{`${data.qStages[i].num}: ${data.qStages[i].name}`}</Tooltip>}
+                    <Tooltip offset={[20, 0]}
+                             direction={'right'}>{`${data.qStages[i-(!!startPos?1:0)].num}: ${data.qStages[i-(!!startPos?1:0)].name}`}</Tooltip>
+                    </>
+                    }
+                    {/*{(path.length > 1 && i === 0) ?*/}
+                    {/*    <Tooltip offset={[20, 0]} direction={'right'} permanent>Start</Tooltip>*/}
+                    {/*    : <Tooltip offset={[20, 0]}*/}
+                    {/*               direction={'right'}>{`${data.qStages[i].num}: ${data.qStages[i].name}`}</Tooltip>}*/}
                 </CircleMarker>)}
         </>
     },
@@ -256,15 +272,22 @@ export const MC = {
             </Marker>
         )
     },
-    location: (data: TLocation, zoom: number) => {
+    location: (data: TLocation, zoom: number, moveTo: TLocation | undefined,
+               onMoveToClickHandler:(pos:{lat:number, lng:number})=>void, ) => {
         const t = new Image()
         t.src = iconPicker(data.icon)
         const iW = t.width / 4 * (zoom - 4) * 0.5
         const iH = t.height / 4 * (zoom - 4) * 0.5
         // console.log(zoom)
+        const onClick = () =>{
+            if(moveTo!== undefined){
+                const pos = {lat:moveTo.pos.x, lng: moveTo.pos.y}
+                onMoveToClickHandler(pos)
+            }
+        }
+        const pos= {lat: data.pos.x, lng: data.pos.y}
         return (
             <Marker
-
                 draggable={false}
                 autoPan={false}
                 // eventHandlers={eventHandlers}
@@ -281,9 +304,12 @@ export const MC = {
                     popupAnchor: [iW / 2 - iW / 2, 0 - iH * 5 / 6],
                 })}
                 position={{lat: data.pos.x, lng: data.pos.y}}>
-                <Popup autoPan={false}>
+                <Tooltip offset={[15, -5]}>{data.name}</Tooltip>
+                <Popup autoPan={false} >
                     <p>{data.name}</p>
                     {data.exploreReq > 0 && <p>explore: {data.exploreReq}</p>}
+                    {moveTo !== undefined &&
+                        <button className={s.controlButton} type={"button"} onClick={onClick}>Move to {`${moveTo.name}`}</button>}
                 </Popup>
 
             </Marker>
@@ -339,8 +365,8 @@ const AddDataMarker: React.FC<TAddDataMarkerProps> = (props) => {
     const onAddHereHandler = () => {
         const mPos = markerRef.current?.getLatLng();
         dispatch(MapSlice.actions.setMarkerForAddPos({
-            x: Number(mPos?.lat?.toFixed(2)) || 0,
-            y: Number(mPos?.lng?.toFixed(2)) || 0
+            x: Number(mPos?.lat?.toFixed(3)) || 0,
+            y: Number(mPos?.lng?.toFixed(3)) || 0
         }))
         dispatch(MapSlice.actions.setIsAddPosFieldActive(false))
         console.log(`markeradd x:${Number(mPos?.lat?.toFixed(4))}| y:${Number(mPos?.lng?.toFixed(4))}`)
@@ -363,7 +389,7 @@ const AddDataMarker: React.FC<TAddDataMarkerProps> = (props) => {
             <Popup>
 
                 <div>
-                    {`x:${Number(pos?.lat?.toFixed(2))} | y:${Number(pos?.lng?.toFixed(2))}`}
+                    {`x:${Number(pos?.lat?.toFixed(3))} | y:${Number(pos?.lng?.toFixed(3))}`}
 
                 </div>
                 <div>

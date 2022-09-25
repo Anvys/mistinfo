@@ -17,10 +17,12 @@ import {PosQuestItemField} from "./PosField";
 import {CompanionSkillField} from "./CompanionSkillField";
 import {ShopContentField} from "./ShopContentField";
 import {NO_LOOT} from "../../../Types/CommonTypes";
+import {SimpleInputField} from "./InputField";
+import {LootAddField} from "./LootAddField";
 // import styles from './CommonFields.module.css';
 
 
-export const fieldsIgnoreList = ['name', '_id',]
+export const fieldsIgnoreList = ['name', '_id', '__v']
 export const fieldsNotRequiredList = ['Ru', 'Fr']
 export const fieldsDisabled = ['staminaelixir.translate.En','staminaelixir.translate.Ru','staminaelixir.translate.Fr']
 export const commonFields = (
@@ -40,10 +42,22 @@ export const commonFields = (
                 switch (true) {
                     case fieldsIgnoreList.includes(eKey):
                         return null
+                    case dataName === 'quest' && eKey === 'startAt':
+                        return <SimpleSelectField
+                            mapSelectValues={['auto',...(selectFieldsOptions["npc"]||['not found'])]}
+                            value={formik.values.startAt} onSelChange={val=>formik.setFieldValue('startAt', val)}
+                            labelText={'Start:'}/>
+                    case dataName === 'quest' && eKey === 'endAt':
+                        return <SimpleSelectField
+                            mapSelectValues={['auto',...selectFieldsOptions["npc"]||['not found']]}
+                            value={formik.values.endAt} onSelChange={val=>formik.setFieldValue('endAt', val)}
+                            labelText={'End:'}/>
                     case dataName==='questItemSource' && eKey==='En':
                         return <SimpleSelectField key={i} mapSelectValues={selectFieldsOptions['questitem'] || ['Error']}
                                                   value={formik.values.translate.En}
                                                   onSelChange={v=>formik.setFieldValue('translate.En', v)} labelText={'Quest Item name'}/>
+                    case eKey === 'moveTo':
+                        return <SimpleSelectField mapSelectValues={['',...(selectFieldsOptions["location"] || ['No location in bd'])]} value={formik.values.moveTo} onSelChange={val=>formik.setFieldValue('moveTo', val)} labelText={'moveTo'}/>
                     case eKey==='content':
                         return <ShopContentField key={i}  formik={formik} index={i} dataName={dataName}/>
                     case eKey==='pos':
@@ -67,7 +81,8 @@ export const commonFields = (
                     case eKey==='loot' && dataName==='loot':
                         return <LootField key={i} formik={formik} index={i} dataName={dataName}/>
                     case eKey==='loot' && dataName!=='loot':
-                        return AddFields.select([NO_LOOT, ...selectFieldsOptions[`loot`] || ['empty db']] as string[] | number[],value, formik,curKey,eKey,i+50,false )
+                        return <LootAddField index={i} dataName={dataName} formik={formik}/>
+                        // return AddFields.select([NO_LOOT, ...selectFieldsOptions[`loot`] || ['empty db']] as string[] | number[],value, formik,curKey,eKey,i+50,false )
                     case eKey==='notes':
                         return <NotesField key={i} formik={formik} index={i} dataName={dataName}/>
                     case eKey==='posQuestItem': // type={formik.values.type} position={formik.values.posQuestItem.}

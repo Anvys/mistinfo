@@ -24,6 +24,9 @@ export const QuestSlice = createSlice({
             state.data = [...action.payload];
             state.isInit = true;
         },
+        initSelectArr: (state, action: PayloadAction) => {
+            selectFieldsOptions['quest'] = state.data.map(v=>v.name)
+        },
         addOne: (state, action: PayloadAction<Array<TQuest>>) => {
             state.data.push(action.payload[0])
         },
@@ -58,6 +61,7 @@ export const QuestThunks = {
         }
     ),
     getOne: createAsyncThunk(`${reducerPath}/getOne`, async (id: string, thunkAPI) => {
+            thunkAPI.dispatch(CurSlice.actions.initSelectArr())
             const res = await CurAPI.getOne(id)
             if (checkError(res)) return res.data
         }

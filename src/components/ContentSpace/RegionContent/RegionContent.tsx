@@ -44,6 +44,7 @@ export const RegionContent: React.FC<TProps> = (props) => {
         bound:[],
         pos: {x:0,y:0},
         translate: {En: '', Ru: '', Fr: ''},
+        notes:[],
     }
     // const isMapActive = useSelector(getIsAddPosFieldActiveSelector)
     return (

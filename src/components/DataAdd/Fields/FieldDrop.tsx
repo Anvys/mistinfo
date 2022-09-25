@@ -22,11 +22,26 @@ export const FieldDrop: React.FC<TProps> = (props) => {
     const components = useSelector(getComponentsSelector)
 
     // const formik = useFormikContext()
-
+    const bookArr = [...selectFieldsOptions["adventure"], ...selectFieldsOptions["weapon"],
+        ...selectFieldsOptions["crafting"], ...selectFieldsOptions["terrain"],...selectFieldsOptions["gatherpoint.type"]]
+    const reputationArr = [...selectFieldsOptions["reputation.guild"], ...selectFieldsOptions["reputation.town"]]
+    const lootTypes = ['Book','Reputation', ...selectFieldsOptions['material.type'], ...selectFieldsOptions['component.type']]
     const onTypeChange: React.ChangeEventHandler<HTMLSelectElement> = (e) => {
-        const findArr = materials.filter(v => v.type === e.target.value).map(v => v.name)
-            .concat(components.filter(v => v.type === e.target.value).map(v => v.name))
-        setNameArr(findArr)
+        switch (e.target.value) {
+            case 'Resource':
+                setNameArr(materials.filter(v => v.type === e.target.value).map(v => v.name)
+                    .concat(components.filter(v => v.type === e.target.value).map(v => v.name)))
+                break
+            case 'Reputation':
+                setNameArr(reputationArr)
+                break
+            case 'Book':
+                setNameArr(bookArr)
+                break
+        }
+        // const findArr = materials.filter(v => v.type === e.target.value).map(v => v.name)
+        //     .concat(components.filter(v => v.type === e.target.value).map(v => v.name))
+        // setNameArr(findArr)
         setType(e.target.value as TDropTypes)
     }
     const onAddHandler = ()=>{
@@ -43,7 +58,7 @@ export const FieldDrop: React.FC<TProps> = (props) => {
                         <select className={styles.inputText} name={'type'} value={type} onChange={onTypeChange}
                                 required autoComplete={'off'} placeholder={'type'}>
                             <option value="" disabled selected hidden>{`Select type`}</option>
-                            {selectFieldsOptions["component.type"].concat(selectFieldsOptions["material.type"]).map((v) =>
+                            {lootTypes.map((v) =>
                                 <option value={v}>{`${v}`}</option>
                             )}
                         </select>
@@ -54,7 +69,7 @@ export const FieldDrop: React.FC<TProps> = (props) => {
                         <select className={styles.inputText} name={'name'} value={name} onChange={(e)=>setName(e.target.value)}
                                  autoComplete={'off'} placeholder={'name'}>
                             <option value="" disabled selected hidden>{`Select name`}</option>
-                            {selectFieldsOptions.tier.map(v => <option value={`tier ${v}`}>{`All tier ${v} ${type}s`}</option>)}
+                            {type !=='Book' && type !== 'Reputation' && selectFieldsOptions.tier.map(v => <option value={`tier ${v}`}>{`All tier ${v} ${type}s`}</option>)}
                             {nameArr.map(v => <option value={v}>{`${v}`}</option>)}
                         </select>
                     </div>

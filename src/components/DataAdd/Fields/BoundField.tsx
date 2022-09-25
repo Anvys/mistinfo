@@ -27,10 +27,12 @@ export const BoundField: React.FC<PosFieldProps> = (props) => {
     const bounds = useSelector(MapSelectors.getBounds)
     const isBoundsActive = useSelector(MapSelectors.isBoundActive)
     const onOpenMapHandler = () => {
+        dispatch(MapSlice.actions.setIsMapActive(true))
         setIsBoundsFromMap(true)
         dispatch(MapSlice.actions.setIsAddBoundsActive(true))
     }
     const onCloseMapHandler = () => {
+        dispatch(MapSlice.actions.setIsMapActive(false))
         setIsBoundsFromMap(false)
         dispatch(MapSlice.actions.setIsAddBoundsActive(false))
     }

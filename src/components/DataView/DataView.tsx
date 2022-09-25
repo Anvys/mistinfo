@@ -1,5 +1,6 @@
 import React from 'react';
 import {DataViewTable2} from "./DataViewTable/DataViewTable";
+import s from './DataView.module.css'
 import {
     TAbility,
     TBonus,
@@ -48,6 +49,10 @@ const getDataWeight = (key: string) => {
             return 0
         case 'name':
             return 1
+        case 'startAt':
+            return 48
+        case 'endAt':
+            return 49
         case 'primary':
             return 50
         case 'obj':
@@ -79,7 +84,9 @@ export const supFuncGetStr = {
 }
 //display data in table
 export const getDataViewTdStr = (key: string, data: any): [Array<string>, Array<string | JSX.Element>] => {
+    if(data===null)return [[key], [`-`]]
     if (typeof data === 'object') {
+        if(key==='startAt') console.log(data)
         const dataEntries = Object.entries(data)
         switch (key) {
             case 'translate' :
@@ -104,13 +111,13 @@ export const getDataViewTdStr = (key: string, data: any): [Array<string>, Array<
                 switch (posQuestItem.type) {
                     case "pos":
                         const pqiPos = posQuestItem.position as TMapPosition
-                        return [[key], [`${pqiPos.x}:${pqiPos.y}`]]
+                        return [['type', 'source'], [posQuestItem.type, `${pqiPos.x}:${pqiPos.y}`]]
                     case "location":
                         const pqiLoc = posQuestItem.position as TLocation
-                        return [[key], [`loc ${pqiLoc.name}(${pqiLoc.pos.x}:${pqiLoc.pos.y})`]]
+                        return [['type', 'source'], [posQuestItem.type,`loc ${pqiLoc.name}(${pqiLoc.pos.x}:${pqiLoc.pos.y})`]]
                     case "monster":
                         const pqiMon = posQuestItem.position as TMonster
-                        return [[key], [`mon ${pqiMon.name} (${pqiMon.region})`]]
+                        return [['type', 'source'], [posQuestItem.type,`mon ${pqiMon.name} (${pqiMon.region})`]]
                     default:
                         return [[key], [`def posQuestItem`]]
                 }
@@ -130,33 +137,35 @@ export const getDataViewTdStr = (key: string, data: any): [Array<string>, Array<
                     `${v}`).join('\n')]]
             case 'content':
                 let contentStr = ''
-                data.map((v: TShopContent) => {
+                contentStr = data.map((v: TShopContent) => {
                     switch (v.type) {
                         case "Empty":
                             return `Empty`
                         case "Ability":
                             const abi = v.item as TAbility
-                            contentStr = `[${abi.level}]${abi.name} ${v.price} gold ${v.reputationRequire === null || v.reputationRequire.count === 0 ? `` : `(${v.reputationRequire.reputation} ${v.reputationRequire.count})`} (${v.count === 0 ? `∞` : `x${v.count}`})`
+                            return `${v.type}: [${abi.level}]${abi.name} ${v.price} gold ${v.reputationRequire === null || v.reputationRequire.count === 0 ? `` : `(${v.reputationRequire.reputation} ${v.reputationRequire.count})`} (${v.count === 0 ? `∞` : `x${v.count}`})`
                             break
                         case "Equip":
                             const eq = v.item as TEquip
-                            contentStr = `${eq.recipe.name} [${eq.recipe.parts.map((part, i) => `${eq.components[i]} x${part.count}`).join(' / ')}] ${v.price} gold ${v.reputationRequire === null || v.reputationRequire.count === 0 ? `` : `(${v.reputationRequire.reputation} ${v.reputationRequire.count})`}`
+                            return `${v.type}: [${v.count === 0 ? `∞` : `x${v.count}`}] ${eq.recipe.name} [${eq.recipe.parts.map((part, i) => `${eq.components[i]} x${part.count}`).join(' / ')}] ${v.price} gold ${v.reputationRequire === null || v.reputationRequire.count === 0 ? `` : `(${v.reputationRequire.reputation} ${v.reputationRequire.count})`}`
                             break
                         case "Recipe":
                             const rec = v.item as TRecipe
-                            contentStr = `${rec.name} ${v.price} gold ${v.reputationRequire === null || v.reputationRequire.count === 0 ? `` : `(${v.reputationRequire.reputation} ${v.reputationRequire.count})`} `
+                            return `${v.type}: ${rec.name} ${v.price} gold ${v.reputationRequire === null || v.reputationRequire.count === 0 ? `` : `(${v.reputationRequire.reputation} ${v.reputationRequire.count})`} `
                             break
                     }
                 }).join('\n')
                 return [[key], data.length === 0 ? [`-`] : [
                     <details>
                         <summary>{`${data.length} items`}</summary>
-                        {contentStr}
+                        <div className={s.shopContent}>{contentStr}</div>
                     </details>
                 ]]
             case 'loot':
-                return [[key], [data.length === 0 ? `-`
-                    : data.map((v: TDrop<TDropTypes>, i: number) =>
+                const curLoot = Array.isArray(data) ? data : data.loot
+                console.log(curLoot)
+                return [[key], [curLoot.length === 0 ? `-`
+                    : curLoot.map((v: TDrop<TDropTypes>, i: number) =>
                         `[${v.type}] ${v.name} x${v.countMin === v.countMax ? v.countMin : `${v.countMin}-${v.countMax}`} ${v.chance === 100 ? `` : `(${v.chance}%)`}`).join('\n')]]
             case 'skills':
                 return [[key], [data.length === 0 ? `-`
@@ -257,6 +266,8 @@ export const getTableTdKey = (key: string, cut: number = 6): string => {
             return 'Terrain'
         case 'terrainReq':
             return 'Difficult'
+        case 'posQuestItem':
+            return 'Pos'
         // case 'durability': return 'dura'
         default:
             return toUpperFirstLetterCase(key.length > cut ? `${key.substring(0, cut)}.` : key)
@@ -266,7 +277,7 @@ export const getTableTdKey = (key: string, cut: number = 6): string => {
 export const toUpperFirstLetterCase = (str: string): string => {
     return str.length > 0 ? str.split('').map((v, i) => i === 0 ? v.toUpperCase() : v).join('') : ''
 }
-export const ignoredFields = ['_id', '__v', 'translate', 'bound']
+export const ignoredFields = ['_id', '__v', 'translate', 'bound', 'moveTo']
 // export const DataView2 = <T extends TCombineData>(props: React.PropsWithChildren<TProps<T>>) =>{
 
 export type TDataViewObj = {
@@ -289,7 +300,7 @@ export const getDataView = (data: Array<TCombineData>, lang: TTranslateLang) => 
         if (ignoredFields.includes(key)) return
         // if object - add keys in 2 rows else add as simple
         if (typeof value === 'object') {
-            _dataView.keys1.push([key, (Array.isArray(value) ? 1 : Object.keys(value).length)])
+            _dataView.keys1.push([key, (Array.isArray(value) || value===null || key ==='loot' ? 1 : Object.keys(value).length)])
             const [valueKeys, valueData] = getDataViewTdStr(key, value)
             // console.log(`---key: ${key}`)
             // console.log(valueData)

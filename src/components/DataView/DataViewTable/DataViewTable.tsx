@@ -27,7 +27,7 @@ export const DataViewTable2: React.FC<TDataViewTable2Props> = React.memo((props)
     const [search, setSearch] = useState('')
     const [regionFilters, setRegionFilters] = useState({land:'all', count:0})
     let data = [...props.data.filter(v=>search.length>0 ? v.name.toLocaleLowerCase().includes(search.toLowerCase()) :true)]
-
+    // console.log(data)
     const lang = useSelector(GlobalSettingsSelectors.getLang)
     const isMod = useSelector(AuthSelectors.isInit)
     const path = useLocation().pathname
@@ -38,6 +38,7 @@ export const DataViewTable2: React.FC<TDataViewTable2Props> = React.memo((props)
     const onCheck = (e: React.ChangeEvent<HTMLInputElement>) => {
         setIsDeleteModeActive(e.target.checked)
     }
+    // console.log(dataView)
     return (
         <div className={styles.mainBox}>
             <div className={styles.searchDiv}>

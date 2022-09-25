@@ -30,7 +30,10 @@ export const QuestContent: React.FC<TProps> = (props) => {
         name: `New Quest ${data.length + 1}`,
         type: 'Quest',
         availableAfter: [],
+        startAt: 'auto',
+        endAt: 'auto',
         qStages: [],
+        loot: '--No loot--',
         translate: {En: `New Quest ${data.length + 1}`, Ru: '', Fr: ''},
         notes: [],
     }

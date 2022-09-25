@@ -47,7 +47,7 @@ export const MapSelectors = {
     isAddActive: (state: TAppState) => state.map.isAddPosFieldActive,
     isBoundActive:  (state: TAppState) => state.map.isAddBoundsActive,
     getBounds: (state: TAppState) => state.map.bounds,
-    isMapActive : (state: TAppState) => state.map.isAddBoundsActive || state.map.isAddPosFieldActive || state.map.isActiveQuestMap,
+    isMapActive : (state: TAppState) => state.map.isMapActive,//isAddBoundsActive || state.map.isAddPosFieldActive || state.map.isActiveQuestMap,
     getActiveQuest : (state: TAppState) => state.map.activeQuest,
     getActiveRegion : (state: TAppState) => state.map.activeRegion,
 }
@@ -64,6 +64,10 @@ export const MaterialSelectors = {
 export const ComponentSelectors = {
     isInit: (state: TAppState) => state.component.isInit,
     getData: (state: TAppState) => state.component.data,
+}
+export const NpcSelectors = {
+    isInit: (state: TAppState) => state.npc.isInit,
+    getData: (state: TAppState) => state.npc.data,
 }
 export const ShopSelectors = {
     isInit: (state: TAppState) => state.shop.isInit,

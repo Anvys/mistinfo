@@ -11,7 +11,7 @@ import {
     LootSelectors,
     MapSelectors,
     MaterialSelectors,
-    MonsterSelectors,
+    MonsterSelectors, NpcSelectors,
     QuestItemSelectors,
     QuestItemSourceSelectors,
     QuestSelectors,
@@ -52,7 +52,7 @@ const MyComponent: React.FC<{ onZoomChange: (z: number) => void, visible: boolea
                     <div>
                         <b>latitude</b>: {coords.lat?.toFixed(3)} <br/>
                         <b>longitude</b>: {coords.lng?.toFixed(3)}<br/>
-                        {`center: x:${map.getCenter().lat.toFixed(2)} | y:${map.getCenter().lng.toFixed(2)}`}
+                        {`center: x:${map.getCenter().lat.toFixed(3)} | y:${map.getCenter().lng.toFixed(3)}`}
                     </div>
                 )}
             </div>
@@ -76,7 +76,7 @@ type TProps = {
     global?:boolean
 };
 export const MyMap: React.FC<TProps> = React.memo((props) => {
-    const {global} = props
+    const {global, wid, hei} = props
 
     const [customMarkerPos, setCustomMarkerPos] = useState({lat: 0, lng: 0})
     const [isCusMarkerActive, setIsCusMarkerActive] = useState(false)
@@ -92,13 +92,14 @@ export const MyMap: React.FC<TProps> = React.memo((props) => {
     }))
 
     const path = useLocation()
-    console.log(getSearchParams(path.search))
+    // console.log(getSearchParams(path.search))
     const isAddMarkerActive = useSelector(MapSelectors.isAddActive)
 
     const isBoundsMenu = useSelector(MapSelectors.isBoundActive)
 
     const activeRegion = useSelector(MapSelectors.getActiveRegion)
 
+    const npc = useSelector(NpcSelectors.getData);
     const materials = useSelector(MaterialSelectors.getData);
     const components = useSelector(ComponentSelectors.getData);
     const resources = [...materials, ...components]
@@ -115,11 +116,20 @@ export const MyMap: React.FC<TProps> = React.memo((props) => {
     const activeQuest = useSelector(MapSelectors.getActiveQuest)
 
     const dispatch = useAppDispatch()
+    const markerRef = useRef<L.Marker>(null)
+
     if(isAddMarkerActive && global){dispatch(MapSlice.actions.setIsAddPosFieldActive(false))}
     const onZoomChange = (z: number) => setZoom(z)
 
-
-    const locationMarkers = locations.map(v => MC.location(v, zoom))
+    const onMoveToClickHandler = (pos:{lat:number, lng:number})=>{
+        if(map!== null){
+            map.setView(pos, map.getZoom(), {animate: true,})
+        }
+    }
+    const locationMarkers = locations.map(v => {
+        const moveTo = v.moveTo === '' ? undefined : locations.find(loc=>loc.name===v.moveTo)
+        return MC.location(v, zoom, moveTo, onMoveToClickHandler)
+    })
     const regionMarkers = regions.map(v => MC.region(v, zoom, locations, gatherPoints, events, loots, resources, activeRegion))
     const activeRegionMarker = MC.region(regions.find(v => v.name===activeRegion)!, zoom, locations, gatherPoints, events, loots, resources, activeRegion)
     const gatherMarkers = gatherPoints.map(gp => {
@@ -135,7 +145,7 @@ export const MyMap: React.FC<TProps> = React.memo((props) => {
         ...v,
         name: `${v.name} №${i + 1}`
     }, zoom))
-    const questMarkers = quests.map((v, i) => MC.quest(v, zoom, locations))
+    const questMarkers = quests.map((v, i) => MC.quest(v, zoom, locations, npc))
     const questItemMarkers = questsItemsSource.map(v => {
         let pos: TMapPosition = {x: 0, y: 0}
         const icon = questsItems.find(qi => qi.name === v.name)?.icon || 'Unknown/Unknown'
@@ -158,7 +168,7 @@ export const MyMap: React.FC<TProps> = React.memo((props) => {
         return MC.questItem(v, zoom, pos, icon)
     })
 
-    const markerRef = useRef<L.Marker>(null)
+
     const eventHandlers = React.useMemo(
         () => ({
             dragend() {
@@ -166,8 +176,8 @@ export const MyMap: React.FC<TProps> = React.memo((props) => {
                 const curMarkerPos = marker?.getLatLng()
                 if (marker != null && curMarkerPos !== undefined) {
                     dispatch(MapSlice.actions.setMarkerForAddPos({
-                        x: Number(curMarkerPos.lat.toFixed(2)) || 0,
-                        y: Number(curMarkerPos.lng.toFixed(2)) || 0
+                        x: Number(curMarkerPos.lat.toFixed(3))-0.045 || 0,
+                        y: Number(curMarkerPos.lng.toFixed(3)) || 0
                     }))
                     setCustomMarkerPos(marker.getLatLng())
                 }
@@ -195,8 +205,9 @@ export const MyMap: React.FC<TProps> = React.memo((props) => {
     useEffect(() => {
         if (isAddMarkerActive && map) map.addEventListener("click", addMarkerPosOnClick);
         return () => {
-            map?.removeEventListener("click", addMarkerPosOnClick)
-            console.log('endmap')
+            if(!!map && map.hasEventListeners('click'))map.clearAllEventListeners()
+            // map?.removeEventListener("click", addMarkerPosOnClick)
+            // console.log('endmap')
 
         }
     }, [map])
@@ -206,8 +217,8 @@ export const MyMap: React.FC<TProps> = React.memo((props) => {
             markerRef.current?.setLatLng({lat: e.latlng.lat, lng: e.latlng.lng})
             // const mPos = markerRef.current?.getLatLng();
             dispatch(MapSlice.actions.setMarkerForAddPos({
-                x: Number(e.latlng.lat.toFixed(2)) || 0,
-                y: Number(e.latlng.lng.toFixed(2)) || 0
+                x: Number(e.latlng.lat.toFixed(3))-0.045 || 0,
+                y: Number(e.latlng.lng.toFixed(3)) || 0
             }))
             e.originalEvent.stopPropagation()
             // setCustomMarkerPos({lat: e.latlng.lat, lng: e.latlng.lng})
@@ -222,7 +233,7 @@ export const MyMap: React.FC<TProps> = React.memo((props) => {
         }
     }, [isAddMarkerActive])
     return (//`${props.wid === -1 ? '50%' : props.wid + 'px'}`
-        <div className={styles.map} style={{width: '100%'}}>
+        <div className={styles.map} style={{width: `${wid===-1?'50%':'100%'}`}}>
             {/*Map*/}
             {/*<button type={'button'} onClick={onAddMarkerHandler}>AddMarker</button>*/}
             {/*x*/}
@@ -234,7 +245,7 @@ export const MyMap: React.FC<TProps> = React.memo((props) => {
                 overflow: "hidden",
                 padding: '0,50px,50px,0'
             }}>
-                <MapContainer attributionControl={false} className={styles.map} center={[0, -45]} zoom={7}
+                <MapContainer attributionControl={false} className={styles.map} center={[0, -45]} zoom={wid===-1?8:7}
                               scrollWheelZoom={false} ref={setMap} markerZoomAnimation={false}>
                     <MyComponent onZoomChange={onZoomChange} visible={false}/>
                     <TileLayer minZoom={5} maxZoom={8} noWrap={true}
@@ -258,7 +269,7 @@ export const MyMap: React.FC<TProps> = React.memo((props) => {
                             : customMarkerPos,
                         markerRef,
                         eventHandlers)}
-                    {!!activeQuest && activeQuest.length > 0 && quests.filter((fv, i) => fv.name === activeQuest).map(v => MC.quest(v, zoom, locations))}
+                    {!!activeQuest && activeQuest.length > 0 && quests.filter((fv, i) => fv.name === activeQuest).map(v => MC.quest(v, zoom, locations, npc))}
                     {isBoundsMenu && <AddBounds/>}
                     {!!activeQuest && 'asd'}
                 </MapContainer>

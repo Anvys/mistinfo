@@ -8,7 +8,7 @@ import {
     TDrop,
     TDropTypes, TEquip,
     TExpr, TLoot, TMonster, TQuestItem, TRecipePart,
-    TRequireAdventure, TRequireQuestItem,
+    TRequireAdventure, TRequireQuestItem, TSkills,
     TStage,
     TStageRequire
 } from "../../../Types/CommonTypes";
@@ -18,7 +18,7 @@ import {
     ComponentSelectors,
     getComponentsSelector,
     getLootByNameSelector,
-    getMaterialsSelector, MaterialSelectors, MonsterSelectors,
+    getMaterialsSelector, LootSelectors, MaterialSelectors, MonsterSelectors,
     QuestItemSelectors,
     RecipeSelectors,
     TSelectors
@@ -45,7 +45,7 @@ export const StageField: React.FC<TProps> = (props) => {
     const [loot, setLoot] = useState('')
     const [req, setReq] = useState<TStageRequire | null>(() => ({type: 'Academic', count: 0}))
     // console.log(`find loot ${loot} /  ${loot.split('#')[1]} : ${useSelector(getLootByNameSelector(loot))}`)
-    const findLoot = useSelector(getLootByNameSelector(loot))
+    const loots = useSelector(LootSelectors.getData)
     // console.log(`stages: ${formik.values.eStages.length}`)
     //formik.values.stages.length>0?formik.values.stages : []
     const [stages, setStages] = useState<Array<TStage>>(() => formik.values.eStages)
@@ -69,7 +69,6 @@ export const StageField: React.FC<TProps> = (props) => {
                 type,
                 require: req,
                 time,
-                loot: findLoot || null
             }
             formik.setFieldValue('eStages', [...stages, newStage])
             setType('Adventure')
@@ -157,15 +156,15 @@ export const StageField: React.FC<TProps> = (props) => {
                                                                                  key={i + 1}>{`${v}`}</option>)}
                     </select>
                 </div>
-                <div className={styles.fieldBoxNoBorder}>
-                    <label className={styles.label} htmlFor={'loot'}>loot:</label>
-                    <select className={styles.inputText} name={'loot'} value={loot}
-                            onChange={e => setLoot(e.target.value)}
-                            autoComplete={'off'} placeholder={'expr'}>
-                        <option value="" disabled hidden key={0}>{NO_LOOT}</option>
-                        {selectFieldsOptions['loot']?.map((v, i) => <option value={v} key={i + 1}>{`${v}`}</option>)}
-                    </select>
-                </div>
+                {/*<div className={styles.fieldBoxNoBorder}>*/}
+                {/*    <label className={styles.label} htmlFor={'loot'}>loot:</label>*/}
+                {/*    <select className={styles.inputText} name={'loot'} value={loot}*/}
+                {/*            onChange={e => setLoot(e.target.value)}*/}
+                {/*            autoComplete={'off'} placeholder={'expr'}>*/}
+                {/*        <option value="" disabled hidden key={0}>{NO_LOOT}</option>*/}
+                {/*        {selectFieldsOptions['loot']?.map((v, i) => <option value={v} key={i + 1}>{`${v}`}</option>)}*/}
+                {/*    </select>*/}
+                {/*</div>*/}
                 <button className={styles.addButton} type={'button'} onClick={onStageAdd}>AddStage</button>
             </div>
             <div className={tableStyles.vidInFields}>
@@ -185,16 +184,18 @@ export const StageField: React.FC<TProps> = (props) => {
                                 {stageKeys.map((key, j) => {
                                     const val: any = st[key as keyof typeof st]
                                     switch (key) {
+                                        case '_id' :
+                                            return null
                                         case 'require':
                                             // console.log(val)
                                             const reqResult = getDataViewTdStr('require', st)
                                             return <td key={j}>{reqResult[1]}</td>
                                         // return <td key={j}>{Object.entries(val).map(([r1, r2], i, arr) => `${r2}${i < arr.length - 1 ? ': ' : ''}`)}</td>
                                         case 'loot':
+                                            console.log(val)
                                             return <td
-                                                key={j}>{val?.map((drop: TDrop<TDropTypes>, i: number) => `${drop.type}#${drop.name}#x${drop.countMin}-${drop.countMax}(${drop.chance}%)${i < val.length - 1 ? '\n' : ''}`)}</td>
-                                        case '_id' :
-                                            return null
+                                                key={j}>{val?.loot.map((drop: TDrop<TDropTypes>, i: number) => `${drop.type}#${drop.name}#x${drop.countMin}-${drop.countMax}(${drop.chance}%)${i < val.length - 1 ? '\n' : ''}`)}</td>
+
                                         default:
                                             return <td key={j}>{val as string}</td>
                                     }
@@ -218,8 +219,10 @@ type TStageAdventureFormProps = {
     onSubmit: (require: TStageRequire) => void
 };
 export const StageAdventureForm: React.FC<TStageAdventureFormProps> = (props) => {
-    const [adventure, setAdventure] = useState<TAdventure>('Academic')
+    const [adventure, setAdventure] = useState<TSkills>('Academic')
     const [count, setCount] = useState(0)
+    const bookArr = [...selectFieldsOptions["adventure"], ...selectFieldsOptions["weapon"],
+        ...selectFieldsOptions["crafting"], ...selectFieldsOptions["terrain"],...selectFieldsOptions["gatherpoint.type"]]
     const onSaveHandler = () => {
         props.onSubmit({type: adventure, count})
     }
@@ -229,7 +232,7 @@ export const StageAdventureForm: React.FC<TStageAdventureFormProps> = (props) =>
                 <p>Add adventure stage</p>
             </div>
             <div className={styles.fieldBoxColNoBorder}>
-                <SimpleSelectField mapSelectValues={[...selectFieldsOptions['adventure']]} value={adventure}
+                <SimpleSelectField mapSelectValues={bookArr} value={adventure}
                                    onSelChange={(val) => setAdventure(val as TAdventure)} labelText={'skill'}/>
                 <SimpleInputField value={count} onChange={(val) => setCount(+val)} index={1} htmlId={'count'}
                                   labelText={'count'} required={false} disabled={false}/>

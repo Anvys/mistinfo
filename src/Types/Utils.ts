@@ -73,6 +73,7 @@ export type TSelectFieldsKeys = keyof typeof selectFieldsOptions
 export type TAdventureType = typeof selectFieldsOptions['adventure'][number]
 export type TWeaponType = typeof selectFieldsOptions['weapon.type'][number]
 export type TCraftingType = typeof selectFieldsOptions['crafting'][number]
+export type TShopContentType = typeof selectFieldsOptions["shopContentItemTypes"][number]
 export const selectFieldsOptions = {
     'material.type': ['Bone', 'Fiber', 'Leather', 'Metal', 'Stone', 'Wood'],
     'material.attributes': ['Absorbity', 'Density', 'Flexibility', 'Hardness', 'Lightness', 'Purity', 'Radiance', 'Rigidity',],
@@ -108,7 +109,7 @@ export const selectFieldsOptions = {
     'equip': ['Helmet', 'Torso' , 'Glove' , 'Legs' , 'Boots' , 'Weapon' , 'Lantern' , 'Cape' , 'Coat'
     , 'Shirt' , 'Pants' , 'Offhand' , 'Pendant' , 'Ring' , 'Bracelet' , 'Crowns'],
     // 'ability.type': [],
-    'shopContentItemTypes': ['Recipe' , 'Ability' , 'Equip' , 'Empty'],
+    'shopContentItemTypes': ['Recipe' , 'Ability' , 'Equip' , 'Empty', 'Book'] as const,
 
     'material': undefined as Array<string> | undefined,
     'component': undefined as Array<string> | undefined,

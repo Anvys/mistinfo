@@ -5,6 +5,7 @@ import {TCombineThunks, useAppDispatch} from "../../redux/store";
 import {useFormik} from "formik";
 import {AddDataForm} from "./AddDataForm";
 import {AuthSelectors, getMarkerForAddPosSelector, MapSelectors, TSelectors} from "../../redux/dataSelectors";
+import {MapSlice} from "../../redux/reducers/mapReducer";
 // import styles from './GenDataAdd.module.css';
 
 
@@ -28,14 +29,15 @@ export const GenDataAdd = <T extends TCombineData, >(props: React.PropsWithChild
         initialValues: initVal,
         enableReinitialize: true,
         onSubmit: async (values, actions) => {
+            console.log(`Add active: ${isMarkerAdd}`)
 
             // @ts-ignore
             console.log(`pos: ${pos.x}:${pos.y} | ownPos: ${values.pos?.x}:${values.pos?.y}/ dataName: ${props.dataName} have pos: ${dataWithPos.includes(props.dataName)}`)
             // if (dataWithPos.includes(props.dataName))
-
+            const fixerPos = {x:Number(pos.x.toFixed(3)),y:Number(pos.y.toFixed(3))}
             const newData = dataWithPos.includes(props.dataName)
                 // @ts-ignore
-                ? {...values, name: values.translate.En, pos: !isMarkerAdd ? values.pos:pos}
+                ? {...values, name: values.translate.En, pos: !isMarkerAdd ? values.pos:fixerPos}
                 : {...values, name: values.translate.En}
             // if(props.dataName ==='gatherpoint'){
             //     const mat = useSelector(getMaterialsSelector).find(v=>v.name===newData.name)
@@ -51,7 +53,9 @@ export const GenDataAdd = <T extends TCombineData, >(props: React.PropsWithChild
                 dispatch(curThunks.updateOne({id: data._id, data: {...newData, _id: data._id}}))
             }
             props.resetAddFormData();
-
+            if(isMarkerAdd && dataWithPos.includes(props.dataName)){
+                dispatch(MapSlice.actions.setIsAddPosFieldActive(false))
+            }
             actions.setSubmitting(false);
         }
     })

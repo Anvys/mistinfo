@@ -24,6 +24,9 @@ export const NpcSlice = createSlice({
             state.data = [...action.payload];
             state.isInit = true;
         },
+        initSelectArr: (state, action: PayloadAction) => {
+            selectFieldsOptions['npc'] = state.data.map(v => v.name)
+        },
         addOne: (state, action: PayloadAction<Array<TNpc>>) => {
             state.data.push(action.payload[0])
         },
@@ -63,6 +66,7 @@ export const NpcThunks = {
         }
     ),
     addOne: createAsyncThunk(`${reducerPath}/addOne`, async (data: TWOid<TNpc>, thunkAPI) => {
+            thunkAPI.dispatch(CurSlice.actions.initSelectArr())
             const res = await CurAPI.addOne(data)
             if (checkError(res)) thunkAPI.dispatch(CurSlice.actions.addOne(res.data))
         }
