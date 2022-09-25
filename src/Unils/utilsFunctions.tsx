@@ -203,6 +203,12 @@ export const getTimeStr = (min: number) =>{
         }
     }
 }
+export const getSearchParams = (str:string) =>{
+    if(str.length){
+        return Object.fromEntries(str.substring(1).split('&').map(v=>v.split('=')))
+    }else return null
+
+}
 // export const getElements = (mapVal: object, prevKey: string, formik: FormikProps<any>, dataName: string) => {
 //     return Object.entries(mapVal).map(([key, value], i) => {
 //         // if (isSkipField(key)) return null

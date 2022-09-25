@@ -34,7 +34,7 @@ export const ContentSpace: React.FC = () => {
     return (
         <div className={styles.contentBox}>
             <Routes>
-                <Route path={'/map'} element={<MyMap wid={800} hei={600}/>}/>
+                <Route path={'/map'} element={<MyMap wid={800} hei={600} global={true}/>}/>
                 <Route path={'/material/'} element={<MaterialContent/>}/>
                 <Route path={'/material/bone'} element={<MaterialContent type={'Bone'}/>}/>
                 <Route path={'/material/fiber'} element={<MaterialContent type={'Fiber'}/>}/>

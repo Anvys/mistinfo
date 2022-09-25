@@ -20,6 +20,12 @@ import {getStagesStr, getStageStr, getTimeStr} from "../../../Unils/utilsFunctio
 import {getPosStr} from "../../DataAdd/Fields/QuestStageField";
 import s from './MarkerCreator.module.css';
 
+
+const colors = {
+    activeEvents: '#D7C72DFF',
+    activeGathers: '#6aafbe',
+}
+
 const iconPicker = (type: string) => {
     if (!type) return require('./../../../assets/icons/temp.png')
     const iPath = type.split('/')
@@ -86,11 +92,13 @@ const getPosFromQuestStage = (pos: TStagePos, type: TStagePosType, locations: Ar
     }
 }
 export const MC = {
-    region: (data: TRegion, zoom: number, locations: Array<TLocation>, gatherPoints:Array<TGatherPoint>,
-             events: Array<TEvent>, loots: Array<TLoot>, resources: Array<TMaterial | TComponent>) => {
-        const ownLocations = locations.filter(v=>v.region === data.name)
-        const ownGather = gatherPoints.filter(v=>v.region === data.name)
-        const ownEvent = events.filter(v=>v.region === data.name)
+    region: (data: TRegion, zoom: number, locations: Array<TLocation>, gatherPoints: Array<TGatherPoint>,
+             events: Array<TEvent>, loots: Array<TLoot>, resources: Array<TMaterial | TComponent>, activeRegion: string | undefined) => {
+        if(!data) return <></>
+        const isActive = activeRegion === data.name
+        const ownLocations = locations.filter(v => v.region === data.name)
+        const ownGather = gatherPoints.filter(v => v.region === data.name)
+        const ownEvent = events.filter(v => v.region === data.name)
         const bounds = data.bound
         // if(bounds.length > 0){
         //     const path = bounds.map(bound => (
@@ -98,23 +106,23 @@ export const MC = {
         //     ))
         // }else return null
 
-        return <Polygon pathOptions={{color: 'lime'}}  positions={bounds}>
+        return <Polygon pathOptions={{color: `${isActive ? 'orange' : 'lime'}`, fillColor: `${isActive?'none':'lime'}`}} positions={bounds}>
             <Tooltip>
-                {data.terrainReq>0 ? `${data.terrain} ${data.terrainReq}`: `No land require`}
+                {data.terrainReq > 0 ? `${data.terrain} ${data.terrainReq}` : `No land require`}
             </Tooltip>
             <Popup className={s.popupDiv}>
                 {`\t${data.name}(${data.terrain} ${data.terrainReq})`}
                 {`\nLocations: ${ownLocations.length}`}
                 {`\nEvents: ${ownEvent.length}`}
-                {ownGather.length>0 && <details>
+                {ownGather.length > 0 && <details>
                     <summary>{`Gathers: ${ownGather.length}`}</summary>
-                    {ownGather.map(v=>{
+                    {ownGather.map(v => {
                         const gatherDifficult = loots.find(loot => loot.name === v.loot)?.loot.reduce((p, c) => {
                             const dif = resources.find(res => res.name === c.name)?.gatherDifficulty
                             if (!!dif) return dif > p ? dif : p
                             else return p
                         }, 0)
-                        return ` ~ ${v.count}x${v.name}(${getTimeStr(v.cooldown)}) [${v.type.substring(0,1)}. ${gatherDifficult}]`
+                        return ` ~ ${v.count}x${v.name}(${getTimeStr(v.cooldown)}) [${v.type.substring(0, 1)}. ${gatherDifficult}]`
                     }).join('\n')}
                 </details>}
 
@@ -154,40 +162,47 @@ export const MC = {
                 </>
                 : <Polyline pathOptions={fillLime} positions={path}/>}
             {path.map((v, i) =>
-                <CircleMarker center={v} pathOptions={i === 0 ? fillLime : follOrange} radius={20} >
+                <CircleMarker center={v} pathOptions={i === 0 ? fillLime : follOrange} radius={20}>
                     <Popup>
                         <div className={s.popupDiv}>{getStageStr(data.qStages[i])}</div>
                     </Popup>
-                    {(path.length>1 && i===0) ? <Tooltip offset={[20,0]} direction={'right'} permanent>Start</Tooltip>
-                    :<Tooltip offset={[20,0]} direction={'right'}>{`${data.qStages[i].num}: ${data.qStages[i].name}`}</Tooltip>}
+                    {(path.length > 1 && i === 0) ?
+                        <Tooltip offset={[20, 0]} direction={'right'} permanent>Start</Tooltip>
+                        : <Tooltip offset={[20, 0]}
+                                   direction={'right'}>{`${data.qStages[i].num}: ${data.qStages[i].name}`}</Tooltip>}
                 </CircleMarker>)}
         </>
     },
-    events: (data: TEvent, zoom: number) => {
+    events: (data: TEvent, zoom: number, activeRegion: string | undefined) => {
         const t = new Image()
         t.src = iconPicker(data.icon)
         const iW = t.width / 4 * (zoom - 4) * 0.5
         const iH = t.height / 4 * (zoom - 4) * 0.5
+        const pos = {lat: data.pos.x, lng: data.pos.y}
+        return (<>
+                <Marker
+                    autoPan={false}
+                    draggable={false}
+                    icon={new Icon({
+                        iconAnchor: [iW / 2, iH * 5 / 6],
+                        iconUrl: t.src,
+                        iconSize: [iW, iH],
+                        popupAnchor: [iW / 2 - iW / 2, 0 - iH * 5 / 6],
+                    })}
+                    position={pos}>
+                    <Popup autoPan={false}>
+                        <div className={s.popupDiv}>
+                            {`${data.name}\n`}
+                            {getStagesStr(data.eStages)}
+                        </div>
+                    </Popup>
 
-        return (
-            <Marker
-                autoPan={false}
-                draggable={false}
-                icon={new Icon({
-                    iconAnchor: [iW / 2, iH * 5 / 6],
-                    iconUrl: t.src,
-                    iconSize: [iW, iH],
-                    popupAnchor: [iW / 2 - iW / 2, 0 - iH * 5 / 6],
-                })}
-                position={{lat: data.pos.x, lng: data.pos.y}}>
-                <Popup autoPan={false}>
-                    <div className={s.popupDiv}>
-                        {`${data.name}\n`}
-                        {getStagesStr(data.eStages)}
-                    </div>
-                </Popup>
+                </Marker>
+                {activeRegion === data.region &&
+                    <CircleMarker center={pos} radius={15}
+                                  pathOptions={{color: colors.activeEvents, fillColor: colors.activeEvents, fillOpacity: 0.7}} />}
+            </>
 
-            </Marker>
         )
     },
     getTowns: (zoom: number) => {
@@ -274,17 +289,20 @@ export const MC = {
             </Marker>
         )
     },
-    gatherPoint: (data: TGatherPoint, zoom: number, gatherDifficult: number) => {
+    gatherPoint: (data: TGatherPoint, zoom: number, gatherDifficult: number, activeRegion: string | undefined) => {
+        if(!data) return <></>
         // const icon = `./../../../assets/icons/${iconPicker(data.type)}.png`
         // console.log(icon)
         // const t = new Image()
         // t.src = iconPicker(data.icon)
         // console.log(`${t.width}:${t.height}`)
-        const iconSize = data.type==='Hunting'? 200: 128;
+        const iconSize = data.type === 'Hunting' ? 200 : 128;
         const iW = iconSize / 6 * (zoom - 4) * 0.5
         const iH = iconSize / 6 * (zoom - 4) * 0.5
+        const pos  = {lat: data.pos.x, lng: data.pos.y}
         return (
-            <Marker
+            <>
+                <Marker
                 draggable={false}
                 // eventHandlers={eventHandlers}
                 // ref={markerRef}
@@ -296,7 +314,7 @@ export const MC = {
                     popupAnchor: [0, -iH / 2],
                     tooltipAnchor: [iW / 2, 0],
                 })}
-                position={{lat: data.pos.x, lng: data.pos.y}}>
+                position={pos}>
                 <Popup>
                     <div className={s.popupgDiv}>
                         {`${data.name} [${data.type} ${gatherDifficult}]  (${getTimeStr(data.cooldown)})`}
@@ -304,6 +322,10 @@ export const MC = {
                 </Popup>
                 <Tooltip><p>{`${data.count}x${data.name}`}</p></Tooltip>
             </Marker>
+                {activeRegion === data.region &&
+                    <CircleMarker center={pos} radius={25}
+                                  pathOptions={{color: colors.activeGathers, fillColor: colors.activeGathers, fillOpacity: 0.7}} />}
+                </>
         )
     },
 }

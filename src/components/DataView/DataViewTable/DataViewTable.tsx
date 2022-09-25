@@ -43,7 +43,7 @@ export const DataViewTable2: React.FC<TDataViewTable2Props> = React.memo((props)
             <div className={styles.searchDiv}>
                 <SimpleInputField value={search} onChange={str=>setSearch(str)} index={0} htmlId={'search'} labelText={'Search:'} required={false} disabled={false}/>
                 {path==='/region' &&<>
-                    <SimpleSelectField mapSelectValues={['all',...selectFieldsOptions['terrain']]} value={regionFilters.land} onSelChange={str=>setRegionFilters(a=>({...a,land: str}))} labelText={'region'}/>
+                    <SimpleSelectField mapSelectValues={['all',...selectFieldsOptions['terrain']]} value={regionFilters.land} onSelChange={str=>setRegionFilters(a=>({...a,land: str}))} labelText={'land:'}/>
                     <SimpleInputField value={regionFilters.count} onChange={str=>setRegionFilters(a=>({...a,count: +str}))} index={0} htmlId={'dif'} labelText={'dif:'} required={false} disabled={false}/>
                 </>}
             </div>

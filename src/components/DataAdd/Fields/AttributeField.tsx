@@ -103,10 +103,10 @@ type TAttributeAddForm = {
     onAttributeAdd: (count: number) => void
 }
 export const AttributeAddForm: React.FC<TAttributeAddForm> = (props) => {
-    const [count, setCount] = useState(0)
+    const [count, setCount] = useState<number | undefined>(undefined)
     const onAddAttribute = () =>{
         console.log('submit attribute')
-        props.onAttributeAdd(count)
+        props.onAttributeAdd(count || 0)
     }
     const htmlId = `attributes.${props.name}`
     const onValueChange: React.ChangeEventHandler<HTMLInputElement> = (e) =>{

@@ -68,6 +68,7 @@
     /*box-shadow: 1px 1px 2px 2px darkgrey;*/
 
     font-size: 18px;
+    font-weight: normal;
     user-select: none;
     transition-duration: 0.05s;
     text-align: center;

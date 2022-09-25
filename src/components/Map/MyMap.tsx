@@ -24,6 +24,8 @@ import {MapSlice} from "../../redux/reducers/mapReducer";
 import {AddBounds} from "./Bounds/AddBounds";
 import {LayerWithFilter} from "./Layer/LayerWithFilter";
 import {TLocation, TMapPosition, TMonster} from "../../Types/CommonTypes";
+import {useLocation} from "react-router-dom";
+import {getSearchParams} from "../../Unils/utilsFunctions";
 
 const MyComponent: React.FC<{ onZoomChange: (z: number) => void, visible: boolean }> = (props) => {
     const [coords, setCoords] = useState({lat: 0, lng: 0});
@@ -71,8 +73,11 @@ export type TLayerFilters = {
 type TProps = {
     wid: number
     hei: number
+    global?:boolean
 };
 export const MyMap: React.FC<TProps> = React.memo((props) => {
+    const {global} = props
+
     const [customMarkerPos, setCustomMarkerPos] = useState({lat: 0, lng: 0})
     const [isCusMarkerActive, setIsCusMarkerActive] = useState(false)
     const [map, setMap] = useState<Leaf.Map | null>(null);
@@ -86,9 +91,13 @@ export const MyMap: React.FC<TProps> = React.memo((props) => {
         region: false,
     }))
 
+    const path = useLocation()
+    console.log(getSearchParams(path.search))
     const isAddMarkerActive = useSelector(MapSelectors.isAddActive)
+
     const isBoundsMenu = useSelector(MapSelectors.isBoundActive)
 
+    const activeRegion = useSelector(MapSelectors.getActiveRegion)
 
     const materials = useSelector(MaterialSelectors.getData);
     const components = useSelector(ComponentSelectors.getData);
@@ -106,21 +115,22 @@ export const MyMap: React.FC<TProps> = React.memo((props) => {
     const activeQuest = useSelector(MapSelectors.getActiveQuest)
 
     const dispatch = useAppDispatch()
-
+    if(isAddMarkerActive && global){dispatch(MapSlice.actions.setIsAddPosFieldActive(false))}
     const onZoomChange = (z: number) => setZoom(z)
 
 
     const locationMarkers = locations.map(v => MC.location(v, zoom))
-    const regionMarkers = regions.map(v => MC.region(v, zoom, locations, gatherPoints, events, loots, resources))
+    const regionMarkers = regions.map(v => MC.region(v, zoom, locations, gatherPoints, events, loots, resources, activeRegion))
+    const activeRegionMarker = MC.region(regions.find(v => v.name===activeRegion)!, zoom, locations, gatherPoints, events, loots, resources, activeRegion)
     const gatherMarkers = gatherPoints.map(gp => {
         const gatherDifficult = loots.find(loot => loot.name === gp.loot)?.loot.reduce((p, c) => {
             const dif = resources.find(res => res.name === c.name)?.gatherDifficulty
             if (!!dif) return dif > p ? dif : p
             else return p
         }, 0)
-        return MC.gatherPoint(gp, zoom, gatherDifficult || 0)
+        return MC.gatherPoint(gp, zoom, gatherDifficult || 0, activeRegion)
     })
-    const eventMarkers = events.map(v => MC.events(v, zoom))
+    const eventMarkers = events.map(v => MC.events(v, zoom, activeRegion))
     const staminaElixirMarkers = stamina.map((v, i) => MC.staminaElixir({
         ...v,
         name: `${v.name} №${i + 1}`
@@ -153,7 +163,12 @@ export const MyMap: React.FC<TProps> = React.memo((props) => {
         () => ({
             dragend() {
                 const marker = markerRef.current
-                if (marker != null) {
+                const curMarkerPos = marker?.getLatLng()
+                if (marker != null && curMarkerPos !== undefined) {
+                    dispatch(MapSlice.actions.setMarkerForAddPos({
+                        x: Number(curMarkerPos.lat.toFixed(2)) || 0,
+                        y: Number(curMarkerPos.lng.toFixed(2)) || 0
+                    }))
                     setCustomMarkerPos(marker.getLatLng())
                 }
             },
@@ -174,6 +189,8 @@ export const MyMap: React.FC<TProps> = React.memo((props) => {
     const onResetActiveQuest = () => {
         dispatch(MapSlice.actions.setActiveQuest(undefined))
         dispatch(MapSlice.actions.setIsActiveQuestMap(false))
+        dispatch(MapSlice.actions.setActiveRegion(undefined))
+        dispatch(MapSlice.actions.setIsActiveRegion(false))
     }
     useEffect(() => {
         if (isAddMarkerActive && map) map.addEventListener("click", addMarkerPosOnClick);
@@ -233,7 +250,9 @@ export const MyMap: React.FC<TProps> = React.memo((props) => {
                                      staminaMarkers={staminaElixirMarkers}
                                      questItemMarkers={questItemMarkers}
                                      regionMarkers={regionMarkers}
+                                     global={global||false}
                     />
+                    {activeRegion !== undefined && activeRegionMarker}
                     {isCusMarkerActive && MC.addDataMarker(customMarkerPos.lng === 0 && customMarkerPos.lat === 0
                             ? map?.getCenter() || customMarkerPos
                             : customMarkerPos,

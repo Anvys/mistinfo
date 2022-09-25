@@ -1,9 +1,9 @@
 import React from 'react';
-import {LayerGroup, LayersControl} from "react-leaflet";
+import {LayerGroup, LayersControl, useMap, useMapEvent} from "react-leaflet";
 import Control from 'react-leaflet-custom-control';
 import {TLayerFilters} from "../MyMap";
 import {useSelector} from "react-redux";
-import {MapSelectors, QuestSelectors} from "../../../redux/dataSelectors";
+import {MapSelectors, QuestSelectors, RegionSelectors} from "../../../redux/dataSelectors";
 import {useAppDispatch} from "../../../redux/store";
 import {MapSlice} from "../../../redux/reducers/mapReducer";
 import s from './LayerFilter.module.css';
@@ -11,6 +11,7 @@ import {SimpleSelectField} from "../../DataAdd/Fields/SelectField";
 import {selectFieldsOptions} from "../../../Types/Utils";
 
 type TProps = {
+    global: boolean
     filter: TLayerFilters
     locationMarkers: Array<JSX.Element>
     eventMarkers: Array<JSX.Element>
@@ -21,14 +22,25 @@ type TProps = {
     onResetActiveQuest: () => void
 };
 export const LayerWithFilter: React.FC<TProps> = (props) => {
-    const {filter} = props
+    const {filter, global} = props
     const isAddActive = useSelector(MapSelectors.isAddActive)
     const activeQuest = useSelector(MapSelectors.getActiveQuest)
+    const activeRegion = useSelector(MapSelectors.getActiveRegion)
     const quests = useSelector(QuestSelectors.getData)
+    const regions = useSelector(RegionSelectors.getData)
+    const map = useMap()
     const dispatch = useAppDispatch()
-    const onQuestSelect = (qName: string) =>{
-        const findRes = quests.find(v=>v.name===qName)
-        if(findRes) dispatch(MapSlice.actions.setActiveQuest(qName))
+    const onQuestSelect = (qName: string) => {
+        const findRes = quests.find(v => v.name === qName)
+        if (findRes) dispatch(MapSlice.actions.setActiveQuest(qName))
+    }
+    const onRegionSelect = (rName: string) => {
+        const findRes = regions.find(v => v.name === rName)
+        if (findRes) {
+            // move  view center map
+            map.setView({lat:findRes.pos.x, lng:findRes.pos.y}, map.getZoom(), {animate: true,})
+            dispatch(MapSlice.actions.setActiveRegion(rName))
+        }
     }
     return (
         <div>
@@ -37,13 +49,19 @@ export const LayerWithFilter: React.FC<TProps> = (props) => {
                     <button className={s.controlButton} type={'button'} onClick={(e) => {
                         e.stopPropagation()
                         props.onResetActiveQuest()
-                    }}>Reset active quest
+                    }}>Reset
                     </button>
-                    {<button className={s.controlButton} type={'button'}  style={{backgroundColor: `${isAddActive ? 'red' : 'green'}`}} onClick={(e) => {
+                    {!global && <button className={s.controlButton} type={'button'}
+                                        style={{backgroundColor: `${isAddActive ? 'red' : 'green'}`}} onClick={(e) => {
                         e.stopPropagation()
                         dispatch(MapSlice.actions.setIsAddPosFieldActive(!isAddActive))
                     }}>Toggle add marker</button>}
-                    {quests.length>0 && <SimpleSelectField mapSelectValues={quests.map(v=>v.name)} value={activeQuest} onSelChange={onQuestSelect} labelText={'quest'}/>}
+                    {quests.length > 0 &&
+                        <SimpleSelectField mapSelectValues={quests.map(v => v.name)} value={activeQuest}
+                                           onSelChange={onQuestSelect} labelText={'quest'}/>}
+                    {regions.length > 0 &&
+                        <SimpleSelectField mapSelectValues={regions.map(v => v.name)} value={activeRegion}
+                                           onSelChange={onRegionSelect} labelText={'region'}/>}
                 </div>
             </Control>
             <LayersControl position="topright" collapsed={false}>

@@ -28,7 +28,9 @@
 .table td {
     white-space: pre;
 }
-
+.asdasd{
+    color: #d72d68;
+}
 .table td:not(.nameTd):not(:nth-last-child(0)){
     padding: 2px;
     border: 1px solid black;
