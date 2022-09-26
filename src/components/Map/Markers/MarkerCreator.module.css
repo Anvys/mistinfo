@@ -1,9 +1,36 @@
 .popupDiv{
+    width: fit-content;
     white-space: pre;
-
+    text-overflow: ellipsis;
 }
 .controlButton{
     padding: 2px 5px;
     border-radius: 10px;
     border: 1px solid black;
+}
+
+details {
+    /*font: 16px "Open Sans", Calibri, sans-serif;*/
+    /*width: 320px;*/
+}
+
+details > summary {
+    padding: 2px 6px;
+    width: 15em;
+    background-color: #ddd;
+    border: none;
+    box-shadow: 3px 3px 4px black;
+    cursor: pointer;
+}
+
+details > p {
+    border-radius: 0 0 10px 10px;
+    background-color: #ddd;
+    padding: 2px 6px;
+    margin: 0;
+    box-shadow: 3px 3px 4px black;
+}
+
+details[open] > summary {
+    background-color: #ccf;
 }

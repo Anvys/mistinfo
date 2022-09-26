@@ -34,7 +34,7 @@ export const GenDataAdd = <T extends TCombineData, >(props: React.PropsWithChild
             // @ts-ignore
             console.log(`pos: ${pos.x}:${pos.y} | ownPos: ${values.pos?.x}:${values.pos?.y}/ dataName: ${props.dataName} have pos: ${dataWithPos.includes(props.dataName)}`)
             // if (dataWithPos.includes(props.dataName))
-            const fixerPos = {x:Number(pos.x.toFixed(3)),y:Number(pos.y.toFixed(3))}
+            const fixerPos = {x:Number(pos.x.toFixed(3))-(props.dataName === 'location'?0.045:0),y:Number(pos.y.toFixed(3))}
             const newData = dataWithPos.includes(props.dataName)
                 // @ts-ignore
                 ? {...values, name: values.translate.En, pos: !isMarkerAdd ? values.pos:fixerPos}
@@ -46,16 +46,17 @@ export const GenDataAdd = <T extends TCombineData, >(props: React.PropsWithChild
 
             console.log(newData)
             if (data === null) { // @ts-ignore
-                dispatch(curThunks.addOne(newData))
+                await dispatch(curThunks.addOne(newData))
             } else {
                 // console.log(data._id)
                 // @ts-ignore
-                dispatch(curThunks.updateOne({id: data._id, data: {...newData, _id: data._id}}))
+                await dispatch(curThunks.updateOne({id: data._id, data: {...newData, _id: data._id}}))
             }
             props.resetAddFormData();
             if(isMarkerAdd && dataWithPos.includes(props.dataName)){
                 dispatch(MapSlice.actions.setIsAddPosFieldActive(false))
             }
+            dispatch(curThunks.getAll())
             actions.setSubmitting(false);
         }
     })

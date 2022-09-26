@@ -3,7 +3,7 @@ import {DataViewTable2} from "./DataViewTable/DataViewTable";
 import s from './DataView.module.css'
 import {
     TAbility,
-    TBonus,
+    TBonus, TBook,
     TCombineData,
     TDrop,
     TDropTypes,
@@ -56,17 +56,17 @@ const getDataWeight = (key: string) => {
         case 'primary':
             return 50
         case 'obj':
-            return 98
+            return 98 + key.length
         case 'translate':
             return 99
         case 'notes':
             return 100
 
         default:
-            return 50
+            return 50 + key.length
     }
 }
-const objectKeyToSort = ['notes',]
+const objectKeyToSort = ['notes','loot']
 //Sorting function for data entries => sorting columns for table
 const dataEntriesSort: (a: [string, any], b: [string, any]) => number = (a, b) => {
     const wA = getDataWeight(typeof a[1] === 'object' && !objectKeyToSort.includes(a[0]) ? 'obj' : a[0])
@@ -151,6 +151,10 @@ export const getDataViewTdStr = (key: string, data: any, path: string = 'none'):
                             const eq = v.item as TEquip
                             return `${v.type}: [${v.count === 0 ? `∞` : `x${v.count}`}] ${eq.recipe.name} [${eq.recipe.parts.map((part, i) => `${eq.components[i]} x${part.count}`).join(' / ')}] ${v.price} gold ${v.reputationRequire === null || v.reputationRequire.count === 0 ? `` : `(${v.reputationRequire.reputation} ${v.reputationRequire.count})`}`
                             break
+                        case "Book":
+                            const book = v.item as TBook
+                            return `${v.type}: [${v.count === 0 ? `∞` : `x${v.count}`}] ${book.skill} +${book.count}  ${v.price} gold ${v.reputationRequire === null || v.reputationRequire.count === 0 ? `` : `(${v.reputationRequire.reputation} ${v.reputationRequire.count})`}`
+                            break
                         case "Recipe":
                             const rec = v.item as TRecipe
                             return `${v.type}: ${rec.name} ${v.price} gold ${v.reputationRequire === null || v.reputationRequire.count === 0 ? `` : `(${v.reputationRequire.reputation} ${v.reputationRequire.count})`} `
@@ -165,7 +169,7 @@ export const getDataViewTdStr = (key: string, data: any, path: string = 'none'):
                 ]]
             case 'loot':
                 const curLoot = Array.isArray(data) ? data : data.loot
-                console.log(curLoot)
+                // console.log(curLoot)
                 return [[key], [curLoot.length === 0 ? `-`
                     : curLoot.map((v: TDrop<TDropTypes>, i: number) =>
                         `[${v.type}] ${v.name} x${v.countMin === v.countMax ? v.countMin : `${v.countMin}-${v.countMax}`} ${v.chance === 100 ? `` : `(${v.chance}%)`}`).join('\n')]]
@@ -279,7 +283,7 @@ export const getTableTdKey = (key: string, cut: number = 6): string => {
 export const toUpperFirstLetterCase = (str: string): string => {
     return str.length > 0 ? str.split('').map((v, i) => i === 0 ? v.toUpperCase() : v).join('') : ''
 }
-export const ignoredFields = ['_id', '__v', 'translate', 'bound', 'moveTo']
+export const ignoredFields = ['_id', '__v', 'translate', 'bound', 'moveTo', 'availableAfter', 'startAt', 'endAt']
 // export const DataView2 = <T extends TCombineData>(props: React.PropsWithChildren<TProps<T>>) =>{
 
 export type TDataViewObj = {

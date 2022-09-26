@@ -58,6 +58,7 @@ export const LocationThunks = {
             const res = await CurAPI.getAll()
             if (res.data.length) {
                 selectFieldsOptions.location = res.data.map(v => v.name);
+                // console.log(selectFieldsOptions.location)
                 // console.log(`1`)
                 // const dataMarkerArr = [...res.data.map(v=>MC.location(v))]
                 // console.log(dataMarkerArr)

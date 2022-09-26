@@ -98,7 +98,7 @@ export const StageQuestField: React.FC<TProps> = (props) => {
             timeSpend,
             stagePosType,
             stagePos,
-            loot: findLoot || null,
+            // loot: findLoot || null,
         } as TQuestStage
         // console.log('Add new stage')
         console.log(newStage)
@@ -258,15 +258,15 @@ export const StageQuestField: React.FC<TProps> = (props) => {
                         {selectFieldsOptions['stage.expr'].map(v => <option value={v}>{`${v}`}</option>)}
                     </select>
                 </div>
-                <div className={styles.fieldBoxNoBorder}>
-                    <label className={styles.label} htmlFor={'loot'}>loot:</label>
-                    <select className={styles.inputText} name={'loot'} value={loot}
-                            onChange={e => setLoot(e.target.value)}
-                            autoComplete={'off'} placeholder={'expr'}>
-                        <option value="" disabled selected hidden>{NO_LOOT}</option>
-                        {selectFieldsOptions['loot']?.map(v => <option value={v}>{`${v}`}</option>)}
-                    </select>
-                </div>
+                {/*<div className={styles.fieldBoxNoBorder}>*/}
+                {/*    <label className={styles.label} htmlFor={'loot'}>loot:</label>*/}
+                {/*    <select className={styles.inputText} name={'loot'} value={loot}*/}
+                {/*            onChange={e => setLoot(e.target.value)}*/}
+                {/*            autoComplete={'off'} placeholder={'expr'}>*/}
+                {/*        <option value="" disabled selected hidden>{NO_LOOT}</option>*/}
+                {/*        {selectFieldsOptions['loot']?.map(v => <option value={v}>{`${v}`}</option>)}*/}
+                {/*    </select>*/}
+                {/*</div>*/}
                 <button className={styles.addButton} type={'button'} onClick={onStageAdd}>AddStage</button>
             </div>
 

@@ -3,7 +3,12 @@ import {TDrop, TDropTypes, TLoot, TWOid} from "../../../Types/CommonTypes";
 import {FormikErrors, useFormik, useFormikContext} from "formik";
 import styles from './Fields.module.css';
 import {useSelector} from "react-redux";
-import {getComponentsSelector, getMaterialsSelector} from "../../../redux/dataSelectors";
+import {
+    AbilitySelectors, ComponentSelectors,
+    getComponentsSelector,
+    getMaterialsSelector,
+    MaterialSelectors
+} from "../../../redux/dataSelectors";
 import {selectFieldsOptions} from "../../../Types/Utils";
 
 type TProps = {
@@ -18,14 +23,15 @@ export const FieldDrop: React.FC<TProps> = (props) => {
     const [countMax, setCountMax] = useState(0)
     const [chance, setChance] = useState(100)
     const [nameArr, setNameArr] = useState<Array<string>>([])
-    const materials = useSelector(getMaterialsSelector)
-    const components = useSelector(getComponentsSelector)
-
+    const materials = useSelector(MaterialSelectors.getData)
+    const components = useSelector(ComponentSelectors.getData)
+    const ability = useSelector(AbilitySelectors.getData)
+    const abilityArr = ability.map(v=>v.name)
     // const formik = useFormikContext()
     const bookArr = [...selectFieldsOptions["adventure"], ...selectFieldsOptions["weapon"],
         ...selectFieldsOptions["crafting"], ...selectFieldsOptions["terrain"],...selectFieldsOptions["gatherpoint.type"]]
     const reputationArr = [...selectFieldsOptions["reputation.guild"], ...selectFieldsOptions["reputation.town"]]
-    const lootTypes = ['Book','Reputation', ...selectFieldsOptions['material.type'], ...selectFieldsOptions['component.type']]
+    const lootTypes = ['Book','Reputation','Ability', ...selectFieldsOptions['material.type'], ...selectFieldsOptions['component.type']]
     const onTypeChange: React.ChangeEventHandler<HTMLSelectElement> = (e) => {
         switch (e.target.value) {
             case 'Resource':
@@ -37,6 +43,9 @@ export const FieldDrop: React.FC<TProps> = (props) => {
                 break
             case 'Book':
                 setNameArr(bookArr)
+                break
+            case 'Ability':
+                setNameArr(abilityArr)
                 break
         }
         // const findArr = materials.filter(v => v.type === e.target.value).map(v => v.name)
@@ -69,7 +78,7 @@ export const FieldDrop: React.FC<TProps> = (props) => {
                         <select className={styles.inputText} name={'name'} value={name} onChange={(e)=>setName(e.target.value)}
                                  autoComplete={'off'} placeholder={'name'}>
                             <option value="" disabled selected hidden>{`Select name`}</option>
-                            {type !=='Book' && type !== 'Reputation' && selectFieldsOptions.tier.map(v => <option value={`tier ${v}`}>{`All tier ${v} ${type}s`}</option>)}
+                            {type !=='Book' && type !== 'Reputation' && type !== 'Ability' && selectFieldsOptions.tier.map(v => <option value={`tier ${v}`}>{`All tier ${v} ${type}s`}</option>)}
                             {nameArr.map(v => <option value={v}>{`${v}`}</option>)}
                         </select>
                     </div>

@@ -7,7 +7,7 @@ import {
     TGatherPoint,
     TLocation, TLoot,
     TMapPosition, TMaterial, TNpc,
-    TQuest, TQuestItemSource, TRegion,
+    TQuest, TQuestItemSource, TRegion, TShop,
     TStagePos, TStagePosType,
     TStaminaElixir
 } from "../../../Types/CommonTypes";
@@ -25,7 +25,10 @@ const colors = {
     activeEvents: '#D7C72DFF',
     activeGathers: '#6aafbe',
 }
-
+const iconSetting = {
+    townIcons:['Kortombourg'],
+    toIncrease:['Gris Domain'],
+}
 const iconPicker = (type: string) => {
     if (!type) return require('./../../../assets/icons/temp.png')
     const iPath = type.split('/')
@@ -164,8 +167,9 @@ export const MC = {
         if(endPos !== undefined && endPos !== '') path = [[endPos.pos.x, endPos.pos.y]]
         // console.log(startPos)
         // console.log(endPos)
+        // console.log(path)
         return <>
-            {path.length + (!!startPos?1:0)+ (!!endPos?1:0) > 2 ?
+            {path.length > 2 ? // + (!!startPos?1:0)+ (!!endPos?1:0) > 2 ?
                 <>
                     <Polyline pathOptions={fillLime} positions={[path[0], path[1]]}/>
                     <Polyline pathOptions={follOrange} positions={path.filter((v, i) => i > 0)}/>
@@ -273,11 +277,12 @@ export const MC = {
         )
     },
     location: (data: TLocation, zoom: number, moveTo: TLocation | undefined,
-               onMoveToClickHandler:(pos:{lat:number, lng:number})=>void, ) => {
+               onMoveToClickHandler:(pos:{lat:number, lng:number})=>void, npcIn: Array<TNpc>, shopIn: Array<TShop>) => {
         const t = new Image()
         t.src = iconPicker(data.icon)
-        const iW = t.width / 4 * (zoom - 4) * 0.5
-        const iH = t.height / 4 * (zoom - 4) * 0.5
+        const resizeCoef = iconSetting.townIcons.includes(data.region) || iconSetting.toIncrease.includes(data.name)?1.5:1
+        const iW = t.width*resizeCoef / 4 * (zoom - 4) * 0.5
+        const iH = t.height*resizeCoef / 4 * (zoom - 4) * 0.5
         // console.log(zoom)
         const onClick = () =>{
             if(moveTo!== undefined){
@@ -303,13 +308,24 @@ export const MC = {
                     iconSize: [iW, iH],
                     popupAnchor: [iW / 2 - iW / 2, 0 - iH * 5 / 6],
                 })}
-                position={{lat: data.pos.x, lng: data.pos.y}}>
+                position={pos}>
                 <Tooltip offset={[15, -5]}>{data.name}</Tooltip>
                 <Popup autoPan={false} >
                     <p>{data.name}</p>
-                    {data.exploreReq > 0 && <p>explore: {data.exploreReq}</p>}
-                    {moveTo !== undefined &&
-                        <button className={s.controlButton} type={"button"} onClick={onClick}>Move to {`${moveTo.name}`}</button>}
+                    <div className={s.popupDiv}>
+                        {data.exploreReq > 0 && <p>explore: {data.exploreReq}</p>}
+                        {npcIn.length>0 && <details>
+                            <summary>{`Npc: ${npcIn.length}`}</summary>
+                            {npcIn.map(v=>{
+                                const shop = shopIn.find(s=>s.npc===v.name)
+                                return `${v.name} ${!!shop?`Shop: [${shop.content.length} items]\n`:``}\n`
+                            })}
+                        </details>}
+                        {/*{shopIn.length>0 && shopIn.map(v=>`Shop: ${v.name} [${v.content.length} items]\n`)}*/}
+                        {moveTo !== undefined &&
+                            <button className={s.controlButton} type={"button"} onClick={onClick}>Move to {`${moveTo.name}`}</button>}
+                    </div>
+
                 </Popup>
 
             </Marker>

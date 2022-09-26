@@ -27,7 +27,7 @@ export const NpcContent: React.FC<TProps> = (props) => {
     const initObj: TWOid<TNpc> = {
         name: '',
         location: '',
-        time: '',
+        time: 'Always',
         translate: {En: '', Ru: '', Fr: ''},
     }
 

@@ -2,7 +2,7 @@ import React, {useEffect, useState} from 'react';
 import styles from './Fields.module.css';
 import ts from "./../../DataView/DataViewTable/DataViewTable.module.css";
 import {FormikProps} from "formik";
-import {TAbility, TRecipePart} from "../../../Types/CommonTypes";
+import {TAbility, TCrafting, TRecipePart} from "../../../Types/CommonTypes";
 import {InputField, SimpleInputField} from "./InputField";
 import {SimpleSelectField} from "./SelectField";
 import {selectFieldsOptions} from "../../../Types/Utils";
@@ -23,6 +23,8 @@ export const RecipePartField: React.FC<TProps> = (props) => {
     const [partName, setPartName] = useState('')
     const [partComp, setPartComp] = useState('')
     const [partCount, setPartCount] = useState(0)
+    const [partType, setPartType] = useState<TCrafting>('Alchemy')
+    const [partReq, setPartReq] = useState(0)
     // const allAbility = useSelector(AbilitySelectors.getData)
     // const onCompSelect = (aName: string) => {
     //     // const findRes = allAbility.find(v => v.name === aName)
@@ -32,7 +34,7 @@ export const RecipePartField: React.FC<TProps> = (props) => {
     const onPartAdd = () => {
         if (partName && partComp && partCount) {
             formik.setFieldValue('parts',
-                [...formik.values.parts, {name: partName, component: partComp, count: partCount}])
+                [...formik.values.parts, {name: partName, component: partComp, count: partCount, type: partType, baseReq: partReq}])
         }
     }
     const onPartDelHandler = (index: number) =>{
@@ -53,6 +55,8 @@ export const RecipePartField: React.FC<TProps> = (props) => {
                 <SimpleSelectField mapSelectValues={selectFieldsOptions['material.type']?.concat(selectFieldsOptions['component.type'] || []) || ['Empty component & material db']} value={partComp}
                                    onSelChange={(comp: string) => setPartComp(comp)} labelText={'Component'} required={false}/>
                 <SimpleInputField value={partCount} onChange={(count: string) => setPartCount(+count)} index={2} htmlId={'count'} labelText={'count'} required={false} disabled={false}/>
+                <SimpleSelectField mapSelectValues={[...selectFieldsOptions["crafting"]]} value={partType} onSelChange={val=>setPartType(val as TCrafting)} labelText={'type'}/>
+                <SimpleInputField value={partReq} onChange={val=>setPartReq(+val)} index={4} htmlId={'req'} labelText={'req'} required={false} disabled={false}/>
                 <button type={'button'} className={styles.addButton} onClick={onPartAdd}>Add</button>
             </div>
             <div>

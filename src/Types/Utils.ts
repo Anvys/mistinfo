@@ -102,7 +102,8 @@ export const selectFieldsOptions = {
     'ability.type': ['Passive' , 'Active'],
     'monster.type' : ['Monster' , 'Boss'],
     'recipe.type' : ['Alchemy' , 'Forge' , 'Herbalism' , 'Sewing' , 'Stoneworking' , 'Tanning' , 'Woodworking'],
-    'resultType' : ['Head' , 'Boots'],
+    'resultType' : ['Helmet', 'Torso' , 'Glove' , 'Legs' , 'Boots' , 'Weapon' , 'Lantern' , 'Cape' , 'Coat'
+        , 'Shirt' , 'Pants' , 'Offhand' , 'Pendant' , 'Ring' , 'Bracelet' , 'Crowns'],
     'companion.type': ['Human' , 'Transport' , 'Tamed'],
     'evoType': ['Gold' , 'Silver'],
     'weapon' : ['Axe', 'Dagger', 'Mace', 'Polearm', 'Staff', 'Sword'],

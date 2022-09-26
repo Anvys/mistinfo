@@ -15,7 +15,7 @@ import {
     QuestItemSelectors,
     QuestItemSourceSelectors,
     QuestSelectors,
-    RegionSelectors,
+    RegionSelectors, ShopSelectors,
     StaminaElixirSelectors
 } from "../../redux/dataSelectors";
 import {MC} from "./Markers/MarkerCreator";
@@ -108,6 +108,7 @@ export const MyMap: React.FC<TProps> = React.memo((props) => {
     const locations = useSelector(LocationSelectors.getData);
     const regions = useSelector(RegionSelectors.getData);
     const monsters = useSelector(MonsterSelectors.getData);
+    const shops = useSelector(ShopSelectors.getData);
     const gatherPoints = useSelector(GatherPointSelectors.getData);
     const events = useSelector(EventSelectors.getData)
     const stamina = useSelector(StaminaElixirSelectors.getData)
@@ -143,7 +144,9 @@ export const MyMap: React.FC<TProps> = React.memo((props) => {
     }
     const locationMarkers = locations.map(v => {
         const moveTo = v.moveTo === '' ? undefined : locations.find(loc=>loc.name===v.moveTo)
-        return MC.location(v, zoom, moveTo, onMoveToClickHandler)
+        const npcIn = npc.filter(n=>n.location === v.name)
+        const shopIn = shops.filter(s=>npcIn.some(n=>n.name===s.npc))
+        return MC.location(v, zoom, moveTo, onMoveToClickHandler,npcIn,shopIn)
     })
     const regionMarkers = regions.map(v => MC.region(v, zoom, locations, gatherPoints, events, loots, resources, activeRegion))
     const activeRegionMarker = MC.region(regions.find(v => v.name===activeRegion)!, zoom, locations, gatherPoints, events, loots, resources, activeRegion)
@@ -191,7 +194,7 @@ export const MyMap: React.FC<TProps> = React.memo((props) => {
                 const curMarkerPos = marker?.getLatLng()
                 if (marker != null && curMarkerPos !== undefined) {
                     dispatch(MapSlice.actions.setMarkerForAddPos({
-                        x: Number(curMarkerPos.lat.toFixed(3))-0.045 || 0,
+                        x: Number(curMarkerPos.lat.toFixed(3)) || 0,//-0.045
                         y: Number(curMarkerPos.lng.toFixed(3)) || 0
                     }))
                     setCustomMarkerPos(marker.getLatLng())
@@ -232,7 +235,7 @@ export const MyMap: React.FC<TProps> = React.memo((props) => {
             markerRef.current?.setLatLng({lat: e.latlng.lat, lng: e.latlng.lng})
             // const mPos = markerRef.current?.getLatLng();
             dispatch(MapSlice.actions.setMarkerForAddPos({
-                x: Number(e.latlng.lat.toFixed(3))-0.045 || 0,
+                x: Number(e.latlng.lat.toFixed(3)) || 0, //-0.045
                 y: Number(e.latlng.lng.toFixed(3)) || 0
             }))
             e.originalEvent.stopPropagation()

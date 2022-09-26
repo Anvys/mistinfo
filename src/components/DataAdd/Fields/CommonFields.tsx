@@ -58,6 +58,10 @@ export const commonFields = (
                                                   onSelChange={v=>formik.setFieldValue('translate.En', v)} labelText={'Quest Item name'}/>
                     case eKey === 'moveTo':
                         return <SimpleSelectField mapSelectValues={['',...(selectFieldsOptions["location"] || ['No location in bd'])]} value={formik.values.moveTo} onSelChange={val=>formik.setFieldValue('moveTo', val)} labelText={'moveTo'}/>
+                    case eKey === 'resultType':
+                        return <SimpleSelectField
+                            mapSelectValues={[...(selectFieldsOptions["equip"] || ['No location in bd'])]}
+                            value={formik.values.resultType} onSelChange={val=>formik.setFieldValue('resultType', val)} labelText={'Result'}/>
                     case eKey==='content':
                         return <ShopContentField key={i}  formik={formik} index={i} dataName={dataName}/>
                     case eKey==='pos':

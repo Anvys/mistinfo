@@ -206,15 +206,17 @@ export type TRecipePart = {
     name: string
     component: string
     count: number
+    type: TCrafting
+    baseReq: number
 }
 export type TResultType = TEquipSlot
 export type TRecipe = {
     _id: string
     name: string
     icon: string
-    type: TCrafting
+
     resultType: TResultType
-    baseReq: number
+    // baseReq: number
     parts : Array<TRecipePart>
     translate: TTranslateData
     notes: Array<string>
@@ -369,7 +371,7 @@ export type TComponentAttributes = {
 
 
 
-export type TDropTypes = TComponentType | TMaterialType | 'Book' | 'Reputation'
+export type TDropTypes = TComponentType | TMaterialType | 'Book' | 'Reputation'| 'Ability'
 export type TDrop<T extends TDropTypes> = {
     type: T
     name: string

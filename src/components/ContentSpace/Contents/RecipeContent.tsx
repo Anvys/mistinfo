@@ -29,9 +29,9 @@ export const RecipeContent: React.FC<TProps> = (props) => {
     const newDefName = `New Recipe ${data.length + 1}`
     const initObj: TWOid<TRecipe> = {
         name: newDefName,
-        type: 'Herbalism',
+        // type: 'Herbalism',
         resultType: 'Helmet',
-        baseReq: 0,
+        // baseReq: 0,
         parts: [],
         icon: '',
         translate: {En: newDefName, Ru: '', Fr: ''},

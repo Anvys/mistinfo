@@ -57,6 +57,6 @@ export const useAppDispatch = () => useDispatch<TAppDispatch>()
 
 export type TCombineThunks = TMaterialThunks | TComponentThunks
     | TNpcThunks | TLocationThunks | TRegionThunks | TGatherPointThunks
-    | TLootThunks | TStaminaElixirThunks | TEventThunks | TQuestThunks | TAuthThunks
+    | TLootThunks | TStaminaElixirThunks | TEventThunks | TQuestThunks
 | TAbilityThunks | TMonsterThunks | TRecipeThunks | TCompanionThunks | TQuestItemThunks
-| TQuestItemSourceThunks | TShopThunks
+| TQuestItemSourceThunks | TShopThunks //| TAuthThunks
