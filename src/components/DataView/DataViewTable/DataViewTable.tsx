@@ -33,7 +33,7 @@ export const DataViewTable2: React.FC<TDataViewTable2Props> = React.memo((props)
     const path = useLocation().pathname
     if(path === '/region') data = data.filter((v: any)=>(regionFilters.land === 'all'? true : v.terrain===regionFilters.land)
         && v.terrainReq>=regionFilters.count)
-    const dataView: TDataViewObj | null = getDataView(data, lang)
+    const dataView: TDataViewObj | null = getDataView(data, lang, path)
     if (!dataView && search.length===0 && path !== '/region') return <>Empty dataView</>
     const onCheck = (e: React.ChangeEvent<HTMLInputElement>) => {
         setIsDeleteModeActive(e.target.checked)

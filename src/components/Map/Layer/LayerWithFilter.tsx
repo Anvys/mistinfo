@@ -1,14 +1,22 @@
 import React from 'react';
-import {LayerGroup, LayersControl, useMap, useMapEvent} from "react-leaflet";
+import {LayerGroup, LayersControl, useMap} from "react-leaflet";
 import Control from 'react-leaflet-custom-control';
 import {TLayerFilters} from "../MyMap";
 import {useSelector} from "react-redux";
-import {MapSelectors, QuestSelectors, RegionSelectors} from "../../../redux/dataSelectors";
+import {
+    LocationSelectors,
+    LootSelectors,
+    MapSelectors,
+    QuestSelectors,
+    RegionSelectors
+} from "../../../redux/dataSelectors";
 import {useAppDispatch} from "../../../redux/store";
 import {MapSlice} from "../../../redux/reducers/mapReducer";
 import s from './LayerFilter.module.css';
 import {SimpleSelectField} from "../../DataAdd/Fields/SelectField";
-import {selectFieldsOptions} from "../../../Types/Utils";
+import {useLocation, useNavigate} from "react-router-dom";
+import {TMapPosition} from "../../../Types/CommonTypes";
+import {getPosFromQuestStage} from "../Markers/MarkerCreator";
 
 type TProps = {
     global: boolean
@@ -28,11 +36,23 @@ export const LayerWithFilter: React.FC<TProps> = (props) => {
     const activeRegion = useSelector(MapSelectors.getActiveRegion)
     const quests = useSelector(QuestSelectors.getData)
     const regions = useSelector(RegionSelectors.getData)
+    const locations = useSelector(LocationSelectors.getData)
     const map = useMap()
+    const loca = useLocation()
+    const history = useNavigate()
     const dispatch = useAppDispatch()
     const onQuestSelect = (qName: string) => {
         const findRes = quests.find(v => v.name === qName)
-        if (findRes) dispatch(MapSlice.actions.setActiveQuest(qName))
+        if (findRes) {
+            dispatch(MapSlice.actions.setActiveQuest(qName))
+            if(findRes.qStages.length>0){
+                const pos: TMapPosition = getPosFromQuestStage(findRes.qStages[0].stagePos, findRes.qStages[0].stagePosType, locations)
+                map.setView({lat:pos.x, lng:pos.y}, map.getZoom(), {animate: true,})
+                if(loca.search.length>0) history('/map')
+                dispatch(MapSlice.actions.setActiveRegion(undefined))
+                dispatch(MapSlice.actions.setIsActiveRegion(false))
+            }
+        }
     }
     const onRegionSelect = (rName: string) => {
         const findRes = regions.find(v => v.name === rName)
@@ -40,6 +60,9 @@ export const LayerWithFilter: React.FC<TProps> = (props) => {
             // move  view center map
             map.setView({lat:findRes.pos.x, lng:findRes.pos.y}, map.getZoom(), {animate: true,})
             dispatch(MapSlice.actions.setActiveRegion(rName))
+            if(loca.search.length>0) history('/map')
+            dispatch(MapSlice.actions.setActiveQuest(undefined))
+            dispatch(MapSlice.actions.setIsActiveQuestMap(false))
         }
     }
     return (

@@ -83,14 +83,16 @@ export const supFuncGetStr = {
     },
 }
 //display data in table
-export const getDataViewTdStr = (key: string, data: any): [Array<string>, Array<string | JSX.Element>] => {
+export const getDataViewTdStr = (key: string, data: any, path: string = 'none'): [Array<string>, Array<string | JSX.Element>] => {
     if(data===null)return [[key], [`-`]]
     if (typeof data === 'object') {
         if(key==='startAt') console.log(data)
         const dataEntries = Object.entries(data)
         switch (key) {
-            case 'translate' :
             case 'pos':
+                return [['Link to map'], [<a href={`/map?x=${data.x}&y=${data.y}${path==='/region'?`&from=region`:``}`}>View in map</a>]]
+            case 'translate' :
+
             case 'attributes' :
                 return [[...dataEntries.map(v => v[0])], [...dataEntries.map(v => v[1])] as Array<string>]
             case 'notes':
@@ -285,7 +287,14 @@ export type TDataViewObj = {
     keys2: Array<[string, number]>
     values: Array<Array<string | JSX.Element>>
 }
-export const getDataView = (data: Array<TCombineData>, lang: TTranslateLang) => {
+const getKeysCount = (key:string, value:any):number =>{
+    if(Array.isArray(value)) return 1
+    if(value === null) return 1
+    if(key==='loot') return 1
+    if(key==='pos') return 1
+    return Object.keys(value).length
+}
+export const getDataView = (data: Array<TCombineData>, lang: TTranslateLang, path: string) => {
     // console.log(`------------dw2-----------`)
     // const {data} = props
     if (data.length === 0) return null
@@ -300,8 +309,8 @@ export const getDataView = (data: Array<TCombineData>, lang: TTranslateLang) => 
         if (ignoredFields.includes(key)) return
         // if object - add keys in 2 rows else add as simple
         if (typeof value === 'object') {
-            _dataView.keys1.push([key, (Array.isArray(value) || value===null || key ==='loot' ? 1 : Object.keys(value).length)])
-            const [valueKeys, valueData] = getDataViewTdStr(key, value)
+            _dataView.keys1.push([key, getKeysCount(key, value)])
+            const [valueKeys, valueData] = getDataViewTdStr(key, value, path)
             // console.log(`---key: ${key}`)
             // console.log(valueData)
             valueKeys.forEach((k2, i2) => {
@@ -318,7 +327,7 @@ export const getDataView = (data: Array<TCombineData>, lang: TTranslateLang) => 
             if (ignoredFields.includes(key)) return
             const [valueKeys, valueData] = getDataViewTdStr(key, key === 'name'
                 ? val.translate[lang] === '' ? val.translate.En : val.translate[lang]
-                : value)
+                : value, path)
             newValues = [...newValues, ...valueData]
         })
         _dataView.values.push(newValues)

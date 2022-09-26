@@ -69,7 +69,7 @@ const getResizeForTowns = (zoom: number): number => {
             return 1
     }
 }
-const getPosFromQuestStage = (pos: TStagePos, type: TStagePosType, locations: Array<TLocation> | null = null): TMapPosition => {
+export const getPosFromQuestStage = (pos: TStagePos, type: TStagePosType, locations: Array<TLocation> | null = null): TMapPosition => {
     switch (type) {
         case "pos":
             // console.log(`pos: ${getPosStr(pos, type)}`)

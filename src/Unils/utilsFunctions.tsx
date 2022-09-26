@@ -205,10 +205,21 @@ export const getTimeStr = (min: number) =>{
         }
     }
 }
-export const getSearchParams = (str:string) =>{
+type TGetSearchParamsReturn = {
+    pos: [number, number] | undefined,
+    from: string | undefined,
+}
+export const getSearchParams = (str:string):TGetSearchParamsReturn | undefined =>{
     if(str.length){
-        return Object.fromEntries(str.substring(1).split('&').map(v=>v.split('=')))
-    }else return null
+        const result: TGetSearchParamsReturn = {
+            pos:undefined ,
+            from: undefined,
+        }
+        const e = Object.fromEntries(str.substring(1).split('&').map(v=>v.split('=')))
+        if(!!e.x && !!e.y && !isNaN(+e.x) && !isNaN(+e.y)) result.pos =  [+e.x, +e.y]
+        if(!!e.from && e.from.length>0)  result.from =  e.from
+        return result
+    }else return undefined
 
 }
 // export const getElements = (mapVal: object, prevKey: string, formik: FormikProps<any>, dataName: string) => {

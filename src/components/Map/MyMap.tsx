@@ -1,7 +1,7 @@
 import Leaf from 'leaflet';
 import React, {useEffect, useRef, useState} from 'react';
 import styles from './Map.module.css';
-import {MapContainer, TileLayer, useMap, useMapEvents} from "react-leaflet";
+import {CircleMarker, MapContainer, TileLayer, useMap, useMapEvents} from "react-leaflet";
 import {useSelector} from "react-redux";
 import {
     ComponentSelectors,
@@ -91,14 +91,15 @@ export const MyMap: React.FC<TProps> = React.memo((props) => {
         region: false,
     }))
 
-    const path = useLocation()
-    // console.log(getSearchParams(path.search))
+
+
     const isAddMarkerActive = useSelector(MapSelectors.isAddActive)
 
     const isBoundsMenu = useSelector(MapSelectors.isBoundActive)
 
     const activeRegion = useSelector(MapSelectors.getActiveRegion)
 
+    //get data from store
     const npc = useSelector(NpcSelectors.getData);
     const materials = useSelector(MaterialSelectors.getData);
     const components = useSelector(ComponentSelectors.getData);
@@ -114,9 +115,23 @@ export const MyMap: React.FC<TProps> = React.memo((props) => {
     const questsItems = useSelector(QuestItemSelectors.getData)
     const questsItemsSource = useSelector(QuestItemSourceSelectors.getData)
     const activeQuest = useSelector(MapSelectors.getActiveQuest)
-
+    //init add marker ref
     const dispatch = useAppDispatch()
     const markerRef = useRef<L.Marker>(null)
+
+    // center map from search string
+    const path = useLocation()
+    const mapSearchPos = getSearchParams(path.search)
+    const center: [number, number] = !!mapSearchPos && mapSearchPos.pos !== undefined ? mapSearchPos.pos : [0, -45]
+    if(!!mapSearchPos && mapSearchPos.from?.length && mapSearchPos.pos !== undefined){
+        const sPos = {x:mapSearchPos.pos[0], y:mapSearchPos.pos[1]}
+        const findRes = regions.find(v=>v.pos.x === sPos.x && v.pos.y===sPos.y)
+        if(!!findRes){
+            dispatch(MapSlice.actions.setActiveRegion(findRes.name))
+            dispatch(MapSlice.actions.setIsActiveRegion(true))
+        }
+    }
+
 
     if(isAddMarkerActive && global){dispatch(MapSlice.actions.setIsAddPosFieldActive(false))}
     const onZoomChange = (z: number) => setZoom(z)
@@ -245,7 +260,7 @@ export const MyMap: React.FC<TProps> = React.memo((props) => {
                 overflow: "hidden",
                 padding: '0,50px,50px,0'
             }}>
-                <MapContainer attributionControl={false} className={styles.map} center={[0, -45]} zoom={wid===-1?8:7}
+                <MapContainer attributionControl={false} className={styles.map} center={center} zoom={wid===-1?8:7}
                               scrollWheelZoom={false} ref={setMap} markerZoomAnimation={false}>
                     <MyComponent onZoomChange={onZoomChange} visible={false}/>
                     <TileLayer minZoom={5} maxZoom={8} noWrap={true}
@@ -272,6 +287,7 @@ export const MyMap: React.FC<TProps> = React.memo((props) => {
                     {!!activeQuest && activeQuest.length > 0 && quests.filter((fv, i) => fv.name === activeQuest).map(v => MC.quest(v, zoom, locations, npc))}
                     {isBoundsMenu && <AddBounds/>}
                     {!!activeQuest && 'asd'}
+                    {mapSearchPos !== undefined && mapSearchPos.from !== 'region' && <CircleMarker center={center} pathOptions={{color: 'red', fillOpacity:0}} radius={20}/>}
                 </MapContainer>
             </div>
         </div>
