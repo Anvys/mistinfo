@@ -66,7 +66,7 @@ const getDataWeight = (key: string) => {
             return 50 + key.length
     }
 }
-const objectKeyToSort = ['notes','loot']
+const objectKeyToSort = ['notes','loot', 'Book']
 //Sorting function for data entries => sorting columns for table
 const dataEntriesSort: (a: [string, any], b: [string, any]) => number = (a, b) => {
     const wA = getDataWeight(typeof a[1] === 'object' && !objectKeyToSort.includes(a[0]) ? 'obj' : a[0])
@@ -74,14 +74,6 @@ const dataEntriesSort: (a: [string, any], b: [string, any]) => number = (a, b) =
     return wA - wB
 }
 
-export const supFuncGetStr = {
-    getRequireStage: (req: TStageRequire) => {
-        switch (req.type) {
-            case '':
-                return ''
-        }
-    },
-}
 //display data in table
 export const getDataViewTdStr = (key: string, data: any, path: string = 'none'): [Array<string>, Array<string | JSX.Element>] => {
     if(data===null)return [[key], [`-`]]
@@ -89,6 +81,10 @@ export const getDataViewTdStr = (key: string, data: any, path: string = 'none'):
         if(key==='startAt') console.log(data)
         const dataEntries = Object.entries(data)
         switch (key) {
+            case 'Book':
+                const curBook = data as TBook
+                // return [['type', 'count'], [curBook.skill, `+${curBook.count}`]]
+                return [['Book'], [`${curBook.skill} +${curBook.count}`]]
             case 'pos':
                 return [['Link to map'], [<a href={`/map?x=${data.x}&y=${data.y}${path==='/region'?`&from=region`:``}`}>View in map</a>]]
             case 'translate' :
@@ -296,11 +292,52 @@ const getKeysCount = (key:string, value:any):number =>{
     if(value === null) return 1
     if(key==='loot') return 1
     if(key==='pos') return 1
+    if(key==='Book') return 1
     return Object.keys(value).length
 }
 export const getDataView = (data: Array<TCombineData>, lang: TTranslateLang, path: string) => {
     // console.log(`------------dw2-----------`)
     // const {data} = props
+    if (data.length === 0) return null
+    const dataEntries = [...Object.entries(data[0]).sort(dataEntriesSort)]
+    // console.log(Object.entries(data[0]))
+    const _dataView: TDataViewObj = {
+        keys1: [],
+        keys2: [],
+        values: [],
+    }
+    dataEntries.forEach(([key, value], index) => {
+        if (ignoredFields.includes(key)) return
+        // if object - add keys in 2 rows else add as simple
+        if (typeof value === 'object') {
+            _dataView.keys1.push([key, getKeysCount(key, value)])
+            const [valueKeys, valueData] = getDataViewTdStr(key, value, path)
+            // console.log(`---key: ${key}`)
+            // console.log(valueData)
+            valueKeys.forEach((k2, i2) => {
+                _dataView.keys2.push([k2, 1])
+            })
+        } else {
+            _dataView.keys1.push([key, 1])
+            _dataView.keys2.push([key, 1])
+        }
+    })
+    data.forEach((val, index) => {
+        let newValues: Array<string | JSX.Element> = []
+        Object.entries(val).sort(dataEntriesSort).forEach(([key, value]) => {
+            if (ignoredFields.includes(key)) return
+            const [valueKeys, valueData] = getDataViewTdStr(key, key === 'name'
+                ? val.translate[lang] === '' ? val.translate.En : val.translate[lang]
+                : value, path)
+            newValues = [...newValues, ...valueData]
+        })
+        _dataView.values.push(newValues)
+    })
+    // console.log(data[0])
+    // console.log(_dataView)
+    return _dataView
+}
+export const getDataViewAny = (data: Array<any>, lang: TTranslateLang, path: string = 'none') => {
     if (data.length === 0) return null
     const dataEntries = [...Object.entries(data[0]).sort(dataEntriesSort)]
     // console.log(Object.entries(data[0]))

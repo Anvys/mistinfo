@@ -8,7 +8,7 @@ export type TInitialState = {
     language: TTranslateLang
 }
 const initialState: TInitialState = {
-    language: 'Ru'
+    language: 'En'
 }
 
 export const GlobalSettingsSlice = createSlice({

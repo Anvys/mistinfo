@@ -66,7 +66,7 @@ export const MaterialContent:React.FC<TProps> = React.memo((props) => {
             </div>
             <div className={styles.dbField}>
                 <Outlet/>
-                {/*<DataViewTable2 dataEditHandler={dataAddHandler} dataDelHandler={dataDelHandler} data={data}/>*/}
+                {/*<DataViewTableSimple dataEditHandler={dataAddHandler} dataDelHandler={dataDelHandler} data={data}/>*/}
                 <DataView type={props.type} data={data} dataEditHandler={dataAddHandler} dataDelHandler={dataDelHandler} />
             </div>
         </div>

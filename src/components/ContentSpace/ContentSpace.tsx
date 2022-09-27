@@ -20,6 +20,7 @@ import {CompanionContent} from "./Contents/CompanionContent";
 import {QuestItemContent} from "./Contents/QiestItemContent";
 import {QuestItemSourceContent} from "./Contents/QiestItemSourceContent";
 import {ShopContent} from "./Contents/ShopContent";
+import {BookContent} from "./Contents/BookContent";
 
 
 export const ContentSpace: React.FC = () => {
@@ -53,6 +54,8 @@ export const ContentSpace: React.FC = () => {
                 <Route path={'/component/Artefact'} element={<ComponentContent type={'Artefact'}/>}/>
 
                     {/*<Route path={'/component/add'} element={<AddComponent selectFields={componentSelectFields}/>}/>*/}
+                <Route path={'/books/'} element={<BookContent/>}/>
+
                 <Route path={'/npc/'} element={<NpcContent/>}/>
                 <Route path={'/location/'} element={<LocationContent/>}/>
                 <Route path={'/region/'} element={<RegionContent/>}/>

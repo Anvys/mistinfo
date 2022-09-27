@@ -60,3 +60,4 @@ export type TCombineThunks = TMaterialThunks | TComponentThunks
     | TLootThunks | TStaminaElixirThunks | TEventThunks | TQuestThunks
 | TAbilityThunks | TMonsterThunks | TRecipeThunks | TCompanionThunks | TQuestItemThunks
 | TQuestItemSourceThunks | TShopThunks //| TAuthThunks
+
