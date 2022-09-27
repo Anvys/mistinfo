@@ -1,12 +1,13 @@
-import React from 'react';
+import React, {useState} from 'react';
 import {LayerGroup, LayersControl, useMap} from "react-leaflet";
 import Control from 'react-leaflet-custom-control';
 import {TLayerFilters} from "../MyMap";
 import {useSelector} from "react-redux";
 import {
+    ComponentSelectors,
     LocationSelectors,
     LootSelectors,
-    MapSelectors,
+    MapSelectors, MaterialSelectors,
     QuestSelectors,
     RegionSelectors
 } from "../../../redux/dataSelectors";
@@ -18,6 +19,8 @@ import {useLocation, useNavigate} from "react-router-dom";
 import {TMapPosition} from "../../../Types/CommonTypes";
 import {getPosFromQuestStage} from "../Markers/MarkerCreator";
 
+const selectMarkers = ['Quest', 'Region', 'Resource'] as const
+type TSelectMarkers = typeof selectMarkers[number]
 type TProps = {
     global: boolean
     filter: TLayerFilters
@@ -31,12 +34,17 @@ type TProps = {
 };
 export const LayerWithFilter: React.FC<TProps> = (props) => {
     const {filter, global} = props
+    // active Markers state
+    const [activeMarker, setActiveMarker] = useState<TSelectMarkers | undefined>(undefined)
+
     const isAddActive = useSelector(MapSelectors.isAddActive)
     const activeQuest = useSelector(MapSelectors.getActiveQuest)
     const activeRegion = useSelector(MapSelectors.getActiveRegion)
+    const activeResource = useSelector(MapSelectors.getActiveResource)
     const quests = useSelector(QuestSelectors.getData)
     const regions = useSelector(RegionSelectors.getData)
     const locations = useSelector(LocationSelectors.getData)
+    const resourceNames = [...useSelector(MaterialSelectors.getData).map(v=>v.name), ...useSelector(ComponentSelectors.getData).filter(v=>v.type==='Plant').map(v=>v.name)]
     const map = useMap()
     const loca = useLocation()
     const history = useNavigate()
@@ -51,6 +59,9 @@ export const LayerWithFilter: React.FC<TProps> = (props) => {
                 if(loca.search.length>0) history('/map')
                 dispatch(MapSlice.actions.setActiveRegion(undefined))
                 dispatch(MapSlice.actions.setIsActiveRegion(false))
+
+                dispatch(MapSlice.actions.setActiveResource(undefined))
+                dispatch(MapSlice.actions.setIsActiveResource(false))
             }
         }
     }
@@ -63,28 +74,50 @@ export const LayerWithFilter: React.FC<TProps> = (props) => {
             if(loca.search.length>0) history('/map')
             dispatch(MapSlice.actions.setActiveQuest(undefined))
             dispatch(MapSlice.actions.setIsActiveQuestMap(false))
+
+            dispatch(MapSlice.actions.setActiveResource(undefined))
+            dispatch(MapSlice.actions.setIsActiveResource(false))
         }
     }
+    const onResourceSelect = (rName: string) => {
+        // const findRes = regions.find(v => v.name === rName)
+        if (rName) {
+            dispatch(MapSlice.actions.setActiveResource(rName))
+
+            dispatch(MapSlice.actions.setActiveQuest(undefined))
+            dispatch(MapSlice.actions.setIsActiveQuestMap(false))
+
+            dispatch(MapSlice.actions.setActiveRegion(undefined))
+            dispatch(MapSlice.actions.setIsActiveRegion(false))
+        }
+    }
+
     return (
         <div>
             <Control position={"topright"}>
                 <div className={s.controlDiv}>
                     <button className={s.controlButton} type={'button'} onClick={(e) => {
                         e.stopPropagation()
+                        setActiveMarker(undefined)
                         props.onResetActiveQuest()
                     }}>Reset
                     </button>
+                    <SimpleSelectField mapSelectValues={[...selectMarkers]} value={activeMarker}
+                                       onSelChange={val=>setActiveMarker(val as TSelectMarkers | undefined)} labelText={'Marker'}/>
                     {!global && <button className={s.controlButton} type={'button'}
                                         style={{backgroundColor: `${isAddActive ? 'red' : 'green'}`}} onClick={(e) => {
                         e.stopPropagation()
                         dispatch(MapSlice.actions.setIsAddPosFieldActive(!isAddActive))
                     }}>Toggle add marker</button>}
-                    {quests.length > 0 &&
+                    {activeMarker === 'Quest' && quests.length > 0 &&
                         <SimpleSelectField mapSelectValues={quests.map(v => v.name)} value={activeQuest}
                                            onSelChange={onQuestSelect} labelText={'quest'}/>}
-                    {regions.length > 0 &&
+                    {activeMarker === 'Region' && regions.length > 0 &&
                         <SimpleSelectField mapSelectValues={regions.map(v => v.name)} value={activeRegion}
                                            onSelChange={onRegionSelect} labelText={'region'}/>}
+                    {activeMarker === 'Resource' && resourceNames.length > 0 &&
+                        <SimpleSelectField mapSelectValues={resourceNames} value={activeResource}
+                                           onSelChange={onResourceSelect} labelText={'Res'}/>}
                 </div>
             </Control>
             <LayersControl position="topright" collapsed={false}>

@@ -23,7 +23,7 @@ import s from './MarkerCreator.module.css';
 
 const colors = {
     activeEvents: '#D7C72DFF',
-    activeGathers: '#6aafbe',
+    activeGathers: '#ffa817',
 }
 const iconSetting = {
     townIcons:['Kortombourg'],
@@ -331,7 +331,7 @@ export const MC = {
             </Marker>
         )
     },
-    gatherPoint: (data: TGatherPoint, zoom: number, gatherDifficult: number, activeRegion: string | undefined) => {
+    gatherPoint: (data: TGatherPoint, zoom: number, gatherDifficult: number, activeRegion: string | undefined, activeResource: string) => {
         if(!data) return <></>
         // const icon = `./../../../assets/icons/${iconPicker(data.type)}.png`
         // console.log(icon)
@@ -364,7 +364,7 @@ export const MC = {
                 </Popup>
                 <Tooltip><p>{`${data.count}x${data.name}`}</p></Tooltip>
             </Marker>
-                {activeRegion === data.region &&
+                {(activeRegion === data.region  || activeResource.length>0 && data.loot.toLowerCase().includes(activeResource.toLowerCase())) &&
                     <CircleMarker center={pos} radius={25}
                                   pathOptions={{color: colors.activeGathers, fillColor: colors.activeGathers, fillOpacity: 0.7}} />}
                 </>

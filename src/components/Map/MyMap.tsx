@@ -98,6 +98,7 @@ export const MyMap: React.FC<TProps> = React.memo((props) => {
     const isBoundsMenu = useSelector(MapSelectors.isBoundActive)
 
     const activeRegion = useSelector(MapSelectors.getActiveRegion)
+    const activeResource = useSelector(MapSelectors.getActiveResource)
 
     //get data from store
     const npc = useSelector(NpcSelectors.getData);
@@ -156,7 +157,7 @@ export const MyMap: React.FC<TProps> = React.memo((props) => {
             if (!!dif) return dif > p ? dif : p
             else return p
         }, 0)
-        return MC.gatherPoint(gp, zoom, gatherDifficult || 0, activeRegion)
+        return MC.gatherPoint(gp, zoom, gatherDifficult || 0, activeRegion, activeResource || '')
     })
     const eventMarkers = events.map(v => MC.events(v, zoom, activeRegion))
     const staminaElixirMarkers = stamina.map((v, i) => MC.staminaElixir({
@@ -212,13 +213,17 @@ export const MyMap: React.FC<TProps> = React.memo((props) => {
     const onClose = () => {
         setIsCusMarkerActive(false)
         dispatch(MapSlice.actions.setIsAddPosFieldActive(false))
-        onResetActiveQuest()
+        onResetActiveMarkers()
     }
-    const onResetActiveQuest = () => {
+    const onResetActiveMarkers = () => {
         dispatch(MapSlice.actions.setActiveQuest(undefined))
         dispatch(MapSlice.actions.setIsActiveQuestMap(false))
+
         dispatch(MapSlice.actions.setActiveRegion(undefined))
         dispatch(MapSlice.actions.setIsActiveRegion(false))
+
+        dispatch(MapSlice.actions.setActiveResource(undefined))
+        dispatch(MapSlice.actions.setIsActiveResource(false))
     }
     useEffect(() => {
         if (isAddMarkerActive && map) map.addEventListener("click", addMarkerPosOnClick);
@@ -272,7 +277,7 @@ export const MyMap: React.FC<TProps> = React.memo((props) => {
                     />
 
                     {MC.getTowns(zoom)}
-                    <LayerWithFilter filter={layerFilter} onResetActiveQuest={onResetActiveQuest}
+                    <LayerWithFilter filter={layerFilter} onResetActiveQuest={onResetActiveMarkers}
                                      locationMarkers={locationMarkers}
                                      eventMarkers={eventMarkers}
                                      gatherMarkers={gatherMarkers}

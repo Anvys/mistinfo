@@ -18,7 +18,11 @@ export type TInitialState = {
     isActiveQuestMap: boolean
     activeRegion: string | undefined
     isActiveRegion: boolean
+    activeResource: string | undefined
+    isActiveResource: boolean
+
     isMapActive: boolean
+
 }
 const initialState: TInitialState = {
     markerForAddPos: {x:0,y:0},
@@ -37,6 +41,9 @@ const initialState: TInitialState = {
 
     activeRegion: undefined,
     isActiveRegion: false,
+
+    activeResource: undefined,
+    isActiveResource: false,
 
     isMapActive: false,
 }
@@ -81,9 +88,16 @@ export const MapSlice = createSlice({
         setIsActiveRegion: (state, action: PayloadAction<boolean>) => {
             state.isActiveRegion = action.payload;
         },
+        setActiveResource: (state, action: PayloadAction<string | undefined>) => {
+            state.activeResource = action.payload;
+        },
+        setIsActiveResource: (state, action: PayloadAction<boolean>) => {
+            state.isActiveResource = action.payload;
+        },
         setIsMapActive: (state, action: PayloadAction<boolean>) => {
             state.isMapActive = action.payload;
         },
+
 
     },
     extraReducers: (builder) => {

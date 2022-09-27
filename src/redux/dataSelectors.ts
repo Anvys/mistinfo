@@ -50,6 +50,7 @@ export const MapSelectors = {
     isMapActive : (state: TAppState) => state.map.isMapActive,//isAddBoundsActive || state.map.isAddPosFieldActive || state.map.isActiveQuestMap,
     getActiveQuest : (state: TAppState) => state.map.activeQuest,
     getActiveRegion : (state: TAppState) => state.map.activeRegion,
+    getActiveResource : (state: TAppState) => state.map.activeResource,
 }
 
 export const LootSelectors = {
