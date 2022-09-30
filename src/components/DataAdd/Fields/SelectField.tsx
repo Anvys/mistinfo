@@ -56,10 +56,35 @@ export const SimpleSelectField:React.FC<TSelectSimpleField> = (props) => {
                     name={`htmlId`}
                     onChange={e=>setVal(e.target.value)}
                     value={val}
-                    required={required}>
+                    required={required|| false}>
                 {labelText !== 'type' && <option className={styles.optionDefault} value="" disabled key={0}>{`Select ${labelText}`}</option>}
                 {mapSelectValues.map((v, i) => (<option key={i+1} value={v}>{v}</option>))}
             </select>
+        </div>
+    );
+}
+type TSimpleBooleanField = {
+    // mapSelectValues: Array<string> | Array<number>,
+    value: boolean,
+    onSelChange: (value: boolean)=>void
+    labelText: string
+    required?: boolean
+};
+export const SimpleBooleanField:React.FC<TSimpleBooleanField> = (props) => {
+    const { value, onSelChange, labelText, } = props
+    const required = props.required === undefined? false: props.required
+    const [val, setVal] = useState(()=>value)
+    console.log(`labelText=${labelText}`)
+    useEffect(()=>{
+        onSelChange(val)
+    },[val])
+    useEffect(()=>{
+        if(value !== val) setVal(value)
+    },[value])
+    return (
+        <div className={styles.fieldBox} key={0}>
+            <label className={styles.label} htmlFor={`htmlId`}>{labelText}</label>
+            <input type={'checkbox'} checked={val} onChange={e=>setVal(e.target.checked)} required={required}/>
         </div>
     );
 }

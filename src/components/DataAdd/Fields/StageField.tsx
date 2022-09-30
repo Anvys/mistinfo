@@ -27,7 +27,7 @@ import {FormikProps} from "formik";
 import {SimpleSelectField} from "./SelectField";
 import {SimpleInputField} from "./InputField";
 import {log} from "util";
-import {getDataViewTdStr} from "../../DataView/DataView";
+import {getDataViewTdStr} from "../../DataView/SortingAndViewUtils";
 
 type TProps = {
     formik: FormikProps<any>

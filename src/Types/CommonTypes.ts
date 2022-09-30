@@ -5,7 +5,7 @@ export type TCombineData = TNpc | TRegion | TLocation
     | TMaterial | TComponent | TGatherPoint | TLoot
     | TStaminaElixir | TEvent | TMapObject | TQuest
 | TRecipe | TAbility | TCompanion | TMonster | TQuestItem | TQuestItemSource
-| TShop
+| TShop | TTrainer
 
 export type TComponent = TResources<TComponentType, TComponentAttributes>
 export type TMaterial = TResources<TMaterialType, TMaterialAttributes>
@@ -170,6 +170,7 @@ export type TCompanion = {
     name: string
     type: 'Human' | 'Transport' | 'Tamed'
     evoType: 'Gold' | 'Silver'
+    isBattle: boolean
     levelMax: number
     lifeMax: number
     staminaMax: number
@@ -180,6 +181,7 @@ export type TCompanion = {
     weaponMaxSkill: number
     comfort: number
     skills: Array<TBonus>
+    abilities: Array<TAbility>
 
     icon: string
     translate: TTranslateData
@@ -221,7 +223,20 @@ export type TRecipe = {
     translate: TTranslateData
     notes: Array<string>
 }
-
+export type TRewCost = { type: string, name: string, count: number }
+export type TTrainer = {
+    _id: string
+    name: string
+    type: TAdventure
+    difficult: number
+    time: number
+    cooldown: number
+    cost: TRewCost
+    reward: TRewCost
+    location: string
+    translate: TTranslateData
+    notes: Array<string>
+}
 export type TQuest = {
     _id: string
     name: string
@@ -246,6 +261,7 @@ export type TEvent = {
     translate: TTranslateData
     notes: Array<string>
 }
+
 export type TStageRequire = TRequireAdventure | TRequireQuestItem | TRequireEquip | TRequireResource | TRequireKill | TRequireBattle
 export type TRequireAdventure = {
     type: TSkills
@@ -295,8 +311,10 @@ export type TStage = {
     require: TStageRequire
     time: number
 }
-export type TExpr = 'or' | 'and'
 
+
+
+export type TExpr = 'or' | 'and'
 
 export type TUserType = 'User' | 'Mod' | 'Admin'
 export type TUser = {
@@ -384,7 +402,7 @@ export type TDrop<T extends TDropTypes> = {
 export type TRequestType = 'Material' | 'Component' | 'Npc'
     | 'Location' | 'Region' | 'GatherPoint' | 'Loot'
     | 'StaminaElixir' | 'Event' | 'MapObject' | 'Quest' | 'Recipe' | 'Companion' | 'Ability' | 'QuestItem'
-| 'Monster' | 'QuestItemSource' | 'Shop'
+| 'Monster' | 'QuestItemSource' | 'Shop' | 'Trainer'
 export type TRequestBody<T extends TRequestType, D> = {
     type: T
     data: D

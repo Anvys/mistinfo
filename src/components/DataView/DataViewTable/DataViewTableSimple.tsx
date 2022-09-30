@@ -1,8 +1,9 @@
 import React from 'react'
 import styles from "./DataViewTable.module.css";
-import {getTableTdKey, TDataViewObj} from "../DataView";
+import {TDataViewObj} from "../DataView";
 import fieldsStyles from "../../DataAdd/Fields/Fields.module.css";
 import {iconUrlPicker} from "../../IconPicker/IconPicker";
+import {getTableTdKey} from "../SortingAndViewUtils";
 //import styles from './DataViewTableSimple.module.css'
 
 type TProps = {

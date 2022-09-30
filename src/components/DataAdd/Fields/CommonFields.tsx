@@ -5,8 +5,8 @@ import {FormikProps} from "formik";
 import {AttributeField} from "./AttributeField";
 import {LootField} from "./LootField";
 import {NotesField} from "./NotesField";
-import {selectFieldsOptions} from "../../../Types/Utils";
-import {SelectField, SimpleSelectField} from "./SelectField";
+import {getSkillsArr, selectFieldsOptions} from "../../../Types/Utils";
+import {SelectField, SimpleBooleanField, SimpleSelectField} from "./SelectField";
 import {StageField} from "./StageField";
 import {StageQuestField} from "./QuestStageField";
 import {AbilityFiled} from "./AbilityFiled";
@@ -19,6 +19,7 @@ import {ShopContentField} from "./ShopContentField";
 import {NO_LOOT} from "../../../Types/CommonTypes";
 import {SimpleInputField} from "./InputField";
 import {LootAddField} from "./LootAddField";
+import {RewardCostFiled} from "./RewardCostFiled";
 // import styles from './CommonFields.module.css';
 
 
@@ -42,6 +43,10 @@ export const commonFields = (
                 switch (true) {
                     case fieldsIgnoreList.includes(eKey):
                         return null
+                    case dataName==='trainer' && (eKey ==='cost' || eKey==='reward'):
+                        // console.log(eKey,value)
+                        // console.log('formik values', formik.values[eKey])
+                        return <RewardCostFiled index={i} formik={formik} field={eKey} dataName={dataName}/>
                     case dataName === 'quest' && eKey === 'startAt':
                         return <SimpleSelectField
                             mapSelectValues={['auto',...(selectFieldsOptions["npc"]||['not found'])]}
@@ -52,6 +57,11 @@ export const commonFields = (
                             mapSelectValues={['auto',...selectFieldsOptions["npc"]||['not found']]}
                             value={formik.values.endAt} onSelChange={val=>formik.setFieldValue('endAt', val)}
                             labelText={'End:'}/>
+                    case dataName === 'trainer' && eKey === 'type':
+                        return <SimpleSelectField
+                            mapSelectValues={getSkillsArr()}
+                            value={formik.values.type} onSelChange={val=>formik.setFieldValue('type', val)}
+                            labelText={'type'}/>
                     case dataName==='questItemSource' && eKey==='En':
                         return <SimpleSelectField key={i} mapSelectValues={selectFieldsOptions['questitem'] || ['Error']}
                                                   value={formik.values.translate.En}
@@ -71,8 +81,8 @@ export const commonFields = (
                     case eKey==='abilities':
                         return <AbilityFiled key={i} formik={formik} index={i} dataName={dataName}/>
                     case eKey==='skills':
-                        console.log(`skilll ${dataName} ${eKey} ${value}`)
-                        console.log(value)
+                        // console.log(`skilll ${dataName} ${eKey} ${value}`)
+                        // console.log(value)
                         return <CompanionSkillField key={i} formik={formik} index={i} dataName={dataName}/>
                     case eKey==='bound':
                         return <BoundField key={i} formik={formik} index={i} dataName={dataName}/>
@@ -112,6 +122,8 @@ export const commonFields = (
                         return AddFields.input('text',value, formik,curKey,eKey,i,!fieldsNotRequiredList.includes(eKey),fieldsDisabled.includes(`${dataName}.${curKey}`))
                     case typeof value==='object' :
                         return commonFields(formik,curKey, value,dataName)
+                    case typeof value === 'boolean' && eKey==='isBattle':
+                        return <SimpleBooleanField value={value} labelText={eKey} onSelChange={val=>formik.setFieldValue(key, val)}/>
 
                     default:
                         console.error(`Default in commonFields// ekey: ${eKey},${curKey},${value},${typeof value}`)

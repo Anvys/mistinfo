@@ -19,10 +19,12 @@ export const CompanionSkillField: React.FC<TProps> = (props) => {
     const [skills, setSkills] = useState<Array<TBonus>>(() => formik.values.skills)
     const [skill, setSkill] = useState<TCompanionBonusType | ''>(() => formik.values.skills[0] || '')
     const [count, setCount] = useState(() => formik.values.skills[0]?.count || 0)
-    const advSel = [...selectFieldsOptions['adventure']] as Array<string>
-    const weaSel = [...selectFieldsOptions['weapon.type']] as Array<string>
-    const craSel = [...selectFieldsOptions['crafting']] as Array<string>
-    const selectSkills = [...advSel, ...weaSel, ...craSel].filter(v => skills.every(b => b.skill !== v))
+    // const advSel = [...selectFieldsOptions['adventure']] as Array<string>
+    // const weaSel = [...selectFieldsOptions['weapon.type']] as Array<string>
+    // const craSel = [...selectFieldsOptions['crafting']] as Array<string>
+    const selectSkills = [...selectFieldsOptions["adventure"], ...selectFieldsOptions["weapon"],
+        ...selectFieldsOptions["crafting"], ...selectFieldsOptions["terrain"],...selectFieldsOptions["gatherpoint.type"]]
+    // const selectSkills = [...advSel, ...weaSel, ...craSel].filter(v => skills.every(b => b.skill !== v))
     // console.log(selectSkills)
     const tableKeys = ['Skill', 'bonus']
     const onSkillDelete = (skill: string) => {
@@ -39,7 +41,7 @@ export const CompanionSkillField: React.FC<TProps> = (props) => {
     useEffect(() => {
         formik.setFieldValue('skills', skills)
     }, [skills])
-    console.log(skills)
+    // console.log(skills)
     return (
         <div>Skills
             <SimpleSelectField mapSelectValues={selectSkills} value={skill}

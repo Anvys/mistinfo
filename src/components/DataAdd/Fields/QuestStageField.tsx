@@ -25,7 +25,7 @@ import {
     StageRequireResourceForm
 } from "./StageField";
 import {getStageRequireStr} from "../../../Unils/utilsFunctions";
-import {getDataViewTdStr} from "../../DataView/DataView";
+import {getDataViewTdStr} from "../../DataView/SortingAndViewUtils";
 
 export const getPosStr = (pos: TStagePos, type: TStagePosType) =>{
     // console.log(pos)

@@ -74,6 +74,8 @@ export type TAdventureType = typeof selectFieldsOptions['adventure'][number]
 export type TWeaponType = typeof selectFieldsOptions['weapon.type'][number]
 export type TCraftingType = typeof selectFieldsOptions['crafting'][number]
 export type TShopContentType = typeof selectFieldsOptions["shopContentItemTypes"][number]
+
+
 export const selectFieldsOptions = {
     'material.type': ['Bone', 'Fiber', 'Leather', 'Metal', 'Stone', 'Wood'],
     'material.attributes': ['Absorbity', 'Density', 'Flexibility', 'Hardness', 'Lightness', 'Purity', 'Radiance', 'Rigidity',],
@@ -111,6 +113,8 @@ export const selectFieldsOptions = {
     , 'Shirt' , 'Pants' , 'Offhand' , 'Pendant' , 'Ring' , 'Bracelet' , 'Crowns'],
     // 'ability.type': [],
     'shopContentItemTypes': ['Recipe' , 'Ability' , 'Equip' , 'Empty', 'Book'] as const,
+    'currency':['Gold', 'Aureate Claw'],
+
 
     'material': undefined as Array<string> | undefined,
     'component': undefined as Array<string> | undefined,
@@ -128,6 +132,7 @@ export const selectFieldsOptions = {
     'questitem': undefined as Array<string> | undefined,
     'questitemsource': undefined as Array<string> | undefined,
     'shop': undefined as Array<string> | undefined,
+    'trainer': undefined as Array<string> | undefined,
 
 
     'gatherpoint.Botany': undefined as Array<string> | undefined,
@@ -135,3 +140,5 @@ export const selectFieldsOptions = {
     'gatherpoint.Lumberjacking': undefined as Array<string> | undefined,
     'gatherpoint.Mining': undefined as Array<string> | undefined,
 }
+export const getSkillsArr = ()=>[...selectFieldsOptions["adventure"], ...selectFieldsOptions["weapon"],
+    ...selectFieldsOptions["crafting"], ...selectFieldsOptions["terrain"],...selectFieldsOptions["gatherpoint.type"]]

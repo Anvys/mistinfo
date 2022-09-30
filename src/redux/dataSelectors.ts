@@ -53,6 +53,10 @@ export const MapSelectors = {
     getActiveResource : (state: TAppState) => state.map.activeResource,
 }
 
+export const TrainerSelectors = {
+    isInit: (state: TAppState) => state.trainer.isInit,
+    getData: (state: TAppState) => state.trainer.data,
+}
 export const LootSelectors = {
     isInit: (state: TAppState) => state.loot.isInit,
     getData: (state: TAppState) => state.loot.data,
@@ -60,7 +64,6 @@ export const LootSelectors = {
 export const MaterialSelectors = {
     isInit: (state: TAppState) => state.material.isInit,
     getData: (state: TAppState) => state.material.data,
-    getEditTarget: (state: TAppState) => state.material.editTarget,
 }
 export const ComponentSelectors = {
     isInit: (state: TAppState) => state.component.isInit,
