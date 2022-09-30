@@ -208,16 +208,19 @@ export const getTimeStr = (min: number) =>{
 type TGetSearchParamsReturn = {
     pos: [number, number] | undefined,
     from: string | undefined,
+    location: string | undefined,
 }
 export const getSearchParams = (str:string):TGetSearchParamsReturn | undefined =>{
     if(str.length){
         const result: TGetSearchParamsReturn = {
             pos:undefined ,
             from: undefined,
+            location:undefined,
         }
         const e = Object.fromEntries(str.substring(1).split('&').map(v=>v.split('=')))
         if(!!e.x && !!e.y && !isNaN(+e.x) && !isNaN(+e.y)) result.pos =  [+e.x, +e.y]
-        if(!!e.from && e.from.length>0)  result.from =  e.from
+        if(!!e.from && e.from.length>0)  result.from =  decodeURI(e.from)
+        if(!!e.location && e.location.length>0) result.location = decodeURI(e.location)
         return result
     }else return undefined
 

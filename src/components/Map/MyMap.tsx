@@ -24,7 +24,7 @@ import {MapSlice} from "../../redux/reducers/mapReducer";
 import {AddBounds} from "./Bounds/AddBounds";
 import {LayerWithFilter} from "./Layer/LayerWithFilter";
 import {TLocation, TMapPosition, TMonster} from "../../Types/CommonTypes";
-import {useLocation} from "react-router-dom";
+import {useLocation, useNavigate} from "react-router-dom";
 import {getSearchParams} from "../../Unils/utilsFunctions";
 
 const MyComponent: React.FC<{ onZoomChange: (z: number) => void, visible: boolean }> = (props) => {
@@ -92,6 +92,7 @@ export const MyMap: React.FC<TProps> = React.memo((props) => {
     }))
 
 
+    const navigate = useNavigate()
 
     const isAddMarkerActive = useSelector(MapSelectors.isAddActive)
 
@@ -131,6 +132,16 @@ export const MyMap: React.FC<TProps> = React.memo((props) => {
         if(!!findRes){
             dispatch(MapSlice.actions.setActiveRegion(findRes.name))
             dispatch(MapSlice.actions.setIsActiveRegion(true))
+        }
+    }
+    if(!!mapSearchPos && mapSearchPos.location && mapSearchPos.location.length > 0){
+        const findLoca = locations.find(v=>v.name === mapSearchPos.location)
+        if(!!findLoca && !!map) {
+            dispatch(MapSlice.actions.setActiveRegion(findLoca.region))
+            dispatch(MapSlice.actions.setIsActiveRegion(true))
+            const pos = findLoca.pos
+            navigate(`/map?x=${pos.x}&y=${pos.y}`)
+            map.setView({lat:pos.x, lng:pos.y}, map.getZoom(), {animate: true,})
         }
     }
 

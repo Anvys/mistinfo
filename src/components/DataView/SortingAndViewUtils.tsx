@@ -209,7 +209,10 @@ export const getDataViewTdStr = (key: string, data: any, path: string = 'none'):
                 return [[key], [data.length ? data : '-']]
             case 'cooldown':
             case 'time':
-                return [[key], [getTimeStr(data)]]
+                return [[key], [typeof data == 'string' ?data: getTimeStr(data)]]
+            case 'location':
+                return [['location'], [<a
+                    href={`/map?location=${data}`}>{`${data}`}</a>]]
             default:
                 return [[key], [data]]
         }
