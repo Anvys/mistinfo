@@ -22,6 +22,7 @@ import {QuestItemSourceContent} from "./Contents/QiestItemSourceContent";
 import {ShopContent} from "./Contents/ShopContent";
 import {BookContent} from "./Contents/BookContent";
 import {TrainerContent} from "./Contents/TrainerContent";
+import {ReputationContent} from "./Contents/ReputationContent";
 
 
 export const ContentSpace: React.FC = () => {
@@ -56,6 +57,7 @@ export const ContentSpace: React.FC = () => {
 
                     {/*<Route path={'/component/add'} element={<AddComponent selectFields={componentSelectFields}/>}/>*/}
                 <Route path={'/books/'} element={<BookContent/>}/>
+                <Route path={'/reputation/'} element={<ReputationContent/>}/>
                 <Route path={'/trainer/'} element={<TrainerContent/>}/>
 
                 <Route path={'/npc/'} element={<NpcContent/>}/>

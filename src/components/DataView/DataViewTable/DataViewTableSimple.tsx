@@ -13,7 +13,7 @@ export const DataViewTableSimple:React.FC<TProps> = (props) => {
     const {dataView} = props
     return (!dataView ? <>No data found</>
         :<>
-            <div className={styles.vid}>
+            <div className={styles.vidSimple}>
                 <table className={styles.table}>
                     <thead>
                         <tr>

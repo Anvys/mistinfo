@@ -23,7 +23,7 @@ import {
     TStage
 } from "../../Types/CommonTypes";
 import s from "./DataView.module.css";
-import {getDetails, getTimeStr} from "../../Unils/utilsFunctions";
+import {getContentShopItemStrFull, getDetails, getTimeStr} from "../../Unils/utilsFunctions";
 
 const getDataWeight = (key: string) => {
     switch (key) {
@@ -31,6 +31,10 @@ const getDataWeight = (key: string) => {
             return 0
         case 'name':
             return 1
+        case 'Reputation':
+            return 2
+        case 'Count':
+            return 1.99
         case 'startAt':
             return 48
         case 'endAt':
@@ -48,7 +52,7 @@ const getDataWeight = (key: string) => {
             return 50 + key.length
     }
 }
-const objectKeyToSort = ['notes', 'loot', 'Book']
+const objectKeyToSort = ['notes', 'loot', 'Book', 'Reputation', 'Count']
 export const keysToChangeView = ['cooldown']
 //Sorting function for data entries => sorting columns for table
 export const dataEntriesSort: (a: [string, any], b: [string, any]) => number = (a, b) => {
@@ -123,29 +127,13 @@ export const getDataViewTdStr = (key: string, data: any, path: string = 'none'):
                     `${v}`).join('\n')]]
             case 'content':
                 let contentStr = ''
-                contentStr = data.map((v: TShopContent) => {
-                    switch (v.type) {
-                        case "Empty":
-                            return `Empty`
-                        case "Ability":
-                            const abi = v.item as TAbility
-                            return `${v.type}: [${abi.level}]${abi.name} ${v.price} gold ${v.reputationRequire === null || v.reputationRequire.count === 0 ? `` : `(${v.reputationRequire.reputation} ${v.reputationRequire.count})`} (${v.count === 0 ? `∞` : `x${v.count}`})`
-                        case "Equip":
-                            const eq = v.item as TEquip
-                            return `${v.type}: [${v.count === 0 ? `∞` : `x${v.count}`}] ${eq.recipe.name} [${eq.recipe.parts.map((part, i) => `${eq.components[i]} x${part.count}`).join(' / ')}] ${v.price} gold ${v.reputationRequire === null || v.reputationRequire.count === 0 ? `` : `(${v.reputationRequire.reputation} ${v.reputationRequire.count})`}`
-                        case "Book":
-                            const book = v.item as TBook
-                            return `${v.type}: [${v.count === 0 ? `∞` : `x${v.count}`}] ${book.skill} +${book.count}  ${v.price} gold ${v.reputationRequire === null || v.reputationRequire.count === 0 ? `` : `(${v.reputationRequire.reputation} ${v.reputationRequire.count})`}`
-                        case "Recipe":
-                            const rec = v.item as TRecipe
-                            return `${v.type}: ${rec.name} ${v.price} gold ${v.reputationRequire === null || v.reputationRequire.count === 0 ? `` : `(${v.reputationRequire.reputation} ${v.reputationRequire.count})`} `
-                    }
-                }).join('\n')
+                contentStr = data.map((v: TShopContent) => getContentShopItemStrFull(v)).join('\n')
                 return [[key], data.length === 0 ? [`-`] : [
-                    <details>
-                        <summary>{`${data.length} items`}</summary>
-                        <div className={s.shopContent}>{contentStr}</div>
-                    </details>
+                    getDetails(`${data.length} items`, contentStr)
+                    // <details>
+                    //     <summary>{`${data.length} items`}</summary>
+                    //     <div className={s.shopContent}>{contentStr}</div>
+                    // </details>
                 ]]
             case 'loot':
                 const curLoot = Array.isArray(data) ? data : data.loot
@@ -196,6 +184,8 @@ export const getDataViewTdStr = (key: string, data: any, path: string = 'none'):
                     default:
                         return [[key], [`error stage req`]]
                 }
+            case 'Source':
+                return [[key], [data]]
             default:
                 console.log(key)
                 console.log(data)
@@ -259,6 +249,8 @@ export const getTableTdKey = (key: string, cut: number = 6): string => {
             return 'Pos'
         case 'cooldown':
             return 'CD'
+        case 'Count':
+            return 'C'
         // case 'durability': return 'dura'
         default:
             return toUpperFirstLetterCase(key.length > cut ? `${key.substring(0, cut)}.` : key)

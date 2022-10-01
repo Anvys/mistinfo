@@ -10,6 +10,17 @@
 
 .vid {
     overflow: auto;
+    text-align: center;
+    vertical-align: center;
+}
+.vidSimple {
+
+    overflow: auto;
+    tbody{
+        *{
+            text-align: left;
+        }
+    }
 }
 .vidInFields {
     overflow: auto;
@@ -47,8 +58,7 @@
 }
 .table td:not(.nameTd):not(:nth-last-child(0)){
     overflow: hidden;
-    text-align: center;
-    vertical-align: center;
+
 }
 .notEmptyTd{
     //background-color: #a9a9a9;

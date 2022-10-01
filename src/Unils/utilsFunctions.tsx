@@ -1,9 +1,9 @@
 import {
-    TAbility, TBonus,
+    TAbility, TBonus, TBook,
     TCombineData, TEquip,
     TMapPosition, TQuestItemPosType,
-    TQuestStage, TRecipePart, TRequireEquip,
-    TResponseBody,
+    TQuestStage, TRecipe, TRecipePart, TRequireEquip,
+    TResponseBody, TShopContent,
     TStage,
     TStageRequire
 } from "../Types/CommonTypes";
@@ -231,6 +231,26 @@ export const getDetails = (summary: string, body:string)=>{
         {body}
     </details>
 }
+export const getContentShopItemStrFull = (v: TShopContent, full: boolean = true) => {
+    const reqStr = `${v.price} gold ${v.reputationRequire === null || v.reputationRequire.count === 0 ? `` : `(${v.reputationRequire.reputation} ${v.reputationRequire.count})`}`
+    switch (v.type) {
+        case "Empty":
+            return `Empty`
+        case "Ability":
+            const abi = v.item as TAbility
+            return `${v.type}: [${abi.level}]${abi.name} ${full?reqStr:''} (${v.count === 0 ? `∞` : `x${v.count}`})`
+        case "Equip":
+            const eq = v.item as TEquip
+            return `${v.type}: [${v.count === 0 ? `∞` : `x${v.count}`}] ${eq.recipe.name} [${eq.recipe.parts.map((part, i) => `${eq.components[i]} x${part.count}`).join(' / ')}] ${full?reqStr:''}`
+        case "Book":
+            const book = v.item as TBook
+            return `${v.type}: [${v.count === 0 ? `∞` : `x${v.count}`}] ${book.skill} +${book.count} ${full?reqStr:''}`
+        case "Recipe":
+            const rec = v.item as TRecipe
+            return `${v.type}: ${rec.name} ${full?reqStr:''}`
+    }
+}
+export const getContentShopItemStrLite = (v: TShopContent) =>getContentShopItemStrFull(v, false)
 // export const getElements = (mapVal: object, prevKey: string, formik: FormikProps<any>, dataName: string) => {
 //     return Object.entries(mapVal).map(([key, value], i) => {
 //         // if (isSkipField(key)) return null

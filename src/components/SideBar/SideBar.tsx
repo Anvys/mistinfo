@@ -109,6 +109,9 @@ export const SideBar: React.FC = () => {
             <div className={`${s.catDiv} ${getStyleSb(path, '/books')}`}>
                 <Link to={'/books'} className={s.navButton}>Books</Link>
             </div>
+            <div className={`${s.catDiv} ${getStyleSb(path, '/reputation')}`}>
+                <Link to={'/reputation'} className={s.navButton}>Rep</Link>
+            </div>
             <div className={`${s.catDiv} ${getStyleSb(path, '/trainer')}`}>
                 <Link to={'/trainer'} className={s.navButton}>Trainers</Link>
             </div>
