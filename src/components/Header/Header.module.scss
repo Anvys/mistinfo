@@ -2,14 +2,14 @@
     display: flex;
     justify-content: space-between;
     padding: 5px;
-    border-radius: 20px;
-    border: 1px solid #000000;
-    background-color: #494848;
+    background-color: #c4c2c2;
+    height: 10vh;
+    margin-bottom: 1px;
 }
 
 .logo {
-    width: 200px;
-    height: 100px;
+    width: 18vh;
+    height: 9vh;
     background: rgba(141, 162, 162, 0) url("../../assets/img/logo/mist_logo.png") center / cover no-repeat;
 }
 

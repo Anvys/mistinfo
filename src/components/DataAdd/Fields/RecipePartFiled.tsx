@@ -1,6 +1,6 @@
 import React, {useEffect, useState} from 'react';
 import styles from './Fields.module.css';
-import ts from "./../../DataView/DataViewTable/DataViewTable.module.css";
+import ts from "../../DataView/DataViewTable/DataViewTable.module.scss";
 import {FormikProps} from "formik";
 import {TAbility, TCrafting, TRecipePart} from "../../../Types/CommonTypes";
 import {InputField, SimpleInputField} from "./InputField";

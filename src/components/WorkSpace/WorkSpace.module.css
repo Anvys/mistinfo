@@ -1,8 +1,8 @@
 .box {
     display: flex;
 
-    border: 1px solid black;
+    border: 1px solid #ababab;
     /*padding: 5px;*/
     justify-content: flex-start;
-    column-gap: 20px;
+    /*column-gap: 20px;*/
 }

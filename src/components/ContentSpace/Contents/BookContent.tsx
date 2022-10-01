@@ -4,7 +4,7 @@ import {EventSelectors, QuestSelectors, ShopSelectors} from "../../../redux/data
 import {TBook, TLoot, TSkills} from "../../../Types/CommonTypes";
 import {getDataView, getDataViewAny} from "../../DataView/DataView";
 import {DataViewTableSimple} from "../../DataView/DataViewTable/DataViewTableSimple";
-import styles from "../../DataView/DataViewTable/DataViewTable.module.css";
+import styles from "../../DataView/DataViewTable/DataViewTable.module.scss";
 import {SimpleInputField} from "../../DataAdd/Fields/InputField";
 import {getDataViewTdStr} from "../../DataView/SortingAndViewUtils";
 //import styles from './BookContent.module.css'

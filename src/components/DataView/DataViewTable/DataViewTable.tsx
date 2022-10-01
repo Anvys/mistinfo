@@ -1,5 +1,5 @@
 import React, {useState} from 'react';
-import styles from './DataViewTable.module.css';
+import styles from './DataViewTable.module.scss';
 import fieldsStyles from './../../DataAdd/Fields/Fields.module.css'
 
 import {useAppDispatch} from "../../../redux/store";
@@ -78,7 +78,7 @@ export const DataViewTable2: React.FC<TDataViewTable2Props> = React.memo((props)
                                 {val.map((str, index2) => {
                                     if (index2 === 0 && dataView.keys1[0][0] === 'icon') {
                                         return (typeof str === 'string' ?
-                                            <td key={index2}><img className={fieldsStyles.imgIcon} key={index2}
+                                            <td key={index2}><img className={styles.imgIcon} key={index2}
                                                                   src={iconUrlPicker(str.split('/')[0], str.split('/')[1])}/>
                                             </td> : null)
                                     }

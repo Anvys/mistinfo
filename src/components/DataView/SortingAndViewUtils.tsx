@@ -17,7 +17,8 @@ import {
     TRequireEquip,
     TRequireKill,
     TRequireQuestItem,
-    TRequireResource, TRewCost,
+    TRequireResource,
+    TRewCost,
     TShopContent,
     TStage
 } from "../../Types/CommonTypes";
@@ -148,7 +149,7 @@ export const getDataViewTdStr = (key: string, data: any, path: string = 'none'):
                 ]]
             case 'loot':
                 const curLoot = Array.isArray(data) ? data : data.loot
-                console.log(curLoot)
+                // console.log(curLoot)
                 return [[key], [curLoot.length === 0 ? `-`
                     : curLoot.map((v: TDrop<TDropTypes>, i: number) =>
                         `[${v.type}] ${v.name} x${v.countMin === v.countMax ? v.countMin : `${v.countMin}-${v.countMax}`} ${v.chance === 100 ? `` : `(${v.chance}%)`}`).join('\n')]]
@@ -209,10 +210,10 @@ export const getDataViewTdStr = (key: string, data: any, path: string = 'none'):
                 return [[key], [data.length ? data : '-']]
             case 'cooldown':
             case 'time':
-                return [[key], [typeof data == 'string' ?data: getTimeStr(data)]]
+                return [[key], [typeof data == 'string' ? data : getTimeStr(data)]]
             case 'location':
-                return [['location'], [<a
-                    href={`/map?location=${data}`}>{`${data}`}</a>]]
+                return [['location'], [<>{`${data}`} <a
+                    href={`/map?location=${data}`}>{`[view]`}</a></>]]
             default:
                 return [[key], [data]]
         }
@@ -276,6 +277,6 @@ export const getKeysCount = (key: string, value: any): number => {
     if (key === 'loot') return 1
     if (key === 'pos') return 1
     if (key === 'Book') return 1
-    if (key === 'reward' || key==='cost') return 2
+    if (key === 'reward' || key === 'cost') return 2
     return Object.keys(value).length
 }

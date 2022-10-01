@@ -1,6 +1,6 @@
 import React, {useEffect, useState} from 'react';
 import styles from './Fields.module.css';
-import tableStyles from './../../DataView/DataViewTable/DataViewTable.module.css';
+import tableStyles from '../../DataView/DataViewTable/DataViewTable.module.scss';
 
 import {FieldDrop} from "./FieldDrop";
 import {TDrop, TDropTypes} from "../../../Types/CommonTypes";

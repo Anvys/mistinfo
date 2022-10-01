@@ -1,6 +1,6 @@
 import React, {useEffect, useState} from 'react';
 import {FormikProps} from "formik";
-import ts from "../../DataView/DataViewTable/DataViewTable.module.css";
+import ts from "../../DataView/DataViewTable/DataViewTable.module.scss";
 import {TBonus} from "../../../Types/CommonTypes";
 import {selectFieldsOptions, TAdventureType, TCraftingType, TWeaponType} from "../../../Types/Utils";
 import {SimpleSelectField} from "./SelectField";

@@ -1,5 +1,5 @@
 import React from 'react'
-import styles from "./DataViewTable.module.css";
+import styles from "./DataViewTable.module.scss";
 import {TDataViewObj} from "../DataView";
 import fieldsStyles from "../../DataAdd/Fields/Fields.module.css";
 import {iconUrlPicker} from "../../IconPicker/IconPicker";

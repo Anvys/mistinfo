@@ -1,5 +1,5 @@
 import React from 'react';
-import s from './Header.module.css';
+import s from './Header.module.scss';
 import {Login} from "../Auth/Login";
 import {useSelector} from "react-redux";
 import {AuthSelectors} from "../../redux/dataSelectors";

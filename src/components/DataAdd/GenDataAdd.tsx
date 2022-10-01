@@ -4,7 +4,7 @@ import {useSelector} from "react-redux";
 import {TCombineThunks, useAppDispatch} from "../../redux/store";
 import {useFormik} from "formik";
 import {AddDataForm} from "./AddDataForm";
-import {AuthSelectors, getMarkerForAddPosSelector, MapSelectors, TSelectors} from "../../redux/dataSelectors";
+import {AuthSelectors, getMarkerForAddPosSelector, MapSelectors} from "../../redux/dataSelectors";
 import {MapSlice} from "../../redux/reducers/mapReducer";
 // import styles from './GenDataAdd.module.css';
 
@@ -71,7 +71,7 @@ export const GenDataAdd = <T extends TCombineData, >(props: React.PropsWithChild
             {/**/}
 
         </div>
-            :<div> user </div>
+            :null
     );
 
 }

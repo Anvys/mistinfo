@@ -2,21 +2,12 @@ import React, {useState} from 'react';
 import styles from './../ContentSpace.module.css';
 import {useDispatch, useSelector} from "react-redux";
 import {Outlet} from "react-router-dom";
-import {
-    getIsLootInitSelector,
-    getIsNpcInitSelector, getLootSelector,
-    getMaterialsSelector,
-    getNpcSelector
-} from "../../../redux/dataSelectors";
-import {NpcThunks} from "../../../redux/reducers/npcReducer";
+import {getIsLootInitSelector, getLootSelector} from "../../../redux/dataSelectors";
 import {TAppDispatch} from "../../../redux/store";
 import {DataView} from "../../DataView/DataView";
-import {TLoot, TNpc, TRegion, TWOid} from "../../../Types/CommonTypes";
+import {TLoot, TWOid} from "../../../Types/CommonTypes";
 import {GenDataAdd} from "../../DataAdd/GenDataAdd";
-import {FieldDrop} from "../../DataAdd/Fields/FieldDrop";
 import {LootThunks} from "../../../redux/reducers/lootReducer";
-import {LootDataAdd} from "../../DataAdd/LootDataAdd";
-import {RegionThunks} from "../../../redux/reducers/regionReducer";
 
 type TProps = {};
 export const LootContent: React.FC<TProps> = (props) => {

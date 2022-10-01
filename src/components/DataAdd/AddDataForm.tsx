@@ -3,7 +3,7 @@ import styles from './DataAdd.module.css';
 import {FormikProps} from "formik";
 import {commonFields} from "./Fields/CommonFields";
 import {useSelector} from "react-redux";
-import {getIsAddPosFieldActiveSelector, MapSelectors} from "../../redux/dataSelectors";
+import {MapSelectors} from "../../redux/dataSelectors";
 import {MyMap} from "../Map/MyMap";
 
 type TProps = {
