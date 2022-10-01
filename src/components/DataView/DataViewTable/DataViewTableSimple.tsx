@@ -4,22 +4,26 @@ import {TDataViewObj} from "../DataView";
 import fieldsStyles from "../../DataAdd/Fields/Fields.module.css";
 import {iconUrlPicker} from "../../IconPicker/IconPicker";
 import {getTableTdKey} from "../SortingAndViewUtils";
+import {trimToKeyStr} from "../../../Unils/utilsFunctions";
 //import styles from './DataViewTableSimple.module.css'
 
 type TProps = {
     dataView: TDataViewObj | null
+    danaName?: string
 }
-export const DataViewTableSimple:React.FC<TProps> = (props) => {
-    const {dataView} = props
-    return (!dataView ? <>No data found</>
-        :<>
-            <div className={styles.vidSimple}>
+export const DataViewTableSimple: React.FC<TProps> = (props) => {
+    const {dataView, danaName} = props
+    return <>{danaName && <div>{trimToKeyStr(danaName, 30)}</div>}
+        {!dataView
+            ? <>No {danaName ? `${danaName}` : `data`} found</>
+            : <div className={styles.vidSimple}>
                 <table className={styles.table}>
                     <thead>
                         <tr>
                             {dataView.keys1.map(([key, num], i) => {
                                     const rowSpan = num > 1 ? 1 : dataView.keys2.some(([k2, num2]) => k2 === key) ? 2 : 1
-                                    return <th className={styles.th1} rowSpan={rowSpan} colSpan={num} key={i} title={key}>
+                                    return <th className={styles.th1} rowSpan={rowSpan} colSpan={num} key={i}
+                                               title={key}>
                                         {getTableTdKey(key, 4)}</th>
                                 }
                             )}
@@ -48,7 +52,7 @@ export const DataViewTableSimple:React.FC<TProps> = (props) => {
                             </tr>)}
                     </tbody>
                 </table>
-            </div>
-        </>
-    )
+            </div>}
+    </>
+
 }

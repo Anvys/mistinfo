@@ -23,7 +23,7 @@ import {
     TStage
 } from "../../Types/CommonTypes";
 import s from "./DataView.module.css";
-import {getContentShopItemStrFull, getDetails, getTimeStr} from "../../Unils/utilsFunctions";
+import {getContentShopItemStrFull, getDetails, getTimeStr, toUpperFirstLetterCase} from "../../Unils/utilsFunctions";
 
 const getDataWeight = (key: string) => {
     switch (key) {
@@ -256,9 +256,7 @@ export const getTableTdKey = (key: string, cut: number = 6): string => {
             return toUpperFirstLetterCase(key.length > cut ? `${key.substring(0, cut)}.` : key)
     }
 }
-export const toUpperFirstLetterCase = (str: string): string => {
-    return str.length > 0 ? str.split('').map((v, i) => i === 0 ? v.toUpperCase() : v).join('') : ''
-}
+
 export const ignoredFields = ['_id', '__v', 'translate', 'bound', 'moveTo', 'availableAfter', 'startAt', 'endAt']
 export const getKeysCount = (key: string, value: any): number => {
     if (Array.isArray(value)) return 1

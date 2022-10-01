@@ -251,6 +251,11 @@ export const getContentShopItemStrFull = (v: TShopContent, full: boolean = true)
     }
 }
 export const getContentShopItemStrLite = (v: TShopContent) =>getContentShopItemStrFull(v, false)
+
+export const trimToKeyStr = (str: string, cut: number = 5) => toUpperFirstLetterCase(str.length > cut ? `${str.substring(0, cut)}.` : str)
+export const toUpperFirstLetterCase = (str: string): string => {
+    return str.length > 0 ? str.split('').map((v, i) => i === 0 ? v.toUpperCase() : v).join('') : ''
+}
 // export const getElements = (mapVal: object, prevKey: string, formik: FormikProps<any>, dataName: string) => {
 //     return Object.entries(mapVal).map(([key, value], i) => {
 //         // if (isSkipField(key)) return null

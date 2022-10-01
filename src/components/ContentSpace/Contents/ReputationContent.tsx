@@ -30,6 +30,13 @@ export type TViewReputationEvent = {
     Source: string | JSX.Element,
     Require: string
 }
+export type TViewReputationQuest = {
+    Start: string,
+    prev: string,
+    Item: string,
+    Source: string | JSX.Element,
+    Require: string
+}
 type TProps = {}
 export const ReputationContent: React.FC<TProps> = (props) => {
     const shops = useSelector(ShopSelectors.getData)
@@ -47,7 +54,7 @@ export const ReputationContent: React.FC<TProps> = (props) => {
                     // const curItem = c.item as TBook
                     const contItem = getContentShopItemStrLite(c)
                     const curNpc = npc.find(v=>v.name === curShop.npc) || {name: 'notFound', location:'notFOund'}
-                    console.log(curNpc.name, curNpc)
+                    // console.log(curNpc.name, curNpc)
                     const npcLoc = location.find(v=>v.name === curNpc.location)
                     return {
                         Reputation: `${c.reputationRequire?.reputation}`,
@@ -87,40 +94,46 @@ export const ReputationContent: React.FC<TProps> = (props) => {
                 ]
             }
             , [] as Array<TViewReputationEvent>)
-    // const questBooks = quests
-    //     .filter(quest => typeof quest.loot !== 'string' && quest.loot.loot.some(loot => loot.type === 'Book'))
-    //     .map(quest => {
-    //         const curLoot = quest.loot as TLoot
-    //         return {...quest, loot: {...curLoot, loot: curLoot.loot.filter(d => d.type === 'Book')}}
-    //     })
-    //     .reduce((summaryArray, curQuest, i, arr) => {
-    //             const loot = curQuest.loot as TLoot
-    //             return [...summaryArray, ...loot.loot.map(drop => {
-    //                 // const curItem = c.item as TBook
-    //                 return {
-    //                     Book: {
-    //                         skill: `${drop.name}` as TSkills,
-    //                         count: drop.countMin,
-    //                     },
-    //                     Source: `Quest [${curQuest.name}]`,
-    //                     Require: `${curQuest.qStages.map(s => `Stage-${s.num}:${getDataViewTdStr('require', s)[1].join('\n')}`).join('\n')}`,
-    //                 }
-    //             })
-    //             ]
-    //         }
-    //         , [] as Array<TViewBook>)
+    const questData = quests
+        .filter(quest => typeof quest.loot !== 'string' && quest.loot.loot.some(loot => loot.type === 'Reputation'))
+        .map(quest => {
+            const curLoot = quest.loot as TLoot
+            return {...quest, loot: {...curLoot, loot: curLoot.loot.filter(d => d.type === 'Reputation')}}
+        })
+        .reduce((summaryArray, curQuest, i, arr) => {
+                const loot = curQuest.loot as TLoot
+                return [...summaryArray, ...loot.loot.map(drop => {
+                    // const curItem = c.item as TBook
+                    const curNpc = npc.find(v=>v.name === curQuest.startAt) || {name: 'notFound', location:'notFOund'}
+                    // console.log(curNpc.name, curNpc)
+                    const npcLoc = location.find(v=>v.name === curNpc.location)
+                    return {
+                        Start: curQuest.startAt,
+                        prev: curQuest.availableAfter.join(', '),
+                        Item: `${drop.name} +${drop.countMin}`,
+                        Source: <>{`Quest [${curQuest.name}]`} {npcLoc !== undefined ? <a
+                            href={`/map?location=${npcLoc.name}`}>{`[view]`}</a>:<>Not found</>}</>,
+                        Require: `${curQuest.qStages.map(s => `Stage-${s.num}:${getDataViewTdStr('require', s)[1].join('\n')}`).join('\n')}`,
+                    }
+                })
+                ]
+            }
+            , [] as Array<TViewReputationQuest>)
     const filteredShops = [...shopData,]//.filter(v=>search.length>0?v.Book.skill.toLocaleLowerCase().includes(search.toLowerCase()) :true)
     const filteredEvents = [...eventData,]//.filter(v=>search.length>0?v.Book.skill.toLocaleLowerCase().includes(search.toLowerCase()) :true)
+    const filteredQuests = [...questData,]//.filter(v=>search.length>0?v.Book.skill.toLocaleLowerCase().includes(search.toLowerCase()) :true)
     const ShopView = getDataViewAny(filteredShops, 'En')
     const EventView = getDataViewAny(filteredEvents, 'En')
+    const QuestView = getDataViewAny(filteredQuests, 'En')
     return (
         <>
             <div className={styles.searchDiv}>
                 <SimpleInputField value={search} onChange={str=>setSearch(str)} index={0} htmlId={'search'}
                                   labelText={'Search:'} required={false} disabled={false}/>
             </div>
-            <DataViewTableSimple dataView={ShopView}/>
-            <DataViewTableSimple dataView={EventView}/>
+            <DataViewTableSimple dataView={ShopView} danaName={`reputation shops`}/>
+            <DataViewTableSimple dataView={EventView} danaName={`reputation events`}/>
+            <DataViewTableSimple dataView={QuestView} danaName={`reputation quests`}/>
         </>
     )
 
