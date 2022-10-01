@@ -172,10 +172,10 @@ export const PosQuestItemField: React.FC<TQuestItemPosProps> = (props) => {
     // console.log(props.formik.values)
     const {onPositionChange, formik} = props
     const dispatch = useAppDispatch()
-    const [type, setType] = useState<TQuestItemPosType>(formik.values.posQuestItem.type)
+    const [type, setType] = useState<TQuestItemPosType>(()=>formik.values.posQuestItem.type)
     // const [name, setName] = useState<string>(formik.values.name)
-    const [mapPos, setMapPos] = useState<TMapPosition | null>(null)
-    const [genPos, setGenPos] = useState<string | TMapPosition | null>(()=>formik.values.posQuestItem.position)
+    const [mapPos, setMapPos] = useState<TMapPosition | undefined>(undefined)
+    const [genPos, setGenPos] = useState<string | TMapPosition | undefined>(()=>formik.values.posQuestItem.position)
 
     const locations = useSelector(LocationSelectors.getData)
     const monsters = useSelector(MonsterSelectors.getData)
@@ -203,7 +203,7 @@ export const PosQuestItemField: React.FC<TQuestItemPosProps> = (props) => {
     }, [mapPos])
     useEffect(() => {
         // console.log(`effect type => gen = null`)
-        setGenPos(null)
+        setGenPos(undefined)
     }, [type])
     useEffect(() => {
         // console.log(`Effect gen : ${type}/${Boolean(genPos)}: ${typeof genPos}`)
@@ -236,10 +236,10 @@ export const PosQuestItemField: React.FC<TQuestItemPosProps> = (props) => {
 
             {type === 'pos' && <SimplePosField onPosChange={(pos) => setMapPos(pos)}/>}
             {type === 'location' && <SimpleSelectField mapSelectValues={selectFieldsOptions['location'] || ['Error']}
-                                                       value={genPos as string}
+                                                       value={genPos as string | undefined}
                                                        onSelChange={v => setGenPos(v)} labelText={'location'}/>}
             {type === 'monster' && <SimpleSelectField mapSelectValues={selectFieldsOptions['monster'] || ['Error']}
-                                                      value={genPos as string}
+                                                      value={genPos as string  | undefined}
                                                       onSelChange={v => setGenPos(v)} labelText={'mob'}/>}
         </div>
     )

@@ -23,13 +23,14 @@ export const SideBar: React.FC = () => {
     const onCategoryClick = (c: TCategoryKeys) => {
         switch (c) {
             case "materials":
-                setCategories(a => ({...a, materials: !a.materials}))
+                setCategories(a => ({...Object.fromEntries(Object.entries(a).map(e=>[e[0], false])) as TCategory, materials: !a.materials}))
                 break
             case "components":
-                setCategories(a => ({...a, components: !a.components}))
+                setCategories(a => ({...Object.fromEntries(Object.entries(a).map(e=>[e[0], false])) as TCategory, components: !a.components}))
                 break
         }
     }
+    const getArrowCatEnd = (isOpen: boolean) => !isOpen ? '▲':'▼' // 🡆
     const getStyleSb = (path: string, uri: string) => path === uri ? s.sbActive : s.sbInactive
     const getStyleSbSubCat = (path: string, uri: string) => path === uri ? s.sbActiveSub : s.sbInactiveSub
     const getStyleSbCat = (path: string, uri: string) => path.includes(uri) ? s.sbActive : s.sbInactive
@@ -73,7 +74,7 @@ export const SideBar: React.FC = () => {
 
             <div className={`${s.catDiv} ${categories.components ? s.sbActive : s.sbInactive}`}>
                 <button className={`${categories.components ? s.catBtnActive : s.catBtn} ${s.navButton}`} type={'button'}
-                        onClick={() => onCategoryClick('components')}>{`Components${categories.components ?'▲':'▼'}`}
+                        onClick={() => onCategoryClick('components')}>{`Components${getArrowCatEnd(categories.components)}`}
                 </button>
             </div>
             {categories.components &&

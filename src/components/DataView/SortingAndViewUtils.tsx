@@ -107,10 +107,10 @@ export const getDataViewTdStr = (key: string, data: any, path: string = 'none'):
                 switch (posQuestItem.type) {
                     case "pos":
                         const pqiPos = posQuestItem.position as TMapPosition
-                        return [['type', 'source'], [posQuestItem.type, `${pqiPos.x}:${pqiPos.y}`]]
+                        return [['type', 'source'], [posQuestItem.type, LinkPosToMap(pqiPos)]]
                     case "location":
                         const pqiLoc = posQuestItem.position as TLocation
-                        return [['type', 'source'], [posQuestItem.type, `loc ${pqiLoc.name}(${pqiLoc.pos.x}:${pqiLoc.pos.y})`]]
+                        return [['type', 'source'], [posQuestItem.type, LinkLocationToMap(pqiLoc)]]
                     case "monster":
                         const pqiMon = posQuestItem.position as TMonster
                         return [['type', 'source'], [posQuestItem.type, `mon ${pqiMon.name} (${pqiMon.region})`]]
@@ -277,4 +277,11 @@ export const getKeysCount = (key: string, value: any): number => {
     if (key === 'reputationReward') return 2
     if (key === 'reward' || key === 'cost') return 2
     return Object.keys(value).length
+}
+
+export const LinkPosToMap = (pos: TMapPosition, text: string='', path: string = 'none') =>{
+    return <a href={`/map?x=${pos.x}&y=${pos.y}${path === '/region' ? `&from=region` : ``}`}>{`[view]`}</a>
+}
+export const LinkLocationToMap = (pos: TLocation | string, text: string = '', path: string = 'none') =>{
+    return <a href={`/map?location=${typeof pos === 'string' ? pos : pos.name}`}>{`[view]`}</a>
 }
