@@ -1,6 +1,6 @@
 import React, {useState} from "react";
 import {Link, useLocation} from "react-router-dom";
-import s from './SideBar.module.css'
+import s from './SideBar.module.scss'
 import {useSelector} from "react-redux";
 import {AuthSelectors} from "../../redux/dataSelectors";
 
@@ -35,7 +35,7 @@ export const SideBar: React.FC = () => {
     const getStyleSbCat = (path: string, uri: string) => path.includes(uri) ? s.sbActive : s.sbInactive
     return (
         <div className={s.sideBox}>
-            Database menu
+            {/*Database menu*/}
             <div className={`${s.catDiv} ${getStyleSb(path, '/AdminLoginForm38n8g32chrtm56')}`}>
                 <Link to={'/AdminLoginForm38n8g32chrtm56'} className={s.navButton}>Login</Link>
             </div>
@@ -44,9 +44,9 @@ export const SideBar: React.FC = () => {
                 <Link to={'/map'} className={s.navButton}>Map</Link>
             </div>
 
-            <div className={`${s.catDivBtn} ${categories.materials ? s.sbActive : s.sbInactive}`}>
-                <button className={`${categories.materials ? s.catBtnActive : s.catBtn} ${s.navButtonL}`} type={'button'}
-                        onClick={() => onCategoryClick('materials')}>Materials
+            <div className={`${s.catDiv} ${categories.materials ? s.sbActive : s.sbInactive}`}>
+                <button className={`${categories.materials ? s.catBtnActive : s.catBtn} ${s.navButton}`} type={'button'}
+                        onClick={() => onCategoryClick('materials')}>{`Materials${categories.materials ?'▲':'▼'}`}
                 </button>
             </div>
             {categories.materials &&
@@ -71,9 +71,9 @@ export const SideBar: React.FC = () => {
                     </div>
                 </div>}
 
-            <div className={`${s.catDivBtn} ${categories.components ? s.sbActive : s.sbInactive}`}>
-                <button className={`${categories.components ? s.catBtnActive : s.catBtn} ${s.navButtonL}`} type={'button'}
-                        onClick={() => onCategoryClick('components')}>Components
+            <div className={`${s.catDiv} ${categories.components ? s.sbActive : s.sbInactive}`}>
+                <button className={`${categories.components ? s.catBtnActive : s.catBtn} ${s.navButton}`} type={'button'}
+                        onClick={() => onCategoryClick('components')}>{`Components${categories.components ?'▲':'▼'}`}
                 </button>
             </div>
             {categories.components &&
@@ -129,9 +129,7 @@ export const SideBar: React.FC = () => {
             <div className={`${s.catDiv} ${getStyleSb(path, '/shop')}`}>
                 <Link to={'/shop'} className={s.navButton}>Shop</Link>
             </div>
-            <div className={`${s.catDiv} ${getStyleSb(path, '/loot')}`}>
-                <Link to={'/loot'} className={s.navButton}>Loot</Link>
-            </div>
+
             <div className={`${s.catDiv} ${getStyleSb(path, '/npc')}`}>
                 <Link to={'/npc'} className={s.navButton}>Npc</Link>
             </div>
@@ -152,7 +150,7 @@ export const SideBar: React.FC = () => {
             </div>
 
 
-            {isAuth && `Dev`}
+            {isAuth && <div className={s.catDiv}>{`Dev menu`}</div>}
             {isAuth &&
                 <>
                     <div className={`${s.catDiv} ${getStyleSb(path, '/staminaelixir')}`}>
@@ -166,6 +164,9 @@ export const SideBar: React.FC = () => {
                     </div>
                     <div className={`${s.catDiv} ${getStyleSb(path, '/questitem')}`}>
                         <Link to={'/questitem'} className={s.navButton}>Quest Item</Link>
+                    </div>
+                    <div className={`${s.catDiv} ${getStyleSb(path, '/loot')}`}>
+                        <Link to={'/loot'} className={s.navButton}>Loot</Link>
                     </div>
                 </>}
 

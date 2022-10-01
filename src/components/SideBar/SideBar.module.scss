@@ -1,0 +1,115 @@
+$bgColor: rgb(55, 55, 66);
+$bgColorCat: rgb(66, 66, 79);
+$bgColorHover: rgb(61, 61, 75);
+$hoverBG: #858585;
+.sideBox {
+    display: flex;
+    border: 5px groove #c5c5c5;
+    background-color: $bgColor;
+    max-width: 200px;
+    flex-direction: column;
+    gap: 2px;
+}
+.categoryBox{
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+    background-color: $bgColorCat;
+}
+.sbActive, .sbInactive,.sbActiveSub, .sbInactiveSub{
+    position: relative;
+    &:before{
+        content: '';
+        width: 10px;
+        height: 10px;
+        border-radius: 50%;
+        color: #1ee0a8;
+        position: absolute;
+        top: 10px;
+        left: 13px;
+        border: 1px solid black;
+    }
+}
+.sbActive, .sbInactive{
+    color: #7bee99;
+}
+.sbActive, .sbActiveSub{
+    background-color:$hoverBG;
+}
+
+.sbInactive::before, .sbInactiveSub::before{
+    background-color: #ffffff;
+}
+.sbActive::before, .sbActiveSub::before{
+    background-color: #77ff00;
+}
+.sbActiveSub::before{
+    top: 12px;
+    left: 30px;
+    width: 5px;
+    height: 5px;
+}
+.sbInactiveSub::before{
+    top: 12px;
+    left: 30px;
+    width: 5px;
+    height: 5px;
+}
+.catDiv, .catBtnDiv{
+    min-height: 30px;
+    position: relative;
+    display: flex;
+    justify-content: center;
+    overflow: hidden;
+
+}
+.catBtnDiv{
+    padding-left: 20px;
+}
+
+.navButton, .navButtonL {
+    min-width: 100%;
+    padding: 5px 5px 5px 30px;
+    font-size: 18px;
+    font-weight: normal;
+    user-select: none;
+    transition-duration: 0.05s;
+    text-align: center;
+    //background-color: #5d6364;
+    color: #dcdcdc;
+    text-decoration: none;
+    &:hover{
+        background-color:$hoverBG;
+        cursor: pointer;
+    }
+    &:active{
+        background-color: #0a99b9;
+        transform: translate(1px, 1px);
+        box-shadow: 0px 0px 2px 2px darkgrey;
+    }
+}
+.navButtonL{
+    //min-width: 110px;
+    padding-left: 5px;
+    text-align: center;
+}
+
+.catBtn, .catBtnActive{
+    border: none;
+    font-size: 18px;
+    border-radius: 3px;
+    user-select: none;
+    transition-duration: 0.05s;
+    /*text-align: center;*/
+    background-color: $bgColor;
+    color: #dcdcdc;
+    &:hover{
+        cursor: pointer;
+        background-color:$hoverBG;
+    }
+}
+.catBtnActive{
+    color: #7bee99;
+    background-color:$hoverBG;
+}
