@@ -31,10 +31,16 @@ const getDataWeight = (key: string) => {
             return 0
         case 'name':
             return 1
-        case 'Reputation':
-            return 2
         case 'Count':
             return 1.99
+        case 'Reputation':
+            return 2
+        case 'Land':
+            return 2
+        case 'Reward':
+            return 3
+        case 'reputationReward':
+            return 3
         case 'startAt':
             return 48
         case 'endAt':
@@ -52,7 +58,7 @@ const getDataWeight = (key: string) => {
             return 50 + key.length
     }
 }
-const objectKeyToSort = ['notes', 'loot', 'Book', 'Reputation', 'Count']
+const objectKeyToSort = ['notes', 'loot', 'Book', 'Reputation', 'Land','Count', 'reputationReward']
 export const keysToChangeView = ['cooldown']
 //Sorting function for data entries => sorting columns for table
 export const dataEntriesSort: (a: [string, any], b: [string, any]) => number = (a, b) => {
@@ -186,6 +192,8 @@ export const getDataViewTdStr = (key: string, data: any, path: string = 'none'):
                 }
             case 'Source':
                 return [[key], [data]]
+            case 'reputationReward':
+                return [['c','rep'], [data.count, data.rep]]
             default:
                 console.log(key)
                 console.log(data)
@@ -251,6 +259,8 @@ export const getTableTdKey = (key: string, cut: number = 6): string => {
             return 'CD'
         case 'Count':
             return 'C'
+        case 'reputationReward':
+            return 'Reward'
         // case 'durability': return 'dura'
         default:
             return toUpperFirstLetterCase(key.length > cut ? `${key.substring(0, cut)}.` : key)
@@ -264,6 +274,7 @@ export const getKeysCount = (key: string, value: any): number => {
     if (key === 'loot') return 1
     if (key === 'pos') return 1
     if (key === 'Book') return 1
+    if (key === 'reputationReward') return 2
     if (key === 'reward' || key === 'cost') return 2
     return Object.keys(value).length
 }

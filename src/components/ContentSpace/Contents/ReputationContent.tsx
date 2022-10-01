@@ -26,14 +26,22 @@ export type TViewReputationShop = {
 export type TViewReputationEvent = {
     Land: string,
     Count: string,
-    Item: string,
+    // Item: string,
+    reputationReward: {
+        rep: string
+        count: number
+    }
     Source: string | JSX.Element,
     Require: string
 }
 export type TViewReputationQuest = {
     Start: string,
     prev: string,
-    Item: string,
+    // Item: string,
+    reputationReward: {
+        rep: string
+        count: number
+    }
     Source: string | JSX.Element,
     Require: string
 }
@@ -47,21 +55,24 @@ export const ReputationContent: React.FC<TProps> = (props) => {
     const npc = useSelector(NpcSelectors.getData)
     const [search, setSearch] = useState('')
     const shopData = shops
-        .filter(shop => shop.content.some(c => c.reputationRequire && c.reputationRequire.count >0))
-        .map(shop => ({...shop, content: [...shop.content.filter(c => c.reputationRequire && c.reputationRequire.count >0)]}))
+        .filter(shop => shop.content.some(c => c.reputationRequire && c.reputationRequire.count > 0))
+        .map(shop => ({
+            ...shop,
+            content: [...shop.content.filter(c => c.reputationRequire && c.reputationRequire.count > 0)]
+        }))
         .reduce((summaryArray, curShop, i, arr) => {
                 return [...summaryArray, ...curShop.content.map(c => {
                     // const curItem = c.item as TBook
                     const contItem = getContentShopItemStrLite(c)
-                    const curNpc = npc.find(v=>v.name === curShop.npc) || {name: 'notFound', location:'notFOund'}
+                    const curNpc = npc.find(v => v.name === curShop.npc) || {name: 'notFound', location: 'notFOund'}
                     // console.log(curNpc.name, curNpc)
-                    const npcLoc = location.find(v=>v.name === curNpc.location)
+                    const npcLoc = location.find(v => v.name === curNpc.location)
                     return {
                         Reputation: `${c.reputationRequire?.reputation}`,
                         Count: `${c.reputationRequire?.count}`,
                         Item: contItem,
                         Source: <>{`Shop [${curShop.npc}]`} {npcLoc !== undefined ? <a
-                            href={`/map?location=${npcLoc.name}`}>{`[view]`}</a>:<>Not found</>}</>,
+                            href={`/map?location=${npcLoc.name}`}>{`[view]`}</a> : <>Not found</>}</>,
                         Require: `${c.price}Gold ${c.reputationRequire && c.reputationRequire.count > 0
                             ? `${c.reputationRequire.reputation} [${c.reputationRequire.count}]` : ``}`
 
@@ -80,14 +91,18 @@ export const ReputationContent: React.FC<TProps> = (props) => {
                 const loot = curEvent.loot as TLoot
                 return [...summaryArray, ...loot.loot.map(drop => {
                     // const curItem = c.item as TBook
-                    const curReg = region.find(v=>v.name === curEvent.region)
+                    const curReg = region.find(v => v.name === curEvent.region)
                     return {
-                        Land: curReg && curReg?.terrainReq>0 ? `${curReg?.terrain || '?'}`:`-`,
-                        Count: curReg && curReg?.terrainReq>0 ?`${curReg?.terrainReq || '?'}`:`-`,
-                        Item: `${drop.name} +${drop.countMin}`,
+                        Land: curReg && curReg?.terrainReq > 0 ? `${curReg?.terrain || '?'}` : `-`,
+                        Count: curReg && curReg?.terrainReq > 0 ? `${curReg?.terrainReq || '?'}` : `-`,
+                        // Item: `${drop.name} +${drop.countMin}`,
+                        reputationReward: {
+                            rep: drop.name,
+                            count: drop.countMin
+                        },
                         Source: <>{`Event [${curEvent.name}]`} {curReg !== undefined ? <a
                             href={`/map?x=${curReg.pos.x}&y=${curReg.pos.y}&from=region`}//href={`/map?region=${curReg.name}`}
-                            >{`[view]`}</a>:<>Not found</>}</>,
+                        >{`[view]`}</a> : <>Not found</>}</>,
                         Require: `${curEvent.eStages.map(s => `Stage-${s.num}:${getDataViewTdStr('require', s)[1].join('\n')}`).join('\n')}`,
                     }
                 })
@@ -104,15 +119,19 @@ export const ReputationContent: React.FC<TProps> = (props) => {
                 const loot = curQuest.loot as TLoot
                 return [...summaryArray, ...loot.loot.map(drop => {
                     // const curItem = c.item as TBook
-                    const curNpc = npc.find(v=>v.name === curQuest.startAt) || {name: 'notFound', location:'notFOund'}
+                    const curNpc = npc.find(v => v.name === curQuest.startAt) || {name: 'notFound', location: 'notFOund'}
                     // console.log(curNpc.name, curNpc)
-                    const npcLoc = location.find(v=>v.name === curNpc.location)
+                    const npcLoc = location.find(v => v.name === curNpc.location)
                     return {
                         Start: curQuest.startAt,
                         prev: curQuest.availableAfter.join(', '),
-                        Item: `${drop.name} +${drop.countMin}`,
+                        reputationReward: {
+                            rep: drop.name,
+                            count: drop.countMin
+                        },
+                        // Item: `${drop.name} +${drop.countMin}`,
                         Source: <>{`Quest [${curQuest.name}]`} {npcLoc !== undefined ? <a
-                            href={`/map?location=${npcLoc.name}`}>{`[view]`}</a>:<>Not found</>}</>,
+                            href={`/map?location=${npcLoc.name}`}>{`[view]`}</a> : <>Not found</>}</>,
                         Require: `${curQuest.qStages.map(s => `Stage-${s.num}:${getDataViewTdStr('require', s)[1].join('\n')}`).join('\n')}`,
                     }
                 })
@@ -128,7 +147,7 @@ export const ReputationContent: React.FC<TProps> = (props) => {
     return (
         <>
             <div className={styles.searchDiv}>
-                <SimpleInputField value={search} onChange={str=>setSearch(str)} index={0} htmlId={'search'}
+                <SimpleInputField value={search} onChange={str => setSearch(str)} index={0} htmlId={'search'}
                                   labelText={'Search:'} required={false} disabled={false}/>
             </div>
             <DataViewTableSimple dataView={ShopView} danaName={`reputation shops`}/>
