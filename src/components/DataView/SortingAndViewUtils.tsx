@@ -23,7 +23,7 @@ import {
     TStage
 } from "../../Types/CommonTypes";
 import s from "./DataView.module.css";
-import {getTimeStr} from "../../Unils/utilsFunctions";
+import {getDetails, getTimeStr} from "../../Unils/utilsFunctions";
 
 const getDataWeight = (key: string) => {
     switch (key) {
@@ -151,8 +151,8 @@ export const getDataViewTdStr = (key: string, data: any, path: string = 'none'):
                 const curLoot = Array.isArray(data) ? data : data.loot
                 // console.log(curLoot)
                 return [[key], [curLoot.length === 0 ? `-`
-                    : curLoot.map((v: TDrop<TDropTypes>, i: number) =>
-                        `[${v.type}] ${v.name} x${v.countMin === v.countMax ? v.countMin : `${v.countMin}-${v.countMax}`} ${v.chance === 100 ? `` : `(${v.chance}%)`}`).join('\n')]]
+                    : getDetails(data.name, curLoot.map((v: TDrop<TDropTypes>, i: number) =>
+                        `[${v.type}] ${v.name} x${v.countMin === v.countMax ? v.countMin : `${v.countMin}-${v.countMax}`} ${v.chance === 100 ? `` : `(${v.chance}%)`}`).join('\n'))]]
             case 'skills':
                 return [[key], [data.length === 0 ? `-`
                     : data.map((v: TBonus, i: number) =>
@@ -161,10 +161,7 @@ export const getDataViewTdStr = (key: string, data: any, path: string = 'none'):
                 const abilitiesStr = data.map((v: TAbility, i: number) =>
                     `[${v.level}] ${v.name} (${v.cd ? `cd ${v.cd} turn` : `no cd`})${i < data.length - 1 ? '\n' : ''}`)
                 return [[key], data.length === 0 ? [`-`] : [
-                    <details>
-                        <summary>{`${data.length} abilities`}</summary>
-                        {abilitiesStr}
-                    </details>
+                    getDetails(`${data.length} abilities`, abilitiesStr)
                 ]]
             case 'parts':
                 const local = data as Array<TRecipePart>

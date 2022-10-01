@@ -225,6 +225,12 @@ export const getSearchParams = (str:string):TGetSearchParamsReturn | undefined =
     }else return undefined
 
 }
+export const getDetails = (summary: string, body:string)=>{
+    return <details>
+        <summary>{summary}</summary>
+        {body}
+    </details>
+}
 // export const getElements = (mapVal: object, prevKey: string, formik: FormikProps<any>, dataName: string) => {
 //     return Object.entries(mapVal).map(([key, value], i) => {
 //         // if (isSkipField(key)) return null

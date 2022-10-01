@@ -280,7 +280,7 @@ export const MyMap: React.FC<TProps> = React.memo((props) => {
                 padding: '0,50px,50px,0'
             }}>
                 <MapContainer attributionControl={false} className={styles.map} center={center} zoom={wid===-1?8:7}
-                              scrollWheelZoom={false} ref={setMap} markerZoomAnimation={false}>
+                              scrollWheelZoom={true} ref={setMap} markerZoomAnimation={false}>
                     <MyComponent onZoomChange={onZoomChange} visible={false}/>
                     <TileLayer minZoom={5} maxZoom={8} noWrap={true}
                                attribution='&copy; <a href="https://asd.con">Vir</a> (c))'

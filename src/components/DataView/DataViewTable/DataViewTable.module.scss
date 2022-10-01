@@ -34,6 +34,12 @@
             background-color: #bfc0bf;
         }
     }
+    details{
+        summary{
+            box-shadow: none;
+        }
+
+    }
 }
 
 .table td {
