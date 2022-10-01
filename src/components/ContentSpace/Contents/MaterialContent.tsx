@@ -1,5 +1,5 @@
 import React, {useState} from 'react';
-import styles from './MaterialContent.module.css';
+import styles from './../ContentSpace.module.css';
 import {useDispatch, useSelector} from "react-redux";
 import {
     AuthSelectors,

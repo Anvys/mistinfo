@@ -1,39 +1,41 @@
 import React, {useState} from 'react';
-import styles from './GatherPointContent.module.css';
+import styles from './../ContentSpace.module.css';
 import {useDispatch, useSelector} from "react-redux";
 import {Outlet} from "react-router-dom";
-import {getGatherPointSelector, getIsLocationInitSelector} from "../../../redux/dataSelectors";
+import {
+    getIsAddPosFieldActiveSelector,
+    getIsLocationInitSelector,
+    getLocationSelector
+} from "../../../redux/dataSelectors";
 import {TAppDispatch} from "../../../redux/store";
 import {DataView} from "../../DataView/DataView";
 import {LocationThunks} from "../../../redux/reducers/locationReducer";
-import {TGatherPoint, TWOid} from "../../../Types/CommonTypes";
+import {TLocation, TWOid} from "../../../Types/CommonTypes";
 import {GenDataAdd} from "../../DataAdd/GenDataAdd";
-import {GatherPointThunks} from "../../../redux/reducers/gatherPointReducer";
+import {MyMap} from "../../Map/MyMap";
 
 type TProps = {};
-export const GatherPointContent: React.FC<TProps> = (props) => {
+export const LocationContent: React.FC<TProps> = (props) => {
     const isInit = useSelector(getIsLocationInitSelector)
     const dispatch = useDispatch<TAppDispatch>()
     if (!isInit) dispatch(LocationThunks.getAll())
-    const data = useSelector(getGatherPointSelector);
-    const [dataToAdd, setDataToAdd] = useState(null as null | TGatherPoint)
+    const data = useSelector(getLocationSelector);
+    const [dataToAdd, setDataToAdd] = useState(null as null | TLocation)
     const dataAddHandler = (id: string) => {
         setDataToAdd(id.length ? data.find(v => v._id === id) || null : null)
     }
     const dataDelHandler = (id: string) => {
-        dispatch(GatherPointThunks.deleteOne(id))
+        dispatch(LocationThunks.deleteOne(id))
     }
     const resetAddFormData = () => setDataToAdd(null)
-    const initObj: TWOid<TGatherPoint> = {
+    const initObj: TWOid<TLocation> = {
         name: '',
-        icon: '',
-        type: 'Mining',
-        loot:'',
-        // drop: [],
-        count: 0,
-        cooldown: 0,
+        exploreReq: 0,
+        quest:'',
         pos: {x: 0, y: 0},
+        icon: '',
         region: '',
+        moveTo: '',
         translate: {En: '', Ru: '', Fr: ''},
         notes:[],
     }
@@ -49,10 +51,11 @@ export const GatherPointContent: React.FC<TProps> = (props) => {
                         data: dataToAdd,
                         resetAddFormData,
                         initObj,
-                        curThunks: GatherPointThunks,
-                        dataName: 'gatherpoint'
+                        curThunks: LocationThunks,
+                        dataName: 'location'
                     })}
                 </div>
+                {/*<IconPicker onIconPickHandler={onIconPickHandler}/>*/}
                 {/*{isMapActive && <MyMap wid={-1} hei={400}/>}*/}
             </div>
             <div className={styles.dbField}>
@@ -60,5 +63,5 @@ export const GatherPointContent: React.FC<TProps> = (props) => {
                 <DataView data={data} dataEditHandler={dataAddHandler} dataDelHandler={dataDelHandler}/>
             </div>
         </div>
-    )
+    );
 }

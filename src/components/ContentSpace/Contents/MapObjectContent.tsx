@@ -1,42 +1,42 @@
 import React, {useState} from 'react';
-import styles from './StaminaElixir.module.css';
+import styles from './../ContentSpace.module.css';
 import {useDispatch, useSelector} from "react-redux";
 import {Outlet} from "react-router-dom";
 import {
     getIsAddPosFieldActiveSelector,
-    getIsStaminaElixirInitSelector,
-    getStaminaElixirSelector
+    getIsMapObjectInitSelector,
+    getMapObjectSelector
 } from "../../../redux/dataSelectors";
 import {TAppDispatch} from "../../../redux/store";
 import {DataView} from "../../DataView/DataView";
-import {TStaminaElixir, TWOid} from "../../../Types/CommonTypes";
+import {TMapObject, TWOid} from "../../../Types/CommonTypes";
 import {GenDataAdd} from "../../DataAdd/GenDataAdd";
 import {MyMap} from "../../Map/MyMap";
-import {StaminaElixirThunks} from "../../../redux/reducers/staminaElixirReducer";
+import {MapObjectThunks} from "../../../redux/reducers/mapObjectReducer";
 
 type TProps = {};
-export const StaminaElixirContent: React.FC<TProps> = (props) => {
-    const isInit = useSelector(getIsStaminaElixirInitSelector)
+export const MapObjectContent: React.FC<TProps> = (props) => {
+    const isInit = useSelector(getIsMapObjectInitSelector)
     const dispatch = useDispatch<TAppDispatch>()
-    if (!isInit) dispatch(StaminaElixirThunks.getAll())
-    const data = useSelector(getStaminaElixirSelector);
-    const [dataToAdd, setDataToAdd] = useState(null as null | TStaminaElixir)
+    if (!isInit) dispatch(MapObjectThunks.getAll())
+    const data = useSelector(getMapObjectSelector);
+    const [dataToAdd, setDataToAdd] = useState(null as null | TMapObject)
     const dataAddHandler = (id: string) => {
         setDataToAdd(id.length ? data.find(v => v._id === id) || null : null)
     }
     const dataDelHandler = (id: string) => {
-        dispatch(StaminaElixirThunks.deleteOne(id))
+        dispatch(MapObjectThunks.deleteOne(id))
     }
     const resetAddFormData = () => setDataToAdd(null)
-    const initObj: TWOid<TStaminaElixir> = {
-        name: 'Vigor',
-        icon: 'staminaElixir/icon',
+    const initObj: TWOid<TMapObject> = {
+        name: '',
+        icon: '',
         pos: {x: 0, y: 0},
-        translate: {En: 'Vigor', Ru: 'Vigor', Fr: 'Vigor'},
+        translate: {En: '', Ru: '', Fr: ''},
         notes: [],
     }
 
-    // const isMapActive = useSelector(getIsAddPosFieldActiveSelector)
+    const isMapActive = useSelector(getIsAddPosFieldActiveSelector)
 
     return (
         <div className={styles.contentBox}>
@@ -47,12 +47,12 @@ export const StaminaElixirContent: React.FC<TProps> = (props) => {
                         data: dataToAdd,
                         resetAddFormData,
                         initObj,
-                        curThunks: StaminaElixirThunks,
-                        dataName: 'staminaelixir'
+                        curThunks: MapObjectThunks,
+                        dataName: 'mapobject'
                     })}
                 </div>
                 {/*<IconPicker onIconPickHandler={onIconPickHandler}/>*/}
-                {/*{isMapActive && <MyMap wid={-1} hei={400}/>}*/}
+                {isMapActive && <MyMap wid={-1} hei={400}/>}
             </div>
             <div className={styles.dbField}>
                 <Outlet/>

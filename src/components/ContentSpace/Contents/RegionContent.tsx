@@ -1,5 +1,5 @@
 import React, {useState} from 'react';
-import styles from './RegionContent.module.css';
+import styles from './../ContentSpace.module.css';
 import {useDispatch, useSelector} from "react-redux";
 import {Outlet} from "react-router-dom";
 import {
