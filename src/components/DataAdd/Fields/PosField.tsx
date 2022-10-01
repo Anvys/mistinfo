@@ -9,17 +9,9 @@ import {
     MonsterSelectors
 } from "../../../redux/dataSelectors";
 import {MapSlice} from "../../../redux/reducers/mapReducer";
-import posStyles from "../DataAdd.module.css";
 import styles from './Fields.module.css';
-import {
-    TLocation,
-    TMapPosition, TMonster,
-    TNpc,
-    TQuestItemPosition,
-    TQuestItemPosType,
-    TStagePos
-} from "../../../Types/CommonTypes";
-import {selectFieldsOptions} from "../../../Types/Utils";
+import {TLocation, TMapPosition, TMonster, TQuestItemPosition, TQuestItemPosType} from "../../../Types/CommonTypes";
+import {EAddState, selectFieldsOptions} from "../../../Types/Utils";
 import {SimpleInputField} from "./InputField";
 import {SimpleSelectField} from "./SelectField";
 
@@ -167,51 +159,52 @@ type TQuestItemPosProps = {
     type?: string
     position?: TQuestItemPosType
 }
-
+const getStrPos = (pos:TMapPosition)=>`${pos.x}:${pos.y}`
 export const PosQuestItemField: React.FC<TQuestItemPosProps> = (props) => {
     // console.log(props.formik.values)
     const {onPositionChange, formik} = props
     const dispatch = useAppDispatch()
-    const [type, setType] = useState<TQuestItemPosType>(()=>formik.values.posQuestItem.type)
+    const [type, setType] = useState<TQuestItemPosType>(()=>{
+        console.log('asdasdasdasdsaddddddddddddddddddd 1')
+        return formik.values.posQuestItem.type
+    })
+    const [saveState, setSaveState] = useState<EAddState>(0)
     // const [name, setName] = useState<string>(formik.values.name)
-    const [mapPos, setMapPos] = useState<TMapPosition | undefined>(undefined)
-    const [genPos, setGenPos] = useState<string | TMapPosition | undefined>(()=>formik.values.posQuestItem.position)
+    // const [mapPos, setMapPos] = useState<TMapPosition | undefined>(undefined)
+    const [genPos, setGenPos] = useState<string | undefined>(()=>{
+        console.log('asdasdasdasdsaddddddddddddddddddd 2')
+        return formik.values.posQuestItem.type === 'pos'
+            ?getStrPos(formik.values.posQuestItem.position):formik.values.posQuestItem.position
+    })
 
     const locations = useSelector(LocationSelectors.getData)
     const monsters = useSelector(MonsterSelectors.getData)
 
-    useEffect(()=>{
+    const onTypeChange = (v: string) =>{
+        setGenPos('')
+        setType(v as TQuestItemPosType)
+    }
+    // useEffect(()=>{
+    //     console.log('CHANGINGGEN POS')
+    //
+    // },[type])
+
+    // useEffect(() => {
+    //     setGenPos(mapPos)
+    // }, [mapPos])
+
+    useEffect(() => {
+        console.log(`FORMIK CHANGED`)
+        setGenPos(formik.values.posQuestItem.position)
         setType(formik.values.posQuestItem.type)
-
-    },[formik.values.posQuestItem.type])
-    useEffect(()=>{
-        // if(type === 'pos'){
-        //     dispatch(MapSlice.actions.setMarkerForAddPos(formik.values.posQuestItem.position.x ? formik.values.posQuestItem.position: {x:23,y:-23}))
-            setMapPos(formik.values.posQuestItem.position)
-        // }
-        // else
-            setGenPos(formik.values.posQuestItem.position)
-
-
-
-
-    },[formik.values.posQuestItem.position])
-    useEffect(() => {
-        // console.log(`setGen ${type}:${type === 'pos' ? mapPos : name}`)
-        setGenPos(mapPos)
-        // setGenPos(type === 'pos' ? mapPos : name)
-    }, [mapPos])
-    useEffect(() => {
-        // console.log(`effect type => gen = null`)
-        setGenPos(undefined)
-    }, [type])
-    useEffect(() => {
-        // console.log(`Effect gen : ${type}/${Boolean(genPos)}: ${typeof genPos}`)
-        // console.log(genPos)
-        if (genPos !== null && genPos) {
+    }, [formik.values.posQuestItem])
+    const onPosSave = () =>{
+        if (genPos !== undefined && !!genPos) {
+            setSaveState(EAddState.added)
             switch (type) {
                 case "pos":
-                    onPositionChange({type, position: genPos as TMapPosition})
+                    const tempPos = genPos.split(':')
+                    onPositionChange({type, position: {x:+tempPos[0], y:+tempPos[1]} as TMapPosition})
                     break;
                 case "location":
                     const loc = locations.find(v => v.name === genPos) as TLocation
@@ -224,23 +217,30 @@ export const PosQuestItemField: React.FC<TQuestItemPosProps> = (props) => {
                     else console.log(`QI POS monster not found`)
                     break;
                 default:
+                    setSaveState(EAddState.error)
                     console.error(`quest item  pos change fail t:${type}/gp:${genPos}`)
             }
+        }else {
+            setSaveState(EAddState.error)
         }
-    }, [genPos])
+
+    }
+
     return (
         <div>
             <p>Choose position</p>
+            <div>{saveState===EAddState.error ?'ERROR or not saved!': saveState===EAddState.added ? 'SAVED!':'EMPTY'}</div>
             <SimpleSelectField mapSelectValues={[...selectFieldsOptions['questItem.postype']]} value={type}
-                               onSelChange={v => setType(v as TQuestItemPosType)} labelText={'Pos type'}/>
+                               onSelChange={onTypeChange} labelText={'Pos type'}/>
 
-            {type === 'pos' && <SimplePosField onPosChange={(pos) => setMapPos(pos)}/>}
+            {type === 'pos' && <SimplePosField onPosChange={(pos) => setGenPos(getStrPos(pos))}/>}
             {type === 'location' && <SimpleSelectField mapSelectValues={selectFieldsOptions['location'] || ['Error']}
-                                                       value={genPos as string | undefined}
+                                                       value={genPos}
                                                        onSelChange={v => setGenPos(v)} labelText={'location'}/>}
             {type === 'monster' && <SimpleSelectField mapSelectValues={selectFieldsOptions['monster'] || ['Error']}
-                                                      value={genPos as string  | undefined}
+                                                      value={genPos}
                                                       onSelChange={v => setGenPos(v)} labelText={'mob'}/>}
+            <button type={'button'} className={styles.addButton} onClick={onPosSave}>Save</button>
         </div>
     )
 }

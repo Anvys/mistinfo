@@ -11,7 +11,12 @@ export enum StatusCodes {
     multipleFound = 424,
     unknownError = 499,
 }
-
+export enum EAddState {
+    new = 0,
+    exist = 1,
+    added = 2,
+    error = 3
+}
 export const getDefaultFormikValues = (str: string) => {
     switch (str) {
         case 'name':

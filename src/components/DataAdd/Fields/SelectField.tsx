@@ -41,8 +41,8 @@ type TSelectSimpleField = {
 export const SimpleSelectField:React.FC<TSelectSimpleField> = (props) => {
     const { value,mapSelectValues, onSelChange, labelText, } = props
     const required = props.required === undefined? false: props.required
-    const [val, setVal] = useState(value|| '')
-    console.log(val)
+    const [val, setVal] = useState(value || '')
+    console.log(labelText, val)
     useEffect(()=>{
         onSelChange(val as string)
     },[val])
@@ -52,13 +52,14 @@ export const SimpleSelectField:React.FC<TSelectSimpleField> = (props) => {
     return (
         <div className={styles.fieldBox} key={0}>
             <label className={styles.label} htmlFor={`htmlId`}>{labelText}</label>
-            <select defaultValue={''}
+            <select
+                // defaultValue={''}
                     className={styles.inputText + ' '+  styles.selectWithDef}
                     name={`htmlId`}
                     onChange={e=>setVal(e.target.value)}
                     value={val}
                     required={required|| false}>
-                {labelText !== 'type' && <option className={styles.optionDefault} value={''} selected disabled key={0}>{`Select ${labelText}`}</option>}
+                {labelText !== 'type' && <option className={styles.optionDefault} value='' disabled key={0}>{`Select ${labelText}`}</option>}
                 {mapSelectValues.map((v, i) => (<option key={i+1} value={v}>{v}</option>))}
             </select>
         </div>
