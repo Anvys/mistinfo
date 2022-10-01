@@ -209,6 +209,7 @@ type TGetSearchParamsReturn = {
     pos: [number, number] | undefined,
     from: string | undefined,
     location: string | undefined,
+    region: string | undefined,
 }
 export const getSearchParams = (str:string):TGetSearchParamsReturn | undefined =>{
     if(str.length){
@@ -216,11 +217,13 @@ export const getSearchParams = (str:string):TGetSearchParamsReturn | undefined =
             pos:undefined ,
             from: undefined,
             location:undefined,
+            region: undefined
         }
         const e = Object.fromEntries(str.substring(1).split('&').map(v=>v.split('=')))
         if(!!e.x && !!e.y && !isNaN(+e.x) && !isNaN(+e.y)) result.pos =  [+e.x, +e.y]
         if(!!e.from && e.from.length>0)  result.from =  decodeURI(e.from)
         if(!!e.location && e.location.length>0) result.location = decodeURI(e.location)
+        if(!!e.region && e.region.length>0) result.region = decodeURI(e.region)
         return result
     }else return undefined
 

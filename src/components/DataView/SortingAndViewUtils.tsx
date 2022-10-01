@@ -113,7 +113,7 @@ export const getDataViewTdStr = (key: string, data: any, path: string = 'none'):
                         return [['type', 'source'], [posQuestItem.type, LinkLocationToMap(pqiLoc)]]
                     case "monster":
                         const pqiMon = posQuestItem.position as TMonster
-                        return [['type', 'source'], [posQuestItem.type, `mon ${pqiMon.name} (${pqiMon.region})`]]
+                        return [['type', 'source'], [posQuestItem.type, LinkRegionToMap(pqiMon.region, pqiMon.name)]]
                     default:
                         return [[key], [`def posQuestItem`]]
                 }
@@ -283,5 +283,10 @@ export const LinkPosToMap = (pos: TMapPosition, text: string='', path: string = 
     return <a href={`/map?x=${pos.x}&y=${pos.y}${path === '/region' ? `&from=region` : ``}`}>{`[view]`}</a>
 }
 export const LinkLocationToMap = (pos: TLocation | string, text: string = '', path: string = 'none') =>{
-    return <a href={`/map?location=${typeof pos === 'string' ? pos : pos.name}`}>{`[view]`}</a>
+    const name = typeof pos === 'string' ? pos : pos.name
+    return <>{`${text?`${text} `:``}`}<a href={`/map?location=${name}`}>{`[${name}]`}</a></>
+}
+export const LinkRegionToMap = (pos: TLocation | string, text: string = '', path: string = 'none') =>{
+    const name = typeof pos === 'string' ? pos : pos.name
+    return <>{`${text?`${text} `:``}`}<a href={`/map?region=${name}`}>{`[${name}]`}</a></>
 }

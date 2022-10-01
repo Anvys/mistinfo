@@ -144,6 +144,16 @@ export const MyMap: React.FC<TProps> = React.memo((props) => {
             map.setView({lat:pos.x, lng:pos.y}, map.getZoom(), {animate: true,})
         }
     }
+    if(!!mapSearchPos && mapSearchPos.region && mapSearchPos.region.length > 0){
+        const findData = regions.find(v=>v.name === mapSearchPos.region)
+        if(!!findData && !!map) {
+            dispatch(MapSlice.actions.setActiveRegion(findData.name))
+            dispatch(MapSlice.actions.setIsActiveRegion(true))
+            const pos = findData.pos
+            navigate(`/map?x=${pos.x}&y=${pos.y}`)
+            map.setView({lat:pos.x, lng:pos.y}, map.getZoom(), {animate: true,})
+        }
+    }
 
 
     if(isAddMarkerActive && global){dispatch(MapSlice.actions.setIsAddPosFieldActive(false))}

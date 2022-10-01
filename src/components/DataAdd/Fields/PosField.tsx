@@ -161,21 +161,11 @@ type TQuestItemPosProps = {
 }
 const getStrPos = (pos:TMapPosition)=>`${pos.x}:${pos.y}`
 export const PosQuestItemField: React.FC<TQuestItemPosProps> = (props) => {
-    // console.log(props.formik.values)
     const {onPositionChange, formik} = props
-    const dispatch = useAppDispatch()
-    const [type, setType] = useState<TQuestItemPosType>(()=>{
-        console.log('asdasdasdasdsaddddddddddddddddddd 1')
-        return formik.values.posQuestItem.type
-    })
+    const [type, setType] = useState<TQuestItemPosType>(()=>formik.values.posQuestItem.type)
     const [saveState, setSaveState] = useState<EAddState>(0)
-    // const [name, setName] = useState<string>(formik.values.name)
-    // const [mapPos, setMapPos] = useState<TMapPosition | undefined>(undefined)
-    const [genPos, setGenPos] = useState<string | undefined>(()=>{
-        console.log('asdasdasdasdsaddddddddddddddddddd 2')
-        return formik.values.posQuestItem.type === 'pos'
-            ?getStrPos(formik.values.posQuestItem.position):formik.values.posQuestItem.position
-    })
+    const [genPos, setGenPos] = useState<string | undefined>(()=>formik.values.posQuestItem.type === 'pos'
+            ?getStrPos(formik.values.posQuestItem.position):formik.values.posQuestItem.position    )
 
     const locations = useSelector(LocationSelectors.getData)
     const monsters = useSelector(MonsterSelectors.getData)
@@ -184,17 +174,7 @@ export const PosQuestItemField: React.FC<TQuestItemPosProps> = (props) => {
         setGenPos('')
         setType(v as TQuestItemPosType)
     }
-    // useEffect(()=>{
-    //     console.log('CHANGINGGEN POS')
-    //
-    // },[type])
-
-    // useEffect(() => {
-    //     setGenPos(mapPos)
-    // }, [mapPos])
-
     useEffect(() => {
-        console.log(`FORMIK CHANGED`)
         setGenPos(formik.values.posQuestItem.position)
         setType(formik.values.posQuestItem.type)
     }, [formik.values.posQuestItem])
@@ -225,7 +205,6 @@ export const PosQuestItemField: React.FC<TQuestItemPosProps> = (props) => {
         }
 
     }
-
     return (
         <div>
             <p>Choose position</p>
