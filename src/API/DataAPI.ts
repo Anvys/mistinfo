@@ -15,8 +15,9 @@ import {
 } from "../Types/CommonTypes";
 
 
-const baseURL = 'http://127.0.0.1'
-const port = 3333;
+// export const baseURL = 'http://127.0.0.1'
+export const baseURL = 'http://62.84.122.87'
+export const port = 3333;
 const instance = axios.create({
     baseURL: `${baseURL}:${port}/api`,
 });
