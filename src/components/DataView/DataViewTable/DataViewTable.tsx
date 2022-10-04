@@ -22,18 +22,23 @@ type TDataViewTable2Props = {
     // dataName: string
     // isMod: boolean
 }
+export type TFilterFunc = (v:any)=>boolean
 export const DataViewTable2: React.FC<TDataViewTable2Props> = React.memo((props) => {
     const {dataEditHandler, dataDelHandler} = props
     const [isDeleteModeActive, setIsDeleteModeActive] = useState(false);
     const [search, setSearch] = useState('')
     const [regionFilters, setRegionFilters] = useState({land:'all', count:0})
-    let data = [...props.data.filter(v=>search.length>0 ? v.name.toLocaleLowerCase().includes(search.toLowerCase()) :true)]
-    // console.log(data)
     const lang = useSelector(GlobalSettingsSelectors.getLang)
     const isMod = useSelector(AuthSelectors.isInit)
     const path = useLocation().pathname
-    if(path === '/region') data = data.filter((v: any)=>(regionFilters.land === 'all'? true : v.terrain===regionFilters.land)
-        && v.terrainReq>=regionFilters.count)
+
+    let filterFunc:TFilterFunc = (v:any)=>
+        (regionFilters.land === 'all'? true : v.terrain===regionFilters.land)
+        && v.terrainReq>=regionFilters.count
+
+    let data = [...props.data.filter(v=>search.length>0 ? v.name.toLocaleLowerCase().includes(search.toLowerCase()) :true)]
+    if(path === '/region') data = data.filter(filterFunc)
+
     const dataView: TDataViewObj | null = getDataView(data, lang, path)
     if (!dataView && search.length===0 && path !== '/region') return <>Empty dataView</>
     const onCheck = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -105,100 +110,100 @@ export const DataViewTable2: React.FC<TDataViewTable2Props> = React.memo((props)
     )
 })
 
-type TProps = {
-    dataKeys: Map<string, Array<string>>
-    sortedDataKeys: Array<string>
-    dataValues: Array<Array<any>>
-    dataEditHandler: (id: string) => void
-    dataDelHandler: (id: string) => void
-    isMod: boolean
-    lang: TTranslateLang | undefined
-};
-
-export const DataViewTable: React.FC<TProps> = (props) => {
-    const {isMod, lang} = props
-    const [isDeleteModeActive, setIsDeleteModeActive] = useState(false);
-    const dispatch = useAppDispatch()
-    const data = isMod
-        ? props.dataValues.map(v => [
-            ...v,
-            <button className={styles.editButton} onClick={() => props.dataEditHandler(v[0])}/>,
-            <button className={styles.deleteButton} onClick={() => props.dataDelHandler(v[0])}/>])
-        : props.dataValues.map(v => [...v])
-    // const onEdithandler:MouseEventHandler<HTMLButtonElement> = (e)=>{
-    //
-    // }
-    // style={{ "--vid-width": '100vw'}as React.CSSProperties}
-    const onCheck = (e: React.ChangeEvent<HTMLInputElement>) => {
-        setIsDeleteModeActive(e.target.checked)
-    }
-    let iconIndex = props.dataKeys.get('primary')?.indexOf('icon')
-    // console.log(`iconIndexEA: ${iconIndex}`)
-    iconIndex = iconIndex === -1 || iconIndex === undefined ? -1 : iconIndex + 4
-// console.log(`iconIndex: ${iconIndex}`)
-// console.log(props.dataKeys)
-//     console.log(data)
-    return (
-        <div className={styles.vid}>
-            <table className={styles.table}>
-                <thead>
-                    <tr className={styles.headRow}>
-                        {props.sortedDataKeys.map((v, i) => {
-                            return props.dataKeys.get(v)?.length
-                                ? <th className={styles.th1} key={i}
-                                      colSpan={props.dataKeys.get(v)?.length}>{v}
-                                </th>
-                                : null
-
-                        })}
-
-                        {isMod && <th>Edit</th>}
-                        {isMod && <th>Del?</th>}
-                    </tr>
-                    <tr>
-                        {/*{ style={i>2?{maxWidth: `calc((95% - 150px)/${props.dataKeys.get(v)?.length||0-3})`}:undefined}}*/}
-                        {props.sortedDataKeys.map((v) => [props.dataKeys.get(v)?.map((dKey, i) => (
-                                <th className={styles.th2} key={i}
-                                    colSpan={1}>{v === 'attributes' ? dKey.substring(0, 3) : dKey.substring(0, 5)}</th>
-
-                            ))]
-                        )}
-                        {isMod && <th></th>}
-                        {isMod && <th><input type={"checkbox"} checked={isDeleteModeActive} onChange={onCheck}/></th>}
-
-                    </tr>
-                </thead>
-                <tbody>
-                    {data.map((data, i) =>
-                        <tr className={styles.dataRow} key={i}>
-                            {data.map((val, j) => {
-                                    const stl = val ? styles.notEmptyTd : styles.emptyTd
-                                    // if(iconIndex===j) console.log(`incex: ${j}=${iconIndex}/= ${val}`)
-                                    // console.log(val?undefined:styles.emptyTd)
-                                    return j > 0
-                                        ? j < 4
-                                            ? <td className={styles.nameTd} key={j}>{val}</td>
-                                            : j < data.length - 1
-                                                ? <td className={stl}
-                                                      key={j}>{iconIndex === (lang === undefined ? j : j + 2) && val
-                                                    ? <img className={fieldsStyles.imgIcon}
-                                                           src={iconUrlPicker(val.split('/')[0], val.split('/')[1])}/>
-                                                    : val}</td>
-                                                : (j >= data.length - 1 && isDeleteModeActive)
-                                                    ? <td className={stl}
-                                                          key={j}>{val}</td>
-                                                    : null
-                                        : null
-                                }
-                            )}
-                            {/*<td>*/}
-                            {/*    <button onClick={onEdithandler}>Edit</button>*/}
-                            {/*</td>*/}
-                        </tr>
-                    )}
-                </tbody>
-            </table>
-        </div>
-
-    )
-}
+// type TProps = {
+//     dataKeys: Map<string, Array<string>>
+//     sortedDataKeys: Array<string>
+//     dataValues: Array<Array<any>>
+//     dataEditHandler: (id: string) => void
+//     dataDelHandler: (id: string) => void
+//     isMod: boolean
+//     lang: TTranslateLang | undefined
+// };
+//
+// export const DataViewTable: React.FC<TProps> = (props) => {
+//     const {isMod, lang} = props
+//     const [isDeleteModeActive, setIsDeleteModeActive] = useState(false);
+//     const dispatch = useAppDispatch()
+//     const data = isMod
+//         ? props.dataValues.map(v => [
+//             ...v,
+//             <button className={styles.editButton} onClick={() => props.dataEditHandler(v[0])}/>,
+//             <button className={styles.deleteButton} onClick={() => props.dataDelHandler(v[0])}/>])
+//         : props.dataValues.map(v => [...v])
+//     // const onEdithandler:MouseEventHandler<HTMLButtonElement> = (e)=>{
+//     //
+//     // }
+//     // style={{ "--vid-width": '100vw'}as React.CSSProperties}
+//     const onCheck = (e: React.ChangeEvent<HTMLInputElement>) => {
+//         setIsDeleteModeActive(e.target.checked)
+//     }
+//     let iconIndex = props.dataKeys.get('primary')?.indexOf('icon')
+//     // console.log(`iconIndexEA: ${iconIndex}`)
+//     iconIndex = iconIndex === -1 || iconIndex === undefined ? -1 : iconIndex + 4
+// // console.log(`iconIndex: ${iconIndex}`)
+// // console.log(props.dataKeys)
+// //     console.log(data)
+//     return (
+//         <div className={styles.vid}>
+//             <table className={styles.table}>
+//                 <thead>
+//                     <tr className={styles.headRow}>
+//                         {props.sortedDataKeys.map((v, i) => {
+//                             return props.dataKeys.get(v)?.length
+//                                 ? <th className={styles.th1} key={i}
+//                                       colSpan={props.dataKeys.get(v)?.length}>{v}
+//                                 </th>
+//                                 : null
+//
+//                         })}
+//
+//                         {isMod && <th>Edit</th>}
+//                         {isMod && <th>Del?</th>}
+//                     </tr>
+//                     <tr>
+//                         {/*{ style={i>2?{maxWidth: `calc((95% - 150px)/${props.dataKeys.get(v)?.length||0-3})`}:undefined}}*/}
+//                         {props.sortedDataKeys.map((v) => [props.dataKeys.get(v)?.map((dKey, i) => (
+//                                 <th className={styles.th2} key={i}
+//                                     colSpan={1}>{v === 'attributes' ? dKey.substring(0, 3) : dKey.substring(0, 5)}</th>
+//
+//                             ))]
+//                         )}
+//                         {isMod && <th></th>}
+//                         {isMod && <th><input type={"checkbox"} checked={isDeleteModeActive} onChange={onCheck}/></th>}
+//
+//                     </tr>
+//                 </thead>
+//                 <tbody>
+//                     {data.map((data, i) =>
+//                         <tr className={styles.dataRow} key={i}>
+//                             {data.map((val, j) => {
+//                                     const stl = val ? styles.notEmptyTd : styles.emptyTd
+//                                     // if(iconIndex===j) console.log(`incex: ${j}=${iconIndex}/= ${val}`)
+//                                     // console.log(val?undefined:styles.emptyTd)
+//                                     return j > 0
+//                                         ? j < 4
+//                                             ? <td className={styles.nameTd} key={j}>{val}</td>
+//                                             : j < data.length - 1
+//                                                 ? <td className={stl}
+//                                                       key={j}>{iconIndex === (lang === undefined ? j : j + 2) && val
+//                                                     ? <img className={fieldsStyles.imgIcon}
+//                                                            src={iconUrlPicker(val.split('/')[0], val.split('/')[1])}/>
+//                                                     : val}</td>
+//                                                 : (j >= data.length - 1 && isDeleteModeActive)
+//                                                     ? <td className={stl}
+//                                                           key={j}>{val}</td>
+//                                                     : null
+//                                         : null
+//                                 }
+//                             )}
+//                             {/*<td>*/}
+//                             {/*    <button onClick={onEdithandler}>Edit</button>*/}
+//                             {/*</td>*/}
+//                         </tr>
+//                     )}
+//                 </tbody>
+//             </table>
+//         </div>
+//
+//     )
+// }
