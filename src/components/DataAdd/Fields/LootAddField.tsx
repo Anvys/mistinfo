@@ -3,8 +3,9 @@ import styles from './Fields.module.css';
 import {useSelector} from "react-redux";
 import {LootSelectors} from "../../../redux/dataSelectors";
 import {selectFieldsOptions} from "../../../Types/Utils";
-import {NO_LOOT, TLoot} from "../../../Types/CommonTypes";
+import {NO_LOOT} from "../../../Types/CommonTypes";
 import {FormikProps} from "formik";
+import {TLoot} from "../../../Types/MainEntities";
 // import styles from './LootAddField.module.css';
 
 type TProps = {

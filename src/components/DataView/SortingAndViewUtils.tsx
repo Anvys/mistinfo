@@ -1,16 +1,11 @@
 import {
-    TAbility,
     TBonus,
     TBook,
     TDrop,
     TDropTypes,
     TEquip,
-    TLocation,
     TMapPosition,
-    TMonster,
-    TQuestItemPosition,
     TQuestStage,
-    TRecipe,
     TRecipePart,
     TRequireAdventure,
     TRequireBattle,
@@ -24,7 +19,11 @@ import {
 } from "../../Types/CommonTypes";
 import s from "./DataView.module.css";
 import {getContentShopItemStrFull, getDetails, getTimeStr, toUpperFirstLetterCase} from "../../Unils/utilsFunctions";
+import {TAbility, TLocation, TMonster, TQuestItemPosition, TRecipe} from "../../Types/MainEntities";
 
+export const ignoredFields = ['_id', '__v', 'translate', 'bound', 'moveTo', 'availableAfter', 'startAt', 'endAt', 'author']
+const objectKeyToSort = ['notes', 'loot', 'Book', 'Reputation', 'Land','Count', 'reputationReward', 'link']
+export const keysToChangeView = ['cooldown']
 const getDataWeight = (key: string) => {
     switch (key) {
         case 'icon':
@@ -53,13 +52,14 @@ const getDataWeight = (key: string) => {
             return 99
         case 'notes':
             return 200
+        case 'link':
+            return 201
 
         default:
             return 50 + key.length
     }
 }
-const objectKeyToSort = ['notes', 'loot', 'Book', 'Reputation', 'Land','Count', 'reputationReward']
-export const keysToChangeView = ['cooldown']
+
 //Sorting function for data entries => sorting columns for table
 export const dataEntriesSort: (a: [string, any], b: [string, any]) => number = (a, b) => {
     const wA = getDataWeight(typeof a[1] === 'object' && !objectKeyToSort.includes(a[0]) ? 'obj' : a[0])
@@ -209,8 +209,10 @@ export const getDataViewTdStr = (key: string, data: any, path: string = 'none'):
             case 'location':
                 return [['location'], [<>{`${data}`} <a
                     href={`/map?location=${data}`}>{`[view]`}</a></>]]
+            // case 'link':
+            //     return [[key], [!data?`<no ${key}>`:data]]
             default:
-                return [[key], [data]]
+                return [[key], [data==='' || typeof data === undefined || data === null?`<no ${key}>`:data]]
         }
 
     }
@@ -267,7 +269,7 @@ export const getTableTdKey = (key: string, cut: number = 6): string => {
     }
 }
 
-export const ignoredFields = ['_id', '__v', 'translate', 'bound', 'moveTo', 'availableAfter', 'startAt', 'endAt']
+
 export const getKeysCount = (key: string, value: any): number => {
     if (Array.isArray(value)) return 1
     if (value === null) return 1

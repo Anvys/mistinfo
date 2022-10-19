@@ -7,9 +7,9 @@ import {
     TAdventure, TCombineData,
     TDrop,
     TDropTypes, TEquip,
-    TExpr, TLoot, TMonster, TQuestItem, TRecipePart,
+    TExpr, TRecipePart,
     TRequireAdventure, TRequireQuestItem, TSkills,
-    TStage,
+    TStage, TStageRequereType,
     TStageRequire
 } from "../../../Types/CommonTypes";
 import {selectFieldsOptions, TSelectFieldsKeys} from "../../../Types/Utils";
@@ -28,6 +28,7 @@ import {SimpleSelectField} from "./SelectField";
 import {SimpleInputField} from "./InputField";
 import {log} from "util";
 import {getDataViewTdStr} from "../../DataView/SortingAndViewUtils";
+import {TLoot, TMonster, TQuestItem} from "../../../Types/MainEntities";
 
 type TProps = {
     formik: FormikProps<any>
@@ -36,7 +37,7 @@ type TProps = {
 export const StageField: React.FC<TProps> = (props) => {
     const {formik} = props
 
-    const [type, setType] = useState('Adventure')
+    const [type, setType] = useState<TStageRequereType>('Adventure')
     const [name, setName] = useState('Stage')
     const [expr, setExpr] = useState<TExpr>('or')
     const [num, setNum] = useState(1)
@@ -53,7 +54,7 @@ export const StageField: React.FC<TProps> = (props) => {
 
     const onTypeChange: React.ChangeEventHandler<HTMLSelectElement> = (e) => {
         setReq(null)
-        setType(e.target.value)
+        setType(e.target.value as TStageRequereType)
     }
     const onRequireAdd = (req: TStageRequire) => {
         setReq(req)

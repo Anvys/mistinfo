@@ -1,5 +1,27 @@
 import {selectFieldsOptions, TShopContentType} from "./Utils";
 import {TShopItemReputation} from "../components/DataAdd/Fields/ShopContentField";
+import {
+    TAbility,
+    TCompanion,
+    TComponent,
+    TEvent,
+    TGatherPoint,
+    TLocation,
+    TLoot,
+    TMapObject,
+    TMaterial,
+    TMonster,
+    TNpc,
+    TQuest,
+    TQuestItem,
+    TQuestItemSource,
+    TRecipe,
+    TRegion,
+    TShop,
+    TStaminaElixir,
+    TTrainer
+} from "./MainEntities";
+
 export const NO_LOOT = '--No loot--' as const
 export type TCombineData = TNpc | TRegion | TLocation
     | TMaterial | TComponent | TGatherPoint | TLoot
@@ -7,105 +29,7 @@ export type TCombineData = TNpc | TRegion | TLocation
 | TRecipe | TAbility | TCompanion | TMonster | TQuestItem | TQuestItemSource
 | TShop | TTrainer
 
-export type TComponent = TResources<TComponentType, TComponentAttributes>
-export type TMaterial = TResources<TMaterialType, TMaterialAttributes>
-
-export type TResources<T, U> = {
-    _id: string
-    name: string
-    icon: string
-
-    type: T
-    durability: number
-    craftDifficulty: number
-    gatherDifficulty: number
-    tier: number
-    attributes: U
-    goldCost: number
-    encumbrance: number
-    translate: TTranslateData
-}
-export type TNpc = {
-    _id: string
-    name: string
-    location: string
-    time: string
-    translate: TTranslateData
-}
-export type TRegion = {
-    _id: string
-    name: string
-    terrain: TTerrain
-    terrainReq: number
-    bound: Array<[number, number]>
-    pos: TMapPosition
-    translate: TTranslateData
-    notes: Array<string>
-}
-export type TLocation = {
-    _id: string
-    name: string
-    exploreReq: number
-    quest: string
-    pos: TMapPosition
-    icon: string
-    region: string
-    moveTo: string | ''
-    translate: TTranslateData
-    notes: Array<string>
-}
-export type TGatherPoint = {
-    _id: string
-    name: string
-    icon: string
-    type: TGathering
-    loot: string
-    // drop: Array<TDrop<TDropTypes>>
-    count: number
-    cooldown: number
-    pos: TMapPosition
-    region: string
-    translate: TTranslateData
-    notes: Array<string>
-}
-export type TLoot = {
-    _id: string
-    name: string
-    loot: Array<TDrop<TDropTypes>>
-    translate: TTranslateData
-    notes: Array<string>
-}
-export type TStaminaElixir = {
-    _id: string
-    name: string
-    icon: string
-    pos: TMapPosition
-    translate: TTranslateData
-    notes: Array<string>
-}
-
-
-export type TQuestItem = {
-    _id: string
-    name: string
-    icon: string
-
-    translate: TTranslateData
-    notes: Array<string>
-}
 export type TQuestItemPosType = typeof selectFieldsOptions['questItem.postype'][number]
-export type TQuestItemPosition = {
-    type: TQuestItemPosType,
-    position: TMapPosition | TLocation | TMonster
-}
-export type TQuestItemSource = {
-    _id: string
-    name: string
-    posQuestItem: TQuestItemPosition
-
-    translate: TTranslateData
-    notes: Array<string>
-}
 
 export type TEquip = {
     recipe: TRecipe
@@ -129,81 +53,14 @@ export type TShopContent = {
     price: number
     reputationRequire: TReputationRequire | null
 }
-export type TShop = {
-    _id: string
-    name: string
-    npc: string
-    content: Array<TShopContent>
 
-    icon: string
-    translate: TTranslateData
-    notes: Array<string>
-}
-export type TMapObject = {
-    _id: string
-    name: string
-    icon: string
-    pos: TMapPosition
-    translate: TTranslateData
-    notes: Array<string>
-}
 export type TAbilityType = 'Passive' | 'Active'
-export type TAbility = {
-    _id: string
-    name: string
-    type: TAbilityType
-    level: number
-    stamina: number
-    cd: number
-    effect: string
-    icon: string
-    translate: TTranslateData
-    notes: Array<string>
-}
 export type TSkills = TWeapons | TAdventure | TCrafting | TGathering | TTerrain
 export type TBonus = {
     skill: TSkills
     count: number
 }
-export type TCompanion = {
-    _id: string
-    name: string
-    type: 'Human' | 'Transport' | 'Tamed'
-    evoType: 'Gold' | 'Silver'
-    isBattle: boolean
-    levelMax: number
-    lifeMax: number
-    staminaMax: number
-    armorMax: number
-    location: string
-    evoQuests: Array<string>
-    weapon: TWeapons
-    weaponMaxSkill: number
-    comfort: number
-    skills: Array<TBonus>
-    abilities: Array<TAbility>
-
-    icon: string
-    translate: TTranslateData
-    notes: Array<string>
-}
 export type TMonsterType = 'Monster' | 'Boss'
-export type TMonster = {
-    _id: string
-    name: string
-    type: TMonsterType
-    level: number
-    life: number
-    stamina: number
-    attack: number
-    armor: number
-    abilities: Array<TAbility>
-    loot: TLoot | typeof NO_LOOT
-    region: string
-    icon: string
-    translate: TTranslateData
-    notes: Array<string>
-}
 export type TRecipePart = {
     name: string
     component: string
@@ -212,57 +69,11 @@ export type TRecipePart = {
     baseReq: number
 }
 export type TResultType = TEquipSlot
-export type TRecipe = {
-    _id: string
-    name: string
-    icon: string
-
-    resultType: TResultType
-    // baseReq: number
-    parts : Array<TRecipePart>
-    translate: TTranslateData
-    notes: Array<string>
-}
 export type TRewCost = { type: string, name: string, count: number }
-export type TTrainer = {
-    _id: string
-    name: string
-    type: TAdventure
-    difficult: number
-    time: number
-    cooldown: number
-    cost: TRewCost
-    reward: TRewCost
-    location: string
-    translate: TTranslateData
-    notes: Array<string>
-}
-export type TQuest = {
-    _id: string
-    name: string
-    type: string
-    availableAfter: Array<string>
-    startAt: string | 'auto'
-    endAt: string | 'auto'
-    qStages: Array<TQuestStage>
-    loot: TLoot | typeof NO_LOOT
-    translate: TTranslateData
-    notes: Array<string>
-}
-export type TEvent = {
-    _id: string
-    name: string
-    type: string
-    icon: string
-    region: string
-    eStages: Array<TStage>
-    loot: TLoot | typeof NO_LOOT
-    pos: TMapPosition
-    translate: TTranslateData
-    notes: Array<string>
-}
+
 
 export type TStageRequire = TRequireAdventure | TRequireQuestItem | TRequireEquip | TRequireResource | TRequireKill | TRequireBattle
+export type TStageRequereType = 'Adventure' | 'QuestItem' | 'Equip' | 'Resource' | 'Kill' | 'Battle'
 export type TRequireAdventure = {
     type: TSkills
     count: number
@@ -294,7 +105,7 @@ export type TQuestStage = {
     proc: number
     expr: TExpr
     name: string
-    type: string
+    type: TStageRequereType
     require: TStageRequire
     timeAvailable: string
     timeSpend: number
@@ -307,7 +118,7 @@ export type TStage = {
     proc: number
     expr: TExpr
     name: string
-    type: string
+    type: TStageRequereType
     require: TStageRequire
     time: number
 }
@@ -345,8 +156,8 @@ export type TGuild =
     | 'Protector of the Rose'
 export type TReputation = 'Gantras' | 'Kortombe' | 'Larcen' | 'Thorval' | 'Wellnear'
 
-
-export type TTranslateLang = 'En' | 'Fr' | 'Ru'
+export const translateLang = ['En' , 'Fr' , 'Ru'] as const
+export type TTranslateLang = typeof translateLang[number] //'En' | 'Fr' | 'Ru'
 export type TTranslateLangObj = Partial<Record<TTranslateLang, string>>
 export type TTranslateLangObjFull = Record<TTranslateLang, string>
 

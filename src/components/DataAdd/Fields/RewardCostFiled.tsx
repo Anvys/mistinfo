@@ -1,13 +1,13 @@
 import React, {useEffect, useState} from 'react';
 import styles from './Fields.module.css';
 import {FormikProps} from "formik";
-import {TAbility} from "../../../Types/CommonTypes";
 import {InputField, SimpleInputField} from "./InputField";
 import {SimpleSelectField} from "./SelectField";
 import {selectFieldsOptions} from "../../../Types/Utils";
 import {useSelector} from "react-redux";
 import {AbilitySelectors, CompanionSelectors, MaterialSelectors} from "../../../redux/dataSelectors";
 import {DataView} from "../../DataView/DataView";
+import {TAbility} from "../../../Types/MainEntities";
 
 type TProps = {
     index: number,

@@ -1,9 +1,10 @@
 import type {PayloadAction} from '@reduxjs/toolkit'
 import {createAsyncThunk, createSlice} from '@reduxjs/toolkit'
-import {TRegion, TWOid} from "../../Types/CommonTypes";
+import {TWOid} from "../../Types/CommonTypes";
 import {RegionAPI} from "../../API/DataAPI";
 import {checkError} from "../../Unils/utilsFunctions";
 import {selectFieldsOptions} from "../../Types/Utils";
+import {TRegion} from "../../Types/MainEntities";
 
 const reducerPath = 'mif/region'
 

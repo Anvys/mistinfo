@@ -24,8 +24,9 @@ import {RewardCostFiled} from "./RewardCostFiled";
 
 
 export const fieldsIgnoreList = ['name', '_id', '__v']
-export const fieldsNotRequiredList = ['Ru', 'Fr']
+export const fieldsNotRequiredList = ['Ru', 'Fr','link']
 export const fieldsDisabled = ['staminaelixir.translate.En','staminaelixir.translate.Ru','staminaelixir.translate.Fr']
+
 export const commonFields = (
     formik: FormikProps<any>,
     key:string,

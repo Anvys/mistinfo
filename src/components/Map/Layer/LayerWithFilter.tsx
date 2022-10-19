@@ -44,7 +44,9 @@ export const LayerWithFilter: React.FC<TProps> = (props) => {
     const quests = useSelector(QuestSelectors.getData)
     const regions = useSelector(RegionSelectors.getData)
     const locations = useSelector(LocationSelectors.getData)
-    const resourceNames = [...useSelector(MaterialSelectors.getData).map(v=>v.name), ...useSelector(ComponentSelectors.getData).filter(v=>v.type==='Plant').map(v=>v.name)]
+    const resourceArr = [...useSelector(MaterialSelectors.getData).filter(v=>v.type!=='Bone'), ...useSelector(ComponentSelectors.getData).filter(v=>v.type==='Plant')]//.sort((a,b)=>a.gatherDifficulty-b.gatherDifficulty).sort((a,b)=>a.type.length-b.type.length)
+    const resourceValues = resourceArr.map(v=>v.name)
+    const resourceNames = resourceArr.map(v=>`${v.type} ${v.name}`)
     const map = useMap()
     const loca = useLocation()
     const history = useNavigate()
@@ -116,7 +118,7 @@ export const LayerWithFilter: React.FC<TProps> = (props) => {
                         <SimpleSelectField mapSelectValues={regions.map(v => v.name)} value={activeRegion}
                                            onSelChange={onRegionSelect} labelText={'region'}/>}
                     {activeMarker === 'Resource' && resourceNames.length > 0 &&
-                        <SimpleSelectField mapSelectValues={resourceNames} value={activeResource}
+                        <SimpleSelectField mapSelectValues={resourceValues} mapSelectNames={resourceNames} value={activeResource}
                                            onSelChange={onResourceSelect} labelText={'Res'}/>}
                 </div>
             </Control>

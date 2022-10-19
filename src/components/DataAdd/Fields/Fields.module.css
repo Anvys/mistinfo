@@ -66,6 +66,10 @@
     font-size: 16px;
     background-color: #ad4332;
 }
+.simpleSelect {
+    text-align: left;
+
+}
 .inputText, .inputNumber{
     font-size: 20px;
     min-width: 30px;

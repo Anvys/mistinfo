@@ -7,13 +7,14 @@ import {
     QuestSelectors, RegionSelectors,
     ShopSelectors
 } from "../../../redux/dataSelectors";
-import {TBook, TLoot, TSkills} from "../../../Types/CommonTypes";
+import {TBook, TSkills} from "../../../Types/CommonTypes";
 import {getDataView, getDataViewAny} from "../../DataView/DataView";
 import {DataViewTableSimple} from "../../DataView/DataViewTable/DataViewTableSimple";
 import styles from "../../DataView/DataViewTable/DataViewTable.module.scss";
 import {SimpleInputField} from "../../DataAdd/Fields/InputField";
 import {getDataViewTdStr} from "../../DataView/SortingAndViewUtils";
 import {getContentShopItemStrFull, getContentShopItemStrLite} from "../../../Unils/utilsFunctions";
+import {TLoot} from "../../../Types/MainEntities";
 //import styles from './BookContent.module.css'
 
 export type TViewReputationShop = {

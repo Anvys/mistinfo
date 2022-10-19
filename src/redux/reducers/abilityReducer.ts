@@ -1,9 +1,10 @@
 import type {PayloadAction} from '@reduxjs/toolkit'
 import {createAsyncThunk, createSlice} from '@reduxjs/toolkit'
-import {TAbility, TWOid} from "../../Types/CommonTypes";
+import {TWOid} from "../../Types/CommonTypes";
 import {AbilityAPI} from "../../API/DataAPI";
 import {checkError} from "../../Unils/utilsFunctions";
 import {selectFieldsOptions} from "../../Types/Utils";
+import {TAbility} from "../../Types/MainEntities";
 
 const reducerPath = 'mif/ability'
 

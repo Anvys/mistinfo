@@ -1,14 +1,14 @@
 import React, {useState} from 'react';
 import styles from './../ContentSpace.module.css';
 import {useDispatch, useSelector} from "react-redux";
-import {Outlet} from "react-router-dom";
 import {getIsNpcInitSelector, getNpcSelector} from "../../../redux/dataSelectors";
 import {NpcThunks} from "../../../redux/reducers/npcReducer";
 import {TAppDispatch} from "../../../redux/store";
 import {DataView} from "../../DataView/DataView";
-import {TNpc, TWOid} from "../../../Types/CommonTypes";
+import {TWOid} from "../../../Types/CommonTypes";
 import {GenDataAdd} from "../../DataAdd/GenDataAdd";
-import {commonFields} from "../../DataAdd/Fields/CommonFields";
+import {initCommonFields} from "../contentUtils";
+import {TNpc} from "../../../Types/MainEntities";
 
 type TProps = {};
 export const NpcContent: React.FC<TProps> = (props) => {
@@ -25,17 +25,14 @@ export const NpcContent: React.FC<TProps> = (props) => {
     }
     const resetAddFormData = () => setDataToAdd(null)
     const initObj: TWOid<TNpc> = {
-        name: '',
         location: '',
         time: 'Always',
-        translate: {En: '', Ru: '', Fr: ''},
+        ...initCommonFields
     }
 
     return (
         <div className={styles.contentBox}>
             <div className={styles.nav}>
-                {/*<LocationDataAdd data={null}/>*/}
-                {/*<NpcDataAdd data={dataToAdd} resetAddFormData={resetAddFormData}/>*/}
                 {GenDataAdd({
                     data: dataToAdd,
                     resetAddFormData,
@@ -43,10 +40,8 @@ export const NpcContent: React.FC<TProps> = (props) => {
                     curThunks: NpcThunks,
                     dataName: 'npc'
                 })}
-
             </div>
             <div className={styles.dbField}>
-                <Outlet/>
                 <DataView data={data} dataEditHandler={dataAddHandler} dataDelHandler={dataDelHandler}/>
             </div>
         </div>

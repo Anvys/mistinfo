@@ -1,14 +1,14 @@
 import React, {useState} from 'react';
 import styles from './../ContentSpace.module.css';
 import {useDispatch, useSelector} from "react-redux";
-import {Outlet} from "react-router-dom";
-import {AbilitySelectors, TrainerSelectors} from "../../../redux/dataSelectors";
+import {TrainerSelectors} from "../../../redux/dataSelectors";
 import {TAppDispatch} from "../../../redux/store";
 import {DataView} from "../../DataView/DataView";
-import {TTrainer, TWOid} from "../../../Types/CommonTypes";
+import {TWOid} from "../../../Types/CommonTypes";
 import {GenDataAdd} from "../../DataAdd/GenDataAdd";
-import {AbilityThunks} from "../../../redux/reducers/abilityReducer";
 import {TrainerThunks} from "../../../redux/reducers/trainerReducer";
+import {TTrainer} from "../../../Types/MainEntities";
+import {initCommonFields} from "../contentUtils";
 
 type TProps = {};
 export const TrainerContent: React.FC<TProps> = (props) => {
@@ -25,9 +25,7 @@ export const TrainerContent: React.FC<TProps> = (props) => {
         dispatch(TrainerThunks.deleteOne(id))
     }
     const resetAddFormData = () => setDataToAdd(null)
-    const newDefName = `New Trainer ${data.length + 1}`
     const initObj: TWOid<TTrainer> = {
-        name: newDefName,
         type: 'Academic',
         difficult: 0,
         time: 0,
@@ -35,9 +33,7 @@ export const TrainerContent: React.FC<TProps> = (props) => {
         cost: {count: 0, name: "", type: ""},
         reward: {count: 0, name: "", type: ""},
         location: '',
-
-        translate: {En: newDefName, Ru: '', Fr: ''},
-        notes: []
+        ...initCommonFields
     }
     return (
         <div className={styles.contentBox}>
@@ -51,8 +47,6 @@ export const TrainerContent: React.FC<TProps> = (props) => {
                 })}
             </div>
             <div className={styles.dbField}>
-                <Outlet/>
-
                 <DataView data={data} dataEditHandler={dataAddHandler} dataDelHandler={dataDelHandler}/>
             </div>
         </div>

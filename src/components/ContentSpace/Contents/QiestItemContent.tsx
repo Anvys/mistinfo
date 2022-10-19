@@ -1,15 +1,14 @@
 import React, {useState} from 'react';
 import styles from './../ContentSpace.module.css';
 import {useDispatch, useSelector} from "react-redux";
-import {Outlet} from "react-router-dom";
-import {AbilitySelectors, QuestItemSelectors} from "../../../redux/dataSelectors";
+import {QuestItemSelectors} from "../../../redux/dataSelectors";
 import {TAppDispatch} from "../../../redux/store";
 import {DataView} from "../../DataView/DataView";
-import {TQuestItem, TWOid} from "../../../Types/CommonTypes";
+import {TWOid} from "../../../Types/CommonTypes";
 import {GenDataAdd} from "../../DataAdd/GenDataAdd";
-import {AbilityThunks} from "../../../redux/reducers/abilityReducer";
 import {QuestItemThunks} from "../../../redux/reducers/questItemReducer";
-import {PosQuestItemField} from "../../DataAdd/Fields/PosField";
+import {TQuestItem} from "../../../Types/MainEntities";
+import {initCommonFields} from "../contentUtils";
 
 type TProps = {};
 
@@ -30,12 +29,9 @@ export const QuestItemContent: React.FC<TProps> = (props) => {
         dispatch(thunks.deleteOne(id))
     }
     const resetAddFormData = () => setDataToAdd(null)
-    const newDefName = `New ${str} ${data.length + 1}`
     const initObj: TWOid<TQuestItem> = {
-        name: newDefName,
         icon: '',
-        translate: {En: newDefName, Ru: '', Fr: ''},
-        notes: [],
+        ...initCommonFields
     }
     return (
         <div className={styles.contentBox}>
@@ -47,10 +43,8 @@ export const QuestItemContent: React.FC<TProps> = (props) => {
                     curThunks: thunks,
                     dataName: str
                 })}
-
             </div>
             <div className={styles.dbField}>
-                <Outlet/>
                 <DataView data={data} dataEditHandler={dataAddHandler} dataDelHandler={dataDelHandler}/>
             </div>
         </div>

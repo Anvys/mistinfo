@@ -1,27 +1,22 @@
 import React, {useState} from 'react';
 import styles from './../ContentSpace.module.css';
 import {useDispatch, useSelector} from "react-redux";
-import {
-    AuthSelectors,
-    getIsMaterialsInitSelector,
-    getMaterialsSelector,
-    MaterialSelectors
-} from "../../../redux/dataSelectors";
+import {getMaterialsSelector} from "../../../redux/dataSelectors";
 import {TAppDispatch} from "../../../redux/store";
-import {Outlet} from "react-router-dom";
 import {DataView} from "../../DataView/DataView";
-import {MaterialSlice, MaterialThunks} from "../../../redux/reducers/materialReducer";
-import {TMaterial, TMaterialType, TWOid} from "../../../Types/CommonTypes";
+import {MaterialThunks} from "../../../redux/reducers/materialReducer";
+import {TMaterialType, TWOid} from "../../../Types/CommonTypes";
 import {GenDataAdd} from "../../DataAdd/GenDataAdd";
-import {DataViewTable2} from "../../DataView/DataViewTable/DataViewTable";
+import {TMaterial} from "../../../Types/MainEntities";
+import {initCommonFields} from "../contentUtils";
 
 type TProps = {
-    type?:TMaterialType
+    type?: TMaterialType
 };
-export const MaterialContent:React.FC<TProps> = React.memo((props) => {
+export const MaterialContent: React.FC<TProps> = React.memo((props) => {
     const dispatch = useDispatch<TAppDispatch>()
     const data = useSelector(getMaterialsSelector);
-    const [dataToAdd, setDataToAdd] = useState(()=>null as null | TMaterial)
+    const [dataToAdd, setDataToAdd] = useState(() => null as null | TMaterial)
     const dataAddHandler = (id: string) => {
         setDataToAdd(id.length ? data.find(v => v._id === id) || null : null)
     }
@@ -30,7 +25,6 @@ export const MaterialContent:React.FC<TProps> = React.memo((props) => {
         dispatch(MaterialThunks.deleteOne(id))
     }
     const initObj: TWOid<TMaterial> = {
-        name: '',
         icon: '',
         type: 'Bone' as TMaterialType,
         durability: 0,
@@ -49,7 +43,7 @@ export const MaterialContent:React.FC<TProps> = React.memo((props) => {
         },
         goldCost: 0,
         encumbrance: 0,
-        translate: {En: '',Fr:'', Ru:''}
+        ...initCommonFields
     }
 
     return (
@@ -65,9 +59,8 @@ export const MaterialContent:React.FC<TProps> = React.memo((props) => {
                 })}
             </div>
             <div className={styles.dbField}>
-                <Outlet/>
-                {/*<DataViewTableSimple dataEditHandler={dataAddHandler} dataDelHandler={dataDelHandler} data={data}/>*/}
-                <DataView type={props.type} data={data} dataEditHandler={dataAddHandler} dataDelHandler={dataDelHandler} />
+                <DataView type={props.type} data={data} dataEditHandler={dataAddHandler}
+                          dataDelHandler={dataDelHandler}/>
             </div>
         </div>
     );

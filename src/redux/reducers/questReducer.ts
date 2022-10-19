@@ -1,9 +1,10 @@
 import type {PayloadAction} from '@reduxjs/toolkit'
 import {createAsyncThunk, createSlice} from '@reduxjs/toolkit'
-import {TQuest, TWOid} from "../../Types/CommonTypes";
+import {TWOid} from "../../Types/CommonTypes";
 import {EventAPI, QuestAPI, RegionAPI} from "../../API/DataAPI";
 import {checkError} from "../../Unils/utilsFunctions";
 import {selectFieldsOptions} from "../../Types/Utils";
+import {TQuest} from "../../Types/MainEntities";
 
 const reducerPath = 'mif/quest'
 

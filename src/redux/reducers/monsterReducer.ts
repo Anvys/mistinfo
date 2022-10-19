@@ -1,9 +1,10 @@
 import type {PayloadAction} from '@reduxjs/toolkit'
 import {createAsyncThunk, createSlice} from '@reduxjs/toolkit'
-import {TMonster, TWOid} from "../../Types/CommonTypes";
+import {TWOid} from "../../Types/CommonTypes";
 import {MonsterAPI} from "../../API/DataAPI";
 import {checkError} from "../../Unils/utilsFunctions";
 import {selectFieldsOptions} from "../../Types/Utils";
+import {TMonster} from "../../Types/MainEntities";
 
 const reducerPath = 'mif/monster'
 

@@ -1,19 +1,15 @@
 import React, {useState} from 'react';
 import styles from './../ContentSpace.module.css';
 import {useDispatch, useSelector} from "react-redux";
-import {Outlet} from "react-router-dom";
-import {
-    getIsAddPosFieldActiveSelector,
-    getIsLocationInitSelector,
-    getRegionSelector
-} from "../../../redux/dataSelectors";
+import {getIsLocationInitSelector, getRegionSelector} from "../../../redux/dataSelectors";
 import {TAppDispatch} from "../../../redux/store";
 import {DataView} from "../../DataView/DataView";
 import {RegionThunks} from "../../../redux/reducers/regionReducer";
-import {TRegion, TWOid} from "../../../Types/CommonTypes";
+import {TWOid} from "../../../Types/CommonTypes";
 import {GenDataAdd} from "../../DataAdd/GenDataAdd";
-import {MyMap} from "../../Map/MyMap";
 import {MapSlice} from "../../../redux/reducers/mapReducer";
+import {TRegion} from "../../../Types/MainEntities";
+import {initCommonFields} from "../contentUtils";
 
 type TProps = {};
 export const RegionContent: React.FC<TProps> = (props) => {
@@ -25,7 +21,7 @@ export const RegionContent: React.FC<TProps> = (props) => {
     const dataEditHandler = (id: string) => {
         const findres = data.find(v => v._id === id) || null
         setDataToAdd(id.length ? findres : null)
-        if(findres!==null) dispatch(MapSlice.actions.setBounds(findres.bound))
+        if (findres !== null) dispatch(MapSlice.actions.setBounds(findres.bound))
 
     }
     const dataDelHandler = (id: string) => {
@@ -38,19 +34,16 @@ export const RegionContent: React.FC<TProps> = (props) => {
         setDataToAdd(null)
     }
     const initObj: TWOid<TRegion> = {
-        name: '',
         terrain: 'Forest',
         terrainReq: 0,
-        bound:[],
-        pos: {x:0,y:0},
-        translate: {En: '', Ru: '', Fr: ''},
-        notes:[],
+        bound: [],
+        pos: {x: 0, y: 0},
+        ...initCommonFields
     }
     // const isMapActive = useSelector(getIsAddPosFieldActiveSelector)
     return (
         <div className={styles.contentBox}>
             <div className={styles.nav}>
-                {/*<RegionDataAdd data={dataToAdd} resetAddFormData={resetAddFormData}/>*/}
                 {GenDataAdd({
                     data: dataToAdd,
                     resetAddFormData,
@@ -58,11 +51,8 @@ export const RegionContent: React.FC<TProps> = (props) => {
                     curThunks: RegionThunks,
                     dataName: 'region'
                 })}
-                {/*{isMapActive && <MyMap wid={-1} hei={400}/>}*/}
             </div>
-
             <div className={styles.dbField}>
-                <Outlet/>
                 <DataView data={data} dataEditHandler={dataEditHandler} dataDelHandler={dataDelHandler}/>
             </div>
         </div>

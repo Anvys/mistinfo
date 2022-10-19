@@ -1,9 +1,10 @@
 import type {PayloadAction} from '@reduxjs/toolkit'
 import {createAsyncThunk, createSlice} from '@reduxjs/toolkit'
-import {TNpc, TWOid} from "../../Types/CommonTypes";
+import {TWOid} from "../../Types/CommonTypes";
 import {NpcAPI} from "../../API/DataAPI";
 import {checkError} from "../../Unils/utilsFunctions";
 import {selectFieldsOptions} from "../../Types/Utils";
+import {TNpc} from "../../Types/MainEntities";
 
 const reducerPath = 'mif/npc'
 

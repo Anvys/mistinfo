@@ -7,7 +7,7 @@ import {
     TAdventure,
     TDrop,
     TDropTypes,
-    TExpr, TLocation, TLoot, TMapPosition, TNpc, TQuestStage,
+    TExpr, TMapPosition, TQuestStage,
     TRequireAdventure,
     TStage, TStagePos, TStagePosType,
     TStageRequire
@@ -26,6 +26,7 @@ import {
 } from "./StageField";
 import {getStageRequireStr} from "../../../Unils/utilsFunctions";
 import {getDataViewTdStr} from "../../DataView/SortingAndViewUtils";
+import {TLocation, TLoot, TNpc} from "../../../Types/MainEntities";
 
 export const getPosStr = (pos: TStagePos, type: TStagePosType) =>{
     // console.log(pos)

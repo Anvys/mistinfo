@@ -3,7 +3,8 @@ import {createAsyncThunk, createSlice} from '@reduxjs/toolkit'
 import {TrainerAPI} from "../../API/DataAPI";
 import {checkError} from "../../Unils/utilsFunctions";
 import {selectFieldsOptions} from "../../Types/Utils";
-import {TTrainer, TWOid} from "../../Types/CommonTypes";
+import {TWOid} from "../../Types/CommonTypes";
+import {TTrainer} from "../../Types/MainEntities";
 
 const reducerPath = 'mif/trainer'
 

@@ -1,13 +1,14 @@
 import React, {useState} from 'react';
 import styles from './../ContentSpace.module.css';
 import {useDispatch, useSelector} from "react-redux";
-import {Outlet} from "react-router-dom";
 import {QuestItemSourceSelectors} from "../../../redux/dataSelectors";
 import {TAppDispatch} from "../../../redux/store";
 import {DataView} from "../../DataView/DataView";
-import {TQuestItemSource, TWOid} from "../../../Types/CommonTypes";
+import {TWOid} from "../../../Types/CommonTypes";
 import {GenDataAdd} from "../../DataAdd/GenDataAdd";
 import {QuestItemSourceThunks} from "../../../redux/reducers/questItemSourceReducer";
+import {TQuestItemSource} from "../../../Types/MainEntities";
+import {initCommonFields} from "../contentUtils";
 
 type TProps = {};
 
@@ -28,13 +29,9 @@ export const QuestItemSourceContent: React.FC<TProps> = (props) => {
         dispatch(thunks.deleteOne(id))
     }
     const resetAddFormData = () => setDataToAdd(null)
-    const newDefName = ``
-
-    const initObj: TWOid<TQuestItemSource> = dataToAdd === null? {
-        name: newDefName,
-        posQuestItem:{type:"pos",position:{x:0,y:0}},
-        translate: {En: newDefName, Ru: '', Fr: ''},
-        notes: [],
+    const initObj: TWOid<TQuestItemSource> = dataToAdd === null ? {
+        posQuestItem: {type: "pos", position: {x: 0, y: 0}},
+        ...initCommonFields
     } : {...dataToAdd}
     console.log(initObj)
     return (
@@ -47,10 +44,8 @@ export const QuestItemSourceContent: React.FC<TProps> = (props) => {
                     curThunks: thunks,
                     dataName: str
                 })}
-
             </div>
             <div className={styles.dbField}>
-                <Outlet/>
                 <DataView data={data} dataEditHandler={dataEditHandler} dataDelHandler={dataDelHandler}/>
             </div>
         </div>

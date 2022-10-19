@@ -1,18 +1,14 @@
 import React, {useState} from 'react';
 import styles from './../ContentSpace.module.css';
 import {useDispatch, useSelector} from "react-redux";
-import {Outlet} from "react-router-dom";
-import {
-    getIsAddPosFieldActiveSelector,
-    getIsLocationInitSelector,
-    getLocationSelector
-} from "../../../redux/dataSelectors";
+import {getIsLocationInitSelector, getLocationSelector} from "../../../redux/dataSelectors";
 import {TAppDispatch} from "../../../redux/store";
 import {DataView} from "../../DataView/DataView";
 import {LocationThunks} from "../../../redux/reducers/locationReducer";
-import {TLocation, TWOid} from "../../../Types/CommonTypes";
+import {TWOid} from "../../../Types/CommonTypes";
 import {GenDataAdd} from "../../DataAdd/GenDataAdd";
-import {MyMap} from "../../Map/MyMap";
+import {TLocation} from "../../../Types/MainEntities";
+import {initCommonFields} from "../contentUtils";
 
 type TProps = {};
 export const LocationContent: React.FC<TProps> = (props) => {
@@ -29,15 +25,13 @@ export const LocationContent: React.FC<TProps> = (props) => {
     }
     const resetAddFormData = () => setDataToAdd(null)
     const initObj: TWOid<TLocation> = {
-        name: '',
         exploreReq: 0,
-        quest:'',
+        quest: '',
         pos: {x: 0, y: 0},
         icon: '',
         region: '',
         moveTo: '',
-        translate: {En: '', Ru: '', Fr: ''},
-        notes:[],
+        ...initCommonFields
     }
 
     // const isMapActive = useSelector(getIsAddPosFieldActiveSelector)
@@ -59,7 +53,6 @@ export const LocationContent: React.FC<TProps> = (props) => {
                 {/*{isMapActive && <MyMap wid={-1} hei={400}/>}*/}
             </div>
             <div className={styles.dbField}>
-                <Outlet/>
                 <DataView data={data} dataEditHandler={dataAddHandler} dataDelHandler={dataDelHandler}/>
             </div>
         </div>

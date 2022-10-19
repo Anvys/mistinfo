@@ -1,13 +1,14 @@
 import React, {useState} from 'react';
 import styles from './../ContentSpace.module.css';
 import {useDispatch, useSelector} from "react-redux";
-import {Outlet} from "react-router-dom";
 import {ShopSelectors} from "../../../redux/dataSelectors";
 import {TAppDispatch} from "../../../redux/store";
 import {DataView} from "../../DataView/DataView";
-import {TShop, TWOid} from "../../../Types/CommonTypes";
+import {TWOid} from "../../../Types/CommonTypes";
 import {GenDataAdd} from "../../DataAdd/GenDataAdd";
 import {ShopThunks} from "../../../redux/reducers/shopReducer";
+import {TShop} from "../../../Types/MainEntities";
+import {initCommonFields} from "../contentUtils";
 
 type TProps = {};
 
@@ -28,15 +29,11 @@ export const ShopContent: React.FC<TProps> = (props) => {
         dispatch(thunks.deleteOne(id))
     }
     const resetAddFormData = () => setDataToAdd(null)
-    const newDefName = `Shop_${data.length}`
-
-    const initObj: TWOid<TShop> = dataToAdd === null? {
-        name: newDefName,
+    const initObj: TWOid<TShop> = dataToAdd === null ? {
         npc: '',
-        content:[],
+        content: [],
         icon: 'other_Other/Quest-Package_for_Leonidas',
-        translate: {En: newDefName, Ru: '', Fr: ''},
-        notes: [],
+        ...initCommonFields
     } : {...dataToAdd}
     // {
     //     type: 'Empty',
@@ -56,10 +53,8 @@ export const ShopContent: React.FC<TProps> = (props) => {
                     curThunks: thunks,
                     dataName: str
                 })}
-
             </div>
             <div className={styles.dbField}>
-                <Outlet/>
                 <DataView data={data} dataEditHandler={dataEditHandler} dataDelHandler={dataDelHandler}/>
             </div>
         </div>

@@ -47,4 +47,5 @@ yarn-error.log*
 /.idea/vcs.xml
 /yarn.lock
 
-.idea
+.idea!/src/Unils/codewars.ts
+/src/Unils/codewars.ts

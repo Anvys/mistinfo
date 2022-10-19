@@ -1,13 +1,14 @@
 import React, {useState} from 'react';
 import styles from './../ContentSpace.module.css';
 import {useDispatch, useSelector} from "react-redux";
-import {Outlet} from "react-router-dom";
 import {getIsLootInitSelector, getLootSelector} from "../../../redux/dataSelectors";
 import {TAppDispatch} from "../../../redux/store";
 import {DataView} from "../../DataView/DataView";
-import {TLoot, TWOid} from "../../../Types/CommonTypes";
+import {TWOid} from "../../../Types/CommonTypes";
 import {GenDataAdd} from "../../DataAdd/GenDataAdd";
 import {LootThunks} from "../../../redux/reducers/lootReducer";
+import {TLoot} from "../../../Types/MainEntities";
+import {initCommonFields} from "../contentUtils";
 
 type TProps = {};
 export const LootContent: React.FC<TProps> = (props) => {
@@ -18,14 +19,12 @@ export const LootContent: React.FC<TProps> = (props) => {
     const [dataToAdd, setDataToAdd] = useState(null as null | TLoot)
 
     const initObj = {
-        name: '',
         loot: [],
-        notes: [],
-        translate: {En: '', Fr: '', Ru: ''},
+        ...initCommonFields
     } as TWOid<TLoot>
 
-    const dataAddHandler = (id: string) =>{
-        setDataToAdd(id.length ? data.find(v=>v._id===id) || null : null)
+    const dataAddHandler = (id: string) => {
+        setDataToAdd(id.length ? data.find(v => v._id === id) || null : null)
     }
     const dataDelHandler = (id: string) => {
         dispatch(LootThunks.deleteOne(id))
@@ -46,9 +45,7 @@ export const LootContent: React.FC<TProps> = (props) => {
                 {/*<LootDataAdd data={null} resetAddFormData={()=>null}/>*/}
             </div>
             <div className={styles.dbField}>
-                <Outlet/>
                 <DataView data={data} dataEditHandler={dataAddHandler} dataDelHandler={dataDelHandler}/>
-
             </div>
         </div>
     );

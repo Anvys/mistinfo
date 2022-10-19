@@ -1,14 +1,15 @@
 import React, {useState} from 'react';
 import styles from './../ContentSpace.module.css';
 import {useDispatch, useSelector} from "react-redux";
-import {Outlet} from "react-router-dom";
 import {getGatherPointSelector, getIsLocationInitSelector} from "../../../redux/dataSelectors";
 import {TAppDispatch} from "../../../redux/store";
 import {DataView} from "../../DataView/DataView";
 import {LocationThunks} from "../../../redux/reducers/locationReducer";
-import {TGatherPoint, TWOid} from "../../../Types/CommonTypes";
+import {NO_LOOT, TWOid} from "../../../Types/CommonTypes";
 import {GenDataAdd} from "../../DataAdd/GenDataAdd";
 import {GatherPointThunks} from "../../../redux/reducers/gatherPointReducer";
+import {TGatherPoint} from "../../../Types/MainEntities";
+import {initCommonFields} from "../contentUtils";
 
 type TProps = {};
 export const GatherPointContent: React.FC<TProps> = (props) => {
@@ -25,21 +26,16 @@ export const GatherPointContent: React.FC<TProps> = (props) => {
     }
     const resetAddFormData = () => setDataToAdd(null)
     const initObj: TWOid<TGatherPoint> = {
-        name: '',
         icon: '',
         type: 'Mining',
-        loot:'',
+        loot: NO_LOOT,
         // drop: [],
         count: 0,
         cooldown: 0,
         pos: {x: 0, y: 0},
         region: '',
-        translate: {En: '', Ru: '', Fr: ''},
-        notes:[],
+        ...initCommonFields
     }
-
-    // const isMapActive = useSelector(getIsAddPosFieldActiveSelector)
-
     return (
         <div className={styles.contentBox}>
             <div className={styles.addFormBox}>
@@ -56,7 +52,6 @@ export const GatherPointContent: React.FC<TProps> = (props) => {
                 {/*{isMapActive && <MyMap wid={-1} hei={400}/>}*/}
             </div>
             <div className={styles.dbField}>
-                <Outlet/>
                 <DataView data={data} dataEditHandler={dataAddHandler} dataDelHandler={dataDelHandler}/>
             </div>
         </div>

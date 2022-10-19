@@ -1,13 +1,14 @@
 import React, {useState} from 'react';
 import styles from './../ContentSpace.module.css';
 import {useDispatch, useSelector} from "react-redux";
-import {Outlet} from "react-router-dom";
 import {MonsterSelectors} from "../../../redux/dataSelectors";
 import {TAppDispatch} from "../../../redux/store";
 import {DataView} from "../../DataView/DataView";
-import {TMonster, TWOid} from "../../../Types/CommonTypes";
+import {TWOid} from "../../../Types/CommonTypes";
 import {GenDataAdd} from "../../DataAdd/GenDataAdd";
 import {MonsterThunks} from "../../../redux/reducers/monsterReducer";
+import {TMonster} from "../../../Types/MainEntities";
+import {initCommonFields} from "../contentUtils";
 
 type TProps = {};
 export const MonsterContent: React.FC<TProps> = (props) => {
@@ -19,8 +20,6 @@ export const MonsterContent: React.FC<TProps> = (props) => {
     const dataAddHandler = (id: string) => {
         const temp = id.length ? data.find(v => v._id === id) || null : null
         setDataToAdd(temp)
-        // console.log(`Setted data:`)
-        // console.log(temp)
     }
     const dataDelHandler = (id: string) => {
         dispatch(MonsterThunks.deleteOne(id))
@@ -28,7 +27,6 @@ export const MonsterContent: React.FC<TProps> = (props) => {
     const resetAddFormData = () => setDataToAdd(null)
     const newDefName = `New Monster ${data.length + 1}`
     const initObj: TWOid<TMonster> = {
-        name: newDefName,
         type: 'Monster',
         level: 1,
         life: 0,
@@ -39,8 +37,7 @@ export const MonsterContent: React.FC<TProps> = (props) => {
         loot: '--No loot--',
         region: '',
         icon: '',
-        translate: {En: newDefName, Ru: '', Fr: ''},
-        notes: [],
+        ...initCommonFields
     }
     return (
         <div className={styles.contentBox}>
@@ -54,8 +51,6 @@ export const MonsterContent: React.FC<TProps> = (props) => {
                 })}
             </div>
             <div className={styles.dbField}>
-                <Outlet/>
-
                 <DataView data={data} dataEditHandler={dataAddHandler} dataDelHandler={dataDelHandler}/>
             </div>
         </div>

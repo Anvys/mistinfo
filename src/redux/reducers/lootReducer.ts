@@ -1,9 +1,10 @@
 import type {PayloadAction} from '@reduxjs/toolkit'
 import {createAsyncThunk, createSlice} from '@reduxjs/toolkit'
-import {NO_LOOT, TLoot, TWOid} from "../../Types/CommonTypes";
+import {NO_LOOT, TWOid} from "../../Types/CommonTypes";
 import {LootAPI, RegionAPI} from "../../API/DataAPI";
 import {checkError} from "../../Unils/utilsFunctions";
 import {selectFieldsOptions} from "../../Types/Utils";
+import {TLoot} from "../../Types/MainEntities";
 
 const reducerPath = 'mif/loot'
 

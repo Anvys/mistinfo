@@ -20,9 +20,9 @@ import {CompanionContent} from "./Contents/CompanionContent";
 import {QuestItemContent} from "./Contents/QiestItemContent";
 import {QuestItemSourceContent} from "./Contents/QiestItemSourceContent";
 import {ShopContent} from "./Contents/ShopContent";
-import {BookContent} from "./Contents/BookContent";
+import {BookContent} from "./CustomContents/BookContent";
 import {TrainerContent} from "./Contents/TrainerContent";
-import {ReputationContent} from "./Contents/ReputationContent";
+import {ReputationContent} from "./CustomContents/ReputationContent";
 
 
 export const ContentSpace: React.FC = () => {

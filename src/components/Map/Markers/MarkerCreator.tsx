@@ -2,21 +2,10 @@ import React from 'react';
 import Leaf, {Icon, LatLngExpression} from "leaflet";
 import {CircleMarker, ImageOverlay, Marker, Polygon, Polyline, Popup, Tooltip} from "react-leaflet";
 import {
-    TComponent,
-    TEvent,
-    TGatherPoint,
-    TLocation,
-    TLoot,
+    NO_LOOT,
     TMapPosition,
-    TMaterial,
-    TNpc,
-    TQuest,
-    TQuestItemSource,
-    TRegion,
-    TShop,
     TStagePos,
-    TStagePosType,
-    TStaminaElixir
+    TStagePosType
 } from "../../../Types/CommonTypes";
 import {useAppDispatch} from "../../../redux/store";
 import {MapSlice} from "../../../redux/reducers/mapReducer";
@@ -25,6 +14,16 @@ import {getAddMarkerIconSelector, getAddMarkerSizeSelector} from "../../../redux
 import {iconUrlPicker} from "../../IconPicker/IconPicker";
 import {getStagesStr, getStageStr, getTimeStr} from "../../../Unils/utilsFunctions";
 import s from './MarkerCreator.module.css';
+import {
+    TComponent,
+    TEvent,
+    TGatherPoint,
+    TLocation,
+    TLoot, TMaterial, TNpc,
+    TQuest,
+    TQuestItemSource, TRegion, TShop,
+    TStaminaElixir
+} from "../../../Types/MainEntities";
 
 
 const colors = {
@@ -102,7 +101,7 @@ export const MC = {
         // }else return null
 
         return <Polygon
-            pathOptions={{color: `${isActive ? 'orange' : 'lime'}`, fillColor: `${isActive ? 'none' : 'lime'}`}}
+            pathOptions={{color: `${isActive ? 'orange' : 'lime'}`, fillColor: `${isActive ? 'rgba(255, 148, 59, 0.09)' : 'lime'}`}}
             positions={bounds}>
             <Tooltip>
                 {data.terrainReq > 0 ? `${data.terrain} ${data.terrainReq}` : `No land require`}
@@ -114,7 +113,7 @@ export const MC = {
                 {ownGather.length > 0 && <details>
                     <summary>{`Gathers: ${ownGather.length}`}</summary>
                     {ownGather.map(v => {
-                        const gatherDifficult = loots.find(loot => loot.name === v.loot)?.loot.reduce((p, c) => {
+                        const gatherDifficult = loots.find(loot => v.loot !== NO_LOOT && loot.name === v.loot.name)?.loot.reduce((p, c) => {
                             const dif = resources.find(res => res.name === c.name)?.gatherDifficulty
                             if (!!dif) return dif > p ? dif : p
                             else return p
@@ -363,7 +362,8 @@ export const MC = {
                     </Popup>
                     <Tooltip><p>{`${data.count}x${data.name}`}</p></Tooltip>
                 </Marker>
-                {(activeRegion === data.region || activeResource.length > 0 && data.loot.toLowerCase().includes(activeResource.toLowerCase())) &&
+                {(activeRegion === data.region || activeResource.length > 0 && typeof data.loot !== 'string' &&
+                        data.loot.loot.some(d=>d.name.toLowerCase().includes(activeResource.toLowerCase()))) &&
                     <CircleMarker center={pos} radius={25}
                                   pathOptions={{
                                       color: colors.activeGathers,

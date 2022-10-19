@@ -10,10 +10,11 @@ import {
 } from "../../../redux/dataSelectors";
 import {MapSlice} from "../../../redux/reducers/mapReducer";
 import styles from './Fields.module.css';
-import {TLocation, TMapPosition, TMonster, TQuestItemPosition, TQuestItemPosType} from "../../../Types/CommonTypes";
+import {TMapPosition, TQuestItemPosType} from "../../../Types/CommonTypes";
 import {EAddState, selectFieldsOptions} from "../../../Types/Utils";
 import {SimpleInputField} from "./InputField";
 import {SimpleSelectField} from "./SelectField";
+import {TLocation, TMonster, TQuestItemPosition} from "../../../Types/MainEntities";
 
 type PosFieldProps = {
     // pos: { x: number, y: number },

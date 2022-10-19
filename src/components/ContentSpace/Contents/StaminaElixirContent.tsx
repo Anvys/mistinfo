@@ -1,18 +1,14 @@
 import React, {useState} from 'react';
 import styles from './../ContentSpace.module.css';
 import {useDispatch, useSelector} from "react-redux";
-import {Outlet} from "react-router-dom";
-import {
-    getIsAddPosFieldActiveSelector,
-    getIsStaminaElixirInitSelector,
-    getStaminaElixirSelector
-} from "../../../redux/dataSelectors";
+import {getIsStaminaElixirInitSelector, getStaminaElixirSelector} from "../../../redux/dataSelectors";
 import {TAppDispatch} from "../../../redux/store";
 import {DataView} from "../../DataView/DataView";
-import {TStaminaElixir, TWOid} from "../../../Types/CommonTypes";
+import {TWOid} from "../../../Types/CommonTypes";
 import {GenDataAdd} from "../../DataAdd/GenDataAdd";
-import {MyMap} from "../../Map/MyMap";
 import {StaminaElixirThunks} from "../../../redux/reducers/staminaElixirReducer";
+import {TStaminaElixir} from "../../../Types/MainEntities";
+import {initCommonFields} from "../contentUtils";
 
 type TProps = {};
 export const StaminaElixirContent: React.FC<TProps> = (props) => {
@@ -29,20 +25,14 @@ export const StaminaElixirContent: React.FC<TProps> = (props) => {
     }
     const resetAddFormData = () => setDataToAdd(null)
     const initObj: TWOid<TStaminaElixir> = {
-        name: 'Vigor',
         icon: 'staminaElixir/icon',
         pos: {x: 0, y: 0},
-        translate: {En: 'Vigor', Ru: 'Vigor', Fr: 'Vigor'},
-        notes: [],
+        ...initCommonFields
     }
-
-    // const isMapActive = useSelector(getIsAddPosFieldActiveSelector)
-
     return (
         <div className={styles.contentBox}>
             <div className={styles.addFormBox}>
                 <div className={styles.addDiv}>
-                    {/*<LocationDataAdd data={dataToAdd} resetAddFormData={resetAddFormData}/>*/}
                     {GenDataAdd({
                         data: dataToAdd,
                         resetAddFormData,
@@ -51,11 +41,8 @@ export const StaminaElixirContent: React.FC<TProps> = (props) => {
                         dataName: 'staminaelixir'
                     })}
                 </div>
-                {/*<IconPicker onIconPickHandler={onIconPickHandler}/>*/}
-                {/*{isMapActive && <MyMap wid={-1} hei={400}/>}*/}
             </div>
             <div className={styles.dbField}>
-                <Outlet/>
                 <DataView data={data} dataEditHandler={dataAddHandler} dataDelHandler={dataDelHandler}/>
             </div>
         </div>

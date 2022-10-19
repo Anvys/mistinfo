@@ -1,5 +1,5 @@
 import React, {useState} from 'react';
-import {TDrop, TDropTypes, TLoot, TWOid} from "../../../Types/CommonTypes";
+import {TDrop, TDropTypes, TWOid} from "../../../Types/CommonTypes";
 import {FormikErrors, useFormik, useFormikContext} from "formik";
 import styles from './Fields.module.css';
 import {useSelector} from "react-redux";
@@ -10,6 +10,7 @@ import {
     MaterialSelectors
 } from "../../../redux/dataSelectors";
 import {selectFieldsOptions} from "../../../Types/Utils";
+import {TLoot} from "../../../Types/MainEntities";
 
 type TProps = {
     index: number

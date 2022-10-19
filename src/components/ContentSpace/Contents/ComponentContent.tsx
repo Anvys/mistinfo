@@ -5,11 +5,13 @@ import {getComponentsSelector, getIsComponentsInitSelector} from "../../../redux
 import {TAppDispatch} from "../../../redux/store";
 import {ComponentThunks} from "../../../redux/reducers/componentReducer";
 import {DataView} from "../../DataView/DataView";
-import {TComponent, TComponentType, TMaterialType, TWOid} from "../../../Types/CommonTypes";
+import {TComponentType, TWOid} from "../../../Types/CommonTypes";
 import {GenDataAdd} from "../../DataAdd/GenDataAdd";
+import {TComponent} from "../../../Types/MainEntities";
+import {initCommonFields} from "../contentUtils";
 
 type TProps = {
-    type?:TComponentType
+    type?: TComponentType
 };
 export const ComponentContent: React.FC<TProps> = (props) => {
 
@@ -26,7 +28,6 @@ export const ComponentContent: React.FC<TProps> = (props) => {
     }
     const resetAddFormData = () => setDataToAdd(null)
     const initObj: TWOid<TComponent> = {
-        name: '',
         icon: '',
         type: 'Plant' as TComponentType,
         durability: 0,
@@ -57,7 +58,7 @@ export const ComponentContent: React.FC<TProps> = (props) => {
         },
         goldCost: 0,
         encumbrance: 0,
-        translate: {En: '', Fr: '', Ru: ''},
+        ...initCommonFields
     }
 
     return (
@@ -73,7 +74,8 @@ export const ComponentContent: React.FC<TProps> = (props) => {
                 })}
             </div>
             <div className={styles.dbField}>
-                <DataView type={props.type} data={data} dataEditHandler={dataAddHandler} dataDelHandler={dataDelHandler}/>
+                <DataView type={props.type} data={data} dataEditHandler={dataAddHandler}
+                          dataDelHandler={dataDelHandler}/>
             </div>
         </div>
     );

@@ -4,7 +4,7 @@ import fieldsStyles from './../../DataAdd/Fields/Fields.module.css'
 
 import {useAppDispatch} from "../../../redux/store";
 import {iconUrlPicker} from "../../IconPicker/IconPicker";
-import {TCombineData, TRegion, TTranslateLang} from "../../../Types/CommonTypes";
+import {TCombineData, TTranslateLang} from "../../../Types/CommonTypes";
 import {getDataView, TDataViewObj} from "../DataView";
 import {useSelector} from "react-redux";
 import {AuthSelectors, GlobalSettingsSelectors} from "../../../redux/dataSelectors";
@@ -13,6 +13,7 @@ import {useLocation} from "react-router-dom";
 import {SimpleSelectField} from "../../DataAdd/Fields/SelectField";
 import {selectFieldsOptions} from "../../../Types/Utils";
 import {getTableTdKey} from "../SortingAndViewUtils";
+import {TRegion} from "../../../Types/MainEntities";
 
 
 type TDataViewTable2Props = {

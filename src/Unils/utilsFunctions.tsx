@@ -1,10 +1,10 @@
 import {
-    TAbility, TBonus, TBook,
+    TBonus, TBook,
     TCombineData, TEquip,
     TMapPosition, TQuestItemPosType,
-    TQuestStage, TRecipe, TRecipePart, TRequireEquip,
+    TQuestStage, TRecipePart, TRequireEquip,
     TResponseBody, TShopContent,
-    TStage,
+    TStage, TStageRequereType,
     TStageRequire
 } from "../Types/CommonTypes";
 import {selectFieldsOptions, StatusCodes} from "../Types/Utils";
@@ -13,6 +13,7 @@ import {AddFields, TSelectFieldOptionsKeys} from "../components/DataAdd/AddField
 import styles from "../components/DataAdd/DataAdd.module.css";
 import {useSelector} from "react-redux";
 import {getMarkerForAddPosSelector, getMaterialsSelector} from "../redux/dataSelectors";
+import {TAbility, TRecipe} from "../Types/MainEntities";
 
 export const getDeepKeys = (obj: object, keys: Array<string> = []): Array<string> => {
     //todo только для объектов, не для массивов
@@ -129,8 +130,8 @@ export const checkError = (data: TResponseBody<TCombineData>): boolean => {
 
     return data.status === StatusCodes.Ok
 }
-export const getStageRequireStr = (type: string, req: TStageRequire) => {
-    // console.log(req)
+export const getStageRequireStr = (type: TStageRequereType, req: TStageRequire) => {
+    console.log(type, req)
     switch (type) {
         case 'Adventure':
             return `${req.type}: ${req.count}`
@@ -138,6 +139,11 @@ export const getStageRequireStr = (type: string, req: TStageRequire) => {
             const eq = req as TRequireEquip
             if (!eq.type.recipe) return `empty`
             return `${eq.count}x ${eq.type.recipe.name}: \n${eq.type.recipe.parts.map((v, i) => `--${v.name}: ${eq.type.components[i]} x${v.count}${i < eq.type.recipe.parts.length - 1 ? '\n' : ''}`).join('')}`
+        case "Kill":
+        case "QuestItem":
+        case "Resource":
+        case "Battle":
+            return `${type} string TODO`
         default:
             return `DefaultStageReqStr`
     }
@@ -150,6 +156,7 @@ export const getStagesStr = (stages: Array<TStage>): string => {
 }
 export const getStageStr = (stage: TStage | TQuestStage): string => {
     // return `-${stage.expr}-:№${stage.num}:${stage.name}:${stage.proc}%:${getStageRequireStr(stage.type, stage.require)}`
+    console.log(`stage`,stage)
     return `№${stage.num}: ${getStageRequireStr(stage.type, stage.require)}(${stage.proc}%)`
 }
 export const getAbilityStr = (abi: TAbility) => {

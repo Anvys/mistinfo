@@ -23,9 +23,11 @@ import {useAppDispatch} from "../../redux/store";
 import {MapSlice} from "../../redux/reducers/mapReducer";
 import {AddBounds} from "./Bounds/AddBounds";
 import {LayerWithFilter} from "./Layer/LayerWithFilter";
-import {TLocation, TMapPosition, TMonster} from "../../Types/CommonTypes";
+import {NO_LOOT, TMapPosition} from "../../Types/CommonTypes";
 import {useLocation, useNavigate} from "react-router-dom";
 import {getSearchParams} from "../../Unils/utilsFunctions";
+import {baseURL, port} from "../../API/DataAPI";
+import {TLocation, TMonster} from "../../Types/MainEntities";
 
 const MyComponent: React.FC<{ onZoomChange: (z: number) => void, visible: boolean }> = (props) => {
     const [coords, setCoords] = useState({lat: 0, lng: 0});
@@ -173,7 +175,7 @@ export const MyMap: React.FC<TProps> = React.memo((props) => {
     const regionMarkers = regions.map(v => MC.region(v, zoom, locations, gatherPoints, events, loots, resources, activeRegion))
     const activeRegionMarker = MC.region(regions.find(v => v.name===activeRegion)!, zoom, locations, gatherPoints, events, loots, resources, activeRegion)
     const gatherMarkers = gatherPoints.map(gp => {
-        const gatherDifficult = loots.find(loot => loot.name === gp.loot)?.loot.reduce((p, c) => {
+        const gatherDifficult = loots.find(loot => gp.loot !== NO_LOOT && loot.name === gp.loot.name)?.loot.reduce((p, c) => {
             const dif = resources.find(res => res.name === c.name)?.gatherDifficulty
             if (!!dif) return dif > p ? dif : p
             else return p
@@ -294,7 +296,7 @@ export const MyMap: React.FC<TProps> = React.memo((props) => {
                     <MyComponent onZoomChange={onZoomChange} visible={false}/>
                     <TileLayer minZoom={5} maxZoom={8} noWrap={true}
                                attribution='&copy; <a href="https://asd.con">Vir</a> (c))'
-                               url={'http://127.0.0.1:3333/api/map/{x}/{y}/{z}'}
+                               url={`${baseURL}:${port}/api/map/{x}/{y}/{z}`}
                     />
 
                     {MC.getTowns(zoom)}
