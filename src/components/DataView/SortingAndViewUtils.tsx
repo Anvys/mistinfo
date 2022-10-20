@@ -21,9 +21,13 @@ import s from "./DataView.module.css";
 import {getContentShopItemStrFull, getDetails, getTimeStr, toUpperFirstLetterCase} from "../../Unils/utilsFunctions";
 import {TAbility, TLocation, TMonster, TQuestItemPosition, TRecipe} from "../../Types/MainEntities";
 
-export const ignoredFields = ['_id', '__v', 'translate', 'bound', 'moveTo', 'availableAfter', 'startAt', 'endAt', 'author']
-const objectKeyToSort = ['notes', 'loot', 'Book', 'Reputation', 'Land','Count', 'reputationReward', 'link']
+export const adminView = ['link','author']
+export const ignoredFields = ['_id', '__v', 'translate', 'bound', 'moveTo', 'availableAfter', 'startAt', 'endAt', ]
+const objectKeyToSort = ['notes', 'loot', 'Book', 'Reputation', 'Land','Count', 'reputationReward',]
 export const keysToChangeView = ['cooldown']
+
+export const inIgnoreView = (key: string, isAuth = false)=> (!isAuth && adminView.includes(key)) || ignoredFields.includes(key)
+
 const getDataWeight = (key: string) => {
     switch (key) {
         case 'icon':
@@ -54,6 +58,8 @@ const getDataWeight = (key: string) => {
             return 200
         case 'link':
             return 201
+        case 'author':
+            return 202
 
         default:
             return 50 + key.length
@@ -263,6 +269,8 @@ export const getTableTdKey = (key: string, cut: number = 6): string => {
             return 'C'
         case 'reputationReward':
             return 'Reward'
+        case 'author':
+            return 'Last edit'
         // case 'durability': return 'dura'
         default:
             return toUpperFirstLetterCase(key.length > cut ? `${key.substring(0, cut)}.` : key)

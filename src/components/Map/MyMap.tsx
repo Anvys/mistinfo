@@ -18,7 +18,7 @@ import {
     RegionSelectors, ShopSelectors,
     StaminaElixirSelectors
 } from "../../redux/dataSelectors";
-import {MC} from "./Markers/MarkerCreator";
+import {Markers} from "./Markers/MarkerCreator";
 import {useAppDispatch} from "../../redux/store";
 import {MapSlice} from "../../redux/reducers/mapReducer";
 import {AddBounds} from "./Bounds/AddBounds";
@@ -28,6 +28,7 @@ import {useLocation, useNavigate} from "react-router-dom";
 import {getSearchParams} from "../../Unils/utilsFunctions";
 import {baseURL, port} from "../../API/DataAPI";
 import {TLocation, TMonster} from "../../Types/MainEntities";
+import {RegionMarker} from "./Markers/RegionMarker";
 
 const MyComponent: React.FC<{ onZoomChange: (z: number) => void, visible: boolean }> = (props) => {
     const [coords, setCoords] = useState({lat: 0, lng: 0});
@@ -170,24 +171,24 @@ export const MyMap: React.FC<TProps> = React.memo((props) => {
         const moveTo = v.moveTo === '' ? undefined : locations.find(loc=>loc.name===v.moveTo)
         const npcIn = npc.filter(n=>n.location === v.name)
         const shopIn = shops.filter(s=>npcIn.some(n=>n.name===s.npc))
-        return MC.location(v, zoom, moveTo, onMoveToClickHandler,npcIn,shopIn)
+        return Markers.location(v, zoom, moveTo, onMoveToClickHandler,npcIn,shopIn)
     })
-    const regionMarkers = regions.map(v => MC.region(v, zoom, locations, gatherPoints, events, loots, resources, activeRegion))
-    const activeRegionMarker = MC.region(regions.find(v => v.name===activeRegion)!, zoom, locations, gatherPoints, events, loots, resources, activeRegion)
+    const regionMarkers = regions.map(v => Markers.region(v, zoom, locations, gatherPoints, events, loots, resources, activeRegion))
+    const activeRegionMarker = Markers.region(regions.find(v => v.name===activeRegion)!, zoom, locations, gatherPoints, events, loots, resources, activeRegion)
     const gatherMarkers = gatherPoints.map(gp => {
         const gatherDifficult = loots.find(loot => gp.loot !== NO_LOOT && loot.name === gp.loot.name)?.loot.reduce((p, c) => {
             const dif = resources.find(res => res.name === c.name)?.gatherDifficulty
             if (!!dif) return dif > p ? dif : p
             else return p
         }, 0)
-        return MC.gatherPoint(gp, zoom, gatherDifficult || 0, activeRegion, activeResource || '')
+        return Markers.gatherPoint(gp, zoom, gatherDifficult || 0, activeRegion, activeResource || '')
     })
-    const eventMarkers = events.map(v => MC.events(v, zoom, activeRegion))
-    const staminaElixirMarkers = stamina.map((v, i) => MC.staminaElixir({
+    const eventMarkers = events.map(v => Markers.events(v, zoom, activeRegion))
+    const staminaElixirMarkers = stamina.map((v, i) => Markers.staminaElixir({
         ...v,
         name: `${v.name} №${i + 1}`
     }, zoom))
-    const questMarkers = quests.map((v, i) => MC.quest(v, zoom, locations, npc))
+    const questMarkers = quests.map((v, i) => Markers.quest(v, zoom, locations, npc))
     const questItemMarkers = questsItemsSource.map(v => {
         let pos: TMapPosition = {x: 0, y: 0}
         const icon = questsItems.find(qi => qi.name === v.name)?.icon || 'Unknown/Unknown'
@@ -207,7 +208,7 @@ export const MyMap: React.FC<TProps> = React.memo((props) => {
             default:
                 console.error(`error in questItemMarkers:type ${v.posQuestItem.type}`)
         }
-        return MC.questItem(v, zoom, pos, icon)
+        return Markers.questItem(v, zoom, pos, icon)
     })
 
 
@@ -299,7 +300,7 @@ export const MyMap: React.FC<TProps> = React.memo((props) => {
                                url={`${baseURL}:${port}/api/map/{x}/{y}/{z}`}
                     />
 
-                    {MC.getTowns(zoom)}
+                    {Markers.getTowns(zoom)}
                     <LayerWithFilter filter={layerFilter} onResetActiveQuest={onResetActiveMarkers}
                                      locationMarkers={locationMarkers}
                                      eventMarkers={eventMarkers}
@@ -310,12 +311,12 @@ export const MyMap: React.FC<TProps> = React.memo((props) => {
                                      global={global||false}
                     />
                     {activeRegion !== undefined && activeRegionMarker}
-                    {isCusMarkerActive && MC.addDataMarker(customMarkerPos.lng === 0 && customMarkerPos.lat === 0
+                    {isCusMarkerActive && Markers.addDataMarker(customMarkerPos.lng === 0 && customMarkerPos.lat === 0
                             ? map?.getCenter() || customMarkerPos
                             : customMarkerPos,
                         markerRef,
                         eventHandlers)}
-                    {!!activeQuest && activeQuest.length > 0 && quests.filter((fv, i) => fv.name === activeQuest).map(v => MC.quest(v, zoom, locations, npc))}
+                    {!!activeQuest && activeQuest.length > 0 && quests.filter((fv, i) => fv.name === activeQuest).map(v => Markers.quest(v, zoom, locations, npc))}
                     {isBoundsMenu && <AddBounds/>}
                     {!!activeQuest && 'asd'}
                     {mapSearchPos !== undefined && mapSearchPos.from !== 'region' && <CircleMarker center={center} pathOptions={{color: 'red', fillOpacity:0}} radius={20}/>}

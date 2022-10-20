@@ -40,7 +40,7 @@ export const DataViewTable2: React.FC<TDataViewTable2Props> = React.memo((props)
     let data = [...props.data.filter(v=>search.length>0 ? v.name.toLocaleLowerCase().includes(search.toLowerCase()) :true)]
     if(path === '/region') data = data.filter(filterFunc)
 
-    const dataView: TDataViewObj | null = getDataView(data, lang, path)
+    const dataView: TDataViewObj | null = getDataView(data, lang, path, isMod)
     if (!dataView && search.length===0 && path !== '/region') return <>Empty dataView</>
     const onCheck = (e: React.ChangeEvent<HTMLInputElement>) => {
         setIsDeleteModeActive(e.target.checked)

@@ -163,9 +163,9 @@ export const SideBar: React.FC = () => {
                     <div className={`${s.catDiv} ${getStyleSb(path, '/gatherpoint')}`}>
                         <Link to={'/gatherpoint'} className={s.navButton}>GatherPoint</Link>
                     </div>
-                    <div className={`${s.catDiv} ${getStyleSb(path, '/mapobject')}`}>
-                        <Link to={'/mapobject'} className={s.navButton}>Map Objects</Link>
-                    </div>
+                    {/*<div className={`${s.catDiv} ${getStyleSb(path, '/mapobject')}`}>*/}
+                    {/*    <Link to={'/mapobject'} className={s.navButton}>Map Objects</Link>*/}
+                    {/*</div>*/}
                     <div className={`${s.catDiv} ${getStyleSb(path, '/questitem')}`}>
                         <Link to={'/questitem'} className={s.navButton}>Quest Item</Link>
                     </div>

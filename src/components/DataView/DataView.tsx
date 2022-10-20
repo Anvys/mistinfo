@@ -1,7 +1,14 @@
 import React from 'react';
 import {DataViewTable2} from "./DataViewTable/DataViewTable";
 import {TCombineData, TTranslateLang} from "../../Types/CommonTypes";
-import {dataEntriesSort, getDataViewTdStr, getKeysCount, ignoredFields, keysToChangeView} from "./SortingAndViewUtils";
+import {
+    adminView,
+    dataEntriesSort,
+    getDataViewTdStr,
+    getKeysCount,
+    ignoredFields, inIgnoreView,
+    keysToChangeView
+} from "./SortingAndViewUtils";
 
 type TProps<T> = {
     data: Array<T>
@@ -26,7 +33,7 @@ export type TDataViewObj = {
     keys2: Array<[string, number]>
     values: Array<Array<string | JSX.Element>>
 }
-export const getDataView = (data: Array<TCombineData>, lang: TTranslateLang, path: string) => {
+export const getDataView = (data: Array<TCombineData>, lang: TTranslateLang, path: string, isAuth = false) => {
     // console.log(`------------dw2-----------`)
     // const {data} = props
     if (data.length === 0) return null
@@ -38,7 +45,7 @@ export const getDataView = (data: Array<TCombineData>, lang: TTranslateLang, pat
         values: [],
     }
     dataEntries.forEach(([key, value], index) => {
-        if (ignoredFields.includes(key)) return
+        if (inIgnoreView(key, isAuth)) return
         // if object - add keys in 2 rows else add as simple
         if (typeof value === 'object') {
             _dataView.keys1.push([key, getKeysCount(key, value)])
@@ -56,7 +63,7 @@ export const getDataView = (data: Array<TCombineData>, lang: TTranslateLang, pat
     data.forEach((val, index) => {
         let newValues: Array<string | JSX.Element> = []
         Object.entries(val).sort(dataEntriesSort).forEach(([key, value]) => {
-            if (ignoredFields.includes(key)) return
+            if (inIgnoreView(key, isAuth)) return
             const [valueKeys, valueData] = getDataViewTdStr(key, key === 'name'
                 ? val.translate[lang] === '' ? val.translate.En : val.translate[lang]
                 : value, path)
