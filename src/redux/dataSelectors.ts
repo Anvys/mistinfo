@@ -51,6 +51,7 @@ export const MapSelectors = {
     getActiveQuest : (state: TAppState) => state.map.activeQuest,
     getActiveRegion : (state: TAppState) => state.map.activeRegion,
     getActiveResource : (state: TAppState) => state.map.activeResource,
+    getAddMarkerPos : (state: TAppState) => state.map.markerForAddPos,
 }
 
 export const TrainerSelectors = {

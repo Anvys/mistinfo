@@ -45,6 +45,10 @@ export const DataViewTable2: React.FC<TDataViewTable2Props> = React.memo((props)
                 if(!!searchParams.name){
                     setSearch(searchParams.name)
 
+                }else{
+                    if(!!searchParams.npc){
+
+                    }
                 }
             }
             navi(path)

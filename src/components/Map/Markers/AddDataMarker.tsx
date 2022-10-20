@@ -13,6 +13,7 @@ type TAddDataMarkerProps = {
 };
 export const AddDataMarker: React.FC<TAddDataMarkerProps> = (props) => {
     const {pos, markerRef, eventHandlers} = props
+    console.log(`markeradd:`, pos)
     const dispatch = useAppDispatch()
     const icon = useSelector(getAddMarkerIconSelector)
     const iconSize = useSelector(getAddMarkerSizeSelector)

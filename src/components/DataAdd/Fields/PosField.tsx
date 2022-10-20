@@ -39,7 +39,9 @@ export const PosField: React.FC<PosFieldProps> = ({posX, posY, htmlId, index, fo
     // const isBoundActive = useSelector(MapSelectors.isBoundActive)
     const onOpenMapHandler = () => {
         dispatch(MapSlice.actions.setIsMapActive(true))
+        console.log(posX,posY)
         setIsPosFromMarker(true)
+        posX!==0 && posY !==0 && dispatch(MapSlice.actions.setMarkerForAddPos({x: posX, y:posY}))
         dispatch(MapSlice.actions.setIsAddPosFieldActive(true))
     }
     const onCloseMapHandler = () => {
