@@ -4,7 +4,7 @@ import {
     TMapPosition, TQuestItemPosType,
     TQuestStage, TRecipePart, TRequireEquip,
     TResponseBody, TShopContent,
-    TStage, TStageRequereType,
+    TStage, TStageRequireType,
     TStageRequire
 } from "../Types/CommonTypes";
 import {selectFieldsOptions, StatusCodes} from "../Types/Utils";
@@ -130,7 +130,7 @@ export const checkError = (data: TResponseBody<TCombineData>): boolean => {
 
     return data.status === StatusCodes.Ok
 }
-export const getStageRequireStr = (type: TStageRequereType, req: TStageRequire) => {
+export const getStageRequireStr = (type: TStageRequireType, req: TStageRequire) => {
     console.log(type, req)
     switch (type) {
         case 'Adventure':

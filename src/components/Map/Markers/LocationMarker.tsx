@@ -35,13 +35,13 @@ export const LocationMarker = (data: TLocation, zoom: number, moveTo: TLocation 
                 <p>{data.name}</p>
                 <div className={s.popupDiv}>
                     {data.exploreReq > 0 && <p>explore: {data.exploreReq}</p>}
-                    {npcIn.length > 0 && <details>
-                        <summary>{`Npc: ${npcIn.length}`}</summary>
-                        {npcIn.map(v => {
+                    {npcIn.length > 0 && <div>
+                        {`\tNpc(${npcIn.length}): \n`}
+                        {npcIn.map((v,i) => {
                             const shop = shopIn.find(s => s.npc === v.name)
-                            return `${v.name} ${!!shop ? `Shop: [${shop.content.length} items]\n` : ``}\n`
+                            return `<${v.name}> ${!!shop ? `Shop: [${shop.content.length} items]\n` : ``}\n`
                         })}
-                    </details>}
+                    </div>}
                     {/*{shopIn.length>0 && shopIn.map(v=>`Shop: ${v.name} [${v.content.length} items]\n`)}*/}
                     {moveTo !== undefined &&
                         <button className={s.controlButton} type={"button"} onClick={onClick}>Move

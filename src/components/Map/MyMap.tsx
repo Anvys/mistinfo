@@ -27,7 +27,7 @@ import {NO_LOOT, TMapPosition} from "../../Types/CommonTypes";
 import {useLocation, useNavigate} from "react-router-dom";
 import {getSearchParams} from "../../Unils/utilsFunctions";
 import {baseURL, port} from "../../API/DataAPI";
-import {TLocation, TMonster} from "../../Types/MainEntities";
+import {TLocation, TMonster, TQuestItem} from "../../Types/MainEntities";
 import {RegionMarker} from "./Markers/RegionMarker";
 
 const MyComponent: React.FC<{ onZoomChange: (z: number) => void, visible: boolean }> = (props) => {
@@ -191,6 +191,7 @@ export const MyMap: React.FC<TProps> = React.memo((props) => {
     const questMarkers = quests.map((v, i) => Markers.quest(v, zoom, locations, npc))
     const questItemMarkers = questsItemsSource.map(v => {
         let pos: TMapPosition = {x: 0, y: 0}
+        const forQuests = quests.filter(q=>q.qStages.some(qs=>qs.type === 'QuestItem' && (!!qs.require && qs.require.type as TQuestItem).name === v.name))
         const icon = questsItems.find(qi => qi.name === v.name)?.icon || 'Unknown/Unknown'
         switch (v.posQuestItem.type) {
             case "pos":
@@ -208,7 +209,7 @@ export const MyMap: React.FC<TProps> = React.memo((props) => {
             default:
                 console.error(`error in questItemMarkers:type ${v.posQuestItem.type}`)
         }
-        return Markers.questItem(v, zoom, pos, icon)
+        return Markers.questItem(v, zoom, pos, icon, forQuests)
     })
 
 

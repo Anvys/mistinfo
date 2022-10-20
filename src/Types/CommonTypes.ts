@@ -73,7 +73,7 @@ export type TRewCost = { type: string, name: string, count: number }
 
 
 export type TStageRequire = TRequireAdventure | TRequireQuestItem | TRequireEquip | TRequireResource | TRequireKill | TRequireBattle
-export type TStageRequereType = 'Adventure' | 'QuestItem' | 'Equip' | 'Resource' | 'Kill' | 'Battle'
+export type TStageRequireType = 'Adventure' | 'QuestItem' | 'Equip' | 'Resource' | 'Kill' | 'Battle'
 export type TRequireAdventure = {
     type: TSkills
     count: number
@@ -105,7 +105,7 @@ export type TQuestStage = {
     proc: number
     expr: TExpr
     name: string
-    type: TStageRequereType
+    type: TStageRequireType
     require: TStageRequire
     timeAvailable: string
     timeSpend: number
@@ -118,7 +118,7 @@ export type TStage = {
     proc: number
     expr: TExpr
     name: string
-    type: TStageRequereType
+    type: TStageRequireType
     require: TStageRequire
     time: number
 }

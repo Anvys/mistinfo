@@ -9,7 +9,7 @@ import {
     TDropTypes, TEquip,
     TExpr, TRecipePart,
     TRequireAdventure, TRequireQuestItem, TSkills,
-    TStage, TStageRequereType,
+    TStage, TStageRequireType,
     TStageRequire
 } from "../../../Types/CommonTypes";
 import {selectFieldsOptions, TSelectFieldsKeys} from "../../../Types/Utils";
@@ -37,7 +37,7 @@ type TProps = {
 export const StageField: React.FC<TProps> = (props) => {
     const {formik} = props
 
-    const [type, setType] = useState<TStageRequereType>('Adventure')
+    const [type, setType] = useState<TStageRequireType>('Adventure')
     const [name, setName] = useState('Stage')
     const [expr, setExpr] = useState<TExpr>('or')
     const [num, setNum] = useState(1)
@@ -54,7 +54,7 @@ export const StageField: React.FC<TProps> = (props) => {
 
     const onTypeChange: React.ChangeEventHandler<HTMLSelectElement> = (e) => {
         setReq(null)
-        setType(e.target.value as TStageRequereType)
+        setType(e.target.value as TStageRequireType)
     }
     const onRequireAdd = (req: TStageRequire) => {
         setReq(req)
