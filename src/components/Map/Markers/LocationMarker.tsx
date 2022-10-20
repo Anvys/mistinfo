@@ -39,7 +39,7 @@ export const LocationMarker = (data: TLocation, zoom: number, moveTo: TLocation 
                         {`\tNpc(${npcIn.length}): \n`}
                         {npcIn.map((v,i) => {
                             const shop = shopIn.find(s => s.npc === v.name)
-                            return `<${v.name}> ${!!shop ? `Shop: [${shop.content.length} items]\n` : ``}\n`
+                            return `${v.name} ${!!shop ? `Shop: [${shop.content.length} items]\n` : ``}\n`
                         })}
                     </div>}
                     {/*{shopIn.length>0 && shopIn.map(v=>`Shop: ${v.name} [${v.content.length} items]\n`)}*/}

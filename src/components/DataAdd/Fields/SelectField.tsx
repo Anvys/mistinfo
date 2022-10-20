@@ -45,6 +45,7 @@ export const SimpleSelectField:React.FC<TSelectSimpleField> = (props) => {
     const required = props.required === undefined? false: props.required
     const [val, setVal] = useState(value || '')
     // console.log(labelText, val)
+    // console.log(`value in select ${labelText}: `, value, typeof value)
     useEffect(()=>{
         onSelChange(val as string)
     },[val])

@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import styles from './DataViewTable.module.scss';
 import fieldsStyles from './../../DataAdd/Fields/Fields.module.css'
 
@@ -9,11 +9,12 @@ import {getDataView, TDataViewObj} from "../DataView";
 import {useSelector} from "react-redux";
 import {AuthSelectors, GlobalSettingsSelectors} from "../../../redux/dataSelectors";
 import {SimpleInputField} from "../../DataAdd/Fields/InputField";
-import {useLocation} from "react-router-dom";
+import {useLocation, useNavigate} from "react-router-dom";
 import {SimpleSelectField} from "../../DataAdd/Fields/SelectField";
 import {selectFieldsOptions} from "../../../Types/Utils";
 import {getTableTdKey} from "../SortingAndViewUtils";
 import {TRegion} from "../../../Types/MainEntities";
+import {getSearchParams} from "../../../Unils/urlUtils";
 
 
 type TDataViewTable2Props = {
@@ -24,6 +25,7 @@ type TDataViewTable2Props = {
     // isMod: boolean
 }
 export type TFilterFunc = (v:any)=>boolean
+export const searchParamsArr = ['name']
 export const DataViewTable2: React.FC<TDataViewTable2Props> = React.memo((props) => {
     const {dataEditHandler, dataDelHandler} = props
     const [isDeleteModeActive, setIsDeleteModeActive] = useState(false);
@@ -31,7 +33,23 @@ export const DataViewTable2: React.FC<TDataViewTable2Props> = React.memo((props)
     const [regionFilters, setRegionFilters] = useState({land:'all', count:0})
     const lang = useSelector(GlobalSettingsSelectors.getLang)
     const isMod = useSelector(AuthSelectors.isInit)
-    const path = useLocation().pathname
+    const loca = useLocation()
+    const navi = useNavigate()
+    const path = loca.pathname
+
+    useEffect(()=>{
+        if(loca.search.length>0){
+            const searchParams:any = getSearchParams(loca.search)
+            console.log(`path:`,path, `sear:`,loca.search, `sp:`,searchParams)
+            if(!!searchParams && searchParamsArr.some(v=>!!searchParams[v])){
+                if(!!searchParams.name){
+                    setSearch(searchParams.name)
+
+                }
+            }
+            navi(path)
+        }
+    },[loca.search])
 
     let filterFunc:TFilterFunc = (v:any)=>
         (regionFilters.land === 'all'? true : v.terrain===regionFilters.land)
@@ -50,6 +68,7 @@ export const DataViewTable2: React.FC<TDataViewTable2Props> = React.memo((props)
         <div className={styles.mainBox}>
             <div className={styles.searchDiv}>
                 <SimpleInputField value={search} onChange={str=>setSearch(str)} index={0} htmlId={'search'} labelText={'Search:'} required={false} disabled={false}/>
+                <button type={'button'} onClick={()=>setSearch('')} className={styles.clearBtn}>clear</button>
                 {path==='/region' &&<>
                     <SimpleSelectField mapSelectValues={['all',...selectFieldsOptions['terrain']]} value={regionFilters.land} onSelChange={str=>setRegionFilters(a=>({...a,land: str}))} labelText={'land:'}/>
                     <SimpleInputField value={regionFilters.count} onChange={str=>setRegionFilters(a=>({...a,count: +str}))} index={0} htmlId={'dif'} labelText={'dif:'} required={false} disabled={false}/>

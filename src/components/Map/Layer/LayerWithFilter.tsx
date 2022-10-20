@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import {LayerGroup, LayersControl, useMap} from "react-leaflet";
 import Control from 'react-leaflet-custom-control';
 import {TLayerFilters} from "../MyMap";
@@ -31,22 +31,38 @@ type TProps = {
     questItemMarkers: Array<JSX.Element>
     regionMarkers: Array<JSX.Element>
     onResetActiveQuest: () => void
+    activeQuest: string | undefined
 };
 export const LayerWithFilter: React.FC<TProps> = (props) => {
-    const {filter, global} = props
-    // active Markers state
-    const [activeMarker, setActiveMarker] = useState<TSelectMarkers | undefined>(undefined)
+    const {filter, global, activeQuest} = props
+
 
     const isAddActive = useSelector(MapSelectors.isAddActive)
-    const activeQuest = useSelector(MapSelectors.getActiveQuest)
+    // const activeQuest = useSelector(MapSelectors.getActiveQuest)
     const activeRegion = useSelector(MapSelectors.getActiveRegion)
     const activeResource = useSelector(MapSelectors.getActiveResource)
+
+    // active Markers state
+    // const [activeMarker, setActiveMarker] = useState<TSelectMarkers | undefined | ''>('')
+    const [activeMarker, setActiveMarker] = useState<TSelectMarkers | undefined>(() => {
+        console.log(`in state: `, activeQuest, activeRegion, activeResource)
+        switch (true) {
+            case !!activeQuest:
+                return 'Quest'
+            case !!activeRegion:
+                return 'Region'
+            case !!activeResource:
+                return 'Resource'
+            default: return undefined
+        }
+    })
+
     const quests = useSelector(QuestSelectors.getData)
     const regions = useSelector(RegionSelectors.getData)
     const locations = useSelector(LocationSelectors.getData)
-    const resourceArr = [...useSelector(MaterialSelectors.getData).filter(v=>v.type!=='Bone'), ...useSelector(ComponentSelectors.getData).filter(v=>v.type==='Plant')]//.sort((a,b)=>a.gatherDifficulty-b.gatherDifficulty).sort((a,b)=>a.type.length-b.type.length)
-    const resourceValues = resourceArr.map(v=>v.name)
-    const resourceNames = resourceArr.map(v=>`${v.type} ${v.name}`)
+    const resourceArr = [...useSelector(MaterialSelectors.getData).filter(v => v.type !== 'Bone'), ...useSelector(ComponentSelectors.getData).filter(v => v.type === 'Plant')]//.sort((a,b)=>a.gatherDifficulty-b.gatherDifficulty).sort((a,b)=>a.type.length-b.type.length)
+    const resourceValues = resourceArr.map(v => v.name)
+    const resourceNames = resourceArr.map(v => `${v.type} ${v.name}`)
     const map = useMap()
     const loca = useLocation()
     const history = useNavigate()
@@ -55,10 +71,10 @@ export const LayerWithFilter: React.FC<TProps> = (props) => {
         const findRes = quests.find(v => v.name === qName)
         if (findRes) {
             dispatch(MapSlice.actions.setActiveQuest(qName))
-            if(findRes.qStages.length>0){
+            if (findRes.qStages.length > 0) {
                 const pos: TMapPosition = getPosFromQuestStage(findRes.qStages[0].stagePos, findRes.qStages[0].stagePosType, locations)
-                map.setView({lat:pos.x, lng:pos.y}, map.getZoom(), {animate: true,})
-                if(loca.search.length>0) history('/map')
+                map.setView({lat: pos.x, lng: pos.y}, map.getZoom(), {animate: true,})
+                if (loca.search.length > 0) history('/map')
                 dispatch(MapSlice.actions.setActiveRegion(undefined))
                 dispatch(MapSlice.actions.setIsActiveRegion(false))
 
@@ -67,13 +83,15 @@ export const LayerWithFilter: React.FC<TProps> = (props) => {
             }
         }
     }
+    //Костыль?
+    if(!!activeQuest && activeMarker!=='Quest') setActiveMarker('Quest')
     const onRegionSelect = (rName: string) => {
         const findRes = regions.find(v => v.name === rName)
         if (findRes) {
             // move  view center map
-            map.setView({lat:findRes.pos.x, lng:findRes.pos.y}, map.getZoom(), {animate: true,})
+            map.setView({lat: findRes.pos.x, lng: findRes.pos.y}, map.getZoom(), {animate: true,})
             dispatch(MapSlice.actions.setActiveRegion(rName))
-            if(loca.search.length>0) history('/map')
+            if (loca.search.length > 0) history('/map')
             dispatch(MapSlice.actions.setActiveQuest(undefined))
             dispatch(MapSlice.actions.setIsActiveQuestMap(false))
 
@@ -93,7 +111,6 @@ export const LayerWithFilter: React.FC<TProps> = (props) => {
             dispatch(MapSlice.actions.setIsActiveRegion(false))
         }
     }
-
     return (
         <div>
             <Control position={"topright"}>
@@ -105,7 +122,8 @@ export const LayerWithFilter: React.FC<TProps> = (props) => {
                     }}>Reset
                     </button>
                     <SimpleSelectField mapSelectValues={[...selectMarkers]} value={activeMarker}
-                                       onSelChange={val=>setActiveMarker(val as TSelectMarkers | undefined)} labelText={'Marker'}/>
+                                       onSelChange={val => setActiveMarker(val as TSelectMarkers | undefined)}
+                                       labelText={'Marker'}/>
                     {!global && <button className={s.controlButton} type={'button'}
                                         style={{backgroundColor: `${isAddActive ? 'red' : 'green'}`}} onClick={(e) => {
                         e.stopPropagation()
@@ -118,7 +136,8 @@ export const LayerWithFilter: React.FC<TProps> = (props) => {
                         <SimpleSelectField mapSelectValues={regions.map(v => v.name)} value={activeRegion}
                                            onSelChange={onRegionSelect} labelText={'region'}/>}
                     {activeMarker === 'Resource' && resourceNames.length > 0 &&
-                        <SimpleSelectField mapSelectValues={resourceValues} mapSelectNames={resourceNames} value={activeResource}
+                        <SimpleSelectField mapSelectValues={resourceValues} mapSelectNames={resourceNames}
+                                           value={activeResource}
                                            onSelChange={onResourceSelect} labelText={'Res'}/>}
                 </div>
             </Control>

@@ -117,3 +117,16 @@
     box-shadow: 0px 0px 1px 1px #718181;
     /*cursor: pointer;*/
 }
+.clearBtn{
+    margin-left: 10px;
+    border: 1px solid black;
+    border-radius: 10px;
+    padding: 5px 10px;
+    align-self: center;
+}
+.clearBtn:hover{
+    cursor: pointer;
+}
+.clearBtn:active{
+    background-color: rgba(0,0,0,0.1);
+}

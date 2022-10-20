@@ -1,18 +1,19 @@
 import {
-    TBonus, TBook,
-    TCombineData, TEquip,
-    TMapPosition, TQuestItemPosType,
-    TQuestStage, TRecipePart, TRequireEquip,
-    TResponseBody, TShopContent,
-    TStage, TStageRequireType,
-    TStageRequire
+    TBonus,
+    TBook,
+    TCombineData,
+    TEquip,
+    TQuestItemPosType,
+    TQuestStage,
+    TRecipePart,
+    TRequireEquip,
+    TResponseBody,
+    TShopContent,
+    TStage,
+    TStageRequire,
+    TStageRequireType
 } from "../Types/CommonTypes";
-import {selectFieldsOptions, StatusCodes} from "../Types/Utils";
-import {FormikProps} from "formik";
-import {AddFields, TSelectFieldOptionsKeys} from "../components/DataAdd/AddFields";
-import styles from "../components/DataAdd/DataAdd.module.css";
-import {useSelector} from "react-redux";
-import {getMarkerForAddPosSelector, getMaterialsSelector} from "../redux/dataSelectors";
+import {StatusCodes} from "../Types/Utils";
 import {TAbility, TRecipe} from "../Types/MainEntities";
 
 export const getDeepKeys = (obj: object, keys: Array<string> = []): Array<string> => {
@@ -131,7 +132,7 @@ export const checkError = (data: TResponseBody<TCombineData>): boolean => {
     return data.status === StatusCodes.Ok
 }
 export const getStageRequireStr = (type: TStageRequireType, req: TStageRequire) => {
-    console.log(type, req)
+    // console.log(type, req)
     switch (type) {
         case 'Adventure':
             return `${req.type}: ${req.count}`
@@ -149,14 +150,16 @@ export const getStageRequireStr = (type: TStageRequireType, req: TStageRequire) 
     }
 }
 export const getStagesStr = (stages: Array<TStage>): string => {
-    const totalStages = stages.reduce((p,c)=>{return c.num>p?c.num:p},0)
+    const totalStages = stages.reduce((p, c) => {
+        return c.num > p ? c.num : p
+    }, 0)
     return stages.map((stage, i) =>
         // `-${stage.expr}-:№${stage.num}:${stage.name}:${stage.proc}%:${getStageRequireStr(stage.type, stage.require)}${i < stages.length - 1 ? '\n' : ''}`).join('')
-        `${totalStages>1?`№${stage.num} `:''}[${stage.name.length> 12 ? stage.name.substring(0,12)+'..':stage.name}]  ${getStageRequireStr(stage.type, stage.require)}(${stage.proc}%)${i < stages.length - 1 ? '\n' : ''}`).join('')
+        `${totalStages > 1 ? `№${stage.num} ` : ''}[${stage.name.length > 12 ? stage.name.substring(0, 12) + '..' : stage.name}]  ${getStageRequireStr(stage.type, stage.require)}(${stage.proc}%)${i < stages.length - 1 ? '\n' : ''}`).join('')
 }
 export const getStageStr = (stage: TStage | TQuestStage): string => {
     // return `-${stage.expr}-:№${stage.num}:${stage.name}:${stage.proc}%:${getStageRequireStr(stage.type, stage.require)}`
-    console.log(`stage`,stage)
+    // console.log(`stage`, stage)
     return `№${stage.num}: ${getStageRequireStr(stage.type, stage.require)}(${stage.proc}%)`
 }
 export const getAbilityStr = (abi: TAbility) => {
@@ -199,43 +202,21 @@ export const getDataObjStr = (field: string, data: any) => {
             return `defaultDataObjStr in getDataObjStr func`
     }
 }
-export const getTimeStr = (min: number) =>{
-    if(min < 60) return `${min}m`
+export const getTimeStr = (min: number) => {
+    if (min < 60) return `${min}m`
     else {
-        const h = Math.floor(min/60)
-        const m = min%60
-        if(h<25) return `${h}h:${m}m`
-        else{
-            const d = Math.floor(h/24)
-            const lastHours = h%24
+        const h = Math.floor(min / 60)
+        const m = min % 60
+        if (h < 25) return `${h}h:${m}m`
+        else {
+            const d = Math.floor(h / 24)
+            const lastHours = h % 24
             return `${d}d:${lastHours}h:${m}m`
         }
     }
 }
-type TGetSearchParamsReturn = {
-    pos: [number, number] | undefined,
-    from: string | undefined,
-    location: string | undefined,
-    region: string | undefined,
-}
-export const getSearchParams = (str:string):TGetSearchParamsReturn | undefined =>{
-    if(str.length){
-        const result: TGetSearchParamsReturn = {
-            pos:undefined ,
-            from: undefined,
-            location:undefined,
-            region: undefined
-        }
-        const e = Object.fromEntries(str.substring(1).split('&').map(v=>v.split('=')))
-        if(!!e.x && !!e.y && !isNaN(+e.x) && !isNaN(+e.y)) result.pos =  [+e.x, +e.y]
-        if(!!e.from && e.from.length>0)  result.from =  decodeURI(e.from)
-        if(!!e.location && e.location.length>0) result.location = decodeURI(e.location)
-        if(!!e.region && e.region.length>0) result.region = decodeURI(e.region)
-        return result
-    }else return undefined
 
-}
-export const getDetails = (summary: string, body:string)=>{
+export const getDetails = (summary: string, body: string) => {
     return <details>
         <summary>{summary}</summary>
         {body}
@@ -248,19 +229,19 @@ export const getContentShopItemStrFull = (v: TShopContent, full: boolean = true)
             return `Empty`
         case "Ability":
             const abi = v.item as TAbility
-            return `${v.type}: [${abi.level}]${abi.name} ${full?reqStr:''} (${v.count === 0 ? `∞` : `x${v.count}`})`
+            return `${v.type}: [${abi.level}]${abi.name} ${full ? reqStr : ''} (${v.count === 0 ? `∞` : `x${v.count}`})`
         case "Equip":
             const eq = v.item as TEquip
-            return `${v.type}: [${v.count === 0 ? `∞` : `x${v.count}`}] ${eq.recipe.name} [${eq.recipe.parts.map((part, i) => `${eq.components[i]} x${part.count}`).join(' / ')}] ${full?reqStr:''}`
+            return `${v.type}: [${v.count === 0 ? `∞` : `x${v.count}`}] ${eq.recipe.name} [${eq.recipe.parts.map((part, i) => `${eq.components[i]} x${part.count}`).join(' / ')}] ${full ? reqStr : ''}`
         case "Book":
             const book = v.item as TBook
-            return `${v.type}: [${v.count === 0 ? `∞` : `x${v.count}`}] ${book.skill} +${book.count} ${full?reqStr:''}`
+            return `${v.type}: [${v.count === 0 ? `∞` : `x${v.count}`}] ${book.skill} +${book.count} ${full ? reqStr : ''}`
         case "Recipe":
             const rec = v.item as TRecipe
-            return `${v.type}: ${rec.name} ${full?reqStr:''}`
+            return `${v.type}: ${rec.name} ${full ? reqStr : ''}`
     }
 }
-export const getContentShopItemStrLite = (v: TShopContent) =>getContentShopItemStrFull(v, false)
+export const getContentShopItemStrLite = (v: TShopContent) => getContentShopItemStrFull(v, false)
 
 export const trimToKeyStr = (str: string, cut: number = 5) => toUpperFirstLetterCase(str.length > cut ? `${str.substring(0, cut)}.` : str)
 export const toUpperFirstLetterCase = (str: string): string => {

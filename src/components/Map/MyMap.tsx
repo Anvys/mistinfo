@@ -18,17 +18,17 @@ import {
     RegionSelectors, ShopSelectors,
     StaminaElixirSelectors
 } from "../../redux/dataSelectors";
-import {Markers} from "./Markers/MarkerCreator";
+import {getPosFromQuestStage, Markers} from "./Markers/MarkerCreator";
 import {useAppDispatch} from "../../redux/store";
 import {MapSlice} from "../../redux/reducers/mapReducer";
 import {AddBounds} from "./Bounds/AddBounds";
 import {LayerWithFilter} from "./Layer/LayerWithFilter";
 import {NO_LOOT, TMapPosition} from "../../Types/CommonTypes";
 import {useLocation, useNavigate} from "react-router-dom";
-import {getSearchParams} from "../../Unils/utilsFunctions";
 import {baseURL, port} from "../../API/DataAPI";
 import {TLocation, TMonster, TQuestItem} from "../../Types/MainEntities";
 import {RegionMarker} from "./Markers/RegionMarker";
+import {getSearchParams} from "../../Unils/urlUtils";
 
 const MyComponent: React.FC<{ onZoomChange: (z: number) => void, visible: boolean }> = (props) => {
     const [coords, setCoords] = useState({lat: 0, lng: 0});
@@ -126,8 +126,9 @@ export const MyMap: React.FC<TProps> = React.memo((props) => {
     const markerRef = useRef<L.Marker>(null)
 
     // center map from search string
-    const path = useLocation()
-    const mapSearchPos = getSearchParams(path.search)
+    const loca = useLocation()
+    const mapSearchPos = getSearchParams(loca.search)
+    // console.log(mapSearchPos    )
     const center: [number, number] = !!mapSearchPos && mapSearchPos.pos !== undefined ? mapSearchPos.pos : [0, -45]
     if(!!mapSearchPos && mapSearchPos.from?.length && mapSearchPos.pos !== undefined){
         const sPos = {x:mapSearchPos.pos[0], y:mapSearchPos.pos[1]}
@@ -157,6 +158,19 @@ export const MyMap: React.FC<TProps> = React.memo((props) => {
             map.setView({lat:pos.x, lng:pos.y}, map.getZoom(), {animate: true,})
         }
     }
+    console.log('Render map[')
+    // if(!!mapSearchPos && mapSearchPos.quest && mapSearchPos.quest.length > 0){
+    //     const findData = quests.find(v=>v.name === mapSearchPos.quest)
+    //     if(!!findData && !!map) {
+    //         dispatch(MapSlice.actions.setActiveQuest(findData.name))
+    //         dispatch(MapSlice.actions.setIsActiveQuestMap(true))
+    //         // const pos = getPosFromQuestStage(findData.qStages[0].stagePos, findData.qStages[0].stagePosType, locations)
+    //         // map.setView({lat:pos.x, lng:pos.y}, map.getZoom(), {animate: true,})
+    //         // console.log({lat:pos.x, lng:pos.y}, mapSearchPos, pos)
+    //         // navigate(`/map?quest=${mapSearchPos.quest}&x=${pos.x}&y=${pos.y}`)
+    //         // if(loca.search.length>0) navigate(`/map?x=${pos.x}&y=${pos.y}`)
+    //     }
+    // }
 
 
     if(isAddMarkerActive && global){dispatch(MapSlice.actions.setIsAddPosFieldActive(false))}
@@ -310,6 +324,7 @@ export const MyMap: React.FC<TProps> = React.memo((props) => {
                                      questItemMarkers={questItemMarkers}
                                      regionMarkers={regionMarkers}
                                      global={global||false}
+                                     activeQuest = {activeQuest}
                     />
                     {activeRegion !== undefined && activeRegionMarker}
                     {isCusMarkerActive && Markers.addDataMarker(customMarkerPos.lng === 0 && customMarkerPos.lat === 0
