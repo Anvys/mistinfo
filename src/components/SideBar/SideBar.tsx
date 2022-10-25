@@ -3,6 +3,7 @@ import {Link, useLocation} from "react-router-dom";
 import s from './SideBar.module.scss'
 import {useSelector} from "react-redux";
 import {AuthSelectors} from "../../redux/dataSelectors";
+import {NavButton} from "../styled/NavButton";
 
 type TCategory = {
     materials: boolean
@@ -37,144 +38,57 @@ export const SideBar: React.FC = () => {
     return (
         <div className={s.sideBox}>
             {/*Database menu*/}
-            <div className={`${s.catDiv} ${getStyleSb(path, '/AdminLoginForm38n8g32chrtm56')}`}>
-                <Link to={'/AdminLoginForm38n8g32chrtm56'} className={s.navButton}>Login</Link>
-            </div>
-
-            <div className={`${s.catDiv} ${getStyleSb(path, '/map')}`}>
-                <Link to={'/map'} className={s.navButton}>Map</Link>
-            </div>
-
-            <div className={`${s.catDiv} ${categories.materials ? s.sbActive : s.sbInactive}`}>
-                <button className={`${categories.materials ? s.catBtnActive : s.catBtn} ${s.navButton}`} type={'button'}
-                        onClick={() => onCategoryClick('materials')}>{`Materials${categories.materials ?'▲':'▼'}`}
-                </button>
-            </div>
+            <NavButton linkTo={'/AdminLoginForm38n8g32chrtm56'} text={'Login'} active={path === '/AdminLoginForm38n8g32chrtm56'}/>
+            <NavButton linkTo={'/map'} text={'Map'} active={path === '/map'}/>
+            <NavButton linkTo={'/AdminLoginForm38n8g32chrtm56'} text={'Login'} active={path === '/AdminLoginForm38n8g32chrtm56'}/>
+            <NavButton linkTo={'#'} text={`SMaterials${getArrowCatEnd(categories.materials)}`} active={categories.materials} onClick={() => onCategoryClick('materials')}/>
             {categories.materials &&
-                <div className={s.categoryBox}>
-                    <div className={`${s.catDiv} ${getStyleSbSubCat(path, '/material/bone')}`}>
-                        <Link to={'/material/bone'} className={s.navButton}>Bone</Link>
-                    </div>
-                    <div className={`${s.catDiv} ${getStyleSbSubCat(path, '/material/fiber')}`}>
-                        <Link to={'/material/fiber'} className={s.navButton}>Fiber</Link>
-                    </div>
-                    <div className={`${s.catDiv} ${getStyleSbSubCat(path, '/material/leather')}`}>
-                        <Link to={'/material/leather'} className={s.navButton}>Leather</Link>
-                    </div>
-                    <div className={`${s.catDiv} ${getStyleSbSubCat(path, '/material/metal')}`}>
-                        <Link to={'/material/metal'} className={s.navButton}>Metal</Link>
-                    </div>
-                    <div className={`${s.catDiv} ${getStyleSbSubCat(path, '/material/stone')}`}>
-                        <Link to={'/material/stone'} className={s.navButton}>Stone</Link>
-                    </div>
-                    <div className={`${s.catDiv} ${getStyleSbSubCat(path, '/material/wood')}`}>
-                        <Link to={'/material/wood'} className={s.navButton}>Wood</Link>
-                    </div>
-                </div>}
-
-            <div className={`${s.catDiv} ${categories.components ? s.sbActive : s.sbInactive}`}>
-                <button className={`${categories.components ? s.catBtnActive : s.catBtn} ${s.navButton}`} type={'button'}
-                        onClick={() => onCategoryClick('components')}>{`Components${getArrowCatEnd(categories.components)}`}
-                </button>
-            </div>
+                <>
+                    <NavButton linkTo={'/material/bone'} text={'Bone'} subCat active={path === '/material/bone'}/>
+                    <NavButton linkTo={'/material/fiber'} text={'Fiber'} subCat active={path === '/material/fiber'}/>
+                    <NavButton linkTo={'/material/leather'} text={'leather'} subCat active={path === '/material/leather'}/>
+                    <NavButton linkTo={'/material/metal'} text={'metal'} subCat active={path === '/material/metal'}/>
+                    <NavButton linkTo={'/material/stone'} text={'stone'} subCat active={path === '/material/stone'}/>
+                    <NavButton linkTo={'/material/wood'} text={'wood'} subCat active={path === '/material/wood'}/>
+                </>
+            }
+            <NavButton linkTo={'#'} text={`SComponents${getArrowCatEnd(categories.components)}`} active={categories.components} onClick={() => onCategoryClick('components')}/>
             {categories.components &&
-                <div className={s.categoryBox}>
-                    <div className={`${s.catDiv} ${getStyleSbSubCat(path, '/component/Plant')}`}>
-                        <Link to={'/component/Plant'} className={s.navButton}>Plant</Link>
-                    </div>
-                    <div className={`${s.catDiv} ${getStyleSbSubCat(path, '/component/Gem')}`}>
-                        <Link to={'/component/Gem'} className={s.navButton}>Gem</Link>
-                    </div>
-                    <div className={`${s.catDiv} ${getStyleSbSubCat(path, '/component/Substance')}`}>
-                        <Link to={'/component/Substance'} className={s.navButton}>Substance</Link>
-                    </div>
-                    <div className={`${s.catDiv} ${getStyleSbSubCat(path, '/component/Powder')}`}>
-                        <Link to={'/component/Powder'} className={s.navButton}>Powder</Link>
-                    </div>
-                    <div className={`${s.catDiv} ${getStyleSbSubCat(path, '/component/Sap')}`}>
-                        <Link to={'/component/Sap'} className={s.navButton}>Sap</Link>
-                    </div>
-                    <div className={`${s.catDiv} ${getStyleSbSubCat(path, '/component/Pollen')}`}>
-                        <Link to={'/component/Pollen'} className={s.navButton}>Pollen</Link>
-                    </div>
-                    <div className={`${s.catDiv} ${getStyleSbSubCat(path, '/component/Artefact')}`}>
-                        <Link to={'/component/Artefact'} className={s.navButton}>Artefact</Link>
-                    </div>
-                </div>}
-
-
-
-            {/*<div className={`${s.catDiv} ${getStyleSb(path, '/map')}`}>*/}
-            {/*    <Link to={'/component'} className={s.navButton}>Component</Link>*/}
-            {/*</div>*/}
-            <div className={`${s.catDiv} ${getStyleSb(path, '/books')}`}>
-                <Link to={'/books'} className={s.navButton}>Books</Link>
-            </div>
-            <div className={`${s.catDiv} ${getStyleSb(path, '/reputation')}`}>
-                <Link to={'/reputation'} className={s.navButton}>Rep</Link>
-            </div>
-            <div className={`${s.catDiv} ${getStyleSb(path, '/trainer')}`}>
-                <Link to={'/trainer'} className={s.navButton}>Trainers</Link>
-            </div>
-
-            <div className={`${s.catDiv} ${getStyleSb(path, '/quest')}`}>
-                <Link to={'/quest'} className={s.navButton}>Quests</Link>
-            </div>
-            <div className={`${s.catDiv} ${getStyleSb(path, '/ability')}`}>
-                <Link to={'/ability'} className={s.navButton}>Ability</Link>
-            </div>
-            <div className={`${s.catDiv} ${getStyleSb(path, '/monster')}`}>
-                <Link to={'/monster'} className={s.navButton}>Monster</Link>
-            </div>
-            <div className={`${s.catDiv} ${getStyleSb(path, '/companion')}`}>
-                <Link to={'/companion'} className={s.navButton}>Companion</Link>
-            </div>
-
-            <div className={`${s.catDiv} ${getStyleSb(path, '/shop')}`}>
-                <Link to={'/shop'} className={s.navButton}>Shop</Link>
-            </div>
-
-            <div className={`${s.catDiv} ${getStyleSb(path, '/npc')}`}>
-                <Link to={'/npc'} className={s.navButton}>Npc</Link>
-            </div>
-            <div className={`${s.catDiv} ${getStyleSb(path, '/recipe')}`}>
-                <Link to={'/recipe'} className={s.navButton}>Recipe</Link>
-            </div>
-            <div className={`${s.catDiv} ${getStyleSb(path, '/region')}`}>
-                <Link to={'/region'} className={s.navButton}>Region</Link>
-            </div>
-            <div className={`${s.catDiv} ${getStyleSb(path, '/location')}`}>
-                <Link to={'/location'} className={s.navButton}>Location</Link>
-            </div>
-            <div className={`${s.catDiv} ${getStyleSb(path, '/event')}`}>
-                <Link to={'/event'} className={s.navButton}>Events</Link>
-            </div>
-            <div className={`${s.catDiv} ${getStyleSb(path, '/questitemsource')}`}>
-                <Link to={'/questitemsource'} className={s.navButton}>QI Source</Link>
-            </div>
-
-
+                <>
+                    <NavButton linkTo={'/component/Plant'} text={'Plant'} subCat active={path === '/component/Plant'}/>
+                    <NavButton linkTo={'/component/Gem'} text={'Gem'} subCat active={path === '/component/Gem'}/>
+                    <NavButton linkTo={'/component/Substance'} text={'Substance'} subCat active={path === '/component/Substance'}/>
+                    <NavButton linkTo={'/component/Powder'} text={'Powder'} subCat active={path === '/component/Powder'}/>
+                    <NavButton linkTo={'/component/Sap'} text={'Sap'} subCat active={path === '/component/Sap'}/>
+                    <NavButton linkTo={'/component/Pollen'} text={'Pollen'} subCat active={path === '/component/Pollen'}/>
+                    <NavButton linkTo={'/component/Artefact'} text={'Artefact'} subCat active={path === '/component/Artefact'}/>
+                </>
+            }
+            <NavButton linkTo={'/books'} text={'books'} active={path === '/books'}/>
+            <NavButton linkTo={'/reputation'} text={'reputation'} active={path === '/reputation'}/>
+            <NavButton linkTo={'/trainer'} text={'trainer'} active={path === '/trainer'}/>
+            <NavButton linkTo={'/quest'} text={'quest'} active={path === '/quest'}/>
+            <NavButton linkTo={'/ability'} text={'ability'} active={path === '/ability'}/>
+            <NavButton linkTo={'/monster'} text={'monster'} active={path === '/monster'}/>
+            <NavButton linkTo={'/companion'} text={'companion'} active={path === '/companion'}/>
+            <NavButton linkTo={'/shop'} text={'shop'} active={path === '/shop'}/>
+            <NavButton linkTo={'/npc'} text={'npc'} active={path === '/npc'}/>
+            <NavButton linkTo={'/recipe'} text={'recipe'} active={path === '/recipe'}/>
+            <NavButton linkTo={'/region'} text={'region'} active={path === '/region'}/>
+            <NavButton linkTo={'/location'} text={'location'} active={path === '/location'}/>
+            <NavButton linkTo={'/event'} text={'event'} active={path === '/event'}/>
+            <NavButton linkTo={'/questitemsource'} text={'QI source'} active={path === '/questitemsource'}/>
+            <NavButton linkTo={'/event'} text={'event'} active={path === '/event'}/>
             {isAuth && <div className={s.catDiv}>{`Dev menu`}</div>}
             {isAuth &&
                 <>
-                    <div className={`${s.catDiv} ${getStyleSb(path, '/staminaelixir')}`}>
-                        <Link to={'/staminaelixir'} className={s.navButton}>Stamina</Link>
-                    </div>
-                    <div className={`${s.catDiv} ${getStyleSb(path, '/gatherpoint')}`}>
-                        <Link to={'/gatherpoint'} className={s.navButton}>GatherPoint</Link>
-                    </div>
-                    {/*<div className={`${s.catDiv} ${getStyleSb(path, '/mapobject')}`}>*/}
-                    {/*    <Link to={'/mapobject'} className={s.navButton}>Map Objects</Link>*/}
-                    {/*</div>*/}
-                    <div className={`${s.catDiv} ${getStyleSb(path, '/questitem')}`}>
-                        <Link to={'/questitem'} className={s.navButton}>Quest Item</Link>
-                    </div>
-                    <div className={`${s.catDiv} ${getStyleSb(path, '/loot')}`}>
-                        <Link to={'/loot'} className={s.navButton}>Loot</Link>
-                    </div>
-                </>}
-
-
+                    <NavButton linkTo={'/staminaelixir'} text={'staminaelixir'} active={path === '/staminaelixir'}/>
+                    <NavButton linkTo={'/gatherpoint'} text={'gatherpoint'} active={path === '/gatherpoint'}/>
+                    <NavButton linkTo={'/questitem'} text={'questitem'} active={path === '/questitem'}/>
+                    <NavButton linkTo={'/loot'} text={'loot'} active={path === '/loot'}/>
+                    {/*<NavButton linkTo={'/mapobject'} text={'mapobject'} active={path === '/mapobject'}/>*/}
+                </>
+            }
         </div>
     )
 }

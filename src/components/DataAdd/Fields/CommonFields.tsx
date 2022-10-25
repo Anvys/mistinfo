@@ -23,7 +23,7 @@ import {RewardCostFiled} from "./RewardCostFiled";
 // import styles from './CommonFields.module.css';
 
 
-export const fieldsIgnoreList = ['name', '_id', '__v']
+export const fieldsIgnoreList = ['name', '_id', '__v', 'author']
 export const fieldsNotRequiredList = ['Ru', 'Fr','link']
 export const fieldsDisabled = ['staminaelixir.translate.En','staminaelixir.translate.Ru','staminaelixir.translate.Fr']
 

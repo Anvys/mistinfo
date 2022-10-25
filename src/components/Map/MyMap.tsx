@@ -164,7 +164,7 @@ export const MyMap: React.FC<TProps> = React.memo((props) => {
             map.setView({lat: pos.x, lng: pos.y}, map.getZoom(), {animate: true,})
         }
     }
-    console.log('Render map[', isCusMarkerActive, center, customMarkerPos, addMarkerPos23)
+    // console.log('Render map[', isCusMarkerActive, center, customMarkerPos, addMarkerPos23)
     // if(!!mapSearchPos && mapSearchPos.quest && mapSearchPos.quest.length > 0){
     //     const findData = quests.find(v=>v.name === mapSearchPos.quest)
     //     if(!!findData && !!map) {

@@ -1,32 +1,35 @@
 import axios, {AxiosResponse} from "axios";
-import {
-    TRequestBody,
-    TRequestType,
-    TResponseBody,
-    TResResponse, TWOid
-} from "../Types/CommonTypes";
+import {TRequestBody, TRequestType, TResponseBody, TWOid} from "../Types/CommonTypes";
 import {
     TAbility,
     TCompanion,
     TComponent,
     TEvent,
-    TGatherPoint, TLocation,
-    TLoot, TMapObject, TMaterial, TMonster, TNpc,
+    TGatherPoint,
+    TLocation,
+    TLoot,
+    TMapObject,
+    TMaterial,
+    TMonster,
+    TNpc,
     TQuest,
     TQuestItem,
-    TQuestItemSource, TRecipe, TRegion, TShop,
+    TQuestItemSource,
+    TRecipe,
+    TRegion,
+    TShop,
     TStaminaElixir,
     TTrainer
 } from "../Types/MainEntities";
-import {AuthSlice} from "../redux/reducers/authReducer";
 import {store} from "../redux/store";
 
 
 // export const baseURL = 'http://127.0.0.1'
 // export const baseURL = 'http://localhost'
 // export const baseURL = 'http://62.84.122.87'
-const getToken = () =>store.getState().auth.data.token
-export const baseURL = 'http://92.101.149.85'
+const getToken = () => store.getState().auth.data.token
+// export const baseURL = 'http://92.101.149.85'
+export const baseURL = 'http://92.101.176.21'
 export const port = 3333;
 const instance = axios.create({
     baseURL: `${baseURL}:${port}/api`,
@@ -35,16 +38,23 @@ const instance = axios.create({
 const getDataAPI = <D, T extends TRequestType>(uri: string, type: T) => {
     type axRes = TResponseBody<D>
     return {
-        getAll: () => instance.get<axRes>(`${uri}/all`, {headers:{"Authorization" : `Bearer ${getToken()}`}}).then(data => data.data),
-        getOne: (id: string) => instance.get<axRes>(`${uri}/one/${id}`, {headers:{"Authorization" : `Bearer ${getToken()}`}}).then(data => data.data),
+        getAll: () => instance.get<axRes>(`${uri}/all`, {headers: {"Authorization": `Bearer ${getToken()}`}}).then(data => data.data),
+        getOne: (id: string) => instance.get<axRes>(`${uri}/one/${id}`, {headers: {"Authorization": `Bearer ${getToken()}`}}).then(data => data.data),
         addOne: (data: TWOid<D>) => instance.post<axRes, AxiosResponse<axRes>, TRequestBody<T, TWOid<D>>>(
-            `${uri}/one`, {type: type, data: data}, {headers:{"Authorization" : `Bearer ${getToken()}`}}).then(data => data.data),
+            `${uri}/one`, {
+                type: type,
+                data: data
+            }, {headers: {"Authorization": `Bearer ${getToken()}`}}).then(data => data.data),
         updateOne: (id: string, data: D) => instance.put<axRes, AxiosResponse<axRes>, TRequestBody<T, D>>(
-            `${uri}/one/${id}`, {type: type, data: data}, {headers:{"Authorization" : `Bearer ${getToken()}`}}).then(data => data.data),
+            `${uri}/one/${id}`, {
+                type: type,
+                data: data
+            }, {headers: {"Authorization": `Bearer ${getToken()}`}}).then(data => data.data),
         deleteOne: (id: string) => instance.delete<axRes>(
-            `${uri}/one/${id}`, {headers:{"Authorization" : `Bearer ${getToken()}`}}).then(data => data.data),
+            `${uri}/one/${id}`, {headers: {"Authorization": `Bearer ${getToken()}`}}).then(data => data.data),
     }
 }
+
 export const MaterialAPI = getDataAPI<TMaterial, 'Material'>(`/materials`, 'Material')
 export const ComponentAPI = getDataAPI<TComponent, 'Component'>(`/components`, 'Component')
 export const NpcAPI = getDataAPI<TNpc, 'Npc'>(`/npc`, 'Npc')
@@ -64,39 +74,3 @@ export const QuestItemAPI = getDataAPI<TQuestItem, 'QuestItem'>(`/questitem`, 'Q
 export const QuestItemSourceAPI = getDataAPI<TQuestItemSource, 'QuestItemSource'>(`/questitemsource`, 'QuestItemSource')
 export const ShopAPI = getDataAPI<TShop, 'Shop'>(`/shop`, 'Shop')
 export const TrainerAPI = getDataAPI<TTrainer, 'Trainer'>(`/trainer`, 'Trainer')
-//     {
-//     getAll: () => instance.get<TMatResponse>(`${materialURI}/all`).then(data => data.data),
-//     getOne: (id: string) => instance.get<TMatResponse>(`${materialURI}/one/:${id}`).then(data => data.data),
-//     addOne: (res: TMaterials) => instance.post<TMatResponse, AxiosResponse<TMatResponse>, TRequestBody>(
-//         `${materialURI}/one`, {type: "Material", data: res}).then(data => data.data),
-//     updateOne: (id: string, res: TMaterials) => instance.put<TMatResponse>(
-//         `${materialURI}/one/:${id}`, {type: "Material", resource: res}).then(data => data.data),
-//     deleteOne: (id: string) => instance.delete<TMatResponse>(
-//         `${materialURI}/one/:${id}`).then(data => data.data),
-// }
-// export const ComponentAPI =
-//     {
-//     getAll: () => instance.get<TComResponse>(`${componentURI}/all`).then(data => data.data),
-//     getOne: (id: string) => instance.get<TComResponse>(`${componentURI}/one/:${id}`).then(data => data.data),
-//     addOne: (res: TMaterials) => instance.post<TComResponse, AxiosResponse<TMatResponse>, TRequestBody>(
-//         `${componentURI}/one`, {type: "Material", data: res}).then(data => data.data),
-//     updateOne: (id: string, res: TMaterials) => instance.put<TMatResponse>(
-//         `${componentURI}/one/:${id}`, {type: "Material", resource: res}).then(data => data.data),
-//     deleteOne: (id: string) => instance.delete<TMatResponse>(
-//         `${componentURI}/one/:${id}`).then(data => data.data),
-// }
-
-// export const ResourceAPI = {
-//     // getAll: () => instance.get<TResponseAllBody>('/resource').then(data => data.data),
-//
-//
-//
-//     getComponents: () => instance.get<TComResponse>('/components/all').then(data => data.data),
-//     getComponent: (name: string) => instance.get<TComResponse>(`/components/one?name=${name}`).then(data => data.data),
-//     addComponent: (res: TComponents) => instance.post<TComResponse, AxiosResponse<TComResponse>, TRequestBody>(
-//         '/components/one', {type: "Component", resource: res}).then(data => data.data),
-//     updateComponent: (name: string, res: TComponents) => instance.put<TComResponse>(
-//         `/components/one?name=${name}`, {type: "Component", resource: res}).then(data => data.data),
-//     deleteComponent: (name: string) => instance.delete<TComResponse>(
-//         `/components/one?name=${name}`).then(data => data.data),
-// }
