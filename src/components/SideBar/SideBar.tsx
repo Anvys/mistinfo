@@ -31,7 +31,7 @@ export const SideBar: React.FC = () => {
                 break
         }
     }
-    const getArrowCatEnd = (isOpen: boolean) => !isOpen ? '▲':'▼' // 🡆
+    const getArrowCatEnd = (isOpen: boolean) => !isOpen ? '[+]':'[-]' // 🡆▲▼
     const getStyleSb = (path: string, uri: string) => path === uri ? s.sbActive : s.sbInactive
     const getStyleSbSubCat = (path: string, uri: string) => path === uri ? s.sbActiveSub : s.sbInactiveSub
     const getStyleSbCat = (path: string, uri: string) => path.includes(uri) ? s.sbActive : s.sbInactive
@@ -41,7 +41,7 @@ export const SideBar: React.FC = () => {
             <NavButton linkTo={'/AdminLoginForm38n8g32chrtm56'} text={'Login'} active={path === '/AdminLoginForm38n8g32chrtm56'}/>
             <NavButton linkTo={'/map'} text={'Map'} active={path === '/map'}/>
             <NavButton linkTo={'/AdminLoginForm38n8g32chrtm56'} text={'Login'} active={path === '/AdminLoginForm38n8g32chrtm56'}/>
-            <NavButton linkTo={'#'} text={`SMaterials${getArrowCatEnd(categories.materials)}`} active={categories.materials} onClick={() => onCategoryClick('materials')}/>
+            <NavButton linkTo={'#'} text={`Materials${getArrowCatEnd(categories.materials)}`} active={categories.materials} onClick={() => onCategoryClick('materials')}/>
             {categories.materials &&
                 <>
                     <NavButton linkTo={'/material/bone'} text={'Bone'} subCat active={path === '/material/bone'}/>
@@ -52,7 +52,7 @@ export const SideBar: React.FC = () => {
                     <NavButton linkTo={'/material/wood'} text={'wood'} subCat active={path === '/material/wood'}/>
                 </>
             }
-            <NavButton linkTo={'#'} text={`SComponents${getArrowCatEnd(categories.components)}`} active={categories.components} onClick={() => onCategoryClick('components')}/>
+            <NavButton linkTo={'#'} text={`Components${getArrowCatEnd(categories.components)}`} active={categories.components} onClick={() => onCategoryClick('components')}/>
             {categories.components &&
                 <>
                     <NavButton linkTo={'/component/Plant'} text={'Plant'} subCat active={path === '/component/Plant'}/>

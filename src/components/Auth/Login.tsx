@@ -17,6 +17,7 @@ export const Login: React.FC<TProps> = (props) => {
 
     // console.log((loca.pathname))
     const onLoginhandler = () => {
+        console.log(`Loggin in `, login, pswd)
         if (login && pswd) {
             dispatch(AuthThunks.login({login: login, password: pswd}))
             setPswd('')

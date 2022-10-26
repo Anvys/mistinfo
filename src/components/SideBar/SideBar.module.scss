@@ -6,6 +6,7 @@ $hoverBG: #858585;
     display: flex;
     border: 5px groove #c5c5c5;
     background-color: $bgColor;
+    //width: fit-content;
     max-width: 200px;
     flex-direction: column;
     gap: 2px;
@@ -16,6 +17,7 @@ $hoverBG: #858585;
     flex-direction: column;
     overflow: hidden;
     background-color: $bgColorCat;
+    width: fit-content;
 }
 .sbActive, .sbInactive,.sbActiveSub, .sbInactiveSub{
     position: relative;
